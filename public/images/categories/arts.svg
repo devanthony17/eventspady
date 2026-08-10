@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="600" height="600" role="img">
+<defs>
+<linearGradient id="g57770" gradientTransform="rotate(61)">
+<stop offset="0%" stop-color="#661cf7"/>
+<stop offset="60%" stop-color="#b5a5ff"/>
+<stop offset="100%" stop-color="#ff7d11"/>
+</linearGradient>
+<radialGradient id="r57770" cx="30%" cy="20%">
+<stop offset="0%" stop-color="#ffffff" stop-opacity=".45"/>
+<stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+</radialGradient>
+<filter id="b57770" x="-30%" y="-30%" width="160%" height="160%">
+<feGaussianBlur stdDeviation="42"/>
+</filter>
+</defs>
+<rect width="600" height="600" fill="url(#g57770)"/>
+<ellipse cx="433" cy="176" rx="220" ry="159" fill="#fff" opacity="0.097" filter="url(#b57770)"/><ellipse cx="60" cy="514" rx="184" ry="133" fill="#fff" opacity="0.108" filter="url(#b57770)"/><ellipse cx="502" cy="17" rx="269" ry="194" fill="#fff" opacity="0.107" filter="url(#b57770)"/><ellipse cx="481" cy="214" rx="135" ry="97" fill="#fff" opacity="0.107" filter="url(#b57770)"/><ellipse cx="26" cy="29" rx="262" ry="189" fill="#fff" opacity="0.079" filter="url(#b57770)"/>
+<path d="M 60 600 A 120 120 0 0 1 300 600" fill="none" stroke="#fff" stroke-opacity="0.260" stroke-width="2.5"/><path d="M 60 600 A 198 198 0 0 1 456 600" fill="none" stroke="#fff" stroke-opacity="0.220" stroke-width="2.5"/><path d="M 60 600 A 276 276 0 0 1 612 600" fill="none" stroke="#fff" stroke-opacity="0.180" stroke-width="2.5"/><path d="M 60 600 A 354 354 0 0 1 768 600" fill="none" stroke="#fff" stroke-opacity="0.140" stroke-width="2.5"/><path d="M 60 600 A 432 432 0 0 1 924 600" fill="none" stroke="#fff" stroke-opacity="0.100" stroke-width="2.5"/>
+<rect width="600" height="600" fill="url(#r57770)"/>
+</svg>

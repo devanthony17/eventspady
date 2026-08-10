@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 700" width="1200" height="700" role="img">
+<defs>
+<linearGradient id="g77920" gradientTransform="rotate(145)">
+<stop offset="0%" stop-color="#db2777"/>
+<stop offset="60%" stop-color="#9273ff"/>
+<stop offset="100%" stop-color="#fbcfe8"/>
+</linearGradient>
+<radialGradient id="r77920" cx="30%" cy="20%">
+<stop offset="0%" stop-color="#ffffff" stop-opacity=".45"/>
+<stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+</radialGradient>
+<filter id="b77920" x="-30%" y="-30%" width="160%" height="160%">
+<feGaussianBlur stdDeviation="42"/>
+</filter>
+</defs>
+<rect width="1200" height="700" fill="url(#g77920)"/>
+<ellipse cx="259" cy="170" rx="125" ry="90" fill="#fff" opacity="0.126" filter="url(#b77920)"/><ellipse cx="4" cy="639" rx="188" ry="135" fill="#fff" opacity="0.053" filter="url(#b77920)"/><ellipse cx="83" cy="373" rx="273" ry="196" fill="#fff" opacity="0.123" filter="url(#b77920)"/><ellipse cx="650" cy="407" rx="115" ry="82" fill="#fff" opacity="0.122" filter="url(#b77920)"/><ellipse cx="1088" cy="403" rx="296" ry="213" fill="#fff" opacity="0.091" filter="url(#b77920)"/>
+<ellipse cx="603" cy="98" rx="166" ry="120" fill="#fff" opacity="0.119" filter="url(#b77920)"/><ellipse cx="741" cy="402" rx="215" ry="155" fill="#fff" opacity="0.146" filter="url(#b77920)"/><ellipse cx="740" cy="322" rx="136" ry="98" fill="#fff" opacity="0.166" filter="url(#b77920)"/><ellipse cx="1101" cy="125" rx="99" ry="71" fill="#fff" opacity="0.097" filter="url(#b77920)"/><ellipse cx="339" cy="298" rx="245" ry="176" fill="#fff" opacity="0.058" filter="url(#b77920)"/>
+<rect width="1200" height="700" fill="url(#r77920)"/>
+</svg>

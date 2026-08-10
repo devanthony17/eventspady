@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800" role="img">
+<defs>
+<linearGradient id="g84023" gradientTransform="rotate(3)">
+<stop offset="0%" stop-color="#0f766e"/>
+<stop offset="60%" stop-color="#2dd4bf"/>
+<stop offset="100%" stop-color="#99f6e4"/>
+</linearGradient>
+<radialGradient id="r84023" cx="30%" cy="20%">
+<stop offset="0%" stop-color="#ffffff" stop-opacity=".45"/>
+<stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+</radialGradient>
+<filter id="b84023" x="-30%" y="-30%" width="160%" height="160%">
+<feGaussianBlur stdDeviation="42"/>
+</filter>
+</defs>
+<rect width="1200" height="800" fill="url(#g84023)"/>
+<ellipse cx="198" cy="1" rx="97" ry="70" fill="#fff" opacity="0.109" filter="url(#b84023)"/><ellipse cx="255" cy="229" rx="299" ry="215" fill="#fff" opacity="0.081" filter="url(#b84023)"/><ellipse cx="402" cy="635" rx="176" ry="127" fill="#fff" opacity="0.079" filter="url(#b84023)"/><ellipse cx="928" cy="99" rx="253" ry="182" fill="#fff" opacity="0.139" filter="url(#b84023)"/><ellipse cx="692" cy="157" rx="298" ry="214" fill="#fff" opacity="0.127" filter="url(#b84023)"/>
+<circle cx="350" cy="377" r="86" fill="none" stroke="#fff" stroke-opacity="0.198" stroke-width="2"/><circle cx="350" cy="377" r="171" fill="none" stroke="#fff" stroke-opacity="0.176" stroke-width="2"/><circle cx="350" cy="377" r="257" fill="none" stroke="#fff" stroke-opacity="0.154" stroke-width="2"/><circle cx="350" cy="377" r="343" fill="none" stroke="#fff" stroke-opacity="0.132" stroke-width="2"/><circle cx="350" cy="377" r="429" fill="none" stroke="#fff" stroke-opacity="0.110" stroke-width="2"/><circle cx="350" cy="377" r="514" fill="none" stroke="#fff" stroke-opacity="0.088" stroke-width="2"/><circle cx="350" cy="377" r="600" fill="none" stroke="#fff" stroke-opacity="0.066" stroke-width="2"/>
+<rect width="1200" height="800" fill="url(#r84023)"/>
+</svg>

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+<defs>
+<linearGradient id="og" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0%" stop-color="#240568"/><stop offset="55%" stop-color="#661cf7"/><stop offset="100%" stop-color="#ff7d11"/>
+</linearGradient>
+<filter id="ob" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="60"/></filter>
+</defs>
+<rect width="1200" height="630" fill="url(#og)"/>
+<ellipse cx="240" cy="140" rx="300" ry="220" fill="#fff" opacity=".12" filter="url(#ob)"/>
+<ellipse cx="1020" cy="520" rx="280" ry="200" fill="#fff" opacity=".1" filter="url(#ob)"/>
+<rect x="72" y="76" width="88" height="88" rx="22" fill="#fff" fill-opacity=".16"/>
+<path d="M96 106h40a4 4 0 0 1 4 4v6a7 7 0 0 0 0 14v6a4 4 0 0 1-4 4H96a4 4 0 0 1-4-4v-6a7 7 0 0 0 0-14v-6a4 4 0 0 1 4-4Z" fill="#fff"/>
+<text x="72" y="300" font-family="Plus Jakarta Sans, Inter, system-ui, sans-serif" font-size="82" font-weight="800" fill="#fff" letter-spacing="-2">Eventspady</text>
+<text x="72" y="372" font-family="Plus Jakarta Sans, Inter, system-ui, sans-serif" font-size="34" font-weight="500" fill="#fff" fill-opacity=".82">Discover, book and manage unforgettable events.</text>
+<text x="72" y="452" font-family="Plus Jakarta Sans, Inter, system-ui, sans-serif" font-size="24" font-weight="600" fill="#fff" fill-opacity=".7">Ticketing · QR check-in · Payments · Guest management</text>
+</svg>

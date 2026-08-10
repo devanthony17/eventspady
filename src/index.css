@@ -1,0 +1,105 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --brand: 116 64 255;
+  }
+
+  * {
+    @apply border-ink-200/70 dark:border-white/10;
+  }
+
+  body {
+    @apply font-sans;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display tracking-tight;
+  }
+
+  /* Focus ring that stays legible on both themes */
+  :where(a, button, input, select, textarea, [tabindex]):focus-visible {
+    @apply outline-none ring-2 ring-brand-500 ring-offset-2 ring-offset-white dark:ring-offset-ink-950;
+  }
+
+  ::selection {
+    @apply bg-brand-500/25;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply rounded-full bg-ink-300/70 dark:bg-white/15;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-ink-400 dark:bg-white/25;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  .surface {
+    @apply rounded-2xl border border-ink-200/70 bg-white shadow-soft dark:border-white/10 dark:bg-ink-900/60;
+  }
+
+  .surface-muted {
+    @apply rounded-2xl border border-ink-200/70 bg-ink-50 dark:border-white/10 dark:bg-white/[.04];
+  }
+
+  .field {
+    @apply w-full rounded-xl border border-ink-200 bg-white px-4 py-2.5 text-sm text-ink-900 shadow-sm
+           transition placeholder:text-ink-400
+           focus:border-brand-500 focus:ring-2 focus:ring-brand-500/25 focus:ring-offset-0
+           disabled:cursor-not-allowed disabled:opacity-60
+           dark:border-white/10 dark:bg-white/[.04] dark:text-ink-50 dark:placeholder:text-ink-400;
+  }
+
+  .label {
+    @apply mb-1.5 block text-sm font-semibold text-ink-700 dark:text-ink-200;
+  }
+
+  .link-underline {
+    @apply relative after:absolute after:-bottom-0.5 after:left-0 after:h-px after:w-0 after:bg-current
+           after:transition-all hover:after:w-full;
+  }
+
+  /* Ticket edge notches */
+  .ticket-notch {
+    background-image: radial-gradient(circle at 0 50%, transparent 10px, currentColor 10px),
+      radial-gradient(circle at 100% 50%, transparent 10px, currentColor 10px);
+  }
+
+  .text-gradient {
+    @apply bg-gradient-to-r from-brand-600 via-brand-500 to-accent-500 bg-clip-text text-transparent;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}

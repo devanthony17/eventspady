@@ -32,7 +32,7 @@ import {
   useSuspendOrganizerMutation,
   useUpdateOrganizerCommissionMutation,
 } from '@hooks/api'
-import { formatDate, formatCurrency } from '@lib/utils'
+import { formatDate, formatCurrency, cn } from '@lib/utils'
 
 export default function OrganizersManagement() {
   const { organizers: storeOrganizers = [], verifyOrganizer, rejectOrganizer, suspendOrganizer } = useStore()
@@ -150,8 +150,8 @@ export default function OrganizersManagement() {
   return (
     <>
       <Seo
-        title="Organizer Gatekeeper & Verification — Admin Console"
-        description="Review, verify, approve and manage event organizers before granting access to their portal."
+        title="Organizer Management — Admin Console"
+        description="Review, verify, approve and manage event organizers."
         noIndex
       />
 
@@ -159,22 +159,16 @@ export default function OrganizersManagement() {
         {/* Page Header */}
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <div className="flex items-center gap-2">
-              <Shield className="size-4 text-brand-600 dark:text-brand-400" />
-              <span className="text-xs font-bold uppercase tracking-wider text-ink-500 dark:text-ink-400">
-                Gatekeeper System
-              </span>
-            </div>
-            <h1 className="mt-1 text-2xl font-black tracking-tight text-ink-900 dark:text-white sm:text-3xl">
-              Organizer Verification & Accounts
+            <h1 className="text-2xl font-bold tracking-tight text-ink-900 dark:text-white sm:text-3xl">
+              Organizers Management
             </h1>
             <p className="mt-1 text-sm text-ink-500 dark:text-ink-400">
-              Organizers must undergo Ghana KYC verification before login credentials grant access to ticket sales and door scanners.
+              Review applications, verify business credentials, and manage organizer portal permissions.
             </p>
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="rounded-xl border border-ink-200/80 bg-white px-3 py-1.5 text-xs font-bold text-ink-700 shadow-sm dark:border-white/10 dark:bg-ink-800 dark:text-ink-200">
+            <span className="rounded-lg border border-ink-200/80 bg-white px-3 py-1.5 text-xs font-medium text-ink-700 shadow-xs dark:border-white/10 dark:bg-ink-800 dark:text-ink-300">
               Total: {organizers.length} Organizers
             </span>
           </div>
@@ -201,20 +195,20 @@ export default function OrganizersManagement() {
                 key={tab.id}
                 type="button"
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-2 rounded-xl px-3.5 py-2 text-xs font-bold transition ${
+                className={`flex items-center gap-2 rounded-lg px-3 py-1.5 text-xs font-medium transition ${
                   activeTab === tab.id
-                    ? 'bg-brand-600 text-white shadow-sm'
+                    ? 'bg-brand-600 text-white shadow-xs'
                     : 'text-ink-600 hover:bg-ink-100 hover:text-ink-900 dark:text-ink-300 dark:hover:bg-white/[.06] dark:hover:text-white'
                 }`}
               >
                 <span>{tab.label}</span>
                 <span
-                  className={`rounded-full px-1.5 py-0.2 text-[10px] ${
+                  className={`rounded-md px-1.5 py-0.5 text-[11px] font-medium leading-none ${
                     activeTab === tab.id
                       ? 'bg-white/20 text-white'
                       : tab.highlight
-                      ? 'bg-amber-500 text-white font-black animate-pulse'
-                      : 'bg-ink-200 text-ink-700 dark:bg-white/10 dark:text-ink-300'
+                      ? 'bg-amber-100 text-amber-800 border border-amber-200/60 dark:bg-amber-950/60 dark:text-amber-300 dark:border-amber-800/40'
+                      : 'bg-ink-100 text-ink-600 dark:bg-white/10 dark:text-ink-400'
                   }`}
                 >
                   {tab.count}
@@ -241,12 +235,12 @@ export default function OrganizersManagement() {
             <table className="w-full text-left text-xs">
               <thead className="border-b border-ink-200/80 bg-ink-50/50 text-ink-500 dark:border-white/10 dark:bg-white/[.02] dark:text-ink-400">
                 <tr>
-                  <th className="px-5 py-3.5 font-bold uppercase tracking-wider">Organizer / Entity</th>
-                  <th className="px-4 py-3.5 font-bold uppercase tracking-wider">Contact & Location</th>
-                  <th className="px-4 py-3.5 font-bold uppercase tracking-wider">KYC & Reg ID</th>
-                  <th className="px-4 py-3.5 font-bold uppercase tracking-wider">Commission</th>
-                  <th className="px-4 py-3.5 font-bold uppercase tracking-wider">Gate Status</th>
-                  <th className="px-5 py-3.5 text-right font-bold uppercase tracking-wider">Actions</th>
+                  <th className="px-5 py-3.5 font-medium uppercase tracking-wider">Organizer / Entity</th>
+                  <th className="px-4 py-3.5 font-medium uppercase tracking-wider">Contact & Location</th>
+                  <th className="px-4 py-3.5 font-medium uppercase tracking-wider">KYC & Reg ID</th>
+                  <th className="px-4 py-3.5 font-medium uppercase tracking-wider">Commission</th>
+                  <th className="px-4 py-3.5 font-medium uppercase tracking-wider">Status</th>
+                  <th className="px-5 py-3.5 text-right font-medium uppercase tracking-wider">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-ink-100 dark:divide-white/[.06]">
@@ -324,20 +318,20 @@ export default function OrganizersManagement() {
                         {/* Status */}
                         <td className="px-4 py-4">
                           {isPending && (
-                            <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-500/15 px-2.5 py-1 text-xs font-black text-amber-700 dark:text-amber-300">
-                              <Clock className="size-3 text-amber-600 animate-pulse" />
-                              Pending Verification
+                            <span className="inline-flex items-center gap-1.5 rounded-md bg-amber-50 px-2 py-0.5 text-xs font-medium text-amber-700 border border-amber-200/60 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800/40">
+                              <span className="size-1.5 rounded-full bg-amber-500" />
+                              Pending
                             </span>
                           )}
                           {isVerified && (
-                            <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/15 px-2.5 py-1 text-xs font-bold text-emerald-700 dark:text-emerald-300">
-                              <CheckCircle2 className="size-3 text-emerald-600" />
-                              Verified & Active
+                            <span className="inline-flex items-center gap-1.5 rounded-md bg-emerald-50 px-2 py-0.5 text-xs font-medium text-emerald-700 border border-emerald-200/60 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800/40">
+                              <span className="size-1.5 rounded-full bg-emerald-500" />
+                              Verified
                             </span>
                           )}
                           {isSuspended && (
-                            <span className="inline-flex items-center gap-1.5 rounded-full bg-rose-500/15 px-2.5 py-1 text-xs font-bold text-rose-700 dark:text-rose-300">
-                              <UserX className="size-3 text-rose-600" />
+                            <span className="inline-flex items-center gap-1.5 rounded-md bg-rose-50 px-2 py-0.5 text-xs font-medium text-rose-700 border border-rose-200/60 dark:bg-rose-950/40 dark:text-rose-300 dark:border-rose-800/40">
+                              <span className="size-1.5 rounded-full bg-rose-500" />
                               Suspended
                             </span>
                           )}
@@ -345,11 +339,11 @@ export default function OrganizersManagement() {
 
                         {/* Actions */}
                         <td className="px-5 py-4 text-right">
-                          <div className="flex items-center justify-end gap-2">
+                          <div className="flex items-center justify-end gap-1.5">
                             <button
                               type="button"
                               onClick={() => openDetails(org)}
-                              className="rounded-lg border border-ink-200 bg-white px-2.5 py-1.5 font-bold text-ink-700 shadow-sm transition hover:bg-ink-50 dark:border-white/10 dark:bg-ink-800 dark:text-ink-200 dark:hover:bg-ink-700"
+                              className="rounded-lg border border-ink-200 bg-white px-2.5 py-1 text-xs font-medium text-ink-700 shadow-xs transition hover:bg-ink-50 dark:border-white/10 dark:bg-ink-800 dark:text-ink-200 dark:hover:bg-ink-700"
                             >
                               Review
                             </button>
@@ -358,7 +352,7 @@ export default function OrganizersManagement() {
                               <button
                                 type="button"
                                 onClick={() => handleVerify(org)}
-                                className="rounded-lg bg-emerald-600 px-3 py-1.5 font-bold text-white shadow-sm transition hover:bg-emerald-700"
+                                className="rounded-lg bg-emerald-600 px-3 py-1 text-xs font-medium text-white shadow-xs transition hover:bg-emerald-700"
                               >
                                 Approve
                               </button>
@@ -368,7 +362,7 @@ export default function OrganizersManagement() {
                               <button
                                 type="button"
                                 onClick={() => handleSuspend(org)}
-                                className="rounded-lg border border-rose-200 text-rose-600 px-2 py-1.5 hover:bg-rose-50 dark:border-rose-500/30 dark:hover:bg-rose-500/10"
+                                className="rounded-lg border border-rose-200 text-rose-600 px-2 py-1 text-xs font-medium hover:bg-rose-50 dark:border-rose-500/30 dark:hover:bg-rose-500/10"
                                 title="Suspend account"
                               >
                                 Suspend
@@ -379,7 +373,7 @@ export default function OrganizersManagement() {
                               <button
                                 type="button"
                                 onClick={() => handleVerify(org)}
-                                className="rounded-lg bg-emerald-600 px-2.5 py-1.5 font-bold text-white transition hover:bg-emerald-700"
+                                className="rounded-lg bg-emerald-600 px-2.5 py-1 text-xs font-medium text-white transition hover:bg-emerald-700"
                               >
                                 Re-verify
                               </button>
@@ -419,30 +413,41 @@ export default function OrganizersManagement() {
                   <h3 className="text-xl font-black text-ink-900 dark:text-white">
                     {selectedOrganizer.name}
                   </h3>
-                  <p className="text-xs text-ink-400">
-                    Verification & KYC Dossier · Applied {formatDate(selectedOrganizer.appliedAt || new Date())}
+                  <p className="text-xs text-ink-500 dark:text-ink-400">
+                    Account & KYC Details · Applied {formatDate(selectedOrganizer.appliedAt || new Date())}
                   </p>
                 </div>
               </div>
 
               {/* Status Banner */}
-              <div className="mt-5 rounded-2xl border border-ink-100 bg-ink-50/70 p-4 dark:border-white/10 dark:bg-white/[.03]">
+              <div className="mt-5 rounded-xl border border-ink-200/60 bg-ink-50/60 p-3.5 dark:border-white/10 dark:bg-white/[.02]">
                 <div className="flex items-center justify-between text-xs">
-                  <span className="font-semibold text-ink-500">Current Login Status:</span>
+                  <span className="font-medium text-ink-600 dark:text-ink-400">Account status:</span>
                   <span
-                    className={`font-black uppercase tracking-wider ${
+                    className={cn(
+                      'inline-flex items-center gap-1.5 rounded-md px-2.5 py-0.5 text-xs font-medium border',
                       selectedOrganizer.status === 'verified'
-                        ? 'text-emerald-600 dark:text-emerald-400'
+                        ? 'bg-emerald-50 text-emerald-700 border-emerald-200/60 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800/40'
                         : selectedOrganizer.status === 'pending'
-                        ? 'text-amber-600 dark:text-amber-400'
-                        : 'text-rose-600 dark:text-rose-400'
-                    }`}
+                        ? 'bg-amber-50 text-amber-700 border-amber-200/60 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800/40'
+                        : 'bg-rose-50 text-rose-700 border-rose-200/60 dark:bg-rose-950/40 dark:text-rose-300 dark:border-rose-800/40'
+                    )}
                   >
+                    <span
+                      className={cn(
+                        'size-1.5 rounded-full',
+                        selectedOrganizer.status === 'verified'
+                          ? 'bg-emerald-500'
+                          : selectedOrganizer.status === 'pending'
+                          ? 'bg-amber-500'
+                          : 'bg-rose-500'
+                      )}
+                    />
                     {selectedOrganizer.status === 'verified'
-                      ? '✓ Verified & Login Permitted'
+                      ? 'Verified'
                       : selectedOrganizer.status === 'pending'
-                      ? '⏳ Blocked at Login Gate'
-                      : '🚫 Suspended'}
+                      ? 'Pending Review'
+                      : 'Suspended'}
                   </span>
                 </div>
               </div>
@@ -515,16 +520,16 @@ export default function OrganizersManagement() {
                     <button
                       type="button"
                       onClick={() => handleReject(selectedOrganizer)}
-                      className="rounded-xl border border-rose-200 px-4 py-2.5 text-xs font-bold text-rose-600 hover:bg-rose-50 dark:border-rose-500/30 dark:hover:bg-rose-500/10"
+                      className="rounded-lg border border-rose-200 px-3.5 py-2 text-xs font-medium text-rose-600 hover:bg-rose-50 dark:border-rose-500/30 dark:hover:bg-rose-500/10"
                     >
-                      Reject Application
+                      Reject application
                     </button>
                     <button
                       type="button"
                       onClick={() => handleVerify(selectedOrganizer)}
-                      className="rounded-xl bg-emerald-600 px-5 py-2.5 text-xs font-bold text-white shadow-md shadow-emerald-600/20 transition hover:bg-emerald-700"
+                      className="rounded-lg bg-emerald-600 px-4 py-2 text-xs font-medium text-white shadow-xs transition hover:bg-emerald-700"
                     >
-                      Approve & Grant Login
+                      Approve application
                     </button>
                   </>
                 )}
@@ -533,9 +538,9 @@ export default function OrganizersManagement() {
                   <button
                     type="button"
                     onClick={() => handleSuspend(selectedOrganizer)}
-                    className="rounded-xl bg-rose-600 px-5 py-2.5 text-xs font-bold text-white transition hover:bg-rose-700"
+                    className="rounded-lg bg-rose-600 px-4 py-2 text-xs font-medium text-white transition hover:bg-rose-700"
                   >
-                    Suspend Organizer
+                    Suspend account
                   </button>
                 )}
 
@@ -543,9 +548,9 @@ export default function OrganizersManagement() {
                   <button
                     type="button"
                     onClick={() => handleVerify(selectedOrganizer)}
-                    className="rounded-xl bg-emerald-600 px-5 py-2.5 text-xs font-bold text-white transition hover:bg-emerald-700"
+                    className="rounded-lg bg-emerald-600 px-4 py-2 text-xs font-medium text-white transition hover:bg-emerald-700"
                   >
-                    Re-instate & Verify
+                    Re-activate account
                   </button>
                 )}
               </div>

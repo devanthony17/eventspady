@@ -265,12 +265,12 @@ export function PortalSideNav({ portal: propPortal, mobileOpen = false, onClose 
                 {item.badge != null && item.badge > 0 && (
                   <span
                     className={cn(
-                      'ml-2 flex items-center justify-center rounded-full px-2 py-0.5 text-[10px] font-black leading-none text-white shadow-sm',
+                      'ml-2 flex items-center justify-center rounded-md px-1.5 py-0.5 text-[11px] font-medium leading-none',
                       item.badgeTone === 'amber'
-                        ? 'bg-amber-500 animate-pulse'
+                        ? 'bg-amber-100 text-amber-800 border border-amber-200/60 dark:bg-amber-950/60 dark:text-amber-300 dark:border-amber-800/40'
                         : item.badgeTone === 'rose'
-                          ? 'bg-rose-500'
-                          : 'bg-accent-500',
+                          ? 'bg-rose-100 text-rose-800 border border-rose-200/60 dark:bg-rose-950/60 dark:text-rose-300 dark:border-rose-800/40'
+                          : 'bg-ink-100 text-ink-700 dark:bg-ink-800 dark:text-ink-200',
                     )}
                   >
                     {item.badge}
@@ -285,15 +285,14 @@ export function PortalSideNav({ portal: propPortal, mobileOpen = false, onClose 
       {/* Bottom Sidebar Info & Actions */}
       <div className="space-y-3 pt-6 border-t border-ink-200/70 dark:border-white/10 mt-6">
         {activePortal === 'admin' && (
-          <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/10 p-3 text-xs text-emerald-800 dark:text-emerald-300">
+          <div className="rounded-lg border border-ink-200/70 bg-ink-50/70 p-2.5 text-xs text-ink-600 dark:border-white/10 dark:bg-white/[.02] dark:text-ink-400">
             <div className="flex items-center justify-between">
-              <span className="flex items-center gap-1.5 font-bold">
-                <span className="size-2 rounded-full bg-emerald-500 animate-ping" />
-                Gateway Online
+              <span className="flex items-center gap-1.5 font-medium text-ink-800 dark:text-ink-200">
+                <span className="size-1.5 rounded-full bg-emerald-500" />
+                Production Core
               </span>
-              <span className="text-[10px] opacity-80">v2.4 core</span>
+              <span className="text-[10px] text-ink-400">v1.0.1</span>
             </div>
-            <p className="mt-1 text-[11px] opacity-85">MoMo USSD latency: 142ms</p>
           </div>
         )}
 

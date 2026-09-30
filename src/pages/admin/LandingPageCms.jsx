@@ -198,13 +198,7 @@ export default function LandingPageCms() {
         {/* Header */}
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <div className="flex items-center gap-2">
-              <Sparkles className="size-4 text-brand-600 dark:text-brand-400" />
-              <span className="text-xs font-bold uppercase tracking-wider text-ink-500 dark:text-ink-400">
-                Content Management System
-              </span>
-            </div>
-            <h1 className="mt-1 text-2xl font-black tracking-tight text-ink-900 dark:text-white sm:text-3xl">
+            <h1 className="text-2xl font-bold tracking-tight text-ink-900 dark:text-white sm:text-3xl">
               Landing Page CMS
             </h1>
             <p className="mt-1 text-xs sm:text-sm text-ink-500 dark:text-ink-400">
@@ -216,7 +210,7 @@ export default function LandingPageCms() {
             <button
               type="button"
               onClick={handleResetDefaults}
-              className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 rounded-xl border border-ink-200 bg-white px-3.5 py-2.5 text-xs font-bold text-ink-600 shadow-sm transition hover:bg-ink-50 active:scale-95 dark:border-white/10 dark:bg-ink-800 dark:text-ink-300 dark:hover:bg-ink-700"
+              className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 rounded-lg border border-ink-200 bg-white px-3.5 py-2 text-xs font-medium text-ink-600 shadow-xs transition hover:bg-ink-50 dark:border-white/10 dark:bg-ink-800 dark:text-ink-300 dark:hover:bg-ink-700"
             >
               <RotateCcw className="size-3.5" />
               <span>Reset to Defaults</span>
@@ -236,7 +230,7 @@ export default function LandingPageCms() {
         {/* Responsive Section Navigation Bar */}
         <div className="space-y-2">
           <div className="-mx-4 px-4 sm:mx-0 sm:px-0">
-            <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto no-scrollbar py-1.5 px-1.5 rounded-2xl bg-ink-100/90 dark:bg-white/[.04] border border-ink-200/80 dark:border-white/10 scroll-smooth">
+            <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto no-scrollbar py-1 px-1 rounded-xl bg-ink-100/80 dark:bg-white/[.04] border border-ink-200/80 dark:border-white/10 scroll-smooth">
               {[
                 {
                   id: 'hero',
@@ -276,22 +270,13 @@ export default function LandingPageCms() {
                     type="button"
                     onClick={() => setActiveTab(tab.id)}
                     className={cn(
-                      'group flex items-center gap-2 rounded-xl px-3.5 py-2.5 sm:px-4 sm:py-2.5 text-xs sm:text-sm font-bold transition-all shrink-0 active:scale-95 select-none',
+                      'group flex items-center gap-2 rounded-lg px-3 py-2 sm:px-3.5 sm:py-2 text-xs font-medium transition-all shrink-0 select-none',
                       isActive
-                        ? 'bg-white text-brand-700 shadow-soft ring-1 ring-ink-200/60 dark:bg-ink-800 dark:text-white dark:ring-white/15'
+                        ? 'bg-white text-brand-700 shadow-xs ring-1 ring-ink-200/60 dark:bg-ink-800 dark:text-white dark:ring-white/15'
                         : 'text-ink-600 hover:bg-white/60 hover:text-ink-900 dark:text-ink-400 dark:hover:bg-white/[.06] dark:hover:text-white',
                     )}
                   >
-                    <span
-                      className={cn(
-                        'grid size-6 place-items-center rounded-lg text-xs font-black transition-colors',
-                        isActive
-                          ? 'bg-brand-50 text-brand-600 dark:bg-brand-500/20 dark:text-brand-300'
-                          : 'bg-ink-200/60 text-ink-600 group-hover:bg-ink-200 dark:bg-white/10 dark:text-ink-400 dark:group-hover:bg-white/15',
-                      )}
-                    >
-                      <tab.icon className="size-3.5" />
-                    </span>
+                    <tab.icon className="size-3.5 shrink-0" />
 
                     <span className="flex items-center gap-1.5 whitespace-nowrap">
                       <span className="inline sm:hidden">{tab.shortLabel}</span>
@@ -301,10 +286,10 @@ export default function LandingPageCms() {
                     {tab.badge != null && (
                       <span
                         className={cn(
-                          'rounded-full px-2 py-0.5 text-[10px] font-black leading-none transition-colors',
+                          'rounded-md px-1.5 py-0.5 text-[11px] font-medium leading-none transition-colors',
                           isActive
-                            ? 'bg-brand-100 text-brand-700 dark:bg-brand-500/25 dark:text-brand-300'
-                            : 'bg-ink-200/80 text-ink-600 dark:bg-white/10 dark:text-ink-300',
+                            ? 'bg-brand-50 text-brand-700 dark:bg-brand-500/25 dark:text-brand-300'
+                            : 'bg-ink-200/70 text-ink-600 dark:bg-white/10 dark:text-ink-400',
                         )}
                       >
                         {tab.badge}

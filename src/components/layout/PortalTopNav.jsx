@@ -126,11 +126,11 @@ export function PortalTopNav({ portal: propPortal, onToggleMobileNav }) {
 
         {/* Right: Actions, Telemetry, Theme, User Profile */}
         <div className="flex items-center gap-2 sm:gap-3">
-          {/* Admin Telemetry status */}
+          {/* Admin status pill */}
           {activePortal === 'admin' && (
-            <div className="hidden md:flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-xs font-bold text-emerald-700 dark:text-emerald-300">
-              <span className="size-2 rounded-full bg-emerald-500 animate-ping" />
-              <span>Gateway Active · 142ms</span>
+            <div className="hidden md:flex items-center gap-1.5 rounded-md border border-ink-200/60 bg-white/60 px-2.5 py-1 text-xs font-medium text-ink-600 dark:border-white/10 dark:bg-white/[.04] dark:text-ink-300">
+              <span className="size-1.5 rounded-full bg-emerald-500" />
+              <span>Systems operational</span>
             </div>
           )}
 

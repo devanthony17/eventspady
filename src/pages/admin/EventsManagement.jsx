@@ -95,13 +95,7 @@ export default function EventsManagement() {
         {/* Header */}
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <div className="flex items-center gap-2">
-              <Calendar className="size-4 text-brand-600 dark:text-brand-400" />
-              <span className="text-xs font-bold uppercase tracking-wider text-ink-500 dark:text-ink-400">
-                Platform Inventory
-              </span>
-            </div>
-            <h1 className="mt-1 text-2xl font-black tracking-tight text-ink-900 dark:text-white sm:text-3xl">
+            <h1 className="text-2xl font-bold tracking-tight text-ink-900 dark:text-white sm:text-3xl">
               Events Management ({events.length})
             </h1>
             <p className="mt-1 text-sm text-ink-500 dark:text-ink-400">
@@ -116,19 +110,19 @@ export default function EventsManagement() {
 
         {/* Filters */}
         <div className="surface flex flex-col gap-4 p-4 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="flex flex-wrap items-center gap-1.5">
             {['all', 'music', 'culture', 'tech', 'sports', 'business'].map((cat) => (
               <button
                 key={cat}
                 type="button"
                 onClick={() => setCategoryFilter(cat)}
-                className={`rounded-xl px-3 py-1.5 text-xs font-bold uppercase tracking-wider transition ${
+                className={`rounded-lg px-3 py-1.5 text-xs font-medium capitalize transition ${
                   categoryFilter === cat
-                    ? 'bg-brand-600 text-white shadow-sm'
+                    ? 'bg-brand-600 text-white shadow-xs'
                     : 'text-ink-600 hover:bg-ink-100 dark:text-ink-300 dark:hover:bg-white/[.06]'
                 }`}
               >
-                {cat}
+                {cat === 'all' ? 'All categories' : cat}
               </button>
             ))}
           </div>
@@ -151,12 +145,12 @@ export default function EventsManagement() {
             <table className="w-full text-left text-xs">
               <thead className="border-b border-ink-200/80 bg-ink-50/50 text-ink-500 dark:border-white/10 dark:bg-white/[.02] dark:text-ink-400">
                 <tr>
-                  <th className="px-5 py-3.5 font-bold uppercase tracking-wider">Event Details</th>
-                  <th className="px-4 py-3.5 font-bold uppercase tracking-wider">Date & Venue</th>
-                  <th className="px-4 py-3.5 font-bold uppercase tracking-wider">Organizer</th>
-                  <th className="px-4 py-3.5 font-bold uppercase tracking-wider">Ticket Sales</th>
-                  <th className="px-4 py-3.5 font-bold uppercase tracking-wider">Status</th>
-                  <th className="px-5 py-3.5 text-right font-bold uppercase tracking-wider">Actions</th>
+                  <th className="px-5 py-3.5 font-medium uppercase tracking-wider">Event Details</th>
+                  <th className="px-4 py-3.5 font-medium uppercase tracking-wider">Date & Venue</th>
+                  <th className="px-4 py-3.5 font-medium uppercase tracking-wider">Organizer</th>
+                  <th className="px-4 py-3.5 font-medium uppercase tracking-wider">Ticket Sales</th>
+                  <th className="px-4 py-3.5 font-medium uppercase tracking-wider">Status</th>
+                  <th className="px-5 py-3.5 text-right font-medium uppercase tracking-wider">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-ink-100 dark:divide-white/[.06]">
@@ -196,13 +190,14 @@ export default function EventsManagement() {
                         <p className="font-semibold text-ink-800 dark:text-ink-200">
                           {ev.organizer?.name || 'Verified Partner'}
                         </p>
-                        <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold">
-                          ✓ Verified
+                        <span className="inline-flex items-center gap-1 text-[11px] text-ink-500 dark:text-ink-400 font-medium">
+                          <span className="size-1.5 rounded-full bg-emerald-500" />
+                          Verified
                         </span>
                       </td>
 
                       <td className="px-4 py-4">
-                        <div className="flex items-center justify-between text-[11px] font-bold">
+                        <div className="flex items-center justify-between text-[11px] font-medium">
                           <span>{ev.sold?.toLocaleString() || 0} sold</span>
                           <span className="text-ink-400">{soldRatio}%</span>
                         </div>
@@ -216,23 +211,23 @@ export default function EventsManagement() {
 
                       <td className="px-4 py-4">
                         {ev.featured ? (
-                          <span className="inline-flex items-center gap-1 rounded-full bg-amber-500/15 px-2.5 py-0.5 text-xs font-bold text-amber-700 dark:text-amber-300">
-                            <Star className="size-3 fill-amber-500" />
+                          <span className="inline-flex items-center gap-1 rounded-md bg-amber-50 px-2 py-0.5 text-xs font-medium text-amber-700 border border-amber-200/60 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800/40">
+                            <Star className="size-3 fill-amber-500 text-amber-500" />
                             Featured
                           </span>
                         ) : (
-                          <span className="rounded-full bg-ink-100 px-2.5 py-0.5 text-xs font-semibold text-ink-600 dark:bg-white/10 dark:text-ink-400">
+                          <span className="inline-flex items-center rounded-md bg-ink-50 px-2 py-0.5 text-xs font-medium text-ink-600 border border-ink-200/60 dark:bg-white/[.04] dark:text-ink-400 dark:border-white/10">
                             Standard
                           </span>
                         )}
                       </td>
 
                       <td className="px-5 py-4 text-right">
-                        <div className="flex items-center justify-end gap-2">
+                        <div className="flex items-center justify-end gap-1.5">
                           <button
                             type="button"
                             onClick={() => toggleFeatured(ev)}
-                            className="rounded-lg border border-ink-200 px-2.5 py-1 text-xs font-bold text-ink-700 hover:bg-ink-100 dark:border-white/10 dark:text-ink-300 dark:hover:bg-white/10"
+                            className="rounded-lg border border-ink-200 px-2.5 py-1 text-xs font-medium text-ink-700 hover:bg-ink-100 dark:border-white/10 dark:text-ink-300 dark:hover:bg-white/10"
                             title={ev.featured ? 'Remove from featured' : 'Feature on homepage'}
                           >
                             {ev.featured ? 'Unfeature' : 'Feature'}

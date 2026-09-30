@@ -112,27 +112,24 @@ export default function Overview() {
         noIndex
       />
 
-      <div className="space-y-8">
+      <div className="space-y-6">
         {/* Welcome Header */}
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <div className="flex items-center gap-2">
-              <span className="flex size-2.5 rounded-full bg-emerald-500 animate-ping" />
-              <span className="text-xs font-extrabold uppercase tracking-wider text-brand-600 dark:text-brand-400">
-                Live Telemetry & Management
-              </span>
-            </div>
-            <h1 className="mt-1 text-2xl font-black tracking-tight text-ink-900 dark:text-white sm:text-3xl">
-              Platform Command Center
+            <p className="text-xs font-semibold uppercase tracking-wider text-ink-500 dark:text-ink-400">
+              Administration
+            </p>
+            <h1 className="mt-1 text-2xl font-bold tracking-tight text-ink-900 dark:text-white sm:text-3xl">
+              Overview & Analytics
             </h1>
             <p className="mt-1 text-sm text-ink-500 dark:text-ink-400">
-              Real-time oversight for attendee ticket sales, organizer verifications, and landing page content.
+              Platform oversight for ticket transactions, organizer approvals, and content.
             </p>
           </div>
 
           <div className="flex flex-wrap items-center gap-2.5">
             <Button to="/admin/cms" variant="outline" size="sm" iconLeft={FileEdit}>
-              Edit Landing Page CMS
+              Edit Landing Page
             </Button>
             <Button to="/admin/organizers" size="sm" iconLeft={ShieldCheck}>
               Review Organizers ({pendingOrganizers.length})
@@ -140,31 +137,29 @@ export default function Overview() {
           </div>
         </div>
 
-        {/* Urgent Verification Alert Banner if organizers are pending */}
+        {/* Organizer Verification Alert Banner */}
         {pendingOrganizers.length > 0 && (
-          <div className="relative overflow-hidden rounded-2xl border border-amber-400/40 bg-gradient-to-r from-amber-500/15 via-amber-500/10 to-transparent p-5 text-amber-950 dark:text-amber-200 shadow-sm">
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-              <div className="flex items-start gap-3.5">
-                <div className="grid size-10 place-items-center rounded-xl bg-amber-500 text-white shadow-md shadow-amber-500/30 shrink-0">
-                  <ShieldAlert className="size-5" />
-                </div>
-                <div>
-                  <h4 className="font-extrabold text-sm sm:text-base text-amber-900 dark:text-amber-200">
-                    {pendingOrganizers.length} Organizer Application{pendingOrganizers.length > 1 ? 's' : ''} Awaiting Gate Approval
-                  </h4>
-                  <p className="mt-0.5 text-xs text-amber-800/80 dark:text-amber-300/80">
-                    Unverified organizers cannot publish tickets or log in to the organizer dashboard until reviewed and verified by an administrator.
-                  </p>
-                </div>
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 rounded-xl border border-amber-200/80 bg-amber-50/60 p-4 text-amber-900 dark:border-amber-900/50 dark:bg-amber-950/20 dark:text-amber-200">
+            <div className="flex items-center gap-3">
+              <div className="grid size-9 place-items-center rounded-lg bg-amber-100 text-amber-700 dark:bg-amber-900/50 dark:text-amber-300 shrink-0">
+                <ShieldCheck className="size-4" />
               </div>
-              <Link
-                to="/admin/organizers"
-                className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-amber-600 px-4 py-2.5 text-xs font-bold text-white shadow-sm transition hover:bg-amber-700"
-              >
-                <span>Verify Now</span>
-                <ArrowRight className="size-3.5" />
-              </Link>
+              <div>
+                <p className="text-sm font-semibold text-amber-950 dark:text-amber-200">
+                  {pendingOrganizers.length} organizer application{pendingOrganizers.length > 1 ? 's' : ''} awaiting review
+                </p>
+                <p className="text-xs text-amber-700/90 dark:text-amber-400/90">
+                  Unverified organizers cannot publish tickets until approved by an administrator.
+                </p>
+              </div>
             </div>
+            <Link
+              to="/admin/organizers"
+              className="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-lg bg-amber-600 px-3.5 py-2 text-xs font-semibold text-white shadow-xs transition hover:bg-amber-700"
+            >
+              <span>Review applications</span>
+              <ArrowRight className="size-3.5" />
+            </Link>
           </div>
         )}
 
@@ -243,13 +238,13 @@ export default function Overview() {
                   {verifiedOrganizers.length} Verified
                 </p>
                 {pendingOrganizers.length > 0 && (
-                  <span className="text-xs font-black text-amber-600 dark:text-amber-400">
+                  <span className="text-xs font-medium text-amber-600 dark:text-amber-400">
                     ({pendingOrganizers.length} pending)
                   </span>
                 )}
               </div>
-              <p className="mt-1.5 text-xs text-ink-400">
-                Strict gatekeeper policy enabled
+              <p className="mt-1.5 text-xs text-ink-500 dark:text-ink-400">
+                Verified organizer credentials
               </p>
             </div>
           </div>
@@ -276,43 +271,43 @@ export default function Overview() {
             <div>
               <div className="flex items-center justify-between">
                 <div>
-                  <h4 className="text-sm font-extrabold uppercase tracking-wider text-ink-500 dark:text-ink-400">
-                    Organizer Gatekeeper Queue
+                  <h4 className="text-sm font-semibold text-ink-900 dark:text-white">
+                    Organizer Approvals
                   </h4>
-                  <p className="mt-0.5 text-xs text-ink-400">Review applicants before granting portal login</p>
+                  <p className="mt-0.5 text-xs text-ink-500 dark:text-ink-400">Review applicants before granting portal access</p>
                 </div>
                 <Link
                   to="/admin/organizers"
-                  className="text-xs font-bold text-brand-600 hover:underline dark:text-brand-400"
+                  className="text-xs font-semibold text-brand-600 hover:underline dark:text-brand-400"
                 >
-                  Manage All ({organizers.length})
+                  Manage all ({organizers.length})
                 </Link>
               </div>
 
               <div className="mt-5 space-y-3">
                 {pendingOrganizers.length === 0 ? (
-                  <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-ink-200 py-8 text-center dark:border-white/10">
-                    <CheckCircle2 className="size-8 text-emerald-500" />
-                    <p className="mt-2 text-sm font-bold text-ink-800 dark:text-ink-200">
-                      All Organizers Verified!
+                  <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-ink-200 py-8 text-center dark:border-white/10">
+                    <CheckCircle2 className="size-7 text-emerald-500" />
+                    <p className="mt-2 text-sm font-semibold text-ink-800 dark:text-ink-200">
+                      All Organizers Verified
                     </p>
                     <p className="mt-0.5 text-xs text-ink-400">
-                      No pending applications in the review pipeline.
+                      No pending applications in the review queue.
                     </p>
                   </div>
                 ) : (
                   pendingOrganizers.map((org) => (
                     <div
                       key={org.id}
-                      className="flex flex-col gap-3 rounded-xl border border-amber-500/20 bg-amber-500/5 p-4 sm:flex-row sm:items-center sm:justify-between dark:border-amber-500/15"
+                      className="flex flex-col gap-3 rounded-xl border border-ink-200/80 bg-white p-4 sm:flex-row sm:items-center sm:justify-between dark:border-white/10 dark:bg-ink-900/60"
                     >
                       <div className="min-w-0">
                         <div className="flex items-center gap-2">
-                          <p className="truncate text-sm font-bold text-ink-900 dark:text-white">
+                          <p className="truncate text-sm font-semibold text-ink-900 dark:text-white">
                             {org.name}
                           </p>
-                          <span className="rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-black uppercase text-amber-800 dark:bg-amber-950 dark:text-amber-300">
-                            Pending Gate
+                          <span className="inline-flex items-center rounded-md bg-amber-50 px-2 py-0.5 text-xs font-medium text-amber-700 border border-amber-200/60 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800/40">
+                            Pending approval
                           </span>
                         </div>
                         <p className="mt-0.5 text-xs text-ink-500 dark:text-ink-400">
@@ -324,9 +319,9 @@ export default function Overview() {
                         <button
                           type="button"
                           onClick={() => handleQuickVerify(org.id, org.name)}
-                          className="rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-bold text-white shadow-sm transition hover:bg-emerald-700"
+                          className="rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-semibold text-white shadow-xs transition hover:bg-emerald-700"
                         >
-                          Verify & Grant Login
+                          Approve
                         </button>
                       </div>
                     </div>
@@ -336,31 +331,25 @@ export default function Overview() {
             </div>
 
             <div className="mt-6 border-t border-ink-100 pt-4 dark:border-white/10 flex items-center justify-between text-xs text-ink-500 dark:text-ink-400">
-              <span>Security Rule: Unverified organizers are blocked at login</span>
-              <span className="font-semibold text-brand-600 dark:text-brand-400">Zero Trust Verification</span>
+              <span>Policy: Unverified organizers are restricted from ticket publishing</span>
+              <span className="font-medium text-ink-600 dark:text-ink-300">Identity Verification</span>
             </div>
           </div>
         </div>
 
         {/* Quick CMS Action Card */}
-        <div className="rounded-2xl border border-brand-500/20 bg-gradient-to-r from-brand-600/10 via-purple-500/10 to-transparent p-6 dark:border-brand-500/10">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-brand-500/10 px-2.5 py-1 text-xs font-bold text-brand-700 dark:text-brand-300">
-                <FileEdit className="size-3.5" />
-                Landing Page Content Management
-              </span>
-              <h3 className="mt-2 text-lg font-black text-ink-900 dark:text-white">
-                Customize Homepage Hero, Spotlight, Reviews & Blog
-              </h3>
-              <p className="mt-1 max-w-2xl text-xs text-ink-600 dark:text-ink-300">
-                Update marketing headlines, choose the featured spotlight event, manage testimonials, or publish news directly from the CMS without code changes.
-              </p>
-            </div>
-            <Button to="/admin/cms" iconRight={ArrowRight}>
-              Open CMS Editor
-            </Button>
+        <div className="surface p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <h3 className="text-base font-semibold text-ink-900 dark:text-white">
+              Landing Page Content Management
+            </h3>
+            <p className="mt-1 max-w-2xl text-xs text-ink-500 dark:text-ink-400">
+              Update marketing headlines, choose the featured spotlight event, manage testimonials, or publish news directly from the CMS editor.
+            </p>
           </div>
+          <Button to="/admin/cms" iconRight={ArrowRight} size="sm">
+            Open CMS Editor
+          </Button>
         </div>
       </div>
     </>

@@ -145,13 +145,7 @@ export default function OrdersManagement() {
         {/* Header */}
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <div className="flex items-center gap-2">
-              <Receipt className="size-4 text-brand-600 dark:text-brand-400" />
-              <span className="text-xs font-bold uppercase tracking-wider text-ink-500 dark:text-ink-400">
-                Financial Audit
-              </span>
-            </div>
-            <h1 className="mt-1 text-2xl font-black tracking-tight text-ink-900 dark:text-white sm:text-3xl">
+            <h1 className="text-2xl font-bold tracking-tight text-ink-900 dark:text-white sm:text-3xl">
               Orders & MoMo Ledger
             </h1>
             <p className="mt-1 text-sm text-ink-500 dark:text-ink-400">
@@ -177,9 +171,9 @@ export default function OrdersManagement() {
                 key={f.id}
                 type="button"
                 onClick={() => setMethodFilter(f.id)}
-                className={`rounded-xl px-3.5 py-1.5 text-xs font-bold transition ${
+                className={`rounded-lg px-3 py-1.5 text-xs font-medium transition ${
                   methodFilter === f.id
-                    ? 'bg-brand-600 text-white shadow-sm'
+                    ? 'bg-brand-600 text-white shadow-xs'
                     : 'text-ink-600 hover:bg-ink-100 dark:text-ink-300 dark:hover:bg-white/[.06]'
                 }`}
               >
@@ -206,66 +200,76 @@ export default function OrdersManagement() {
             <table className="w-full text-left text-xs">
               <thead className="border-b border-ink-200/80 bg-ink-50/50 text-ink-500 dark:border-white/10 dark:bg-white/[.02] dark:text-ink-400">
                 <tr>
-                  <th className="px-5 py-3.5 font-bold uppercase tracking-wider">Order ID & Date</th>
-                  <th className="px-4 py-3.5 font-bold uppercase tracking-wider">Attendee</th>
-                  <th className="px-4 py-3.5 font-bold uppercase tracking-wider">Event</th>
-                  <th className="px-4 py-3.5 font-bold uppercase tracking-wider">Amount (GH₵)</th>
-                  <th className="px-4 py-3.5 font-bold uppercase tracking-wider">Gateway & Ref</th>
-                  <th className="px-5 py-3.5 text-right font-bold uppercase tracking-wider">Status</th>
+                  <th className="px-5 py-3.5 font-medium uppercase tracking-wider">Order ID & Date</th>
+                  <th className="px-4 py-3.5 font-medium uppercase tracking-wider">Attendee</th>
+                  <th className="px-4 py-3.5 font-medium uppercase tracking-wider">Event</th>
+                  <th className="px-4 py-3.5 font-medium uppercase tracking-wider">Amount (GH₵)</th>
+                  <th className="px-4 py-3.5 font-medium uppercase tracking-wider">Gateway & Ref</th>
+                  <th className="px-5 py-3.5 text-right font-medium uppercase tracking-wider">Status</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-ink-100 dark:divide-white/[.06]">
-                {filteredOrders.map((order) => (
-                  <tr
-                    key={order.id}
-                    onClick={() => setSelectedOrderId(order.id)}
-                    className="cursor-pointer transition hover:bg-ink-50/50 dark:hover:bg-white/[.02]"
-                  >
-                    <td className="px-5 py-4">
-                      <p className="font-mono font-bold text-ink-900 dark:text-white">
-                        {order.id}
-                      </p>
-                      <p className="text-[11px] text-ink-400">{formatDate(order.date)}</p>
-                    </td>
+                {filteredOrders.map((order) => {
+                  const isRefunded = order.status === 'refunded'
+                  return (
+                    <tr
+                      key={order.id}
+                      onClick={() => setSelectedOrderId(order.id)}
+                      className="cursor-pointer transition hover:bg-ink-50/50 dark:hover:bg-white/[.02]"
+                    >
+                      <td className="px-5 py-4">
+                        <p className="font-mono font-bold text-ink-900 dark:text-white">
+                          {order.id}
+                        </p>
+                        <p className="text-[11px] text-ink-400">{formatDate(order.date)}</p>
+                      </td>
 
-                    <td className="px-4 py-4">
-                      <p className="font-bold text-ink-900 dark:text-white">
-                        {order.attendeeName}
-                      </p>
-                      <p className="text-[11px] text-ink-400">{order.attendeeEmail}</p>
-                    </td>
+                      <td className="px-4 py-4">
+                        <p className="font-bold text-ink-900 dark:text-white">
+                          {order.attendeeName}
+                        </p>
+                        <p className="text-[11px] text-ink-400">{order.attendeeEmail}</p>
+                      </td>
 
-                    <td className="px-4 py-4">
-                      <p className="font-medium text-ink-800 dark:text-ink-200 truncate max-w-[200px]">
-                        {order.eventTitle}
-                      </p>
-                      <p className="text-[11px] text-ink-400">
-                        {order.tickets} ticket{order.tickets > 1 ? 's' : ''}
-                      </p>
-                    </td>
+                      <td className="px-4 py-4">
+                        <p className="font-medium text-ink-800 dark:text-ink-200 truncate max-w-[200px]">
+                          {order.eventTitle}
+                        </p>
+                        <p className="text-[11px] text-ink-400">
+                          {order.tickets} ticket{order.tickets > 1 ? 's' : ''}
+                        </p>
+                      </td>
 
-                    <td className="px-4 py-4 font-black text-ink-900 dark:text-white">
-                      {formatCurrency(order.amount)}
-                    </td>
+                      <td className="px-4 py-4 font-bold text-ink-900 dark:text-white">
+                        {formatCurrency(order.amount)}
+                      </td>
 
-                    <td className="px-4 py-4">
-                      <div className="flex items-center gap-1.5">
-                        <Smartphone className="size-3.5 text-brand-600 dark:text-brand-400" />
-                        <span className="font-bold text-ink-800 dark:text-ink-200">
-                          {order.paymentMethod}
-                        </span>
-                      </div>
-                      <p className="font-mono text-[10px] text-ink-400">{order.momoRef}</p>
-                    </td>
+                      <td className="px-4 py-4">
+                        <div className="flex items-center gap-1.5">
+                          <Smartphone className="size-3.5 text-ink-500 dark:text-ink-400" />
+                          <span className="font-medium text-ink-800 dark:text-ink-200">
+                            {order.paymentMethod}
+                          </span>
+                        </div>
+                        <p className="font-mono text-[10px] text-ink-400">{order.momoRef}</p>
+                      </td>
 
-                    <td className="px-5 py-4 text-right">
-                      <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/15 px-2.5 py-0.5 text-xs font-bold text-emerald-700 dark:text-emerald-300">
-                        <CheckCircle2 className="size-3 text-emerald-600" />
-                        Settled
-                      </span>
-                    </td>
-                  </tr>
-                ))}
+                      <td className="px-5 py-4 text-right">
+                        {isRefunded ? (
+                          <span className="inline-flex items-center gap-1.5 rounded-md bg-rose-50 px-2 py-0.5 text-xs font-medium text-rose-700 border border-rose-200/60 dark:bg-rose-950/40 dark:text-rose-300 dark:border-rose-800/40">
+                            <span className="size-1.5 rounded-full bg-rose-500" />
+                            Refunded
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-1.5 rounded-md bg-emerald-50 px-2 py-0.5 text-xs font-medium text-emerald-700 border border-emerald-200/60 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800/40">
+                            <span className="size-1.5 rounded-full bg-emerald-500" />
+                            Settled
+                          </span>
+                        )}
+                      </td>
+                    </tr>
+                  )
+                })}
               </tbody>
             </table>
           </div>

@@ -1,8 +1,9 @@
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react'
 import { Quote, ChevronLeft, ChevronRight, ShieldCheck } from 'lucide-react'
 import { Container, Section, SectionHeading } from '@components/ui/Section'
 import { Rating } from '@components/ui/Rating'
 import { useLandingCms } from '@hooks/api'
+import { trustedOrganizers as defaultTrustedOrganizers } from '@data/testimonials'
 
 const DEFAULT_TESTIMONIALS = [
   {
@@ -44,7 +45,17 @@ export function Testimonials() {
   const { data: cmsData } = useLandingCms()
   const cmsTestimonials = cmsData?.testimonials || cmsData?.data?.testimonials
   const list = cmsTestimonials && cmsTestimonials.length > 0 ? cmsTestimonials : DEFAULT_TESTIMONIALS
-  const trustedOrganizers = cmsData?.trustedOrganizers || DEFAULT_ORGANIZERS
+
+  const trustedOrganizers = useMemo(() => {
+    const fromCms = cmsData?.trustedOrganizers || cmsData?.data?.trustedOrganizers
+    if (Array.isArray(fromCms) && fromCms.length > 0) {
+      return fromCms.map((org, i) => ({
+        ...org,
+        logo: org.logo || defaultTrustedOrganizers[i % defaultTrustedOrganizers.length]?.logo,
+      }))
+    }
+    return defaultTrustedOrganizers
+  }, [cmsData])
 
   const [activeIndex, setActiveIndex] = useState(0)
   const [isPaused, setIsPaused] = useState(false)
@@ -288,14 +299,18 @@ export function Testimonials() {
             <div className="flex w-max animate-marquee items-center gap-6 sm:gap-8 hover:[animation-play-state:paused] py-3">
               {[...trustedOrganizers, ...trustedOrganizers].map((org, i) => (
                 <div
-                  key={`${org.id}-${i}`}
+                  key={`${org.id || org.name}-${i}`}
                   className="group relative flex h-14 sm:h-16 shrink-0 items-center justify-center rounded-2xl border border-ink-200/70 bg-white/90 px-6 sm:px-7 shadow-sm backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 hover:border-brand-500/50 hover:bg-white hover:shadow-md dark:border-white/15 dark:bg-white/[.07] dark:hover:border-brand-400/60 dark:hover:bg-white/[.12]"
-                  title={`${org.name} — ${org.tag}`}
+                  title={`${org.name}${org.tag ? ` — ${org.tag}` : ''}`}
                 >
                   <img
                     src={org.logo}
                     alt={org.name}
+                    loading="lazy"
                     className="h-8 sm:h-9 w-auto max-w-[160px] sm:max-w-[190px] object-contain transition-all duration-300 group-hover:scale-105"
+                    onError={(e) => {
+                      e.currentTarget.src = '/images/organizers/logo-arts-council.svg'
+                    }}
                   />
                 </div>
               ))}

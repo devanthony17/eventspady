@@ -203,7 +203,7 @@ export function SearchDialog({ open, onClose }) {
                       )}
                     >
                       <span className="flex size-10 shrink-0 items-center justify-center rounded-full border border-[#dce6fa] bg-white text-[#2d2942] shadow-xs dark:border-blue-400/20 dark:bg-ink-800 dark:text-ink-100">
-                        {category.icon ? (
+                        {category.icon && typeof category.icon !== 'string' ? (
                           <category.icon className="size-5" aria-hidden="true" />
                         ) : (
                           <Tag className="size-4" aria-hidden="true" />

@@ -8,6 +8,7 @@ import {
   Mail,
   MapPin,
   Phone,
+  Tag,
   Twitter,
   Youtube,
 } from 'lucide-react'
@@ -198,7 +199,11 @@ export function Footer() {
                 to={`/events?category=${category.id}`}
                 className="inline-flex items-center gap-1.5 rounded-full border border-ink-200 px-3 py-1.5 text-xs font-semibold text-ink-600 transition hover:border-brand-400 hover:bg-brand-50 hover:text-brand-700 dark:border-white/10 dark:text-ink-300 dark:hover:border-brand-500/40 dark:hover:bg-white/5 dark:hover:text-white"
               >
-                <category.icon className="size-3.5 shrink-0 text-ink-500 dark:text-ink-400" aria-hidden="true" />
+                {category.icon && typeof category.icon !== 'string' ? (
+                  <category.icon className="size-3.5 shrink-0 text-ink-500 dark:text-ink-400" aria-hidden="true" />
+                ) : (
+                  <Tag className="size-3.5 shrink-0 text-ink-500 dark:text-ink-400" aria-hidden="true" />
+                )}
                 <span>{category.name}</span>
               </Link>
             ))}

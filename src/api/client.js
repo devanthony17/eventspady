@@ -1,7 +1,16 @@
 import axios from 'axios'
 import tokenManager from './tokenManager'
 
-export const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
+const configuredApiUrl = import.meta.env.VITE_API_URL
+const configuredForLocalhost = /^https?:\/\/(localhost|127\.0\.0\.1)(?::\d+)?(?:\/|$)/i.test(
+  configuredApiUrl || '',
+)
+
+// A production build must never direct visitors to their own localhost.
+export const API_BASE_URL =
+  import.meta.env.PROD && configuredForLocalhost
+    ? window.location.origin
+    : configuredApiUrl || window.location.origin
 
 // Primary Axios instance for all application API calls
 export const apiClient = axios.create({

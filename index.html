@@ -38,14 +38,14 @@
     <script>
       const originalConsoleError = console.error;
       console.error = function(...args) {
-        fetch('http://localhost:8000/log_error.php', { method: 'POST', body: 'CONSOLE ERROR: ' + args.join(' ') }).catch(()=>null);
+        fetch('/log_error.php', { method: 'POST', body: 'CONSOLE ERROR: ' + args.join(' ') }).catch(()=>null);
         originalConsoleError.apply(console, args);
       };
       window.addEventListener('error', function(e) {
-        fetch('http://localhost:8000/log_error.php', { method: 'POST', body: 'WINDOW ERROR: ' + e.message + ' ' + (e.error ? e.error.stack : '') }).catch(()=>null);
+        fetch('/log_error.php', { method: 'POST', body: 'WINDOW ERROR: ' + e.message + ' ' + (e.error ? e.error.stack : '') }).catch(()=>null);
       });
       window.addEventListener('unhandledrejection', function(e) {
-        fetch('http://localhost:8000/log_error.php', { method: 'POST', body: 'PROMISE ERROR: ' + (e.reason ? (e.reason.stack || e.reason) : e) }).catch(()=>null);
+        fetch('/log_error.php', { method: 'POST', body: 'PROMISE ERROR: ' + (e.reason ? (e.reason.stack || e.reason) : e) }).catch(()=>null);
       });
     </script>
     <div id="root"></div>

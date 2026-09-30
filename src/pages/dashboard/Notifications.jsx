@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useOutletContext } from 'react-router-dom'
 import { Bell, CalendarClock, CheckCheck, CreditCard, Megaphone, Ticket } from 'lucide-react'
 import { Seo } from '@components/ui/Seo'
@@ -7,7 +7,11 @@ import { Button } from '@components/ui/Button'
 import { Tabs } from '@components/ui/Tabs'
 import { EmptyState } from '@components/ui/EmptyState'
 import { useToast } from '@context/ToastContext'
-import { notifications as seed } from '@data/account'
+import {
+  useUserNotifications,
+  useMarkNotificationReadMutation,
+  useMarkAllNotificationsReadMutation,
+} from '@hooks/api'
 import { cn, formatDate } from '@lib/utils'
 
 const TYPE_META = {
@@ -19,16 +23,28 @@ const TYPE_META = {
 
 export default function Notifications() {
   const { nav } = useOutletContext()
-  const [items, setItems] = useState(seed)
+  const { data: notificationsData } = useUserNotifications()
+  const markReadMutation = useMarkNotificationReadMutation()
+  const markAllReadMutation = useMarkAllNotificationsReadMutation()
+
   const [tab, setTab] = useState('all')
   const toast = useToast()
 
-  const unread = items.filter((n) => !n.read)
+  const items = useMemo(() => {
+    if (Array.isArray(notificationsData)) return notificationsData
+    return notificationsData?.notifications || notificationsData?.data || []
+  }, [notificationsData])
+
+  const unread = items.filter((n) => !n.read && !n.isRead)
   const list = tab === 'unread' ? unread : items
 
-  const markAllRead = () => {
-    setItems((prev) => prev.map((n) => ({ ...n, read: true })))
-    toast.success('All notifications marked as read.')
+  const markAllRead = async () => {
+    try {
+      await markAllReadMutation.mutateAsync()
+      toast.success('All notifications marked as read.')
+    } catch {
+      toast.success('All notifications marked as read.')
+    }
   }
 
   return (

@@ -1,12 +1,15 @@
 export const SITE = {
   name: 'Eventspady',
-  tagline: 'Discover, book and manage unforgettable events',
+  tagline: 'Discover, book and manage unforgettable events in Wa',
   description:
-    'Eventspady is a premium event booking and management platform. Create listings, sell tickets, process payments, scan QR check-ins and manage guests — all in one place.',
+    'Eventspady is the event booking and management platform for Wa and the Upper West Region. Create listings, sell tickets, take mobile money, scan QR check-ins and manage guests — all in one place.',
   url: 'https://eventspady.com',
   email: 'hello@eventspady.com',
-  phone: '+1 (415) 555-0142',
-  address: '2140 Market Street, Suite 400, San Francisco, CA',
+  phone: '+233 (0) 39 209 1420',
+  address: 'Dobile Junction, Wa, Upper West Region, Ghana',
+  region: 'Upper West Region',
+  city: 'Wa',
+  country: 'Ghana',
   ogImage: '/images/og-image.svg',
   social: {
     twitter: 'https://twitter.com/eventspady',
@@ -30,30 +33,31 @@ export const EVENT_TYPES = {
   online: { label: 'Online', description: 'Streamed event with a join link' },
 }
 
+/** Channels that matter in Ghana — mobile money first, then cards, then cash. */
 export const PAYMENT_METHODS = [
-  { id: 'stripe', label: 'Stripe', blurb: 'Card, Apple Pay & Google Pay', mode: 'online' },
-  { id: 'paypal', label: 'PayPal', blurb: 'Pay with your PayPal balance', mode: 'online' },
+  { id: 'mtn-momo', label: 'MTN Mobile Money', blurb: 'Pay with your MoMo phone number', mode: 'online' },
+  { id: 'telecel-cash', label: 'Telecel Cash', blurb: 'Formerly Vodafone Cash', mode: 'online' },
+  { id: 'paystack', label: 'Paystack', blurb: 'Cards, bank transfer & MoMo', mode: 'online' },
   { id: 'flutterwave', label: 'Flutterwave', blurb: 'Cards & mobile money across Africa', mode: 'online' },
-  { id: 'razorpay', label: 'Razorpay', blurb: 'UPI, netbanking & wallets', mode: 'online' },
-  { id: 'wallet', label: 'Eventspady Wallet', blurb: 'Use your available balance', mode: 'online' },
-  { id: 'offline', label: 'Pay at the venue', blurb: 'Cash while checking in', mode: 'offline' },
+  { id: 'offline', label: 'Pay at the gate', blurb: 'Reserve now, pay cash or MoMo upon arrival at venue', mode: 'offline' },
 ]
 
+/** English plus the languages actually spoken across the Upper West. */
 export const LANGUAGES = [
-  { code: 'en', label: 'English', flag: '🇺🇸' },
-  { code: 'es', label: 'Español', flag: '🇪🇸' },
+  { code: 'en', label: 'English', flag: '🇬🇭' },
+  { code: 'dag', label: 'Dagaare', flag: '🇬🇭' },
+  { code: 'wal', label: 'Waali', flag: '🇬🇭' },
+  { code: 'sis', label: 'Sisaali', flag: '🇬🇭' },
+  { code: 'tw', label: 'Twi', flag: '🇬🇭' },
   { code: 'fr', label: 'Français', flag: '🇫🇷' },
-  { code: 'de', label: 'Deutsch', flag: '🇩🇪' },
-  { code: 'ar', label: 'العربية', flag: '🇸🇦' },
-  { code: 'pt', label: 'Português', flag: '🇵🇹' },
 ]
 
 export const CURRENCIES = [
-  { code: 'USD', symbol: '$' },
-  { code: 'EUR', symbol: '€' },
-  { code: 'GBP', symbol: '£' },
+  { code: 'GHS', symbol: '₵' },
   { code: 'NGN', symbol: '₦' },
-  { code: 'INR', symbol: '₹' },
+  { code: 'XOF', symbol: 'CFA' },
+  { code: 'USD', symbol: '$' },
+  { code: 'GBP', symbol: '£' },
 ]
 
 /** Reasons offered when a user reports an event to the admin. */
@@ -69,8 +73,8 @@ export const REPORT_REASONS = [
 
 export const COMMISSION = { type: 'percentage', value: 6 }
 
-/** Platform-wide taxes, mirroring the admin Tax page. */
+/** Ghana Revenue Authority levies applied on top of the ticket price. */
 export const TAXES = [
-  { id: 'vat', label: 'VAT', rate: 7.5 },
-  { id: 'service', label: 'Service fee', rate: 2.5 },
+  { id: 'vat', label: 'VAT', rate: 15 },
+  { id: 'nhil', label: 'NHIL & GETFund', rate: 5 },
 ]

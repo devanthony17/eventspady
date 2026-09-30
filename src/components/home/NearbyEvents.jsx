@@ -4,15 +4,20 @@ import { Container, Section, SectionHeading } from '@components/ui/Section'
 import { Button } from '@components/ui/Button'
 import { EventCard } from '@components/events/EventCard'
 import { useGeolocation } from '@hooks/useGeolocation'
-import { events } from '@data/events'
-import { distanceKm } from '@lib/utils'
+import { useEvents } from '@hooks/api'
+import { distanceKm, getEventCoordinates } from '@lib/utils'
 
 /**
- * Sorts venue events by distance once the visitor grants location.
+ * Sorts venue events by distance once the visitor grants location or selects a city.
  * Falls back to the soonest upcoming events until then.
  */
 export function NearbyEvents() {
-  const { position, status, error, request } = useGeolocation()
+  const { data: eventsData } = useEvents()
+  const events = useMemo(() => {
+    if (Array.isArray(eventsData)) return eventsData
+    return eventsData?.events || eventsData?.data || []
+  }, [eventsData])
+  const { position, locationName, status, error, request, openModal, clearLocation } = useGeolocation()
 
   const list = useMemo(() => {
     const venueEvents = events.filter((e) => e.venue)
@@ -22,60 +27,70 @@ export function NearbyEvents() {
     }
 
     return venueEvents
-      .map((event) => ({ event, km: distanceKm(position, { lat: event.venue.lat, lng: event.venue.lng }) }))
+      .map((event) => {
+        const coords = getEventCoordinates(event)
+        const km = distanceKm(position, coords)
+        return { event, km }
+      })
+      .filter((item) => item.km != null)
       .sort((a, b) => a.km - b.km)
       .slice(0, 3)
       .map(({ event, km }) => ({ ...event, distanceKm: km }))
-  }, [position])
+  }, [events, position])
 
   return (
     <Section>
       <Container>
         <SectionHeading
           eyebrow="Near you"
-          title={position ? 'Closest to you right now' : 'Happening near you'}
+          title={position ? `Closest to ${locationName || 'you'} right now` : 'Happening near you'}
           description={
             position
-              ? 'Sorted by straight-line distance from your current location.'
-              : 'Share your location and we will rank events by how far you would have to travel.'
+              ? `Sorted by distance from ${locationName || 'your current position'}.`
+              : 'Share your location or pick a city to rank events by how close they are to you.'
           }
           action={
             position ? (
-              <Button to="/events?near=me" variant="outline" iconRight={ArrowRight}>
-                See all nearby
-              </Button>
+              <div className="flex flex-wrap items-center gap-2">
+                <Button variant="ghost" size="sm" onClick={openModal}>
+                  Change
+                </Button>
+                <Button to="/events?near=me" variant="outline" iconRight={ArrowRight}>
+                  See all nearby
+                </Button>
+              </div>
             ) : (
-              <Button
-                onClick={request}
-                variant="outline"
-                iconLeft={LocateFixed}
-                loading={status === 'pending'}
-              >
-                Use my location
-              </Button>
+              <div className="flex flex-wrap items-center gap-2">
+                <Button
+                  onClick={request}
+                  variant="outline"
+                  iconLeft={LocateFixed}
+                  loading={status === 'pending'}
+                >
+                  Use my location
+                </Button>
+                <Button variant="ghost" size="sm" onClick={openModal}>
+                  Choose city
+                </Button>
+              </div>
             )
           }
         />
 
         {error && (
-          <p className="mb-6 rounded-xl bg-amber-50 px-4 py-3 text-sm text-amber-800 dark:bg-amber-500/10 dark:text-amber-300">
-            {error} Showing the soonest upcoming events instead.
-          </p>
+          <div className="mb-6 flex flex-wrap items-center justify-between gap-3 rounded-xl bg-amber-50 px-4 py-3 text-xs text-amber-800 dark:bg-amber-500/10 dark:text-amber-300">
+            <p>
+              {error} <span>Showing upcoming events or you can select a city manually.</span>
+            </p>
+            <Button size="sm" variant="outline" onClick={openModal} className="h-8 text-xs">
+              Select City
+            </Button>
+          </div>
         )}
 
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {list.map((event) => (
-            <div key={event.id} className="relative">
-              <EventCard event={event} />
-              {event.distanceKm != null && (
-                <span className="pointer-events-none absolute right-3 top-14 z-20 rounded-full bg-ink-950/85 px-2.5 py-1 text-xs font-bold text-white backdrop-blur">
-                  <MapPin className="mr-1 inline size-3" aria-hidden="true" />
-                  {event.distanceKm < 1
-                    ? `${Math.round(event.distanceKm * 1000)} m away`
-                    : `${event.distanceKm.toFixed(event.distanceKm < 10 ? 1 : 0)} km away`}
-                </span>
-              )}
-            </div>
+            <EventCard key={event.id} event={event} />
           ))}
         </div>
       </Container>

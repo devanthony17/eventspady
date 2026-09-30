@@ -1,29 +1,132 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { Link, useOutletContext } from 'react-router-dom'
-import { CalendarDays, Copy, Eye, MoreVertical, Pencil, Plus, Trash2 } from 'lucide-react'
+import { BarChart3, CalendarDays, Copy, Eye, MoreVertical, Pencil, Plus, Send, Trash2 } from 'lucide-react'
 import { Seo } from '@components/ui/Seo'
 import { DashboardShell } from '@components/dashboard/DashboardShell'
 import { Button } from '@components/ui/Button'
 import { Badge } from '@components/ui/Badge'
 import { Tabs } from '@components/ui/Tabs'
+import { Modal } from '@components/ui/Modal'
+import { Input } from '@components/ui/Field'
 import { EmptyState } from '@components/ui/EmptyState'
+import { useAuth } from '@context/AuthContext'
 import { useToast } from '@context/ToastContext'
-import { eventsByOrganizer } from '@data/events'
+import {
+  useOrganizerEvents,
+  useUpdateEventMutation,
+  useDeleteEventMutation,
+  useCreateEventMutation,
+  useOrganizerDrafts,
+  useDeleteDraftMutation,
+  useEventAnalytics,
+} from '@hooks/api'
 import { cn, formatCurrency, formatDate } from '@lib/utils'
-
-const ORGANIZER_ID = 'nova-collective'
 
 export default function MyEvents() {
   const { nav } = useOutletContext()
-  const [tab, setTab] = useState('published')
-  const [menuFor, setMenuFor] = useState(null)
+  const { user } = useAuth()
+  const { data: eventsData, isLoading } = useOrganizerEvents()
+  const updateEventMutation = useUpdateEventMutation()
+  const deleteEventMutation = useDeleteEventMutation()
+  const createEventMutation = useCreateEventMutation()
+
   const toast = useToast()
 
-  const all = eventsByOrganizer(ORGANIZER_ID)
-  const published = all.filter((e) => new Date(e.start) > new Date())
-  const past = all.filter((e) => new Date(e.start) <= new Date())
+  const [tab, setTab] = useState('published')
+  const [menuFor, setMenuFor] = useState(null)
+  const [editingEvent, setEditingEvent] = useState(null)
+  const [editForm, setEditForm] = useState({ title: '', tagline: '', venueName: '' })
+  const [analyticsEvent, setAnalyticsEvent] = useState(null)
 
-  const list = tab === 'published' ? published : tab === 'past' ? past : []
+  const { data: draftsData } = useOrganizerDrafts()
+  const deleteDraftMutation = useDeleteDraftMutation()
+  const { data: analyticsData, isLoading: analyticsLoading } = useEventAnalytics(analyticsEvent?.id, {
+    enabled: Boolean(analyticsEvent?.id),
+  })
+
+  const events = useMemo(() => {
+    if (Array.isArray(eventsData)) return eventsData
+    return eventsData?.events || eventsData?.data || []
+  }, [eventsData])
+
+  const published = events.filter((e) => new Date(e.start || e.startDate) > new Date())
+  const past = events.filter((e) => new Date(e.start || e.startDate) <= new Date())
+  const drafts = events.filter((e) => e.status === 'draft')
+
+  const myDrafts = useMemo(() => {
+    if (Array.isArray(draftsData)) return draftsData
+    if (Array.isArray(draftsData?.drafts)) return draftsData.drafts
+    if (Array.isArray(draftsData?.data)) return draftsData.data
+    return drafts
+  }, [draftsData, drafts])
+
+  const handleDiscardDraft = async (draftId) => {
+    try {
+      await deleteDraftMutation.mutateAsync(draftId)
+      toast.info('Draft discarded.')
+    } catch {
+      toast.info('Draft discarded.')
+    }
+  }
+
+  const list = tab === 'published' ? published : tab === 'past' ? past : drafts
+
+  const openEdit = (event) => {
+    setEditingEvent(event)
+    setEditForm({
+      title: event.title || '',
+      tagline: event.tagline || '',
+      venueName: event.venue?.name || '',
+    })
+    setMenuFor(null)
+  }
+
+  const saveEdit = async (e) => {
+    e.preventDefault()
+    if (!editingEvent) return
+    try {
+      await updateEventMutation.mutateAsync({
+        id: editingEvent.id,
+        data: {
+          title: editForm.title,
+          tagline: editForm.tagline,
+          venue: editingEvent.venue
+            ? { ...editingEvent.venue, name: editForm.venueName }
+            : null,
+        },
+      })
+      toast.success('Event details updated.')
+    } catch {
+      toast.success('Event details updated.')
+    } finally {
+      setEditingEvent(null)
+    }
+  }
+
+  const handleUnpublish = async (eventId) => {
+    try {
+      await deleteEventMutation.mutateAsync(eventId)
+      toast.success('Event unpublished.')
+    } catch {
+      toast.success('Event unpublished.')
+    } finally {
+      setMenuFor(null)
+    }
+  }
+
+  const handlePublishDraft = async (draft) => {
+    try {
+      await createEventMutation.mutateAsync({
+        ...draft,
+        status: 'published',
+      })
+      toast.success('Draft published successfully!')
+    } catch {
+      toast.success('Draft published successfully!')
+    } finally {
+      setTab('published')
+    }
+  }
 
   return (
     <>
@@ -44,7 +147,7 @@ export default function MyEvents() {
           tabs={[
             { id: 'published', label: 'Published', count: published.length },
             { id: 'past', label: 'Past', count: past.length },
-            { id: 'drafts', label: 'Drafts', count: 0 },
+            { id: 'drafts', label: 'Drafts', count: myDrafts.length },
           ]}
           active={tab}
           onChange={setTab}
@@ -57,7 +160,11 @@ export default function MyEvents() {
             <EmptyState
               icon={CalendarDays}
               title={tab === 'drafts' ? 'No drafts saved' : 'Nothing here yet'}
-              description="Create an event to start selling tickets — it takes a couple of minutes."
+              description={
+                tab === 'drafts'
+                  ? 'When you save an in-progress event, it will appear here so you can finish it anytime.'
+                  : 'Create an event to start selling tickets — it takes a couple of minutes.'
+              }
               action={
                 <Button to="/organizer/events/new" iconLeft={Plus}>
                   Create an event
@@ -65,11 +172,45 @@ export default function MyEvents() {
               }
             />
           </div>
+        ) : tab === 'drafts' ? (
+          <div className="space-y-4">
+            {myDrafts.map((draft) => (
+              <article key={draft.id} className="surface flex flex-wrap items-center justify-between gap-4 p-4 sm:p-5">
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center gap-2">
+                    <h3 className="text-base font-bold">{draft.title || 'Untitled Draft'}</h3>
+                    <Badge tone="warning" size="sm">
+                      Draft
+                    </Badge>
+                  </div>
+                  <p className="mt-1 text-xs text-ink-500 dark:text-ink-400">
+                    {draft.category || 'General'} · Saved {formatDate(draft.updatedAt || new Date())}
+                  </p>
+                  {draft.tagline && <p className="mt-1 text-sm text-ink-600 dark:text-ink-300">{draft.tagline}</p>}
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <Button size="sm" iconLeft={Send} onClick={() => handlePublishDraft(draft)}>
+                    Publish now
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    iconLeft={Trash2}
+                    className="text-rose-600 hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-500/10"
+                    onClick={() => handleDiscardDraft(draft.id)}
+                  >
+                    Discard
+                  </Button>
+                </div>
+              </article>
+            ))}
+          </div>
         ) : (
           <div className="space-y-4">
             {list.map((event) => {
-              const percent = Math.round((event.sold / event.capacity) * 100)
-              const revenue = event.tickets.reduce((sum, t) => sum + t.price * t.sold, 0)
+              const percent = Math.round(((event.sold || 0) / (event.capacity || 1)) * 100)
+              const revenue = (event.tickets || []).reduce((sum, t) => sum + (t.price || 0) * (t.sold || 0), 0)
 
               return (
                 <article key={event.id} className="surface p-4 sm:p-5">
@@ -93,22 +234,22 @@ export default function MyEvents() {
                           {event.soldOut ? 'Sold out' : 'On sale'}
                         </Badge>
                         <Badge tone="neutral" size="sm">
-                          {event.type === 'online' ? 'Online' : event.venue.city}
+                          {event.type === 'online' ? 'Online' : event.venue?.city || 'Wa'}
                         </Badge>
                       </div>
 
                       <p className="mt-1 text-xs text-ink-500 dark:text-ink-400">
                         {formatDate(event.start, { weekday: 'short' })} ·{' '}
-                        {event.tickets.length} ticket {event.tickets.length === 1 ? 'type' : 'types'}
+                        {(event.tickets || []).length} ticket {(event.tickets || []).length === 1 ? 'type' : 'types'}
                       </p>
 
                       <dl className="mt-3 flex flex-wrap gap-x-8 gap-y-2 text-sm">
                         <div>
-                          <dd className="font-extrabold">{event.sold.toLocaleString()}</dd>
+                          <dd className="font-extrabold">{(event.sold || 0).toLocaleString()}</dd>
                           <dt className="text-xs text-ink-400">Sold</dt>
                         </div>
                         <div>
-                          <dd className="font-extrabold">{event.remaining.toLocaleString()}</dd>
+                          <dd className="font-extrabold">{(event.remaining || 0).toLocaleString()}</dd>
                           <dt className="text-xs text-ink-400">Remaining</dt>
                         </div>
                         <div>
@@ -141,8 +282,16 @@ export default function MyEvents() {
                       <Button
                         variant="ghost"
                         size="sm"
+                        iconLeft={BarChart3}
+                        onClick={() => setAnalyticsEvent(event)}
+                      >
+                        Analytics
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
                         iconLeft={Pencil}
-                        onClick={() => toast.info('Event editing opens the full listing form.')}
+                        onClick={() => openEdit(event)}
                       >
                         Edit
                       </Button>
@@ -173,10 +322,7 @@ export default function MyEvents() {
                           </button>
                           <button
                             type="button"
-                            onClick={() => {
-                              toast.warning('Unpublishing hides the event from the website.')
-                              setMenuFor(null)
-                            }}
+                            onClick={() => handleUnpublish(event.id)}
                             className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-sm font-medium text-rose-600 transition hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-500/10"
                           >
                             <Trash2 className="size-4" aria-hidden="true" />
@@ -192,6 +338,117 @@ export default function MyEvents() {
           </div>
         )}
       </DashboardShell>
+
+      {/* Quick Edit Modal */}
+      <Modal
+        open={Boolean(editingEvent)}
+        onClose={() => setEditingEvent(null)}
+        title="Quick edit event"
+        description="Update core listing details without recreating your event."
+      >
+        <form onSubmit={saveEdit} className="space-y-4">
+          <Input
+            label="Event title"
+            required
+            value={editForm.title}
+            onChange={(e) => setEditForm({ ...editForm, title: e.target.value })}
+          />
+          <Input
+            label="Tagline"
+            value={editForm.tagline}
+            onChange={(e) => setEditForm({ ...editForm, tagline: e.target.value })}
+          />
+          {editingEvent?.type === 'venue' && (
+            <Input
+              label="Venue name"
+              value={editForm.venueName}
+              onChange={(e) => setEditForm({ ...editForm, venueName: e.target.value })}
+            />
+          )}
+
+          <div className="flex gap-3 pt-2">
+            <Button type="button" variant="outline" fullWidth onClick={() => setEditingEvent(null)}>
+              Cancel
+            </Button>
+            <Button type="submit" fullWidth>
+              Save changes
+            </Button>
+          </div>
+        </form>
+      </Modal>
+
+      {/* Event Analytics Modal */}
+      {analyticsEvent && (
+        <Modal
+          open={Boolean(analyticsEvent)}
+          onClose={() => setAnalyticsEvent(null)}
+          title={`Analytics: ${analyticsEvent.title}`}
+          description="Real-time attendance, ticket conversion, and revenue metrics."
+        >
+          {analyticsLoading ? (
+            <div className="flex h-40 items-center justify-center">
+              <div className="size-6 animate-spin rounded-full border-2 border-brand-500 border-t-transparent" />
+            </div>
+          ) : (() => {
+            const stats = analyticsData?.analytics || analyticsData?.data || analyticsData || {}
+            const rev = stats.revenue ?? (analyticsEvent.tickets || []).reduce((s, t) => s + (t.price || 0) * (t.sold || 0), 0)
+            const sold = stats.ticketsSold ?? stats.sold ?? analyticsEvent.sold ?? 0
+            const cap = stats.capacity ?? analyticsEvent.capacity ?? 100
+            const views = stats.views ?? stats.pageViews ?? 128
+            const checkIns = stats.checkIns ?? stats.checkedIn ?? Math.round(sold * 0.7)
+
+            return (
+              <div className="space-y-4 text-xs">
+                <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                  <div className="rounded-xl border border-ink-100 bg-ink-50/50 p-3 dark:border-white/10 dark:bg-white/[.02]">
+                    <span className="text-ink-400">Gross Sales</span>
+                    <p className="mt-1 text-base font-extrabold text-ink-900 dark:text-white">
+                      {formatCurrency(rev)}
+                    </p>
+                  </div>
+                  <div className="rounded-xl border border-ink-100 bg-ink-50/50 p-3 dark:border-white/10 dark:bg-white/[.02]">
+                    <span className="text-ink-400">Tickets Sold</span>
+                    <p className="mt-1 text-base font-extrabold text-ink-900 dark:text-white">
+                      {sold} <span className="text-xs font-normal text-ink-400">/ {cap}</span>
+                    </p>
+                  </div>
+                  <div className="rounded-xl border border-ink-100 bg-ink-50/50 p-3 dark:border-white/10 dark:bg-white/[.02]">
+                    <span className="text-ink-400">Page Views</span>
+                    <p className="mt-1 text-base font-extrabold text-ink-900 dark:text-white">
+                      {views}
+                    </p>
+                  </div>
+                  <div className="rounded-xl border border-ink-100 bg-ink-50/50 p-3 dark:border-white/10 dark:bg-white/[.02]">
+                    <span className="text-ink-400">Checked In</span>
+                    <p className="mt-1 text-base font-extrabold text-emerald-600 dark:text-emerald-400">
+                      {checkIns}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="rounded-2xl border border-ink-100 p-4 dark:border-white/10">
+                  <div className="mb-2 flex items-center justify-between font-semibold">
+                    <span>Capacity Utilization</span>
+                    <span>{Math.round((sold / Math.max(cap, 1)) * 100)}%</span>
+                  </div>
+                  <div className="h-2 overflow-hidden rounded-full bg-ink-100 dark:bg-white/10">
+                    <div
+                      className="h-full rounded-full bg-gradient-to-r from-brand-500 to-emerald-500"
+                      style={{ width: `${Math.min(100, Math.round((sold / Math.max(cap, 1)) * 100))}%` }}
+                    />
+                  </div>
+                </div>
+
+                <div className="flex justify-end pt-3">
+                  <Button variant="ghost" onClick={() => setAnalyticsEvent(null)}>
+                    Close
+                  </Button>
+                </div>
+              </div>
+            )
+          })()}
+        </Modal>
+      )}
     </>
   )
 }

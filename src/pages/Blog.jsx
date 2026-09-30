@@ -8,22 +8,33 @@ import { Badge } from '@components/ui/Badge'
 import { Button } from '@components/ui/Button'
 import { Avatar } from '@components/ui/Avatar'
 import { EmptyState } from '@components/ui/EmptyState'
-import { blogCategories, posts } from '@data/blog'
+import { useBlogPosts } from '@hooks/api'
 import { cn, formatDate, readingTime } from '@lib/utils'
 
 export default function Blog() {
   const [query, setQuery] = useState('')
   const [category, setCategory] = useState('All')
+  const { data: blogData, isLoading: blogLoading } = useBlogPosts()
+
+  const posts = useMemo(() => {
+    if (Array.isArray(blogData)) return blogData
+    return blogData?.posts || blogData?.data || []
+  }, [blogData])
+
+  const blogCategories = useMemo(() => {
+    const set = new Set(posts.map((p) => p.category).filter(Boolean))
+    return ['All', ...Array.from(set)]
+  }, [posts])
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase()
     return posts
       .filter((post) => (category === 'All' ? true : post.category === category))
       .filter((post) =>
-        q ? `${post.title} ${post.excerpt} ${post.tags.join(' ')}`.toLowerCase().includes(q) : true,
+        q ? `${post.title} ${post.excerpt} ${(post.tags || []).join(' ')}`.toLowerCase().includes(q) : true,
       )
-      .sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt))
-  }, [query, category])
+      .sort((a, b) => new Date(b.publishedAt || b.createdAt) - new Date(a.publishedAt || a.createdAt))
+  }, [posts, query, category])
 
   const [lead, ...rest] = filtered
 
@@ -38,7 +49,7 @@ export default function Blog() {
       <PageHero
         eyebrow="The Eventspady blog"
         title="Ideas for people who run events"
-        description="Selling tickets, running a calm door, getting paid and everything else we have learned from 48,000 events."
+        description="Selling tickets, running a calm door, getting paid and everything else we have learned from 3,400 events across the Upper West."
         breadcrumbs={[{ label: 'Blog' }]}
       >
         <div className="relative max-w-lg">

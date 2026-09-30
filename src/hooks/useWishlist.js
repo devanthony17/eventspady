@@ -1,25 +1,10 @@
-import { useCallback } from 'react'
-import { useLocalStorage } from '@hooks/useLocalStorage'
+import { useWishlistContext } from '@context/WishlistContext'
 
-/** Saved events, persisted per browser. */
+/**
+ * Hook providing reactive saved events state.
+ * Syncs in real time across the Navbar counter, event card heart buttons,
+ * dashboard counters, and saved events list without requiring a page refresh.
+ */
 export function useWishlist() {
-  const [ids, setIds] = useLocalStorage('eventspady:wishlist', [])
-
-  const has = useCallback((eventId) => ids.includes(eventId), [ids])
-
-  const toggle = useCallback(
-    (eventId) => {
-      let added = false
-      setIds((prev) => {
-        added = !prev.includes(eventId)
-        return added ? [...prev, eventId] : prev.filter((id) => id !== eventId)
-      })
-      return added
-    },
-    [setIds],
-  )
-
-  const clear = useCallback(() => setIds([]), [setIds])
-
-  return { ids, has, toggle, clear, count: ids.length }
+  return useWishlistContext()
 }

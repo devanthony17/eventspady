@@ -34,7 +34,7 @@ const SECTIONS = [
     id: 'payment-data',
     title: 'Payment data',
     body: [
-      'Card numbers and bank credentials never reach our servers. Payments are processed by Stripe, PayPal, Flutterwave or Razorpay, each of whom handles the card data directly under their own PCI-compliant systems.',
+      'Card numbers, bank credentials and mobile money PINs never reach our servers. Payments are processed by MTN MoMo, Telecel Cash, Paystack or Flutterwave, each of whom handles those details directly under their own regulated systems.',
       'We store only what we need to reconcile an order: the amount, the currency, the last four digits where the processor provides them, and the processor transaction reference.',
     ],
   },

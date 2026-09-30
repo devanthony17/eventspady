@@ -1,10 +1,10 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { ArrowRight, Flame, Sparkles, Ticket, Video } from 'lucide-react'
 import { Container, Section, SectionHeading } from '@components/ui/Section'
 import { Button } from '@components/ui/Button'
 import { Tabs } from '@components/ui/Tabs'
 import { EventCard } from '@components/events/EventCard'
-import { events, featuredEvents, freeEvents, onlineEvents, trendingEvents } from '@data/events'
+import { useEvents } from '@hooks/api'
 
 const TABS = [
   { id: 'featured', label: 'Featured', icon: Sparkles },
@@ -13,16 +13,25 @@ const TABS = [
   { id: 'free', label: 'Free', icon: Ticket },
 ]
 
-const SOURCES = {
-  featured: featuredEvents,
-  trending: trendingEvents,
-  online: onlineEvents,
-  free: freeEvents,
-}
-
 export function FeaturedEvents() {
+  const { data: eventsData, isLoading } = useEvents()
+  const events = useMemo(() => {
+    if (Array.isArray(eventsData)) return eventsData
+    return eventsData?.events || eventsData?.data || []
+  }, [eventsData])
   const [tab, setTab] = useState('featured')
-  const list = (SOURCES[tab] ?? (() => events))().slice(0, 6)
+
+  const sources = useMemo(
+    () => ({
+      featured: events.filter((e) => e.featured || e.id?.startsWith('evt-custom')),
+      trending: events.filter((e) => e.trending || e.sold > 0),
+      online: events.filter((e) => e.type === 'online'),
+      free: events.filter((e) => e.isFree),
+    }),
+    [events],
+  )
+
+  const list = (sources[tab] ?? events).slice(0, 6)
 
   return (
     <Section className="bg-ink-50 dark:bg-white/[.02]">
@@ -39,7 +48,7 @@ export function FeaturedEvents() {
         />
 
         <Tabs
-          tabs={TABS.map((t) => ({ ...t, count: (SOURCES[t.id] ?? (() => events))().length }))}
+          tabs={TABS.map((t) => ({ ...t, count: (sources[t.id] ?? events).length }))}
           active={tab}
           onChange={setTab}
           variant="pill"

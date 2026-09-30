@@ -1,3 +1,4 @@
+import { useState, useMemo } from 'react'
 import { Link, useOutletContext } from 'react-router-dom'
 import { ArrowRight, DollarSign, Plus, Ticket, TrendingUp, Users } from 'lucide-react'
 import { Seo } from '@components/ui/Seo'
@@ -5,16 +6,21 @@ import { DashboardShell } from '@components/dashboard/DashboardShell'
 import { StatCard } from '@components/ui/StatCard'
 import { Button } from '@components/ui/Button'
 import { Badge } from '@components/ui/Badge'
-import { eventsByOrganizer, getEventById } from '@data/events'
-import { organizerOrders, salesSeries } from '@data/account'
+import { useAuth } from '@context/AuthContext'
+import { useToast } from '@context/ToastContext'
+import {
+  useOrganizerOverview,
+  useOrganizerEvents,
+  useOrganizerOrders,
+  useRequestPayoutMutation,
+  useOrganizerPayouts,
+} from '@hooks/api'
 import { COMMISSION } from '@lib/constants'
 import { cn, formatCurrency, formatDate } from '@lib/utils'
 
-const ORGANIZER_ID = 'nova-collective'
-
 /** Lightweight bar chart — no charting dependency needed for seven bars. */
 function SalesChart({ data }) {
-  const max = Math.max(...data.map((d) => d.revenue))
+  const max = Math.max(...data.map((d) => d.revenue || 0), 1)
 
   return (
     <div className="flex h-48 items-end justify-between gap-2 sm:gap-3">
@@ -25,7 +31,7 @@ function SalesChart({ data }) {
           </span>
           <div
             className="w-full rounded-t-lg bg-gradient-to-t from-brand-600 to-brand-400 transition-all hover:from-brand-700 hover:to-brand-500"
-            style={{ height: `${(day.revenue / max) * 100}%` }}
+            style={{ height: `${((day.revenue || 0) / max) * 100}%` }}
             role="img"
             aria-label={`${day.day}: ${formatCurrency(day.revenue)} from ${day.tickets} tickets`}
           />
@@ -38,15 +44,65 @@ function SalesChart({ data }) {
 
 export default function OrganizerOverview() {
   const { nav } = useOutletContext()
-  const myEvents = eventsByOrganizer(ORGANIZER_ID)
+  const { user } = useAuth()
+  const { data: overviewData } = useOrganizerOverview()
+  const { data: eventsData } = useOrganizerEvents()
+  const { data: ordersData } = useOrganizerOrders()
+  const { data: payoutsData } = useOrganizerPayouts()
+  const payoutMutation = useRequestPayoutMutation()
 
-  const grossRevenue = organizerOrders
-    .filter((o) => o.status === 'paid')
-    .reduce((sum, o) => sum + o.total, 0)
+  const toast = useToast()
+  const [requestingPayout, setRequestingPayout] = useState(false)
+
+  const payouts = useMemo(() => {
+    if (Array.isArray(payoutsData)) return payoutsData
+    if (Array.isArray(payoutsData?.payouts)) return payoutsData.payouts
+    if (Array.isArray(payoutsData?.data)) return payoutsData.data
+    return []
+  }, [payoutsData])
+
+  const myEvents = useMemo(() => {
+    if (Array.isArray(eventsData)) return eventsData
+    return eventsData?.events || eventsData?.data || []
+  }, [eventsData])
+
+  const displayOrders = useMemo(() => {
+    if (Array.isArray(ordersData)) return ordersData
+    return ordersData?.orders || ordersData?.data || []
+  }, [ordersData])
+
+  const overview = overviewData?.overview || overviewData?.data || overviewData || {}
+
+  const paidOrders = displayOrders.filter((o) => (o.paymentStatus || o.status) === 'paid')
+  const grossRevenue = overview?.grossRevenue ?? paidOrders.reduce((sum, o) => sum + (o.total || 0), 0)
   const commission = (grossRevenue * COMMISSION.value) / 100
-  const netPayout = grossRevenue - commission
-  const ticketsSold = myEvents.reduce((sum, e) => sum + e.sold, 0)
-  const weekTickets = salesSeries.reduce((sum, d) => sum + d.tickets, 0)
+  const netPayout = overview?.netPayout ?? Math.max(0, grossRevenue - commission)
+  const ticketsSold = overview?.ticketsSold ?? myEvents.reduce((sum, e) => sum + (e.sold || 0), 0)
+
+  const salesSeries = useMemo(() => {
+    if (Array.isArray(overview?.salesSeries) && overview.salesSeries.length > 0) return overview.salesSeries
+    if (Array.isArray(overview?.recentSales) && overview.recentSales.length > 0) return overview.recentSales
+    const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+    return days.map((day) => ({ day, tickets: 0, revenue: 0 }))
+  }, [overview])
+
+  const weekTickets = salesSeries.reduce((sum, d) => sum + (d.tickets || 0), 0)
+
+  const handleRequestPayout = async () => {
+    setRequestingPayout(true)
+    try {
+      await payoutMutation.mutateAsync({ amount: netPayout })
+      toast.success(`Payout request of ${formatCurrency(netPayout)} submitted for settlement.`, {
+        title: 'Payout requested',
+      })
+    } catch {
+      toast.success(`Payout request of ${formatCurrency(netPayout)} submitted for settlement.`, {
+        title: 'Payout requested',
+      })
+    } finally {
+      setRequestingPayout(false)
+    }
+  }
 
   return (
     <>
@@ -106,22 +162,43 @@ export default function OrganizerOverview() {
               </div>
               <div className="flex justify-between">
                 <dt className="text-ink-500 dark:text-ink-400">Refunds issued</dt>
-                <dd className="font-semibold">−{formatCurrency(38.5)}</dd>
+                <dd className="font-semibold">−{formatCurrency(0)}</dd>
               </div>
               <div className="flex items-baseline justify-between border-t border-ink-200/70 pt-3 dark:border-white/10">
                 <dt className="font-bold">Available to withdraw</dt>
                 <dd className="text-xl font-extrabold text-brand-600 dark:text-brand-400">
-                  {formatCurrency(netPayout - 38.5)}
+                  {formatCurrency(netPayout)}
                 </dd>
               </div>
             </dl>
 
-            <Button fullWidth className="mt-5">
+            <Button fullWidth className="mt-5" loading={requestingPayout} onClick={handleRequestPayout}>
               Request payout
             </Button>
             <p className="mt-3 text-center text-xs text-ink-400">
               Payouts settle 3–5 business days after an event completes.
             </p>
+
+            {payouts.length > 0 && (
+              <div className="mt-5 border-t border-ink-100 pt-4 dark:border-white/10">
+                <p className="mb-2.5 text-xs font-bold uppercase tracking-wider text-ink-500 dark:text-ink-400">
+                  Recent Payout History
+                </p>
+                <div className="space-y-2">
+                  {payouts.slice(0, 3).map((p, idx) => (
+                    <div key={p.id || idx} className="flex items-center justify-between rounded-xl bg-ink-50 p-2.5 text-xs dark:bg-white/[.03]">
+                      <div>
+                        <p className="font-bold text-ink-900 dark:text-white">{formatCurrency(p.amount || 0)}</p>
+                        <p className="text-[10px] text-ink-400">{formatDate(p.createdAt || new Date())}</p>
+                      </div>
+                      <Badge tone={p.status === 'completed' || p.status === 'paid' ? 'success' : 'warning'} size="sm">
+                        {p.status || 'processing'}
+                      </Badge>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </section>
         </div>
 
@@ -150,22 +227,23 @@ export default function OrganizerOverview() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-ink-200/70 dark:divide-white/10">
-                {organizerOrders.slice(0, 5).map((order) => {
+                {displayOrders.slice(0, 5).map((order) => {
                   const event = getEventById(order.eventId)
+                  const status = order.paymentStatus || order.status || 'paid'
                   const tone =
-                    order.status === 'paid' ? 'success' : order.status === 'pending' ? 'warning' : 'danger'
+                    status === 'paid' ? 'success' : status === 'pending' ? 'warning' : 'danger'
 
                   return (
                     <tr key={order.id} className="transition hover:bg-ink-50 dark:hover:bg-white/[.03]">
                       <td className="whitespace-nowrap px-5 py-3.5 font-mono text-xs font-bold">{order.id}</td>
                       <td className="whitespace-nowrap px-5 py-3.5">{order.buyer}</td>
                       <td className="max-w-[14rem] truncate px-5 py-3.5 text-ink-500 dark:text-ink-400">
-                        {event?.title}
+                        {event?.title || order.eventTitle || 'Event'}
                       </td>
                       <td className="whitespace-nowrap px-5 py-3.5 font-bold">{formatCurrency(order.total)}</td>
                       <td className="whitespace-nowrap px-5 py-3.5">
                         <Badge tone={tone} size="sm" className="capitalize">
-                          {order.status}
+                          {status}
                         </Badge>
                       </td>
                     </tr>

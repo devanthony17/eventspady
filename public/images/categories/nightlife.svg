@@ -1,20 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="600" height="600" role="img">
-<defs>
-<linearGradient id="g13044" gradientTransform="rotate(161)">
-<stop offset="0%" stop-color="#0f766e"/>
-<stop offset="60%" stop-color="#2dd4bf"/>
-<stop offset="100%" stop-color="#99f6e4"/>
-</linearGradient>
-<radialGradient id="r13044" cx="30%" cy="20%">
-<stop offset="0%" stop-color="#ffffff" stop-opacity=".45"/>
-<stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
-</radialGradient>
-<filter id="b13044" x="-30%" y="-30%" width="160%" height="160%">
-<feGaussianBlur stdDeviation="42"/>
-</filter>
-</defs>
-<rect width="600" height="600" fill="url(#g13044)"/>
-<ellipse cx="282" cy="237" rx="179" ry="129" fill="#fff" opacity="0.150" filter="url(#b13044)"/><ellipse cx="76" cy="419" rx="137" ry="99" fill="#fff" opacity="0.127" filter="url(#b13044)"/><ellipse cx="600" cy="126" rx="174" ry="125" fill="#fff" opacity="0.145" filter="url(#b13044)"/><ellipse cx="452" cy="463" rx="307" ry="221" fill="#fff" opacity="0.068" filter="url(#b13044)"/><ellipse cx="138" cy="459" rx="289" ry="208" fill="#fff" opacity="0.104" filter="url(#b13044)"/>
-<circle cx="276" cy="192" r="43" fill="none" stroke="#fff" stroke-opacity="0.198" stroke-width="2"/><circle cx="276" cy="192" r="86" fill="none" stroke="#fff" stroke-opacity="0.176" stroke-width="2"/><circle cx="276" cy="192" r="129" fill="none" stroke="#fff" stroke-opacity="0.154" stroke-width="2"/><circle cx="276" cy="192" r="171" fill="none" stroke="#fff" stroke-opacity="0.132" stroke-width="2"/><circle cx="276" cy="192" r="214" fill="none" stroke="#fff" stroke-opacity="0.110" stroke-width="2"/><circle cx="276" cy="192" r="257" fill="none" stroke="#fff" stroke-opacity="0.088" stroke-width="2"/><circle cx="276" cy="192" r="300" fill="none" stroke="#fff" stroke-opacity="0.066" stroke-width="2"/>
-<rect width="600" height="600" fill="url(#r13044)"/>
+<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#1e293b" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M24 5V14" stroke-width="1.5" />
+  <circle cx="24" cy="27" r="13" />
+  <path d="M11.5 24C15 26 33 26 36.5 24" />
+  <path d="M11.5 30C15 32 33 32 36.5 30" />
+  <path d="M14 19C17 21 31 21 34 19" />
+  <path d="M14 35C17 37 31 37 34 35" />
+  <path d="M24 14V40" />
+  <path d="M18 15.5C19.5 20 19.5 34 18 38.5" />
+  <path d="M30 15.5C28.5 20 28.5 34 30 38.5" />
+  <path d="M10 14L10.7 16.3L13 17L10.7 17.7L10 20L9.3 17.7L7 17L9.3 16.3L10 14Z" fill="#1e293b" stroke="none" />
+  <circle cx="8" cy="27" r="1" fill="#1e293b" stroke="none" />
+  <path d="M38 15L38.7 17.3L41 18L38.7 18.7L38 21L37.3 18.7L35 18L37.3 17.3L38 15Z" fill="#1e293b" stroke="none" />
+  <circle cx="40" cy="28" r="1.2" fill="#1e293b" stroke="none" />
 </svg>

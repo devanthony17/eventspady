@@ -1,10 +1,9 @@
 import { Link } from 'react-router-dom'
 import { Heart, MapPin, Ticket, Users, Video } from 'lucide-react'
 import { Badge } from '@components/ui/Badge'
-import { Rating } from '@components/ui/Rating'
 import { useWishlist } from '@hooks/useWishlist'
 import { useToast } from '@context/ToastContext'
-import { calendarChip, cn, formatCurrency, formatTime } from '@lib/utils'
+import { calendarChip, cn, formatCurrency, formatDistance, formatTime } from '@lib/utils'
 
 function SaveButton({ event, className }) {
   const { has, toggle } = useWishlist()
@@ -50,9 +49,7 @@ export function EventCard({ event, variant = 'default', className, showSave = tr
 
   const priceLabel = event.isFree
     ? 'Free'
-    : event.priceFrom === event.priceTo
-      ? formatCurrency(event.priceFrom)
-      : `From ${formatCurrency(event.priceFrom)}`
+    : formatCurrency(event.priceFrom)
 
   if (variant === 'compact') {
     return (
@@ -106,12 +103,17 @@ export function EventCard({ event, variant = 'default', className, showSave = tr
 
         <div className="flex flex-col p-5">
           <div className="mb-2 flex flex-wrap items-center gap-2">
-            <Badge tone="brand" size="sm">
+            <Badge tone="brand" size="sm" icon={event.categoryMeta?.icon}>
               {event.categoryMeta?.name}
             </Badge>
             <Badge tone={isOnline ? 'info' : 'neutral'} size="sm" icon={isOnline ? Video : MapPin}>
               {isOnline ? 'Online' : event.venue.city}
             </Badge>
+            {event.distanceKm != null && (
+              <Badge tone="accent" size="sm" icon={MapPin}>
+                {formatDistance(event.distanceKm)}
+              </Badge>
+            )}
             {event.soldOut && (
               <Badge tone="danger" size="sm">
                 Sold out
@@ -131,12 +133,25 @@ export function EventCard({ event, variant = 'default', className, showSave = tr
           </h3>
           <p className="mt-1.5 line-clamp-2 text-sm text-ink-500 dark:text-ink-400">{event.tagline}</p>
 
-          <div className="mt-3 flex items-center gap-4 text-xs text-ink-500 dark:text-ink-400">
-            <span className="inline-flex items-center gap-1.5">
-              <Users className="size-3.5" aria-hidden="true" />
-              {event.sold.toLocaleString()} going
+          <div className="mt-3 flex flex-wrap items-center gap-4 text-xs text-ink-500 dark:text-ink-400">
+            <span className="inline-flex items-center gap-1.5 font-medium">
+              <Users className="size-3.5 text-brand-600 dark:text-brand-400" aria-hidden="true" />
+              {event.sold?.toLocaleString() ?? 0} going
             </span>
-            <Rating value={event.rating} size="sm" showValue />
+            {event.organizer?.name && (
+              <span className="inline-flex items-center gap-1.5 truncate">
+                <img
+                  src={event.organizer?.logo || '/images/organizers/organizer-1.svg'}
+                  alt=""
+                  onError={(e) => {
+                    e.currentTarget.onerror = null
+                    e.currentTarget.src = '/images/organizers/organizer-1.svg'
+                  }}
+                  className="size-4 shrink-0 rounded-full object-cover ring-1 ring-black/10 dark:ring-white/10"
+                />
+                <span className="truncate font-semibold text-ink-700 dark:text-ink-200">{event.organizer.name}</span>
+              </span>
+            )}
           </div>
 
           <div className="mt-auto flex items-center justify-between gap-3 pt-4">
@@ -184,6 +199,11 @@ export function EventCard({ event, variant = 'default', className, showSave = tr
           <Badge tone="glass" size="sm" icon={isOnline ? Video : MapPin}>
             {isOnline ? 'Online' : event.venue.city}
           </Badge>
+          {event.distanceKm != null && (
+            <Badge tone="glass" size="sm" icon={MapPin} className="bg-brand-950/80 text-brand-300 ring-1 ring-brand-400/40">
+              {formatDistance(event.distanceKm)}
+            </Badge>
+          )}
           {event.soldOut ? (
             <Badge tone="danger" size="sm">
               Sold out
@@ -200,10 +220,13 @@ export function EventCard({ event, variant = 'default', className, showSave = tr
 
       <div className="flex flex-1 flex-col p-5">
         <div className="mb-2 flex items-center justify-between gap-2">
-          <Badge tone="brand" size="sm">
+          <Badge tone="brand" size="sm" icon={event.categoryMeta?.icon}>
             {event.categoryMeta?.name}
           </Badge>
-          <Rating value={event.rating} count={event.reviewsCount} size="sm" showValue={false} />
+          <span className="inline-flex items-center gap-1 text-xs font-medium text-ink-500 dark:text-ink-400">
+            <Users className="size-3.5 text-brand-600 dark:text-brand-400" aria-hidden="true" />
+            <span>{event.sold?.toLocaleString() ?? 0} going</span>
+          </span>
         </div>
 
         <h3 className="text-base font-bold leading-snug sm:text-lg">
@@ -217,15 +240,19 @@ export function EventCard({ event, variant = 'default', className, showSave = tr
 
         <p className="mt-1.5 line-clamp-2 text-sm text-ink-500 dark:text-ink-400">{event.tagline}</p>
 
-        <div className="mt-4 flex items-center gap-2 border-t border-ink-200/70 pt-4 dark:border-white/10">
+        <div className="mt-4 flex items-center gap-2.5 border-t border-ink-200/70 pt-4 dark:border-white/10">
           <img
-            src={event.organizer?.logo}
-            alt=""
+            src={event.organizer?.logo || '/images/organizers/organizer-1.svg'}
+            alt={event.organizer?.name || 'Organizer'}
             loading="lazy"
-            className="size-7 shrink-0 rounded-full object-cover"
+            onError={(e) => {
+              e.currentTarget.onerror = null
+              e.currentTarget.src = '/images/organizers/organizer-1.svg'
+            }}
+            className="size-7 shrink-0 rounded-full object-cover ring-1 ring-black/10 dark:ring-white/10"
           />
-          <span className="min-w-0 flex-1 truncate text-xs font-medium text-ink-500 dark:text-ink-400">
-            {event.organizer?.name}
+          <span className="min-w-0 flex-1 truncate text-xs font-semibold text-ink-700 dark:text-ink-200">
+            {event.organizer?.name || 'Organizer'}
           </span>
           <span className="shrink-0 text-sm font-extrabold text-brand-600 dark:text-brand-400">{priceLabel}</span>
         </div>

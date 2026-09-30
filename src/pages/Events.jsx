@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { CalendarSearch, LayoutGrid, List, Search, SlidersHorizontal, X } from 'lucide-react'
+import { CalendarSearch, LayoutGrid, List, MapPin, Search, SlidersHorizontal, X } from 'lucide-react'
 import { Seo } from '@components/ui/Seo'
 import { Container, Section } from '@components/ui/Section'
 import { Breadcrumbs } from '@components/ui/Breadcrumbs'
@@ -10,9 +10,8 @@ import { EmptyState } from '@components/ui/EmptyState'
 import { EventCard } from '@components/events/EventCard'
 import { ActiveFilterChips, EventFilters } from '@components/events/EventFilters'
 import { useGeolocation } from '@hooks/useGeolocation'
-import { events } from '@data/events'
-import { categories } from '@data/categories'
-import { cn, distanceKm } from '@lib/utils'
+import { useEvents, useCategories } from '@hooks/api'
+import { cn, distanceKm, getEventCoordinates } from '@lib/utils'
 
 const PER_PAGE = 9
 
@@ -74,17 +73,33 @@ function matchesWhen(event, when) {
 function matchesPrice(event, price) {
   if (price === 'free') return event.isFree
   if (price === 'paid') return !event.isFree
-  if (price === 'under50') return event.priceFrom < 50
-  if (price === 'under150') return event.priceFrom < 150
+  if (price === 'under100') return event.priceFrom < 100
+  if (price === 'under300') return event.priceFrom < 300
   return true
 }
 
 export default function Events() {
+  const { data: eventsData, isLoading: eventsLoading } = useEvents()
+  const { data: categoriesData } = useCategories()
+
+  const events = useMemo(() => {
+    if (Array.isArray(eventsData)) return eventsData
+    return eventsData?.events || eventsData?.data || []
+  }, [eventsData])
+
+  const categories = useMemo(() => {
+    if (Array.isArray(categoriesData)) return categoriesData
+    return categoriesData?.categories || categoriesData?.data || []
+  }, [categoriesData])
   const [params, setParams] = useSearchParams()
   const [view, setView] = useState('grid')
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [page, setPage] = useState(1)
-  const { position, status: locationStatus, request: requestLocation } = useGeolocation()
+  const { position, status: locationStatus, locationName, request: requestLocation, openModal: openLocationModal } = useGeolocation()
+
+  const cities = useMemo(() => {
+    return [...new Set(events.filter((e) => e.venue?.city).map((e) => e.venue.city))].sort()
+  }, [events])
 
   const filters = useMemo(() => readFilters(params), [params])
   const [searchInput, setSearchInput] = useState(filters.q)
@@ -123,9 +138,18 @@ export default function Events() {
       updateFilters({ near: false })
       return
     }
-    requestLocation()
+    if (!position) {
+      requestLocation().catch(() => {})
+    }
     updateFilters({ near: true })
   }
+
+  // Auto-request location if visiting /events?near=me directly and not yet obtained
+  useEffect(() => {
+    if (filters.near && !position && locationStatus === 'idle') {
+      requestLocation().catch(() => {})
+    }
+  }, [filters.near, position, locationStatus, requestLocation])
 
   const results = useMemo(() => {
     const q = filters.q.trim().toLowerCase()
@@ -148,12 +172,19 @@ export default function Events() {
 
     if (filters.near && position) {
       list = list
-        .map((event) => ({
-          event,
-          km: event.venue ? distanceKm(position, { lat: event.venue.lat, lng: event.venue.lng }) : Infinity,
-        }))
+        .map((event) => {
+          const coords = getEventCoordinates(event)
+          const km = distanceKm(position, coords)
+          return {
+            event,
+            km: km != null ? km : Infinity,
+          }
+        })
         .sort((a, b) => a.km - b.km)
-        .map(({ event }) => event)
+        .map(({ event, km }) => ({
+          ...event,
+          distanceKm: km < Infinity ? km : null,
+        }))
       return list
     }
 
@@ -249,6 +280,7 @@ export default function Events() {
                     onReset={resetFilters}
                     onUseLocation={onUseLocation}
                     locationStatus={locationStatus}
+                    cities={cities}
                   />
                 </div>
               </div>
@@ -311,6 +343,35 @@ export default function Events() {
               </div>
 
               <ActiveFilterChips filters={filters} onChange={updateFilters} onReset={resetFilters} />
+
+              {filters.near && (
+                <div className="mb-5 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-brand-500/20 bg-brand-50/60 p-3.5 text-xs text-brand-900 dark:border-brand-500/20 dark:bg-brand-500/10 dark:text-brand-200">
+                  <div className="flex items-center gap-2">
+                    <MapPin className="size-4 shrink-0 text-brand-600 dark:text-brand-400" />
+                    <span>
+                      Showing events sorted by distance from{' '}
+                      <strong>{locationName || (position ? 'your location' : 'detecting location...')}</strong>
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={openLocationModal}
+                      className="font-bold underline hover:text-brand-700 dark:hover:text-brand-300"
+                    >
+                      Change location / city
+                    </button>
+                    <span>·</span>
+                    <button
+                      type="button"
+                      onClick={() => updateFilters({ near: false })}
+                      className="text-ink-500 hover:text-rose-600 dark:text-ink-400"
+                    >
+                      Clear
+                    </button>
+                  </div>
+                </div>
+              )}
 
               {pageItems.length === 0 ? (
                 <EmptyState
@@ -383,6 +444,7 @@ export default function Events() {
                 onReset={resetFilters}
                 onUseLocation={onUseLocation}
                 locationStatus={locationStatus}
+                cities={cities}
               />
             </div>
 

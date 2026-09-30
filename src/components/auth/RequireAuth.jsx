@@ -19,12 +19,18 @@ export function RequireAuth({ role }) {
     )
   }
 
-  if (!isAuthenticated) {
-    return <Navigate to="/login" state={{ from: location.pathname }} replace />
+  const isAdminRoute = role === 'admin' || location.pathname.startsWith('/admin')
+
+  if (!isAuthenticated || !user) {
+    const loginTarget = isAdminRoute ? '/admin/login' : '/login'
+    return <Navigate to={loginTarget} state={{ from: location.pathname }} replace />
   }
 
-  if (role && user.role !== role) {
-    return <Navigate to="/dashboard" replace />
+  if (role && user.role !== role && user.role !== 'admin') {
+    if (isAdminRoute) {
+      return <Navigate to="/admin/login" state={{ from: location.pathname }} replace />
+    }
+    return <Navigate to={user.role === 'organizer' ? '/organizer' : '/dashboard'} replace />
   }
 
   return <Outlet />

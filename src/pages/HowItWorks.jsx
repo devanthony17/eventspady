@@ -9,7 +9,7 @@ import {
   Search,
   Ticket,
   Users,
-  Wallet,
+  Smartphone,
   WifiOff,
 } from 'lucide-react'
 import { Seo } from '@components/ui/Seo'
@@ -26,7 +26,7 @@ import { cn } from '@lib/utils'
 const ATTENDEE_STEPS = [
   { icon: Search, title: 'Search', description: 'Filter by city, category, date or price — or let us sort by distance from you.' },
   { icon: Ticket, title: 'Choose tickets', description: 'Free, paid, one-day or all-days. Add a coupon code if you have one.' },
-  { icon: CreditCard, title: 'Pay', description: 'Card, PayPal, UPI, mobile money, wallet balance — or cash at the door where offered.' },
+  { icon: CreditCard, title: 'Pay', description: 'MTN Mobile Money, Telecel Cash, card — or cash at the door where the organizer offers it.' },
   { icon: QrCode, title: 'Walk in', description: 'Your QR ticket arrives instantly. Show it at the door and you are in.' },
 ]
 
@@ -136,8 +136,8 @@ export default function HowItWorks() {
                           : 'bg-brand-100 text-brand-700 dark:bg-brand-500/15 dark:text-brand-300',
                       )}
                     >
-                      {method.id === 'wallet' ? (
-                        <Wallet className="size-4" aria-hidden="true" />
+                      {method.id.includes('momo') || method.id.includes('telecel') ? (
+                        <Smartphone className="size-4" aria-hidden="true" />
                       ) : (
                         <CreditCard className="size-4" aria-hidden="true" />
                       )}

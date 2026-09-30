@@ -8,23 +8,39 @@ import { Badge } from '@components/ui/Badge'
 import { Button } from '@components/ui/Button'
 import { Avatar } from '@components/ui/Avatar'
 import { useToast } from '@context/ToastContext'
-import { getPost, posts, relatedPosts } from '@data/blog'
+import { useBlogPost, useBlogPosts } from '@hooks/api'
 import { SITE } from '@lib/constants'
 import { formatDate, readingTime } from '@lib/utils'
 import NotFound from '@pages/NotFound'
 
 export default function BlogPost() {
   const { slug } = useParams()
-  const post = getPost(slug)
+  const { data: postData, isLoading: postLoading } = useBlogPost(slug)
+  const { data: allPostsData } = useBlogPosts()
   const [copied, setCopied] = useState(false)
   const toast = useToast()
 
+  const post = postData?.post || postData?.data || postData
+  const allPosts = Array.isArray(allPostsData) ? allPostsData : (allPostsData?.posts || allPostsData?.data || [])
+
+  if (postLoading && !post) {
+    return (
+      <div className="grid min-h-[60vh] place-items-center" role="status" aria-label="Loading post">
+        <div className="size-8 animate-spin rounded-full border-2 border-brand-500 border-t-transparent" />
+      </div>
+    )
+  }
+
   if (!post) return <NotFound />
 
-  const url = `${SITE.url}/blog/${post.slug}`
-  const minutes = readingTime(post.body.map((b) => b.text).join(' '))
-  const related = relatedPosts(post, 3)
-  const fallback = related.length > 0 ? related : posts.filter((p) => p.id !== post.id).slice(0, 3)
+  const url = `${SITE.url}/blog/${post.slug || post.id}`
+  const bodyText = Array.isArray(post.body)
+    ? post.body.map((b) => (typeof b === 'string' ? b : b.text || '')).join(' ')
+    : typeof post.body === 'string'
+      ? post.body
+      : post.content || ''
+  const minutes = readingTime(bodyText)
+  const fallback = allPosts.filter((p) => p.slug !== post.slug && p.id !== post.id).slice(0, 3)
 
   const onCopy = async () => {
     try {

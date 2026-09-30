@@ -11,24 +11,35 @@ import { Tabs } from '@components/ui/Tabs'
 import { EmptyState } from '@components/ui/EmptyState'
 import { EventCard } from '@components/events/EventCard'
 import { useToast } from '@context/ToastContext'
-import { getOrganizer } from '@data/organizers'
-import { eventsByOrganizer } from '@data/events'
+import { useOrganizer, useEvents } from '@hooks/api'
 import { SITE } from '@lib/constants'
 import { formatCompact } from '@lib/utils'
 import NotFound from '@pages/NotFound'
 
 export default function OrganizerProfile() {
   const { organizerId } = useParams()
-  const organizer = getOrganizer(organizerId)
+  const { data: apiOrganizer, isLoading: organizerLoading } = useOrganizer(organizerId)
+  const { data: eventsData } = useEvents()
   const [tab, setTab] = useState('upcoming')
   const [following, setFollowing] = useState(false)
   const toast = useToast()
 
+  const organizer = apiOrganizer?.organizer || apiOrganizer?.data || apiOrganizer
+  const allEvents = Array.isArray(eventsData) ? eventsData : (eventsData?.events || eventsData?.data || [])
+
+  if (organizerLoading && !organizer) {
+    return (
+      <div className="grid min-h-[60vh] place-items-center" role="status" aria-label="Loading organizer profile">
+        <div className="size-8 animate-spin rounded-full border-2 border-brand-500 border-t-transparent" />
+      </div>
+    )
+  }
+
   if (!organizer) return <NotFound />
 
-  const all = eventsByOrganizer(organizer.id)
-  const upcoming = all.filter((e) => new Date(e.start) > new Date())
-  const past = all.filter((e) => new Date(e.start) <= new Date())
+  const all = allEvents.filter((e) => e.organizerId === organizerId || e.organizer?.id === organizerId)
+  const upcoming = all.filter((e) => new Date(e.start || e.startDate) > new Date())
+  const past = all.filter((e) => new Date(e.start || e.startDate) <= new Date())
   const list = tab === 'upcoming' ? upcoming : past
 
   const onFollow = () => {

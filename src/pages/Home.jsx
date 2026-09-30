@@ -36,16 +36,23 @@ export default function Home() {
       />
 
       <Hero />
-      <StatsStrip />
-      <CategoryGrid />
-      <FeaturedEvents />
-      <SpotlightBanner />
-      <HowItWorks />
-      <NearbyEvents />
-      <PlatformFeatures />
-      <OrganizerCta />
-      <Testimonials />
-      <BlogPreview />
+
+      {/*
+        Opaque and above the hero's fixed video layer, so everything from here
+        down scrolls over it rather than letting it bleed through.
+      */}
+      <div className="relative z-10 bg-white dark:bg-ink-950">
+        <StatsStrip />
+        <CategoryGrid />
+        <FeaturedEvents />
+        <SpotlightBanner />
+        <HowItWorks />
+        <NearbyEvents />
+        <PlatformFeatures />
+        <OrganizerCta />
+        <Testimonials />
+        <BlogPreview />
+      </div>
     </>
   )
 }

@@ -4,7 +4,7 @@ import { Container, Section } from '@components/ui/Section'
 import { Badge } from '@components/ui/Badge'
 import { Button } from '@components/ui/Button'
 import { useCountdown } from '@hooks/useCountdown'
-import { events } from '@data/events'
+import { useEvents, useLandingCms } from '@hooks/api'
 import { formatCurrency, formatDateRange } from '@lib/utils'
 
 function CountdownUnit({ value, label }) {
@@ -20,12 +20,20 @@ function CountdownUnit({ value, label }) {
 
 /** Countdown banner for the next big featured event. */
 export function SpotlightBanner() {
-  const spotlight =
-    events
-      .filter((e) => e.featured && new Date(e.start) > new Date())
-      .sort((a, b) => new Date(a.start) - new Date(b.start))[0] ?? events[0]
+  const { data: eventsData } = useEvents()
+  const { data: cmsData } = useLandingCms()
 
-  const countdown = useCountdown(spotlight.start)
+  const activeEvents = Array.isArray(eventsData) ? eventsData : (eventsData?.events || eventsData?.data || [])
+  const spotlightConfig = cmsData?.spotlight || cmsData?.data?.spotlight
+
+  const spotlight =
+    (spotlightConfig?.eventSlug && activeEvents.find((e) => e.slug === spotlightConfig.eventSlug)) ||
+    activeEvents.find((e) => e.featured && new Date(e.start || e.startDate) > new Date()) ||
+    activeEvents[0]
+
+  const countdown = useCountdown(spotlight?.start || spotlight?.startDate || new Date().toISOString())
+
+  if (!spotlight) return null
 
   return (
     <Section size="tight">
@@ -45,7 +53,7 @@ export function SpotlightBanner() {
           <div className="relative grid gap-8 p-7 sm:p-10 lg:grid-cols-[1.3fr_1fr] lg:items-center lg:p-12">
             <div>
               <Badge tone="glass" size="md" className="mb-4">
-                Spotlight event
+                {spotlightConfig?.badgeText || 'Spotlight event'}
               </Badge>
 
               <h2 className="text-balance text-2xl font-extrabold leading-tight sm:text-3xl lg:text-4xl">

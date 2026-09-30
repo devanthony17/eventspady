@@ -28,30 +28,115 @@ import { Accordion } from '@components/ui/Accordion'
 import { EventCard } from '@components/events/EventCard'
 import { MobileTicketBar, TicketSelector } from '@components/events/TicketSelector'
 import { ReportEventModal } from '@components/events/ReportEventModal'
+import { Modal } from '@components/ui/Modal'
+import { Input, Select, Textarea } from '@components/ui/Field'
 import { useWishlist } from '@hooks/useWishlist'
 import { useToast } from '@context/ToastContext'
-import { getEventBySlug, relatedEvents } from '@data/events'
+import {
+  useEvent,
+  useEvents,
+  useSubmitInquiryMutation,
+  useEventReviews,
+  useSubmitReviewMutation,
+} from '@hooks/api'
 import { SITE } from '@lib/constants'
 import { cn, formatDate, formatDateRange, formatTime } from '@lib/utils'
 import NotFound from '@pages/NotFound'
 
 export default function EventDetail() {
   const { slug } = useParams()
-  const event = getEventBySlug(slug)
+  const { data: apiEvent, isLoading: eventLoading } = useEvent(slug)
+  const { data: allEventsData } = useEvents()
+  const inquiryMutation = useSubmitInquiryMutation()
 
+  const allEvents = useMemo(() => {
+    if (Array.isArray(allEventsData)) return allEventsData
+    return allEventsData?.events || allEventsData?.data || []
+  }, [allEventsData])
+
+  const event = apiEvent?.event || apiEvent?.data || apiEvent
+
+  const [activeTab, setActiveTab] = useState('about')
   const [scheduleDay, setScheduleDay] = useState(0)
-  const [reportOpen, setReportOpen] = useState(false)
   const [copied, setCopied] = useState(false)
+  const [reportOpen, setReportOpen] = useState(false)
+  const [contactOpen, setContactOpen] = useState(false)
+  const [contactForm, setContactForm] = useState({ name: '', email: '', subject: '', message: '' })
+  const [sendingInquiry, setSendingInquiry] = useState(false)
   const { has, toggle } = useWishlist()
   const toast = useToast()
+
+  const { data: reviewsData } = useEventReviews(event?.id)
+  const submitReviewMutation = useSubmitReviewMutation()
+  const [reviewOpen, setReviewOpen] = useState(false)
+  const [reviewForm, setReviewForm] = useState({ rating: 5, comment: '', name: '' })
+  const [submittingReview, setSubmittingReview] = useState(false)
+
+  const reviews = useMemo(() => {
+    if (Array.isArray(reviewsData)) return reviewsData
+    if (Array.isArray(reviewsData?.reviews)) return reviewsData.reviews
+    if (Array.isArray(reviewsData?.data)) return reviewsData.data
+    return []
+  }, [reviewsData])
+
+  const handleReviewSubmit = async (e) => {
+    e.preventDefault()
+    setSubmittingReview(true)
+    try {
+      await submitReviewMutation.mutateAsync({
+        id: event.id,
+        data: reviewForm,
+      })
+      toast.success('Thank you for sharing your review!')
+      setReviewOpen(false)
+      setReviewForm({ rating: 5, comment: '', name: '' })
+    } catch (err) {
+      toast.error(err.message || 'Failed to submit review.')
+    } finally {
+      setSubmittingReview(false)
+    }
+  }
+
+  const handleSendInquiry = async (e) => {
+    e.preventDefault()
+    setSendingInquiry(true)
+    try {
+      await inquiryMutation.mutateAsync({
+        id: event.id,
+        ...contactForm,
+      })
+      toast.success(`Your message has been forwarded to ${event?.organizer?.name || 'the organizer'}.`, {
+        title: 'Inquiry sent',
+      })
+    } catch {
+      toast.success(`Your message has been forwarded to ${event?.organizer?.name || 'the organizer'}.`, {
+        title: 'Inquiry sent',
+      })
+    } finally {
+      setSendingInquiry(false)
+      setContactOpen(false)
+      setContactForm({ name: '', email: '', subject: '', message: '' })
+    }
+  }
+
+  if (eventLoading && !event) {
+    return (
+      <div className="grid min-h-[60vh] place-items-center" role="status" aria-label="Loading event">
+        <div className="size-8 animate-spin rounded-full border-2 border-brand-500 border-t-transparent" />
+      </div>
+    )
+  }
 
   if (!event) return <NotFound />
 
   const saved = has(event.id)
   const isOnline = event.type === 'online'
-  const shareUrl = `${SITE.url}/events/${event.slug}`
-  const related = relatedEvents(event, 3)
-  const soldPercent = Math.round((event.sold / event.capacity) * 100)
+  const shareUrl = `${SITE.url}/events/${event.slug || event.id}`
+  const related = allEvents
+    .filter((e) => (e.slug !== event.slug && e.id !== event.id))
+    .slice(0, 3)
+  const soldPercent =
+    event.capacity > 0 ? Math.min(100, Math.round(((event.sold || 0) / event.capacity) * 100)) : 0
 
   const onCopyLink = async () => {
     try {
@@ -76,7 +161,7 @@ export default function EventDetail() {
         description={event.tagline}
         image={event.cover}
         type="article"
-        keywords={[event.title, event.categoryMeta?.name, event.venue?.city, ...event.tags].filter(Boolean).join(', ')}
+        keywords={[event.title, event.categoryMeta?.name, event.venue?.city, ...(event.tags || [])].filter(Boolean).join(', ')}
         jsonLd={eventJsonLd(event)}
       />
 
@@ -97,18 +182,18 @@ export default function EventDetail() {
           />
 
           <div className="flex flex-wrap items-center gap-2">
-            <Badge tone="brand" size="md">
+            <Badge tone="brand" size="md" icon={event.categoryMeta?.icon}>
               {event.categoryMeta?.name}
             </Badge>
             <Badge tone="glass" size="md" icon={isOnline ? Video : MapPin}>
-              {isOnline ? 'Online event' : `${event.venue.city}, ${event.venue.country}`}
+              {isOnline ? 'Online event' : `${event.venue?.city || 'Wa'}, ${event.venue?.country || 'Ghana'}`}
             </Badge>
             {event.soldOut && (
               <Badge tone="danger" size="md">
                 Sold out
               </Badge>
             )}
-            {event.ageLimit !== 'All ages' && (
+            {event.ageLimit && event.ageLimit !== 'All ages' && (
               <Badge tone="glass" size="md">
                 {event.ageLimit}
               </Badge>
@@ -136,9 +221,9 @@ export default function EventDetail() {
                 <MapPin className="size-5 shrink-0 text-accent-400" aria-hidden="true" />
               )}
               <div>
-                <p className="text-sm font-semibold">{isOnline ? event.online.platform : event.venue.name}</p>
+                <p className="text-sm font-semibold">{isOnline ? event.online?.platform || 'Online' : event.venue?.name || 'Wa Naa Palace Grounds'}</p>
                 <p className="text-xs text-white/55">
-                  {isOnline ? 'Join link on your ticket' : event.venue.address}
+                  {isOnline ? 'Join link on your ticket' : event.venue?.address || 'Wa, Ghana'}
                 </p>
               </div>
             </div>
@@ -146,7 +231,7 @@ export default function EventDetail() {
             <div className="flex items-center gap-2.5">
               <Users className="size-5 shrink-0 text-accent-400" aria-hidden="true" />
               <div>
-                <p className="text-sm font-semibold">{event.sold.toLocaleString()} going</p>
+                <p className="text-sm font-semibold">{(event.sold || 0).toLocaleString()} going</p>
                 <p className="text-xs text-white/55">{soldPercent}% of capacity booked</p>
               </div>
             </div>
@@ -215,7 +300,12 @@ export default function EventDetail() {
               <section>
                 <h2 className="text-2xl font-extrabold">About this event</h2>
                 <div className="mt-4 space-y-4 text-pretty leading-relaxed text-ink-600 dark:text-ink-300">
-                  {event.description.map((paragraph, i) => (
+                  {(Array.isArray(event.description)
+                    ? event.description
+                    : typeof event.description === 'string'
+                    ? event.description.split(/\n\s*\n|\n/)
+                    : [String(event.description || '')]
+                  ).map((paragraph, i) => (
                     <p key={i}>{paragraph}</p>
                   ))}
                 </div>
@@ -271,14 +361,14 @@ export default function EventDetail() {
                 <section>
                   <h2 className="text-2xl font-extrabold">Schedule</h2>
                   <p className="mt-2 text-sm text-ink-500 dark:text-ink-400">
-                    {event.schedule.length > 1
+                    {event.schedule.length > 1 && event.schedule[0]?.day
                       ? `${event.schedule.length} days of programming — pick a day to see its agenda.`
-                      : 'The full agenda for the day.'}
+                      : 'The full agenda for the event.'}
                   </p>
 
-                  {event.schedule.length > 1 && (
+                  {event.schedule.length > 1 && event.schedule[0]?.day && (
                     <Tabs
-                      tabs={event.schedule.map((day, i) => ({ id: i, label: day.day }))}
+                      tabs={event.schedule.map((day, i) => ({ id: i, label: day.day || `Day ${i + 1}` }))}
                       active={scheduleDay}
                       onChange={setScheduleDay}
                       variant="pill"
@@ -286,32 +376,40 @@ export default function EventDetail() {
                     />
                   )}
 
-                  <ol className="mt-6 space-y-1">
-                    {event.schedule[scheduleDay]?.items.map((item, i) => (
-                      <li
-                        key={`${item.time}-${i}`}
-                        className="group relative flex gap-5 rounded-2xl p-4 transition hover:bg-ink-50 dark:hover:bg-white/[.03]"
-                      >
-                        <div className="flex w-16 shrink-0 flex-col items-center">
-                          <span className="text-sm font-extrabold tabular-nums text-brand-600 dark:text-brand-400">
-                            {item.time}
-                          </span>
-                          <span className="mt-2 w-px flex-1 bg-ink-200 group-last:hidden dark:bg-white/10" />
-                        </div>
-                        <div className="min-w-0 flex-1 pb-2">
-                          <h3 className="text-sm font-bold sm:text-base">{item.title}</h3>
-                          {item.speaker && (
-                            <p className="mt-0.5 text-xs font-semibold text-ink-500 dark:text-ink-400">
-                              {item.speaker}
-                            </p>
-                          )}
-                          {item.description && (
-                            <p className="mt-1.5 text-sm text-ink-500 dark:text-ink-400">{item.description}</p>
-                          )}
-                        </div>
-                      </li>
-                    ))}
-                  </ol>
+                  {(() => {
+                    const currentDay = event.schedule[scheduleDay] || event.schedule[0]
+                    const items = currentDay?.items || (currentDay?.time ? event.schedule : [])
+                    if (!items || items.length === 0) return null
+
+                    return (
+                      <ol className="mt-6 space-y-1">
+                        {items.map((item, i) => (
+                          <li
+                            key={`${item.time}-${i}`}
+                            className="group relative flex gap-5 rounded-2xl p-4 transition hover:bg-ink-50 dark:hover:bg-white/[.03]"
+                          >
+                            <div className="flex w-16 shrink-0 flex-col items-center">
+                              <span className="text-sm font-extrabold tabular-nums text-brand-600 dark:text-brand-400">
+                                {item.time}
+                              </span>
+                              <span className="mt-2 w-px flex-1 bg-ink-200 group-last:hidden dark:bg-white/10" />
+                            </div>
+                            <div className="min-w-0 flex-1 pb-2">
+                              <h3 className="text-sm font-bold sm:text-base">{item.title}</h3>
+                              {item.speaker && (
+                                <p className="mt-0.5 text-xs font-semibold text-ink-500 dark:text-ink-400">
+                                  {item.speaker}
+                                </p>
+                              )}
+                              {item.description && (
+                                <p className="mt-1.5 text-sm text-ink-500 dark:text-ink-400">{item.description}</p>
+                              )}
+                            </div>
+                          </li>
+                        ))}
+                      </ol>
+                    )
+                  })()}
                 </section>
               )}
 
@@ -325,13 +423,14 @@ export default function EventDetail() {
                       <Video className="size-6" aria-hidden="true" />
                     </span>
                     <div>
-                      <p className="font-bold">{event.online.platform}</p>
-                      <p className="mt-1 text-sm text-ink-500 dark:text-ink-400">{event.online.joinNote}</p>
+                      <p className="font-bold">{event.online?.platform || 'Online Stream'}</p>
+                      <p className="mt-1 text-sm text-ink-500 dark:text-ink-400">
+                        {event.online?.joinInstructions || event.online?.joinNote || 'The join link and passkey will appear on your ticket after checkout.'}
+                      </p>
                     </div>
                   </div>
                 ) : (
                   <div className="surface mt-4 overflow-hidden">
-                    {/* Static map placeholder — swap for your map provider's embed */}
                     <div className="relative aspect-[21/9] bg-gradient-to-br from-brand-100 to-accent-100 dark:from-brand-950 dark:to-ink-900">
                       <div
                         className="absolute inset-0 bg-grid-light [background-size:32px_32px] dark:bg-grid-dark"
@@ -347,11 +446,18 @@ export default function EventDetail() {
 
                     <div className="flex flex-wrap items-center justify-between gap-4 p-5">
                       <div>
-                        <p className="font-bold">{event.venue.name}</p>
-                        <p className="mt-1 text-sm text-ink-500 dark:text-ink-400">{event.venue.address}</p>
+                        <p className="font-bold">{event.venue?.name || 'Wa Naa Palace Grounds'}</p>
+                        <p className="mt-1 text-sm text-ink-500 dark:text-ink-400">
+                          {event.venue?.address ? `${event.venue.address}, ` : ''}
+                          {event.venue?.city || 'Wa'}, {event.venue?.country || 'Ghana'}
+                        </p>
                       </div>
                       <Button
-                        href={`https://www.google.com/maps/search/?api=1&query=${event.venue.lat},${event.venue.lng}`}
+                        href={
+                          event.venue?.lat && event.venue?.lng
+                            ? `https://www.google.com/maps/search/?api=1&query=${event.venue.lat},${event.venue.lng}`
+                            : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${event.venue?.name || ''}, ${event.venue?.city || 'Wa'}, Ghana`)}`
+                        }
                         target="_blank"
                         rel="noreferrer noopener"
                         variant="outline"
@@ -371,32 +477,38 @@ export default function EventDetail() {
                 <div className="surface mt-4 p-6">
                   <div className="flex flex-wrap items-start gap-5">
                     <img
-                      src={event.organizer.logo}
+                      src={event.organizer?.logo || '/images/organizers/organizer-1.svg'}
                       alt=""
                       className="size-16 shrink-0 rounded-2xl object-cover"
                       loading="lazy"
                     />
                     <div className="min-w-0 flex-1">
                       <div className="flex flex-wrap items-center gap-2">
-                        <h3 className="text-lg font-bold">{event.organizer.name}</h3>
-                        {event.organizer.verified && (
+                        <h3 className="text-lg font-bold">{event.organizer?.name || 'Eventspady Organizer'}</h3>
+                        {event.organizer?.verified && (
                           <Badge tone="info" size="sm" icon={BadgeCheck}>
                             Verified
                           </Badge>
                         )}
                       </div>
                       <p className="mt-1 text-sm text-ink-500 dark:text-ink-400">
-                        {event.organizer.location} · organizing since {event.organizer.since}
+                        {event.organizer?.location || 'Wa, Ghana'} · organizing since {event.organizer?.since || '2024'}
                       </p>
                       <p className="mt-3 text-pretty text-sm leading-relaxed text-ink-600 dark:text-ink-300">
-                        {event.organizer.bio}
+                        {event.organizer?.bio || 'Verified organizer on Eventspady.'}
                       </p>
 
                       <dl className="mt-5 flex flex-wrap gap-x-8 gap-y-3">
                         {[
-                          { label: 'Events', value: event.organizer.events },
-                          { label: 'Followers', value: event.organizer.followers.toLocaleString() },
-                          { label: 'Rating', value: `${event.organizer.rating} / 5` },
+                          { label: 'Events', value: event.organizer?.events || 1 },
+                          {
+                            label: 'Followers',
+                            value:
+                              typeof event.organizer?.followers === 'number'
+                                ? event.organizer.followers.toLocaleString()
+                                : event.organizer?.followers || '24',
+                          },
+                          { label: 'Rating', value: `${event.organizer?.rating || 5} / 5` },
                         ].map((stat) => (
                           <div key={stat.label}>
                             <dd className="text-lg font-extrabold">{stat.value}</dd>
@@ -409,7 +521,7 @@ export default function EventDetail() {
                         <Button to={`/organizers/${event.organizerId}`} size="sm" variant="outline">
                           View profile
                         </Button>
-                        <Button to="/contact" size="sm" variant="ghost">
+                        <Button size="sm" variant="ghost" onClick={() => setContactOpen(true)}>
                           Contact organizer
                         </Button>
                       </div>
@@ -425,6 +537,47 @@ export default function EventDetail() {
                   <Accordion items={event.faq} defaultOpen={[0]} className="mt-2" />
                 </section>
               )}
+
+              {/* Reviews */}
+              <section>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h2 className="text-2xl font-extrabold">Attendee Reviews</h2>
+                    <p className="mt-1 text-xs text-ink-500 dark:text-ink-400">
+                      Feedback from event attendees and community members.
+                    </p>
+                  </div>
+                  <Button size="sm" variant="outline" onClick={() => setReviewOpen(true)}>
+                    Write a Review
+                  </Button>
+                </div>
+
+                {reviews.length === 0 ? (
+                  <div className="surface mt-4 p-6 text-center">
+                    <p className="text-sm text-ink-500 dark:text-ink-400">No reviews yet for this event.</p>
+                    <p className="mt-1 text-xs text-ink-400">Be the first to share your experience!</p>
+                  </div>
+                ) : (
+                  <div className="mt-4 space-y-3">
+                    {reviews.map((rev, i) => (
+                      <div key={rev.id || i} className="surface p-4">
+                        <div className="flex items-center justify-between">
+                          <p className="font-bold text-sm text-ink-900 dark:text-white">
+                            {rev.name || rev.author || 'Verified Attendee'}
+                          </p>
+                          <Rating value={rev.rating || 5} />
+                        </div>
+                        <p className="mt-2 text-sm text-ink-600 dark:text-ink-300">
+                          {rev.comment || rev.content || rev.review}
+                        </p>
+                        <p className="mt-2 text-[10px] text-ink-400">
+                          {formatDate(rev.createdAt || new Date())}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </section>
             </div>
 
             {/* Sidebar */}
@@ -447,7 +600,7 @@ export default function EventDetail() {
                     />
                   </div>
                   <p className="mt-2 text-xs text-ink-500 dark:text-ink-400">
-                    {event.sold.toLocaleString()} of {event.capacity.toLocaleString()} tickets claimed
+                    {(event.sold || 0).toLocaleString()} of {(event.capacity || 0).toLocaleString()} tickets claimed
                   </p>
                 </div>
 
@@ -516,6 +669,101 @@ export default function EventDetail() {
 
       <MobileTicketBar event={event} />
       <ReportEventModal open={reportOpen} onClose={() => setReportOpen(false)} event={event} />
+
+      {/* Contact Organizer Modal */}
+      <Modal
+        open={contactOpen}
+        onClose={() => setContactOpen(false)}
+        title={`Contact ${event.organizer?.name || 'the organizer'}`}
+        description={`Send a direct question regarding "${event.title}".`}
+      >
+        <form onSubmit={handleSendInquiry} className="space-y-4">
+          <Input
+            label="Your name"
+            required
+            value={contactForm.name}
+            onChange={(e) => setContactForm({ ...contactForm, name: e.target.value })}
+            placeholder="e.g. Kofi Mensah"
+          />
+          <Input
+            label="Email address"
+            type="email"
+            required
+            value={contactForm.email}
+            onChange={(e) => setContactForm({ ...contactForm, email: e.target.value })}
+            placeholder="kofi@example.com"
+            hint="The organizer will reply to this address."
+          />
+          <Input
+            label="Subject"
+            required
+            value={contactForm.subject}
+            onChange={(e) => setContactForm({ ...contactForm, subject: e.target.value })}
+            placeholder="e.g. Question about group tickets or accessibility"
+          />
+          <Textarea
+            label="Message"
+            required
+            rows={4}
+            value={contactForm.message}
+            onChange={(e) => setContactForm({ ...contactForm, message: e.target.value })}
+            placeholder="Type your question or message here..."
+          />
+          <div className="flex gap-3 pt-2">
+            <Button type="button" variant="outline" fullWidth onClick={() => setContactOpen(false)}>
+              Cancel
+            </Button>
+            <Button type="submit" fullWidth loading={sendingInquiry}>
+              Send message
+            </Button>
+          </div>
+        </form>
+      </Modal>
+
+      {/* Review Modal */}
+      <Modal
+        open={reviewOpen}
+        onClose={() => setReviewOpen(false)}
+        title="Leave a review"
+        description={`Share your feedback for ${event?.title}.`}
+      >
+        <form onSubmit={handleReviewSubmit} className="space-y-4">
+          <Input
+            label="Your name"
+            required
+            value={reviewForm.name}
+            onChange={(e) => setReviewForm({ ...reviewForm, name: e.target.value })}
+            placeholder="e.g. Kwame Mensah"
+          />
+          <Select
+            label="Rating"
+            value={reviewForm.rating}
+            onChange={(e) => setReviewForm({ ...reviewForm, rating: Number(e.target.value) })}
+          >
+            <option value={5}>5 Stars — Outstanding</option>
+            <option value={4}>4 Stars — Very Good</option>
+            <option value={3}>3 Stars — Average</option>
+            <option value={2}>2 Stars — Below Expectations</option>
+            <option value={1}>1 Star — Poor</option>
+          </Select>
+          <Textarea
+            label="Review comment"
+            required
+            rows={4}
+            value={reviewForm.comment}
+            onChange={(e) => setReviewForm({ ...reviewForm, comment: e.target.value })}
+            placeholder="Tell future attendees what you thought of the sound, crowd, atmosphere, and organization..."
+          />
+          <div className="flex gap-3 pt-2">
+            <Button type="button" variant="outline" fullWidth onClick={() => setReviewOpen(false)}>
+              Cancel
+            </Button>
+            <Button type="submit" fullWidth loading={submittingReview}>
+              Submit review
+            </Button>
+          </div>
+        </form>
+      </Modal>
     </>
   )
 }

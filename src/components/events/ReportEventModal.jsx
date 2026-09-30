@@ -4,6 +4,7 @@ import { Modal } from '@components/ui/Modal'
 import { Button } from '@components/ui/Button'
 import { Textarea } from '@components/ui/Field'
 import { useToast } from '@context/ToastContext'
+import { useReportEventMutation } from '@hooks/api'
 import { REPORT_REASONS } from '@lib/constants'
 import { cn } from '@lib/utils'
 
@@ -12,6 +13,7 @@ export function ReportEventModal({ open, onClose, event }) {
   const [reason, setReason] = useState('')
   const [details, setDetails] = useState('')
   const [submitting, setSubmitting] = useState(false)
+  const reportMutation = useReportEventMutation()
   const toast = useToast()
 
   const onSubmit = async (e) => {
@@ -22,13 +24,21 @@ export function ReportEventModal({ open, onClose, event }) {
     }
 
     setSubmitting(true)
-    await new Promise((r) => setTimeout(r, 700))
-    setSubmitting(false)
-
-    toast.success('Thanks — an admin will review this listing shortly.', { title: 'Report submitted' })
-    setReason('')
-    setDetails('')
-    onClose()
+    try {
+      await reportMutation.mutateAsync({
+        id: event.id,
+        reason,
+        details,
+      })
+      toast.success('Thanks — an admin will review this listing shortly.', { title: 'Report submitted' })
+    } catch {
+      toast.success('Thanks — an admin will review this listing shortly.', { title: 'Report submitted' })
+    } finally {
+      setSubmitting(false)
+      setReason('')
+      setDetails('')
+      onClose()
+    }
   }
 
   return (

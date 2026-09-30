@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 54" width="220" height="54" fill="none">
+  <!-- Telecel Circular Emblem -->
+  <g transform="translate(6, 7)">
+    <circle cx="20" cy="20" r="18" fill="#E11D48"/>
+    <!-- Stylized curved 't' -->
+    <path d="M16 13v14c0 3 2 4 5 4M13 18h8" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <!-- Wordmark -->
+  <text x="52" y="25" font-family="'Plus Jakarta Sans', Inter, system-ui, sans-serif" font-size="14.5" font-weight="900" letter-spacing="0.2" fill="#E11D48">telecel <tspan fill="#F43F5E" font-weight="600">cash</tspan></text>
+  <text x="52" y="38" font-family="'Plus Jakarta Sans', Inter, system-ui, sans-serif" font-size="8.5" font-weight="700" letter-spacing="1.8" fill="#94A3B8">INSTANT PAYOUTS</text>
+</svg>

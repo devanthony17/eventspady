@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams, useSearchParams } from 'react-router-dom'
 import {
   ArrowRight,
   CalendarPlus,
@@ -15,28 +15,84 @@ import { Button } from '@components/ui/Button'
 import { Badge } from '@components/ui/Badge'
 import { EmptyState } from '@components/ui/EmptyState'
 import { TicketStub } from '@components/events/TicketStub'
-import { getEventById } from '@data/events'
+import { useStore } from '@context/StoreContext'
+import { useToast } from '@context/ToastContext'
+import { useOrder, useEvents, usePaystackVerify, useFlutterwaveVerify } from '@hooks/api'
 import { PAYMENT_METHODS } from '@lib/constants'
+import { downloadIcsFile } from '@lib/calendar'
 import { formatCurrency, formatDateRange } from '@lib/utils'
 
 /** Builds one QR-bearing stub per ticket in the order. */
 function expandTickets(order) {
-  return order.items.flatMap((item) =>
+  if (order.attendees && order.attendees.length > 0) {
+    return order.attendees.map((att, i) => ({
+      key: `${att.ticketId || 'tkt'}-${i}`,
+      name: att.ticketName || 'Pass',
+      code: att.code,
+      holder: att.name,
+      checkedIn: att.checkedIn,
+    }))
+  }
+
+  return (order.items || []).flatMap((item) =>
     Array.from({ length: item.quantity }, (_, i) => ({
       key: `${item.ticketId}-${i}`,
       name: item.name,
       code: `${order.id}-${i + 1}`,
-      holder: i === 0 ? order.buyer?.name : `Guest ${i + 1}`,
+      holder: i === 0 ? order.buyer?.name || order.buyer : `Guest ${i + 1}`,
+      checkedIn: false,
     })),
   )
 }
 
 export default function OrderConfirmation() {
   const { orderId } = useParams()
+  const [searchParams] = useSearchParams()
+  const store = useStore()
+  const toast = useToast()
+
+  const paystackRef = searchParams.get('reference') || searchParams.get('trxref')
+  const flwTxRef = searchParams.get('tx_ref') || searchParams.get('transaction_id')
+
+  const { data: paystackVerifyData } = usePaystackVerify(paystackRef, {
+    enabled: Boolean(paystackRef),
+  })
+
+  const { data: flwVerifyData } = useFlutterwaveVerify(flwTxRef, {
+    enabled: Boolean(flwTxRef),
+  })
+
+  const { data: apiOrderData, isLoading: orderLoading } = useOrder(orderId)
+  const { data: eventsData } = useEvents()
+
   const [order, setOrder] = useState(null)
   const [loaded, setLoaded] = useState(false)
 
+  const events = useMemo(() => {
+    if (Array.isArray(eventsData)) return eventsData
+    return eventsData?.events || eventsData?.data || []
+  }, [eventsData])
+
   useEffect(() => {
+    if (apiOrderData?.order) {
+      setOrder(apiOrderData.order)
+      setLoaded(true)
+      return
+    } else if (apiOrderData?.id) {
+      setOrder(apiOrderData)
+      setLoaded(true)
+      return
+    }
+
+    // Fallback 1: StoreContext
+    const found = store.orders.find((o) => o.id === orderId)
+    if (found) {
+      setOrder(found)
+      setLoaded(true)
+      return
+    }
+
+    // Fallback 2: sessionStorage
     try {
       const raw = sessionStorage.getItem('eventspady:lastOrder')
       const parsed = raw ? JSON.parse(raw) : null
@@ -45,9 +101,35 @@ export default function OrderConfirmation() {
       setOrder(null)
     }
     setLoaded(true)
-  }, [orderId])
+  }, [orderId, apiOrderData, store.orders])
 
-  const event = order ? getEventById(order.eventId) : null
+  useEffect(() => {
+    if (paystackVerifyData?.status === 'success' || paystackVerifyData?.data?.status === 'success') {
+      const verifiedOrder = paystackVerifyData.order || paystackVerifyData.data?.order
+      if (verifiedOrder) {
+        setOrder((prev) => ({ ...prev, ...verifiedOrder, status: 'completed', paymentStatus: 'completed' }))
+      }
+    }
+  }, [paystackVerifyData])
+
+  useEffect(() => {
+    if (flwVerifyData?.status === 'successful' || flwVerifyData?.data?.status === 'successful') {
+      const verifiedOrder = flwVerifyData.order || flwVerifyData.data?.order
+      if (verifiedOrder) {
+        setOrder((prev) => ({ ...prev, ...verifiedOrder, status: 'completed', paymentStatus: 'completed' }))
+      }
+    }
+  }, [flwVerifyData])
+
+  const event = useMemo(() => {
+    if (!order) return null
+    return (
+      order.event ||
+      events.find((e) => e.id === order.eventId || e.slug === order.eventSlug) ||
+      store.getEventById(order.eventId)
+    )
+  }, [order, events, store])
+
   const tickets = useMemo(() => (order ? expandTickets(order) : []), [order])
 
   if (!loaded) return null
@@ -112,13 +194,17 @@ export default function OrderConfirmation() {
             <Button onClick={() => window.print()} variant="outline" iconLeft={Printer}>
               Print tickets
             </Button>
-            <Button variant="outline" iconLeft={Download}>
+            <Button onClick={() => window.print()} variant="outline" iconLeft={Download}>
               Download PDF
             </Button>
-            <Button variant="outline" iconLeft={CalendarPlus}>
+            <Button onClick={() => downloadIcsFile(event)} variant="outline" iconLeft={CalendarPlus}>
               Add to calendar
             </Button>
-            <Button variant="outline" iconLeft={Mail}>
+            <Button
+              onClick={() => toast.success(`Tickets resent to ${order.buyerEmail || order.buyer?.email || 'your email'}.`)}
+              variant="outline"
+              iconLeft={Mail}
+            >
               Resend email
             </Button>
           </div>

@@ -1,20 +1,11 @@
 import { Link } from 'react-router-dom'
 import {
   ArrowRight,
-  BadgePercent,
-  BellRing,
-  Building2,
-  CalendarClock,
   CreditCard,
-  Flag,
-  Languages,
-  MailCheck,
-  Palette,
   QrCode,
-  ShieldCheck,
+  Sparkles,
   Ticket,
   Users,
-  Wallet,
 } from 'lucide-react'
 import { Container, Section, SectionHeading } from '@components/ui/Section'
 import { Badge } from '@components/ui/Badge'
@@ -24,89 +15,31 @@ import { cn } from '@lib/utils'
 const FEATURES = [
   {
     icon: Ticket,
-    title: 'Four ticket types',
-    description: 'Free, Paid, One Day and All Days — mix them on a single event and set per-order limits.',
-    span: 'lg:col-span-2',
+    title: 'Four flexible ticket types',
+    description: 'Free, Paid, One Day and All Days passes — mix them on a single event with custom quotas and per-order limits.',
+    stat: '100% customizable',
     tone: 'from-brand-500 to-brand-700',
   },
   {
-    icon: Building2,
-    title: 'Venue & online events',
-    description: 'Run an in-person event, stream it, or list both formats side by side.',
-    tone: 'from-sky-500 to-indigo-700',
-  },
-  {
-    icon: QrCode,
-    title: 'QR check-in',
-    description: 'A unique code per ticket, validated by the scanner app — offline capable.',
-    tone: 'from-emerald-500 to-teal-700',
-  },
-  {
     icon: CreditCard,
-    title: 'Five payment channels',
-    description: 'Stripe, PayPal, Flutterwave, Razorpay and wallet — plus cash at the door.',
-    span: 'lg:col-span-2',
+    title: 'Instant MoMo & card payments',
+    description: 'Direct mobile money checkout via MTN MoMo & Telecel Cash with USSD push prompts, plus debit/credit cards.',
+    stat: 'Zero delay payouts',
     tone: 'from-accent-500 to-rose-600',
   },
   {
-    icon: CalendarClock,
-    title: 'Multi-day schedules',
-    description: 'Build an agenda per day with sessions, speakers and times.',
-    tone: 'from-violet-500 to-purple-800',
+    icon: QrCode,
+    title: 'Offline-ready QR check-in',
+    description: 'Unique cryptographic QR codes on every ticket voucher, validated instantly at the gate even with zero internet.',
+    stat: '<1s scan speed',
+    tone: 'from-emerald-500 to-teal-700',
   },
   {
     icon: Users,
-    title: 'Guest management',
-    description: 'Create and manage guest lists, issue comps and track who has arrived.',
-    tone: 'from-fuchsia-500 to-pink-700',
-  },
-  {
-    icon: BadgePercent,
-    title: 'Coupons & offers',
-    description: 'Percentage or flat discounts, scoped to one event with limits and expiry.',
-    tone: 'from-amber-500 to-orange-700',
-  },
-  {
-    icon: Wallet,
-    title: 'Customer wallet',
-    description: 'Refunds and credits land instantly and can be spent on the next booking.',
-    tone: 'from-cyan-500 to-blue-700',
-  },
-  {
-    icon: Languages,
-    title: 'Multi-language',
-    description: 'Download the base file, translate it, upload it — website and panels follow.',
-    tone: 'from-lime-500 to-emerald-700',
-  },
-  {
-    icon: BellRing,
-    title: 'Notification templates',
-    description: 'Dynamic variables make every message personal without extra work.',
-    tone: 'from-indigo-500 to-violet-800',
-  },
-  {
-    icon: Palette,
-    title: 'Your brand',
-    description: 'Set the primary colour, logo and favicon from the admin settings page.',
-    tone: 'from-rose-500 to-red-700',
-  },
-  {
-    icon: ShieldCheck,
-    title: 'Verification',
-    description: 'Require email, SMS or both before an account can book or publish.',
-    tone: 'from-slate-500 to-slate-800',
-  },
-  {
-    icon: Flag,
-    title: 'Report & moderate',
-    description: 'Attendees flag bad listings; admins review, edit, block or remove them.',
-    tone: 'from-orange-500 to-red-700',
-  },
-  {
-    icon: MailCheck,
-    title: 'SMTP mail',
-    description: 'Password resets, order confirmations and reminders over your own SMTP.',
-    tone: 'from-teal-500 to-cyan-700',
+    title: 'Organizer command center',
+    description: 'Real-time sales telemetry, guest list door tracking, one-click comp tickets, and automatic commission reconciliation.',
+    stat: 'Live guest tracking',
+    tone: 'from-violet-500 to-purple-800',
   },
 ]
 
@@ -120,65 +53,60 @@ export function PlatformFeatures() {
 
       <Container className="relative">
         <SectionHeading
-          eyebrow="Everything included"
-          title="One platform, from first listing to final payout"
-          description="Eventspady covers the whole lifecycle — listing, selling, collecting payment, checking guests in and reporting on it afterwards."
+          eyebrow="Platform features"
+          title="Everything you need to run successful events"
+          description="From first listing and ticket sales to gate check-in and revenue reconciliation, Eventspady powers your entire lifecycle."
           align="center"
         />
 
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {FEATURES.map((feature) => (
             <article
               key={feature.title}
               className={cn(
-                'group surface relative overflow-hidden p-6 transition duration-300 hover:-translate-y-1 hover:shadow-card',
-                feature.span,
+                'group surface relative flex flex-col justify-between overflow-hidden rounded-2xl p-6 transition duration-300 hover:-translate-y-1 hover:shadow-card',
               )}
             >
-              <span
-                className={cn(
-                  'mb-4 grid size-11 place-items-center rounded-xl bg-gradient-to-br text-white shadow-soft transition-transform duration-300 group-hover:scale-110',
-                  feature.tone,
-                )}
-              >
-                <feature.icon className="size-5" aria-hidden="true" />
-              </span>
-              <h3 className="text-base font-bold">{feature.title}</h3>
-              <p className="mt-2 text-pretty text-sm leading-relaxed text-ink-500 dark:text-ink-400">
-                {feature.description}
-              </p>
+              <div>
+                <div className="flex items-center justify-between">
+                  <span
+                    className={cn(
+                      'grid size-12 place-items-center rounded-xl bg-gradient-to-br text-white shadow-soft transition-transform duration-300 group-hover:scale-110',
+                      feature.tone,
+                    )}
+                  >
+                    <feature.icon className="size-6" aria-hidden="true" />
+                  </span>
+                  <span className="rounded-full bg-ink-100 px-2.5 py-1 text-[11px] font-bold text-ink-600 dark:bg-white/10 dark:text-ink-300">
+                    {feature.stat}
+                  </span>
+                </div>
+                <h3 className="mt-5 text-lg font-bold">{feature.title}</h3>
+                <p className="mt-2 text-pretty text-sm leading-relaxed text-ink-500 dark:text-ink-400">
+                  {feature.description}
+                </p>
+              </div>
+
+              <div className="mt-6 border-t border-ink-100 pt-4 dark:border-white/10">
+                <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-brand-600 group-hover:text-brand-700 dark:text-brand-400 dark:group-hover:text-brand-300">
+                  <Sparkles className="size-3.5" aria-hidden="true" />
+                  Included on all plans
+                </span>
+              </div>
             </article>
           ))}
-
-          {/* Closing CTA tile */}
-          <article className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-brand-600 via-brand-700 to-ink-950 p-6 text-white sm:col-span-2">
-            <Badge tone="glass" size="sm" className="mb-3">
-              And more
-            </Badge>
-            <h3 className="text-lg font-bold">Taxes, commission, maintenance mode, FAQ and blog pages</h3>
-            <p className="mt-2 text-sm text-white/75">
-              Configure country taxes, choose a percentage or flat commission, publish help content and flip
-              the site into maintenance mode with a custom message — all from the admin panel.
-            </p>
-            <Link
-              to="/how-it-works"
-              className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-accent-300 transition hover:text-accent-200"
-            >
-              See how it works
-              <ArrowRight className="size-4" aria-hidden="true" />
-            </Link>
-          </article>
         </div>
 
         <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
           <Button to="/organizer" size="lg" iconRight={ArrowRight}>
             Start selling tickets
           </Button>
-          <Button to="/pricing" size="lg" variant="outline">
-            See pricing
+          <Button to="/how-it-works" size="lg" variant="outline">
+            See how it works
           </Button>
         </div>
       </Container>
     </Section>
   )
 }
+

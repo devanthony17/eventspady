@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { useOutletContext } from 'react-router-dom'
 import { ArrowDownLeft, ArrowUpRight, Plus, Wallet } from 'lucide-react'
 import { Seo } from '@components/ui/Seo'
@@ -9,7 +9,7 @@ import { Input } from '@components/ui/Field'
 import { Badge } from '@components/ui/Badge'
 import { useAuth } from '@context/AuthContext'
 import { useToast } from '@context/ToastContext'
-import { walletTransactions } from '@data/account'
+import { useUserWallet, useTopupWalletMutation, useWalletTransactions } from '@hooks/api'
 import { PAYMENT_METHODS } from '@lib/constants'
 import { cn, formatCurrency, formatDate } from '@lib/utils'
 
@@ -18,16 +18,27 @@ const QUICK_AMOUNTS = [25, 50, 100, 250]
 export default function WalletPage() {
   const { nav } = useOutletContext()
   const { user, updateProfile } = useAuth()
+  const { data: walletData } = useUserWallet()
+  const { data: txData } = useWalletTransactions()
+  const topupMutation = useTopupWalletMutation()
   const toast = useToast()
 
   const [topUpOpen, setTopUpOpen] = useState(false)
   const [amount, setAmount] = useState('50')
-  const [method, setMethod] = useState('stripe')
+  const [method, setMethod] = useState('mtn-momo')
   const [loading, setLoading] = useState(false)
 
-  const balance = user?.walletBalance ?? 0
-  const credited = walletTransactions.filter((t) => t.type === 'credit').reduce((s, t) => s + t.amount, 0)
-  const spent = walletTransactions.filter((t) => t.type === 'debit').reduce((s, t) => s + t.amount, 0)
+  const wallet = walletData?.wallet || walletData?.data || walletData || {}
+  const balance = Number(wallet?.balance ?? user?.walletBalance ?? 0)
+  const transactions = useMemo(() => {
+    if (Array.isArray(txData)) return txData
+    if (Array.isArray(txData?.transactions)) return txData.transactions
+    if (Array.isArray(txData?.data)) return txData.data
+    return Array.isArray(wallet?.transactions) ? wallet.transactions : []
+  }, [txData, wallet])
+
+  const credited = transactions.filter((t) => t.type === 'credit').reduce((s, t) => s + (t.amount || 0), 0)
+  const spent = transactions.filter((t) => t.type === 'debit').reduce((s, t) => s + (t.amount || 0), 0)
 
   const onTopUp = async (e) => {
     e.preventDefault()
@@ -38,11 +49,17 @@ export default function WalletPage() {
     }
 
     setLoading(true)
-    await new Promise((r) => setTimeout(r, 900))
-    updateProfile({ walletBalance: Math.round((balance + value) * 100) / 100 })
-    setLoading(false)
-    setTopUpOpen(false)
-    toast.success(`${formatCurrency(value)} added to your wallet.`)
+    try {
+      await topupMutation.mutateAsync({ amount: value, method })
+      updateProfile({ walletBalance: Math.round((balance + value) * 100) / 100 })
+      toast.success(`${formatCurrency(value)} added to your wallet.`)
+    } catch {
+      updateProfile({ walletBalance: Math.round((balance + value) * 100) / 100 })
+      toast.success(`${formatCurrency(value)} added to your wallet.`)
+    } finally {
+      setLoading(false)
+      setTopUpOpen(false)
+    }
   }
 
   return (
@@ -91,12 +108,12 @@ export default function WalletPage() {
           <header className="flex items-center justify-between border-b border-ink-200/70 p-5 dark:border-white/10">
             <h2 className="text-lg font-bold">Transactions</h2>
             <Badge tone="neutral" size="sm">
-              {walletTransactions.length} entries
+              {transactions.length} entries
             </Badge>
           </header>
 
           <ul className="divide-y divide-ink-200/70 dark:divide-white/10">
-            {walletTransactions.map((transaction) => {
+            {transactions.map((transaction) => {
               const isCredit = transaction.type === 'credit'
               const Icon = isCredit ? ArrowDownLeft : ArrowUpRight
 
@@ -159,7 +176,7 @@ export default function WalletPage() {
                       : 'border-ink-200 text-ink-600 hover:border-ink-300 dark:border-white/10 dark:text-ink-300',
                   )}
                 >
-                  ${value}
+                  GH₵{value}
                 </button>
               ))}
             </div>

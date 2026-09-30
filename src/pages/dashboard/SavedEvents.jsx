@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { useOutletContext } from 'react-router-dom'
 import { Heart, Trash2 } from 'lucide-react'
 import { Seo } from '@components/ui/Seo'
@@ -7,12 +8,18 @@ import { EmptyState } from '@components/ui/EmptyState'
 import { EventCard } from '@components/events/EventCard'
 import { useWishlist } from '@hooks/useWishlist'
 import { useToast } from '@context/ToastContext'
-import { events } from '@data/events'
+import { useEvents } from '@hooks/api'
 
 export default function SavedEvents() {
   const { nav } = useOutletContext()
   const { ids, clear } = useWishlist()
+  const { data: eventsData } = useEvents()
   const toast = useToast()
+
+  const events = useMemo(() => {
+    if (Array.isArray(eventsData)) return eventsData
+    return eventsData?.events || eventsData?.data || []
+  }, [eventsData])
 
   const saved = events.filter((event) => ids.includes(event.id))
 

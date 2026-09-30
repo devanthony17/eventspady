@@ -1,77 +1,94 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
 import {
-  ChevronDown,
+  BadgeDollarSign,
+  CalendarDays,
+  Check,
+  Compass,
+  FileText,
   Globe,
   Heart,
+  HelpCircle,
+  Home as HomeIcon,
+  Info,
   LayoutDashboard,
   LogOut,
-  Menu,
+  Mail,
+  Menu as MenuIcon,
+  MessageSquare,
+  Newspaper,
   Plus,
   Search,
   Settings,
+  ShieldCheck,
+  ShoppingBag,
   Ticket,
   User,
-  Wallet,
+  Users,
   X,
 } from 'lucide-react'
 import { Logo } from '@components/layout/Logo'
 import { ThemeToggle } from '@components/layout/ThemeToggle'
 import { SearchDialog } from '@components/layout/SearchDialog'
 import { Button } from '@components/ui/Button'
-import { Badge } from '@components/ui/Badge'
 import { Avatar } from '@components/ui/Avatar'
 import { useAuth } from '@context/AuthContext'
 import { useCart } from '@context/CartContext'
 import { useWishlist } from '@hooks/useWishlist'
 import { useClickOutside } from '@hooks/useClickOutside'
-import { categories } from '@data/categories'
+import { useIsDesktop } from '@hooks/useMediaQuery'
 import { LANGUAGES } from '@lib/constants'
 import { cn } from '@lib/utils'
 
-const NAV_LINKS = [
-  { label: 'Home', to: '/' },
-  { label: 'Events', to: '/events', mega: true },
-  { label: 'Organizers', to: '/organizers' },
-  { label: 'Blog', to: '/blog' },
-  {
-    label: 'Pages',
-    to: '/about',
-    dropdown: [
-      { label: 'About us', to: '/about' },
-      { label: 'How it works', to: '/how-it-works' },
-      { label: 'Pricing', to: '/pricing' },
-      { label: 'FAQ', to: '/faq' },
-      { label: 'Contact', to: '/contact' },
-      { label: 'Feedback', to: '/feedback' },
-      { label: 'Privacy policy', to: '/privacy' },
-      { label: 'Terms of service', to: '/terms' },
-    ],
-  },
+/** Every page reachable from the slide-out menu, each with its own icon. */
+const MENU_LINKS = [
+  { label: 'Home', to: '/', icon: HomeIcon, end: true },
+  { label: 'Events', to: '/events', icon: CalendarDays },
+  { label: 'Organizers', to: '/organizers', icon: Users },
+  { label: 'Blog', to: '/blog', icon: Newspaper },
+  { label: 'About', to: '/about', icon: Info },
+  { label: 'How it works', to: '/how-it-works', icon: Compass },
+  { label: 'Pricing', to: '/pricing', icon: BadgeDollarSign },
+  { label: 'FAQ', to: '/faq', icon: HelpCircle },
+  { label: 'Contact', to: '/contact', icon: Mail },
+  { label: 'Feedback', to: '/feedback', icon: MessageSquare },
+  { label: 'Privacy', to: '/privacy', icon: ShieldCheck },
+  { label: 'Terms', to: '/terms', icon: FileText },
 ]
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false)
-  const [mobileOpen, setMobileOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
-  const [openMenu, setOpenMenu] = useState(null)
   const [userMenuOpen, setUserMenuOpen] = useState(false)
-  const [langOpen, setLangOpen] = useState(false)
   const [language, setLanguage] = useState(LANGUAGES[0])
+
+  // 'closed' | 'open' | 'closing' — the extra state lets the exit animation finish.
+  const [menuState, setMenuState] = useState('closed')
 
   const { pathname } = useLocation()
   const navigate = useNavigate()
   const { user, isAuthenticated, isOrganizer, logout } = useAuth()
   const { summary } = useCart()
   const { count: wishlistCount } = useWishlist()
+  const isDesktop = useIsDesktop()
 
-  const navRef = useRef(null)
   const userMenuRef = useRef(null)
-  const langRef = useRef(null)
+  const closeTimer = useRef(null)
 
-  useClickOutside(navRef, () => setOpenMenu(null), openMenu !== null)
   useClickOutside(userMenuRef, () => setUserMenuOpen(false), userMenuOpen)
-  useClickOutside(langRef, () => setLangOpen(false), langOpen)
+
+  const closeMenu = useCallback(() => {
+    setMenuState((state) => (state === 'open' ? 'closing' : state))
+    clearTimeout(closeTimer.current)
+    closeTimer.current = setTimeout(() => setMenuState('closed'), 460)
+  }, [])
+
+  const openMenu = useCallback(() => {
+    clearTimeout(closeTimer.current)
+    setMenuState('open')
+  }, [])
+
+  useEffect(() => () => clearTimeout(closeTimer.current), [])
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8)
@@ -82,35 +99,49 @@ export function Navbar() {
 
   // Close every transient surface on navigation.
   useEffect(() => {
-    setMobileOpen(false)
-    setOpenMenu(null)
     setUserMenuOpen(false)
+    setMenuState((state) => (state === 'open' ? 'closing' : state))
+    const timer = setTimeout(() => setMenuState('closed'), 460)
+    return () => clearTimeout(timer)
   }, [pathname])
 
   useEffect(() => {
-    document.body.style.overflow = mobileOpen ? 'hidden' : ''
+    document.body.style.overflow = menuState === 'open' ? 'hidden' : ''
     return () => {
       document.body.style.overflow = ''
     }
-  }, [mobileOpen])
+  }, [menuState])
 
-  // Cmd/Ctrl+K opens search from anywhere.
+  // Escape closes the menu; Cmd/Ctrl+K opens search.
   useEffect(() => {
     const onKeyDown = (e) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
         e.preventDefault()
         setSearchOpen(true)
       }
+      if (e.key === 'Escape') closeMenu()
     }
     window.addEventListener('keydown', onKeyDown)
     return () => window.removeEventListener('keydown', onKeyDown)
-  }, [])
+  }, [closeMenu])
 
   const handleLogout = () => {
     logout()
     setUserMenuOpen(false)
     navigate('/')
   }
+
+  const menuOpen = menuState === 'open'
+
+  // The home hero is a dark video, so the un-scrolled bar inverts to stay legible.
+  const overHero = pathname === '/' && !scrolled
+
+  const iconButton = cn(
+    'grid size-10 place-items-center rounded-xl transition',
+    overHero
+      ? 'text-white/85 hover:bg-white/15 hover:text-white'
+      : 'text-ink-600 hover:bg-ink-100 dark:text-ink-300 dark:hover:bg-white/10',
+  )
 
   return (
     <>
@@ -123,149 +154,39 @@ export function Navbar() {
 
       <header
         className={cn(
-          'sticky top-0 z-50 transition-all duration-300',
+          'sticky top-0 z-50 border-b transition-all duration-300',
           scrolled
-            ? 'border-b border-ink-200/70 bg-white/85 backdrop-blur-xl dark:border-white/10 dark:bg-ink-950/85'
-            : 'border-b border-transparent bg-white/60 backdrop-blur-md dark:bg-ink-950/60',
+            ? 'border-ink-200/70 bg-white/85 backdrop-blur-xl dark:border-white/10 dark:bg-ink-950/85'
+            : overHero
+              ? 'border-transparent bg-transparent'
+              : 'border-transparent bg-white/70 backdrop-blur-md dark:bg-ink-950/70',
         )}
       >
-        <nav ref={navRef} className="mx-auto flex h-16 w-full max-w-7xl items-center gap-3 px-4 sm:px-6 lg:h-[4.5rem] lg:gap-6 lg:px-8">
-          <Logo />
+        <nav className="mx-auto flex h-16 w-full max-w-7xl items-center gap-3 px-4 sm:px-6 lg:h-20 lg:px-8">
+          {/* Left — brand */}
+          <Logo tone={overHero ? 'inverse' : 'auto'} />
 
-          {/* Desktop navigation */}
-          <ul className="ml-2 hidden items-center gap-0.5 lg:flex">
-            {NAV_LINKS.map((link) => {
-              const hasPanel = link.mega || link.dropdown
-              const isOpen = openMenu === link.label
-
-              if (!hasPanel) {
-                return (
-                  <li key={link.label}>
-                    <NavLink
-                      to={link.to}
-                      end={link.to === '/'}
-                      className={({ isActive }) =>
-                        cn(
-                          'rounded-lg px-3 py-2 text-sm font-semibold transition',
-                          isActive
-                            ? 'text-brand-600 dark:text-brand-400'
-                            : 'text-ink-600 hover:bg-ink-100 hover:text-ink-900 dark:text-ink-300 dark:hover:bg-white/10 dark:hover:text-white',
-                        )
-                      }
-                    >
-                      {link.label}
-                    </NavLink>
-                  </li>
-                )
-              }
-
-              return (
-                <li key={link.label} className="relative">
-                  <button
-                    type="button"
-                    onClick={() => setOpenMenu(isOpen ? null : link.label)}
-                    aria-expanded={isOpen}
-                    aria-haspopup="true"
-                    className={cn(
-                      'flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-semibold transition',
-                      isOpen || pathname.startsWith(link.to)
-                        ? 'text-brand-600 dark:text-brand-400'
-                        : 'text-ink-600 hover:bg-ink-100 hover:text-ink-900 dark:text-ink-300 dark:hover:bg-white/10 dark:hover:text-white',
-                    )}
-                  >
-                    {link.label}
-                    <ChevronDown className={cn('size-3.5 transition-transform', isOpen && 'rotate-180')} aria-hidden="true" />
-                  </button>
-
-                  {isOpen && link.mega && <MegaMenu onNavigate={() => setOpenMenu(null)} />}
-
-                  {isOpen && link.dropdown && (
-                    <div className="absolute left-0 top-full mt-2 w-56 animate-scale-in overflow-hidden rounded-2xl border border-ink-200/70 bg-white p-1.5 shadow-card dark:border-white/10 dark:bg-ink-900">
-                      {link.dropdown.map((item) => (
-                        <Link
-                          key={item.to}
-                          to={item.to}
-                          className="block rounded-xl px-3 py-2 text-sm font-medium text-ink-600 transition hover:bg-brand-50 hover:text-brand-700 dark:text-ink-300 dark:hover:bg-white/5 dark:hover:text-white"
-                        >
-                          {item.label}
-                        </Link>
-                      ))}
-                    </div>
-                  )}
-                </li>
-              )
-            })}
-          </ul>
-
-          <div className="ml-auto flex items-center gap-1">
+          {/* Right — utilities + menu trigger */}
+          <div className="ml-auto flex items-center gap-1 sm:gap-1.5">
             <button
               type="button"
               onClick={() => setSearchOpen(true)}
-              className="hidden items-center gap-2 rounded-xl border border-ink-200 py-2 pl-3 pr-2 text-sm text-ink-400 transition hover:border-brand-300 hover:text-ink-600 dark:border-white/10 dark:hover:border-brand-500/40 dark:hover:text-ink-200 md:flex lg:w-56"
-              aria-label="Search events"
-            >
-              <Search className="size-4 shrink-0" aria-hidden="true" />
-              <span className="hidden lg:inline">Search events…</span>
-              <kbd className="ml-auto hidden rounded-md border border-ink-200 px-1.5 py-0.5 text-[10px] font-semibold dark:border-white/15 lg:block">
-                ⌘K
-              </kbd>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setSearchOpen(true)}
-              className="grid size-10 place-items-center rounded-xl text-ink-600 transition hover:bg-ink-100 dark:text-ink-300 dark:hover:bg-white/10 md:hidden"
+              className={iconButton}
               aria-label="Search events"
             >
               <Search className="size-5" />
             </button>
 
-            {/* Language */}
-            <div ref={langRef} className="relative hidden sm:block">
-              <button
-                type="button"
-                onClick={() => setLangOpen((v) => !v)}
-                aria-expanded={langOpen}
-                aria-label={`Language: ${language.label}`}
-                className="grid size-10 place-items-center rounded-xl text-ink-600 transition hover:bg-ink-100 dark:text-ink-300 dark:hover:bg-white/10"
-              >
-                <Globe className="size-5" />
-              </button>
-              {langOpen && (
-                <div className="absolute right-0 top-full mt-2 w-44 animate-scale-in overflow-hidden rounded-2xl border border-ink-200/70 bg-white p-1.5 shadow-card dark:border-white/10 dark:bg-ink-900">
-                  {LANGUAGES.map((lang) => (
-                    <button
-                      key={lang.code}
-                      type="button"
-                      onClick={() => {
-                        setLanguage(lang)
-                        setLangOpen(false)
-                      }}
-                      className={cn(
-                        'flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-sm font-medium transition',
-                        lang.code === language.code
-                          ? 'bg-brand-50 text-brand-700 dark:bg-brand-500/15 dark:text-brand-300'
-                          : 'text-ink-600 hover:bg-ink-50 dark:text-ink-300 dark:hover:bg-white/5',
-                      )}
-                    >
-                      <span aria-hidden="true">{lang.flag}</span>
-                      {lang.label}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            <ThemeToggle className="hidden sm:grid" />
+            <ThemeToggle className={cn('hidden sm:grid', overHero && 'text-white/85 hover:bg-white/15 hover:text-white')} />
 
             <Link
               to="/dashboard/saved"
-              className="relative hidden size-10 place-items-center rounded-xl text-ink-600 transition hover:bg-ink-100 dark:text-ink-300 dark:hover:bg-white/10 sm:grid"
+              className={cn(iconButton, 'relative')}
               aria-label={`Saved events (${wishlistCount})`}
             >
               <Heart className="size-5" />
               {wishlistCount > 0 && (
-                <span className="absolute right-1.5 top-1.5 grid min-w-4 place-items-center rounded-full bg-accent-500 px-1 text-[10px] font-bold leading-4 text-white">
+                <span className="absolute right-1 top-1 grid min-w-4 place-items-center rounded-full bg-rose-500 px-1 text-[10px] font-bold leading-4 text-white">
                   {wishlistCount}
                 </span>
               )}
@@ -273,28 +194,30 @@ export function Navbar() {
 
             <Link
               to="/checkout"
-              className="relative grid size-10 place-items-center rounded-xl text-ink-600 transition hover:bg-ink-100 dark:text-ink-300 dark:hover:bg-white/10"
-              aria-label={`Booking cart (${summary.count} tickets)`}
+              className={cn(iconButton, 'relative')}
+              aria-label={`Booking bag (${summary.count} tickets)`}
             >
-              <Ticket className="size-5" />
+              <ShoppingBag className="size-5" />
               {summary.count > 0 && (
-                <span className="absolute right-1.5 top-1.5 grid min-w-4 place-items-center rounded-full bg-brand-600 px-1 text-[10px] font-bold leading-4 text-white">
+                <span className="absolute right-1 top-1 grid min-w-4 place-items-center rounded-full bg-accent-500 px-1 text-[10px] font-bold leading-4 text-white">
                   {summary.count}
                 </span>
               )}
             </Link>
 
             {isAuthenticated ? (
-              <div ref={userMenuRef} className="relative ml-1">
+              <div ref={userMenuRef} className="relative">
                 <button
                   type="button"
                   onClick={() => setUserMenuOpen((v) => !v)}
                   aria-expanded={userMenuOpen}
                   aria-label="Account menu"
-                  className="flex items-center gap-2 rounded-xl p-1 transition hover:bg-ink-100 dark:hover:bg-white/10"
+                  className={cn(
+                    'grid size-10 place-items-center rounded-xl transition',
+                    overHero ? 'hover:bg-white/15' : 'hover:bg-ink-100 dark:hover:bg-white/10',
+                  )}
                 >
                   <Avatar src={user.avatar} name={user.name} size="sm" />
-                  <ChevronDown className={cn('hidden size-3.5 text-ink-400 transition-transform lg:block', userMenuOpen && 'rotate-180')} aria-hidden="true" />
                 </button>
 
                 {userMenuOpen && (
@@ -311,11 +234,9 @@ export function Navbar() {
                       {[
                         { label: 'Dashboard', to: '/dashboard', icon: LayoutDashboard },
                         { label: 'My tickets', to: '/dashboard/tickets', icon: Ticket },
-                        { label: 'Wallet', to: '/dashboard/wallet', icon: Wallet },
                         { label: 'Profile', to: '/dashboard/profile', icon: User },
-                        ...(isOrganizer
-                          ? [{ label: 'Organizer panel', to: '/organizer', icon: Settings }]
-                          : []),
+                        ...(isOrganizer ? [{ label: 'Organizer panel', to: '/organizer', icon: Settings }] : []),
+                        ...(user?.role === 'admin' ? [{ label: 'Admin Console', to: '/admin', icon: ShieldCheck }] : []),
                       ].map((item) => (
                         <Link
                           key={item.to}
@@ -342,206 +263,285 @@ export function Navbar() {
                 )}
               </div>
             ) : (
-              <Button to="/login" variant="ghost" size="sm" className="ml-1 hidden lg:inline-flex">
+              <Button
+                to="/login"
+                variant="ghost"
+                size="sm"
+                className={cn('hidden sm:inline-flex', overHero && 'text-white hover:bg-white/15 hover:text-white')}
+              >
                 Sign in
               </Button>
             )}
 
             <Button
-              to={isOrganizer ? '/organizer/events/new' : '/organizer'}
+              to="/organizer"
               size="sm"
               iconLeft={Plus}
-              className="ml-1 hidden xl:inline-flex"
+              className="hidden xl:inline-flex"
             >
               Create event
             </Button>
 
+            {/* Burger + label */}
             <button
               type="button"
-              onClick={() => setMobileOpen(true)}
-              className="grid size-10 place-items-center rounded-xl text-ink-700 transition hover:bg-ink-100 dark:text-ink-200 dark:hover:bg-white/10 lg:hidden"
-              aria-label="Open menu"
+              onClick={menuOpen ? closeMenu : openMenu}
+              aria-expanded={menuOpen}
+              aria-controls="primary-menu"
+              className={cn(
+                'ml-1 flex h-10 items-center gap-2 rounded-xl pl-2.5 pr-3 transition',
+                overHero
+                  ? 'text-white hover:bg-white/15'
+                  : 'text-ink-800 hover:bg-ink-100 dark:text-white dark:hover:bg-white/10',
+              )}
             >
-              <Menu className="size-5" />
+              <span className="relative grid size-5 place-items-center">
+                <MenuIcon
+                  className={cn(
+                    'absolute size-5 transition-all duration-300',
+                    menuOpen ? 'rotate-90 scale-0 opacity-0' : 'rotate-0 scale-100 opacity-100',
+                  )}
+                />
+                <X
+                  className={cn(
+                    'absolute size-5 transition-all duration-300',
+                    menuOpen ? 'rotate-0 scale-100 opacity-100' : '-rotate-90 scale-0 opacity-0',
+                  )}
+                />
+              </span>
+              <span className="text-sm font-semibold">Menu</span>
             </button>
           </div>
         </nav>
       </header>
 
-      <MobileMenu open={mobileOpen} onClose={() => setMobileOpen(false)} onLogout={handleLogout} />
+      {menuState !== 'closed' &&
+        (isDesktop ? (
+          <DesktopMenu
+            state={menuState}
+            onClose={closeMenu}
+            language={language}
+            setLanguage={setLanguage}
+          />
+        ) : (
+          <MobileMenu
+            state={menuState}
+            onClose={closeMenu}
+            isAuthenticated={isAuthenticated}
+            onLogout={handleLogout}
+          />
+        ))}
+
       <SearchDialog open={searchOpen} onClose={() => setSearchOpen(false)} />
     </>
   )
 }
 
-/* -------------------------------------------------------------- mega menu */
+/* ------------------------------------------------------- desktop side rail */
 
-function MegaMenu({ onNavigate }) {
-  const shortcuts = [
-    { label: 'All events', to: '/events', description: 'Browse the full catalogue' },
-    { label: 'Free events', to: '/events?price=free', description: 'No ticket cost' },
-    { label: 'Online events', to: '/events?type=online', description: 'Join from anywhere' },
-    { label: 'Near me', to: '/events?near=me', description: 'Sorted by distance' },
-  ]
+/**
+ * Narrow full-height rail sliding in from the right.
+ * Width is 10% of the viewport, floored so the labels stay readable
+ * on smaller laptop screens.
+ */
+function DesktopMenu({ state, onClose, language, setLanguage }) {
+  const [langOpen, setLangOpen] = useState(false)
 
   return (
-    <div className="absolute left-1/2 top-full z-50 mt-2 w-[min(60rem,calc(100vw-3rem))] -translate-x-1/2 animate-scale-in rounded-3xl border border-ink-200/70 bg-white p-6 shadow-card dark:border-white/10 dark:bg-ink-900">
-      <div className="grid gap-6 lg:grid-cols-[1fr_16rem]">
-        <div>
-          <p className="mb-3 text-xs font-bold uppercase tracking-wider text-ink-400">Browse by category</p>
-          <div className="grid grid-cols-2 gap-1 xl:grid-cols-3">
-            {categories.slice(0, 12).map((category) => (
-              <Link
-                key={category.id}
-                to={`/events?category=${category.id}`}
-                onClick={onNavigate}
-                className="group flex items-center gap-3 rounded-xl p-2.5 transition hover:bg-brand-50 dark:hover:bg-white/5"
-              >
-                <span className={cn('grid size-9 shrink-0 place-items-center rounded-lg bg-gradient-to-br text-white', category.color)}>
-                  <category.icon className="size-4" aria-hidden="true" />
-                </span>
-                <span className="min-w-0">
-                  <span className="block truncate text-sm font-semibold group-hover:text-brand-700 dark:group-hover:text-white">
-                    {category.name}
-                  </span>
-                  <span className="block text-xs text-ink-400">{category.count} events</span>
-                </span>
-              </Link>
+    <div id="primary-menu" className="fixed inset-0 z-[80]">
+      <div
+        className={cn('absolute inset-0 bg-ink-950/45 backdrop-blur-sm', state === 'closing' ? 'animate-fade-in opacity-0 transition-opacity' : 'animate-fade-in')}
+        onClick={onClose}
+        aria-hidden="true"
+      />
+
+      <aside
+        className={cn(
+          'absolute right-0 top-0 flex h-full w-[20%] min-w-[15rem] flex-col border-l border-ink-200/70 bg-white',
+          'dark:border-white/10 dark:bg-ink-950',
+          state === 'closing' ? 'animate-[slide-in-right_.35s_ease-in_reverse_both]' : 'animate-slide-in-right',
+        )}
+      >
+        <div className="flex items-center justify-between border-b border-ink-200/70 px-3 py-4 dark:border-white/10">
+          <span className="text-[11px] font-bold uppercase tracking-wider text-ink-400">Menu</span>
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Close menu"
+            className="grid size-7 place-items-center rounded-lg text-ink-500 transition hover:bg-ink-100 dark:hover:bg-white/10"
+          >
+            <X className="size-4" />
+          </button>
+        </div>
+
+        <nav className="flex-1 overflow-y-auto p-2">
+          <ul className="space-y-0.5">
+            {MENU_LINKS.map((link) => (
+              <li key={link.to}>
+                <NavLink
+                  to={link.to}
+                  end={link.end}
+                  onClick={onClose}
+                  className={({ isActive }) =>
+                    cn(
+                      'flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold transition',
+                      isActive
+                        ? 'bg-brand-600 text-white'
+                        : 'text-ink-600 hover:bg-ink-100 hover:text-ink-900 dark:text-ink-300 dark:hover:bg-white/[.07] dark:hover:text-white',
+                    )
+                  }
+                >
+                  <link.icon className="size-[18px] shrink-0" aria-hidden="true" />
+                  <span className="truncate">{link.label}</span>
+                </NavLink>
+              </li>
             ))}
-          </div>
+          </ul>
+        </nav>
+
+        {/* Repositioned Admin Console */}
+        <div className="border-t border-ink-200/70 p-2 dark:border-white/10">
+          <NavLink
+            to="/admin"
+            onClick={onClose}
+            className={({ isActive }) =>
+              cn(
+                'flex items-center gap-3 rounded-xl px-3 py-2.5 text-xs font-bold uppercase tracking-wider transition',
+                isActive
+                  ? 'bg-brand-600 text-white'
+                  : 'text-ink-500 hover:bg-brand-50 hover:text-brand-700 dark:text-ink-400 dark:hover:bg-white/[.07] dark:hover:text-white',
+              )
+            }
+          >
+            <ShieldCheck className="size-4 shrink-0 text-brand-500 dark:text-brand-400" aria-hidden="true" />
+            <span className="truncate">Admin Console</span>
+          </NavLink>
         </div>
 
-        <div className="flex flex-col gap-2 lg:border-l lg:border-ink-200/70 lg:pl-6 dark:lg:border-white/10">
-          <p className="mb-1 text-xs font-bold uppercase tracking-wider text-ink-400">Shortcuts</p>
-          {shortcuts.map((item) => (
-            <Link
-              key={item.to}
-              to={item.to}
-              onClick={onNavigate}
-              className="rounded-xl p-2.5 transition hover:bg-brand-50 dark:hover:bg-white/5"
-            >
-              <span className="block text-sm font-semibold">{item.label}</span>
-              <span className="block text-xs text-ink-400">{item.description}</span>
-            </Link>
-          ))}
+        {/* Language */}
+        <div className="border-t border-ink-200/70 p-2 dark:border-white/10">
+          <button
+            type="button"
+            onClick={() => setLangOpen((v) => !v)}
+            aria-expanded={langOpen}
+            className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold text-ink-600 transition hover:bg-ink-100 dark:text-ink-300 dark:hover:bg-white/[.07]"
+          >
+            <Globe className="size-[18px] shrink-0" aria-hidden="true" />
+            <span className="truncate">{language.label}</span>
+          </button>
 
-          <div className="mt-auto rounded-2xl bg-gradient-to-br from-brand-600 to-brand-800 p-4 text-white">
-            <Badge tone="glass" size="sm" className="mb-2">
-              For organizers
-            </Badge>
-            <p className="text-sm font-bold">List your event free</p>
-            <p className="mt-1 text-xs text-white/75">Sell tickets, scan QR codes and get paid out fast.</p>
-            <Button to="/organizer" size="xs" variant="accent" className="mt-3" onClick={onNavigate}>
-              Get started
-            </Button>
-          </div>
+          {langOpen && (
+            <ul className="mt-1 max-h-48 space-y-0.5 overflow-y-auto">
+              {LANGUAGES.map((item) => (
+                <li key={item.code}>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setLanguage(item)
+                      setLangOpen(false)
+                    }}
+                    className={cn(
+                      'flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-sm transition',
+                      item.code === language.code
+                        ? 'bg-brand-50 font-bold text-brand-700 dark:bg-brand-500/15 dark:text-brand-300'
+                        : 'text-ink-600 hover:bg-ink-100 dark:text-ink-400 dark:hover:bg-white/5',
+                    )}
+                  >
+                    <span aria-hidden="true">{item.flag}</span>
+                    <span className="truncate">{item.label}</span>
+                    {item.code === language.code && <Check className="ml-auto size-3 shrink-0" />}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
-      </div>
+      </aside>
     </div>
   )
 }
 
-/* ------------------------------------------------------------ mobile menu */
+/* --------------------------------------------- mobile circular reveal menu */
 
-function MobileMenu({ open, onClose, onLogout }) {
-  const { user, isAuthenticated } = useAuth()
-
-  if (!open) return null
-
+/** Full-viewport menu that wipes open in a circle from the burger button. */
+function MobileMenu({ state, onClose, isAuthenticated, onLogout }) {
   return (
-    <div className="fixed inset-0 z-[80] lg:hidden">
-      <div className="absolute inset-0 animate-fade-in bg-ink-950/50 backdrop-blur-sm" onClick={onClose} aria-hidden="true" />
-
-      <div className="absolute right-0 top-0 flex h-full w-[min(22rem,88vw)] animate-scale-in flex-col bg-white shadow-card dark:bg-ink-950">
-        <div className="flex items-center justify-between border-b border-ink-200/70 p-4 dark:border-white/10">
-          <Logo />
+    <div
+      id="primary-menu"
+      className={cn(
+        'fixed inset-0 z-[80] overflow-y-auto bg-gradient-to-br from-brand-800 via-brand-900 to-ink-950 text-white',
+        state === 'closing' ? 'animate-circle-out' : 'animate-circle-in',
+      )}
+    >
+      <div className="flex min-h-full flex-col px-6 pb-10 pt-5">
+        <div className="mb-8 flex items-center justify-between">
+          <Logo tone="inverse" />
           <button
             type="button"
             onClick={onClose}
-            className="grid size-10 place-items-center rounded-xl text-ink-600 transition hover:bg-ink-100 dark:text-ink-300 dark:hover:bg-white/10"
             aria-label="Close menu"
+            className="flex h-10 items-center gap-2 rounded-xl pl-2.5 pr-3 text-white transition hover:bg-white/10"
           >
             <X className="size-5" />
+            <span className="text-sm font-semibold">Close</span>
           </button>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-4">
-          {isAuthenticated && (
-            <Link to="/dashboard" className="mb-4 flex items-center gap-3 rounded-2xl bg-ink-50 p-3 dark:bg-white/5">
-              <Avatar src={user.avatar} name={user.name} size="md" />
-              <div className="min-w-0">
-                <p className="truncate text-sm font-bold">{user.name}</p>
-                <p className="truncate text-xs text-ink-500 dark:text-ink-400">View dashboard</p>
-              </div>
-            </Link>
-          )}
-
-          <nav className="space-y-1">
-            {NAV_LINKS.map((link) => (
-              <div key={link.label}>
+        <nav className="flex-1">
+          <ul className="space-y-1">
+            {MENU_LINKS.map((link, i) => (
+              <li key={link.to} style={{ animationDelay: `${120 + i * 35}ms` }} className="animate-fade-up">
                 <NavLink
                   to={link.to}
-                  end={link.to === '/'}
+                  end={link.end}
+                  onClick={onClose}
                   className={({ isActive }) =>
                     cn(
-                      'block rounded-xl px-3 py-2.5 text-base font-semibold transition',
-                      isActive
-                        ? 'bg-brand-50 text-brand-700 dark:bg-brand-500/15 dark:text-brand-300'
-                        : 'text-ink-700 hover:bg-ink-100 dark:text-ink-200 dark:hover:bg-white/5',
+                      'flex items-center gap-4 rounded-2xl px-3 py-3 text-lg font-bold transition',
+                      isActive ? 'bg-white/15 text-white' : 'text-white/75 hover:bg-white/10 hover:text-white',
                     )
                   }
                 >
+                  <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-white/10">
+                    <link.icon className="size-5" aria-hidden="true" />
+                  </span>
                   {link.label}
                 </NavLink>
-                {link.dropdown && (
-                  <div className="ml-3 mt-1 space-y-0.5 border-l border-ink-200/70 pl-3 dark:border-white/10">
-                    {link.dropdown.map((item) => (
-                      <Link
-                        key={item.to}
-                        to={item.to}
-                        className="block rounded-lg px-3 py-2 text-sm text-ink-500 transition hover:text-brand-600 dark:text-ink-400 dark:hover:text-white"
-                      >
-                        {item.label}
-                      </Link>
-                    ))}
-                  </div>
-                )}
-              </div>
+              </li>
             ))}
-          </nav>
+          </ul>
+        </nav>
 
-          <div className="mt-6 border-t border-ink-200/70 pt-4 dark:border-white/10">
-            <p className="mb-2 px-3 text-xs font-bold uppercase tracking-wider text-ink-400">Categories</p>
-            <div className="grid grid-cols-2 gap-1">
-              {categories.slice(0, 8).map((category) => (
-                <Link
-                  key={category.id}
-                  to={`/events?category=${category.id}`}
-                  className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-ink-600 transition hover:bg-ink-100 dark:text-ink-300 dark:hover:bg-white/5"
-                >
-                  <category.icon className="size-4 shrink-0 text-brand-500" aria-hidden="true" />
-                  <span className="truncate">{category.name}</span>
-                </Link>
-              ))}
-            </div>
-          </div>
+        {/* Repositioned Admin Console */}
+        <div className="mt-6 border-t border-white/15 pt-4">
+          <NavLink
+            to="/admin"
+            onClick={onClose}
+            className={({ isActive }) =>
+              cn(
+                'flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-bold transition',
+                isActive ? 'bg-white/20 text-white' : 'bg-white/5 text-white/75 hover:bg-white/10 hover:text-white',
+              )
+            }
+          >
+            <span className="grid size-8 shrink-0 place-items-center rounded-xl bg-white/10">
+              <ShieldCheck className="size-4 text-brand-300" aria-hidden="true" />
+            </span>
+            <span>Admin Console</span>
+          </NavLink>
         </div>
 
-        <div className="space-y-2 border-t border-ink-200/70 p-4 dark:border-white/10">
-          <div className="flex items-center justify-between pb-1">
-            <span className="text-sm font-semibold text-ink-600 dark:text-ink-300">Appearance</span>
-            <ThemeToggle />
-          </div>
+        <div className="mt-6 flex flex-col gap-2.5">
           {isAuthenticated ? (
-            <Button variant="outline" fullWidth iconLeft={LogOut} onClick={onLogout}>
+            <Button variant="outline" fullWidth size="lg" iconLeft={LogOut} onClick={onLogout} className="border-white/25 bg-white/5 text-white hover:bg-white/15 hover:text-white">
               Sign out
             </Button>
           ) : (
             <>
-              <Button to="/login" variant="outline" fullWidth>
+              <Button to="/login" variant="outline" fullWidth size="lg" onClick={onClose} className="border-white/25 bg-white/5 text-white hover:bg-white/15 hover:text-white">
                 Sign in
               </Button>
-              <Button to="/register" fullWidth>
+              <Button to="/register" variant="accent" fullWidth size="lg" onClick={onClose}>
                 Create account
               </Button>
             </>

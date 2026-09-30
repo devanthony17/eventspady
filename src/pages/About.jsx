@@ -24,7 +24,7 @@ const VALUES = [
     icon: Globe2,
     title: 'Built for everywhere',
     description:
-      'Mobile money in Lagos matters as much as cards in Berlin. Multi-language, multi-currency and multi-channel by default.',
+      'A trader paying by MoMo in Wa matters as much as a card payment anywhere else. Multi-language, mobile-money-first and built for the connection speeds people actually have.',
   },
   {
     icon: Lightbulb,
@@ -44,11 +44,11 @@ const TEAM = [
 ]
 
 const TIMELINE = [
-  { year: '2016', title: 'A spreadsheet and a door', description: 'We started by running our own club nights and hating every part of the ticketing.' },
-  { year: '2018', title: 'First 1,000 organizers', description: 'The scanner app shipped and door queues stopped being the worst part of the night.' },
-  { year: '2021', title: 'Payments everywhere', description: 'Flutterwave and Razorpay joined Stripe and PayPal, opening up two more continents.' },
-  { year: '2023', title: 'Multi-language platform', description: 'Admins could translate the whole product, panels included, without touching code.' },
-  { year: 'Today', title: '2.4M tickets and counting', description: '48,000 events across 74 countries, from supper clubs to arena finals.' },
+  { year: '2016', title: 'A spreadsheet and a door', description: 'We started by running our own nights in Wa and hating every part of the ticketing.' },
+  { year: '2018', title: 'First 200 organizers', description: 'The scanner app shipped and door queues stopped being the worst part of the night.' },
+  { year: '2021', title: 'Mobile money first', description: 'MTN MoMo and Telecel Cash went live at checkout, and advance ticket sales across the region doubled within a season.' },
+  { year: '2023', title: 'Dagaare and Waali', description: 'Admins could translate the whole product, panels included, without touching code.' },
+  { year: 'Today', title: '186K tickets and counting', description: '3,400 events across all eleven districts of the Upper West, from courtyard dinners to the Dumba festival.' },
 ]
 
 export default function About() {
@@ -56,7 +56,7 @@ export default function About() {
     <>
       <Seo
         title="About us"
-        description="Eventspady is the event booking and management platform built by people who used to run the door themselves. 2.4 million tickets across 74 countries."
+        description="Eventspady is the event booking and management platform for Wa and the Upper West Region, built by people who used to run the door themselves. 186,000 tickets across eleven districts."
         keywords="about eventspady, event ticketing company, event management platform"
       />
 
@@ -96,16 +96,16 @@ export default function About() {
               />
               <div className="space-y-4 text-pretty leading-relaxed text-ink-600 dark:text-ink-300">
                 <p>
-                  Eventspady began in 2016 with a warehouse night, a printed guest list and a queue that went
-                  around the block because nobody could find their name. The event was good. The operation was not.
+                  Eventspady began in 2016 with a night at a Wa nightclub, a printed guest list and a queue that ran
+                  down Dobile Junction because nobody could find their name. The event was good. The operation was not.
                 </p>
                 <p>
                   We built the first version of the scanner that weekend. It was ugly and it worked, and the
-                  next event's queue cleared in twenty minutes. Everything since has been an extension of that
+                  next event’s queue cleared in twenty minutes. Everything since has been an extension of that
                   same idea — remove the friction between wanting to be at an event and actually being inside it.
                 </p>
                 <p>
-                  Today organizers in 74 countries use Eventspady to sell tickets, take payment in the way their
+                  Today organizers across all eleven Upper West districts use Eventspady to sell tickets, take payment in the way their
                   audience actually pays, and get people through the door without anyone reaching for a
                   spreadsheet.
                 </p>
@@ -172,7 +172,7 @@ export default function About() {
           <SectionHeading
             eyebrow="The team"
             title="Small team, a lot of events"
-            description="We are spread across four countries and most of us still work a door somewhere every few months."
+            description="We are all based in the Upper West and most of us still work a door somewhere every few months."
             align="center"
           />
 

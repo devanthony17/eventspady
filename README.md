@@ -1,7 +1,10 @@
 # Eventspady
 
-A premium event booking & management web app — discover events, book tickets, pay through
-five channels, and check guests in with QR codes.
+A premium event booking & management web app for **Wa, Upper West Region, Ghana** — discover
+events, book tickets, pay by mobile money, and check guests in with QR codes.
+
+All pricing is in **Ghana cedis (GHS)**, and the catalogue, venues, map coordinates and
+organizers are all real places across the region: Wa, Jirapa and Wechiau.
 
 Built with **React 18 + Vite + Tailwind CSS**, plain JavaScript, path aliases, per-page SEO and
 lucide icons. All imagery lives in `public/images` and is generated locally, so the app runs with
@@ -33,8 +36,9 @@ sign-in screen to land in the organizer panel.
 ## What's in it
 
 **For attendees**
-- Home page with search, categories, featured/trending/online/free tabs, countdown spotlight and
-  location-aware "near you" section
+- Full-bleed hero with three crossfading looping videos, a masked text reveal and scroll parallax
+- Categories, featured/trending/online/free tabs, countdown spotlight and a location-aware
+  "near you" section
 - Event catalogue with URL-driven filters (category, type, date, price, ticket type, city,
   distance), grid/list views, sorting and pagination
 - Event detail with gallery, multi-day schedule, venue map, organizer profile, FAQ, share and
@@ -69,7 +73,7 @@ src/
     dashboard/          DashboardShell (shared by attendee + organizer panels)
     events/             EventCard, EventFilters, TicketSelector, TicketStub, ReportEventModal
     home/               Hero, CategoryGrid, FeaturedEvents, SpotlightBanner, …
-    layout/             Navbar (mega menu), Footer, PageHero, LegalPage, SearchDialog
+    layout/             Navbar (slide-out menu), Footer, PageHero, LegalPage, SearchDialog
     ui/                 Button, Badge, Field, Modal, Tabs, Accordion, Seo, …
   context/              Theme, Auth, Cart, Toast providers
   data/                 events, organizers, categories, blog, faq, coupons, account
@@ -115,7 +119,7 @@ Structured-data helpers live in `src/components/ui/Seo.jsx`:
 Dashboard, checkout and auth routes pass `noIndex`.
 
 ```jsx
-<Seo title="Nova Nights" description={event.tagline} image={event.cover} jsonLd={eventJsonLd(event)} />
+<Seo title={event.title} description={event.tagline} image={event.cover} jsonLd={eventJsonLd(event)} />
 ```
 
 ---
@@ -133,10 +137,66 @@ To use real photography instead, drop files into `public/images/events/` and poi
 
 ---
 
+## Hero videos
+
+The hero plays three looping clips that crossfade every 7 seconds, pinned with `position: fixed`
+so the rest of the page scrolls over them in a parallax manner.
+
+Footage lives in `public/videos` as `hero.mp4`, `hero2.mp4` and `hero3.mp4` (edit `HERO_MEDIA`
+in `src/components/home/Hero.jsx` to change the paths). If a file is missing, the animated
+backdrop at `public/images/hero/motion-N.svg` shows through, so the section is never blank.
+See `public/videos/README.md` for encoding guidance.
+
+The clips are muted, autoplaying and `playsInline`. Rotation pauses entirely under
+`prefers-reduced-motion`.
+
+Hero copy enters as a masked line reveal (`animate-reveal-up`) and leaves on a scroll-driven
+parallax — the text drifts up, fades and blurs faster than the video behind it, which is what
+sells the depth. Both effects are disabled under `prefers-reduced-motion`.
+
+> Because the backdrop is `fixed`, everything below the hero must be opaque and above it —
+> see the `relative z-10 bg-white dark:bg-ink-950` wrapper in `src/pages/Home.jsx` and the
+> `relative z-10` on `<Footer>`.
+
+---
+
+## Navigation
+
+- **Left:** the logo image, served from `public/images`. Swap the file referenced in
+  `src/components/layout/Logo.jsx` to rebrand.
+- **Right:** a burger button labelled **Menu**, plus search, theme, **saved events**, booking bag
+  and account. Saved lives in the top bar rather than inside the menu.
+- **Desktop (≥1024px):** the menu slides in from the right as a full-height rail at `20%` of the
+  viewport width, floored at `15rem` so labels stay readable on smaller laptops. Every entry has
+  a lucide icon; the language switcher sits at the bottom.
+- **Mobile:** the same button opens a full-viewport menu that wipes open in a circle from the
+  burger itself (`animate-circle-in`), with the language switcher inline.
+
+---
+
 ## Theming
 
 Brand colours, shadows and animations are defined in `tailwind.config.js` under `brand`, `accent`
-and `ink` scales. Change `brand` to re-skin the whole app.
+and `ink` scales. `brand` is a midnight-blue scale anchored on `#191970` at `brand-800`; `accent`
+is the warm orange used for highlights. Change `brand` to re-skin the whole app.
+
+---
+
+## Localisation
+
+Scope is Wa and the Upper West Region. The pieces that encode that:
+
+| Concern | Where |
+| --- | --- |
+| Currency (`GHS`, `en-GH` → `GH₵`) | `formatCurrency` in `src/lib/utils.js` |
+| Dates and numbers (`en-GB`) | `src/lib/utils.js` |
+| Taxes (VAT 15%, NHIL & GETFund 5%) | `TAXES` in `src/lib/constants.js` |
+| Payment channels (MTN MoMo, Telecel Cash, Paystack, Flutterwave, wallet, cash) | `PAYMENT_METHODS` |
+| Languages (English, Dagaare, Waali, Sisaali, Twi, French) | `LANGUAGES` |
+| Venues, towns and map coordinates | `venue.lat` / `venue.lng` in `src/data/events.js` |
+
+Map links on the event page are built from each venue's real latitude and longitude, so
+"Get directions" opens the actual place.
 
 Dark mode is class-based. The theme is applied before first paint by an inline script in
 `index.html`, so there is no flash, and `ThemeContext` keeps it in sync with the OS until the user

@@ -19,7 +19,7 @@ const STEPS = [
     icon: CreditCard,
     title: 'Pay your way',
     description:
-      'Card, PayPal, UPI, mobile money or wallet balance. Some organizers also let you pay cash at the door.',
+      'MTN MoMo, Telecel Cash, card or wallet balance. Most organizers also let you pay cash at the door.',
   },
   {
     icon: QrCode,

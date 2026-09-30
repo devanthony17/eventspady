@@ -1,17 +1,53 @@
-import { LocateFixed, RotateCcw, X } from 'lucide-react'
+import { useMemo } from 'react'
+import {
+  Briefcase,
+  Cpu,
+  HeartHandshake,
+  Landmark,
+  LocateFixed,
+  Music,
+  Palette,
+  RotateCcw,
+  Tag,
+  Trophy,
+  UtensilsCrossed,
+  X,
+} from 'lucide-react'
 import { Button } from '@components/ui/Button'
 import { Checkbox } from '@components/ui/Field'
-import { categories } from '@data/categories'
-import { eventCities } from '@data/events'
+import { useCategories, useEvents } from '@hooks/api'
 import { TICKET_TYPES } from '@lib/constants'
 import { cn } from '@lib/utils'
+import { useLocationContext } from '@context/LocationContext'
+
+const CATEGORY_ICONS = {
+  music: Music,
+  culture: Landmark,
+  business: Briefcase,
+  sports: Trophy,
+  tech: Cpu,
+  arts: Palette,
+  food: UtensilsCrossed,
+  community: HeartHandshake,
+}
+
+const DEFAULT_CATEGORIES = [
+  { id: 'music', name: 'Music' },
+  { id: 'culture', name: 'Culture & Festivals' },
+  { id: 'business', name: 'Business & Networking' },
+  { id: 'sports', name: 'Sports & Fitness' },
+  { id: 'tech', name: 'Technology & Gaming' },
+  { id: 'arts', name: 'Arts & Theatre' },
+  { id: 'food', name: 'Food & Drink' },
+  { id: 'community', name: 'Community & Charity' },
+]
 
 const PRICE_OPTIONS = [
   { id: 'all', label: 'Any price' },
   { id: 'free', label: 'Free only' },
   { id: 'paid', label: 'Paid only' },
-  { id: 'under50', label: 'Under $50' },
-  { id: 'under150', label: 'Under $150' },
+  { id: 'under100', label: 'Under GH₵100' },
+  { id: 'under300', label: 'Under GH₵300' },
 ]
 
 const WHEN_OPTIONS = [
@@ -35,7 +71,25 @@ function Group({ title, children }) {
  * Filter panel shared by the sidebar (desktop) and the drawer (mobile).
  * Fully controlled — `filters` and `onChange` come from the URL search params.
  */
-export function EventFilters({ filters, onChange, onReset, onUseLocation, locationStatus, className }) {
+export function EventFilters({ filters, onChange, onReset, onUseLocation, locationStatus, cities, className }) {
+  const { locationName, openLocationModal } = useLocationContext()
+  const { data: categoriesData } = useCategories()
+  const { data: eventsData } = useEvents()
+
+  const categories = useMemo(() => {
+    if (Array.isArray(categoriesData) && categoriesData.length > 0) return categoriesData
+    if (Array.isArray(categoriesData?.categories) && categoriesData.categories.length > 0) return categoriesData.categories
+    return DEFAULT_CATEGORIES
+  }, [categoriesData])
+
+  const availableCities = useMemo(() => {
+    if (cities && cities.length > 0) return cities
+    const evts = Array.isArray(eventsData) ? eventsData : eventsData?.events || []
+    const set = new Set(evts.map((e) => e.venue?.city).filter(Boolean))
+    if (set.size > 0) return Array.from(set).sort()
+    return ['Wa', 'Nandom', 'Jirapa', 'Lawra', 'Accra']
+  }, [cities, eventsData])
+
   const toggleCategory = (id) => {
     const next = filters.categories.includes(id)
       ? filters.categories.filter((c) => c !== id)
@@ -78,18 +132,22 @@ export function EventFilters({ filters, onChange, onReset, onUseLocation, locati
 
       <Group title="Category">
         <div className="max-h-64 space-y-2.5 overflow-y-auto pr-1">
-          {categories.map((category) => (
-            <Checkbox
-              key={category.id}
-              checked={filters.categories.includes(category.id)}
-              onChange={() => toggleCategory(category.id)}
-              label={
-                <span className="flex items-center justify-between gap-2">
-                  {category.name}
-                </span>
-              }
-            />
-          ))}
+          {categories.map((category) => {
+            const Icon = category.icon || CATEGORY_ICONS[category.id] || Tag
+            return (
+              <Checkbox
+                key={category.id}
+                checked={filters.categories.includes(category.id)}
+                onChange={() => toggleCategory(category.id)}
+                label={
+                  <span className="flex items-center gap-2">
+                    <Icon className="size-4 shrink-0 text-ink-600 dark:text-ink-300" aria-hidden="true" />
+                    <span>{category.name}</span>
+                  </span>
+                }
+              />
+            )
+          })}
         </div>
       </Group>
 
@@ -160,24 +218,34 @@ export function EventFilters({ filters, onChange, onReset, onUseLocation, locati
           aria-label="Filter by city"
         >
           <option value="">Anywhere</option>
-          {eventCities().map((city) => (
+          {availableCities.map((city) => (
             <option key={city} value={city}>
               {city}
             </option>
           ))}
         </select>
 
-        <Button
-          variant={filters.near ? 'soft' : 'outline'}
-          size="sm"
-          fullWidth
-          className="mt-3"
-          iconLeft={LocateFixed}
-          loading={locationStatus === 'pending'}
-          onClick={onUseLocation}
-        >
-          {filters.near ? 'Sorted by distance' : 'Events near me'}
-        </Button>
+        <div className="mt-3 flex flex-col gap-2">
+          <Button
+            variant={filters.near ? 'primary' : 'outline'}
+            size="sm"
+            fullWidth
+            iconLeft={LocateFixed}
+            loading={locationStatus === 'pending'}
+            onClick={onUseLocation}
+          >
+            {filters.near ? (locationName ? `Near ${locationName}` : 'Sorted by distance') : 'Events near me'}
+          </Button>
+          {filters.near && (
+            <button
+              type="button"
+              onClick={openLocationModal}
+              className="text-center text-xs font-semibold text-brand-600 hover:underline dark:text-brand-400"
+            >
+              Change location / city
+            </button>
+          )}
+        </div>
       </Group>
 
       <div className="pt-5">
@@ -191,6 +259,13 @@ export function EventFilters({ filters, onChange, onReset, onUseLocation, locati
 
 /** Removable chips summarising the filters currently applied. */
 export function ActiveFilterChips({ filters, onChange, onReset }) {
+  const { data: categoriesData } = useCategories()
+  const categories = useMemo(() => {
+    if (Array.isArray(categoriesData) && categoriesData.length > 0) return categoriesData
+    if (Array.isArray(categoriesData?.categories) && categoriesData.categories.length > 0) return categoriesData.categories
+    return DEFAULT_CATEGORIES
+  }, [categoriesData])
+
   const chips = []
 
   if (filters.q) chips.push({ key: 'q', label: `“${filters.q}”`, clear: { q: '' } })
@@ -203,9 +278,11 @@ export function ActiveFilterChips({ filters, onChange, onReset }) {
   filters.categories.forEach((id) => {
     const category = categories.find((c) => c.id === id)
     if (category) {
+      const Icon = category.icon || CATEGORY_ICONS[category.id] || Tag
       chips.push({
         key: `cat-${id}`,
         label: category.name,
+        icon: Icon,
         clear: { categories: filters.categories.filter((c) => c !== id) },
       })
     }
@@ -230,6 +307,7 @@ export function ActiveFilterChips({ filters, onChange, onReset }) {
           onClick={() => onChange(chip.clear)}
           className="inline-flex items-center gap-1.5 rounded-full bg-brand-50 py-1.5 pl-3 pr-2 text-xs font-semibold capitalize text-brand-700 transition hover:bg-brand-100 dark:bg-brand-500/15 dark:text-brand-300 dark:hover:bg-brand-500/25"
         >
+          {chip.icon && <chip.icon className="size-3.5 shrink-0" aria-hidden="true" />}
           {chip.label}
           <X className="size-3.5" aria-hidden="true" />
         </button>

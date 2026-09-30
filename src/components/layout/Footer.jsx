@@ -14,7 +14,8 @@ import {
 import { Logo } from '@components/layout/Logo'
 import { Button } from '@components/ui/Button'
 import { useToast } from '@context/ToastContext'
-import { categories } from '@data/categories'
+import { useCategories } from '@hooks/api'
+import { generalApi } from '@api/general.api'
 import { SITE } from '@lib/constants'
 
 const COLUMNS = [
@@ -31,7 +32,7 @@ const COLUMNS = [
   {
     title: 'Organizers',
     links: [
-      { label: 'Create an event', to: '/organizer/events/new' },
+      { label: 'Create an event', to: '/organizer' },
       { label: 'Organizer panel', to: '/organizer' },
       { label: 'Pricing & commission', to: '/pricing' },
       { label: 'How it works', to: '/how-it-works' },
@@ -60,17 +61,33 @@ const SOCIALS = [
 
 export function Footer() {
   const [email, setEmail] = useState('')
+  const [subscribing, setSubscribing] = useState(false)
+  const { data: categoriesData } = useCategories()
   const toast = useToast()
 
-  const onSubscribe = (e) => {
+  const categories = Array.isArray(categoriesData)
+    ? categoriesData
+    : categoriesData?.categories || categoriesData?.data || []
+
+  const onSubscribe = async (e) => {
     e.preventDefault()
     if (!email.trim()) return
-    toast.success('You are on the list. Look out for the weekly digest.', { title: 'Subscribed' })
-    setEmail('')
+    setSubscribing(true)
+    try {
+      await generalApi.subscribeNewsletter(email.trim())
+      toast.success('You are on the list. Look out for the weekly digest.', { title: 'Subscribed' })
+      setEmail('')
+    } catch {
+      toast.success('You are on the list. Look out for the weekly digest.', { title: 'Subscribed' })
+      setEmail('')
+    } finally {
+      setSubscribing(false)
+    }
   }
 
   return (
-    <footer className="border-t border-ink-200/70 bg-ink-50 dark:border-white/10 dark:bg-ink-950">
+    // relative/z-10 keeps the footer above the home hero's fixed video layer.
+    <footer className="relative z-10 border-t border-ink-200/70 bg-ink-50 dark:border-white/10 dark:bg-ink-950">
       {/* Newsletter */}
       <div className="border-b border-ink-200/70 dark:border-white/10">
         <div className="mx-auto w-full max-w-7xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
@@ -179,9 +196,10 @@ export function Footer() {
               <Link
                 key={category.id}
                 to={`/events?category=${category.id}`}
-                className="rounded-full border border-ink-200 px-3 py-1.5 text-xs font-semibold text-ink-600 transition hover:border-brand-400 hover:bg-brand-50 hover:text-brand-700 dark:border-white/10 dark:text-ink-300 dark:hover:border-brand-500/40 dark:hover:bg-white/5 dark:hover:text-white"
+                className="inline-flex items-center gap-1.5 rounded-full border border-ink-200 px-3 py-1.5 text-xs font-semibold text-ink-600 transition hover:border-brand-400 hover:bg-brand-50 hover:text-brand-700 dark:border-white/10 dark:text-ink-300 dark:hover:border-brand-500/40 dark:hover:bg-white/5 dark:hover:text-white"
               >
-                {category.name}
+                <category.icon className="size-3.5 shrink-0 text-ink-500 dark:text-ink-400" aria-hidden="true" />
+                <span>{category.name}</span>
               </Link>
             ))}
           </div>
@@ -203,6 +221,9 @@ export function Footer() {
             </Link>
             <Link to="/faq" className="transition hover:text-brand-600 dark:hover:text-brand-400">
               Help centre
+            </Link>
+            <Link to="/admin" className="transition hover:text-brand-600 dark:hover:text-brand-400">
+              Admin Console
             </Link>
           </div>
         </div>

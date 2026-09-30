@@ -68,7 +68,7 @@ export function TicketSelector({ event, className }) {
           {event.soldOut ? (
             <Badge tone="danger">Sold out</Badge>
           ) : (
-            <Badge tone="success">{event.remaining.toLocaleString()} left</Badge>
+            <Badge tone="success">{(event.remaining ?? 100).toLocaleString()} left</Badge>
           )}
         </div>
       </div>
@@ -76,10 +76,10 @@ export function TicketSelector({ event, className }) {
       <div className="divide-y divide-ink-200/70 dark:divide-white/10">
         {event.tickets.map((ticket) => {
           const quantity = lines[ticket.id] ?? 0
-          const soldOut = ticket.remaining <= 0
-          const salesClosed = new Date(ticket.salesEnd) < new Date()
+          const soldOut = (ticket.remaining ?? 100) <= 0
+          const salesClosed = ticket.salesEnd ? new Date(ticket.salesEnd).getTime() < Date.now() : false
           const disabled = soldOut || salesClosed
-          const max = Math.min(ticket.perOrderLimit, ticket.remaining)
+          const max = Math.min(ticket.perOrderLimit || 10, ticket.remaining ?? 100)
 
           return (
             <div key={ticket.id} className={cn('p-5', disabled && 'opacity-60')}>
@@ -127,7 +127,7 @@ export function TicketSelector({ event, className }) {
                   value={quantity}
                   max={max}
                   disabled={disabled}
-                  onDelta={(delta) => addTicket(event.id, ticket.id, delta, max)}
+                  onDelta={(delta) => addTicket(event.id, ticket.id, delta, max, event)}
                 />
               </div>
             </div>

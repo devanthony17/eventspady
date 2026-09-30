@@ -29,16 +29,26 @@ function rng(seed) {
   }
 }
 
+/** Brand anchors — midnight blue primary, warm accent. */
+const BRAND = {
+  deep: '#0b0b2e',
+  midnight: '#191970',
+  mid: '#384a9a',
+  light: '#6b83cd',
+  pale: '#c2cfec',
+  accent: '#ff7d11',
+}
+
 const PALETTES = [
-  ['#661cf7', '#b5a5ff', '#ff7d11'],
-  ['#0ea5e9', '#7440ff', '#22d3ee'],
+  [BRAND.midnight, BRAND.light, BRAND.accent],
+  ['#0ea5e9', BRAND.mid, '#22d3ee'],
   ['#f43f5e', '#ff9b38', '#ffdaa8'],
   ['#059669', '#34d399', '#a7f3d0'],
-  ['#240568', '#661cf7', '#ff7d11'],
-  ['#db2777', '#9273ff', '#fbcfe8'],
+  [BRAND.deep, BRAND.midnight, BRAND.accent],
+  ['#db2777', BRAND.light, '#fbcfe8'],
   ['#1d4ed8', '#38bdf8', '#c7d2fe'],
   ['#c2410c', '#f59e0b', '#fde68a'],
-  ['#4c1d95', '#a78bfa', '#f0abfc'],
+  ['#312e81', '#818cf8', '#c7d2fe'],
   ['#0f766e', '#2dd4bf', '#99f6e4'],
 ]
 
@@ -153,27 +163,83 @@ ${recipe(rand, w, h, id)}
 </svg>`
 }
 
+/**
+ * Ambient motion backdrop for the hero. CSS animations declared inside the SVG
+ * keep running when it is loaded via <img>, so it reads as looping footage
+ * until real video files are dropped into `public/videos`.
+ */
+function motionBackdrop(seed, w = 1920, h = 1080) {
+  const rand = rng(seed)
+  const id = Math.floor(rand() * 100000)
+
+  // Locked to brand blues so the hero never drifts off-palette.
+  const HERO_PALETTES = [
+    [BRAND.midnight, BRAND.mid, BRAND.accent],
+    ['#1d4ed8', BRAND.midnight, BRAND.light],
+    [BRAND.mid, '#0ea5e9', BRAND.accent],
+  ]
+  const [a, b, c] = HERO_PALETTES[Math.floor(rand() * HERO_PALETTES.length)]
+
+  const orbs = Array.from({ length: 6 }, (_, i) => {
+    const cx = rand() * w
+    const cy = rand() * h
+    const r = 200 + rand() * 340
+    const dur = (26 + rand() * 26).toFixed(1)
+    const dx = (rand() * 340 - 170).toFixed(0)
+    const dy = (rand() * 260 - 130).toFixed(0)
+    const fill = [a, b, c, '#ffffff'][i % 4]
+    return `<circle class="orb o${i}" cx="${cx.toFixed(0)}" cy="${cy.toFixed(0)}" r="${r.toFixed(0)}" fill="${fill}" opacity="${(0.18 + rand() * 0.26).toFixed(2)}" filter="url(#soft${id})">
+<animateTransform attributeName="transform" type="translate" values="0 0; ${dx} ${dy}; 0 0" dur="${dur}s" repeatCount="indefinite" calcMode="spline" keySplines="0.45 0 0.55 1; 0.45 0 0.55 1" keyTimes="0; 0.5; 1"/>
+</circle>`
+  }).join('\n')
+
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" preserveAspectRatio="xMidYMid slice" role="img">
+<defs>
+<linearGradient id="base${id}" gradientTransform="rotate(${Math.floor(rand() * 140)})">
+<stop offset="0%" stop-color="${BRAND.deep}"/>
+<stop offset="55%" stop-color="${a}"/>
+<stop offset="100%" stop-color="${BRAND.deep}"/>
+</linearGradient>
+<filter id="soft${id}" x="-40%" y="-40%" width="180%" height="180%">
+<feGaussianBlur stdDeviation="120"/>
+</filter>
+<linearGradient id="sweep${id}" x1="0" y1="0" x2="1" y2="0">
+<stop offset="0%" stop-color="#ffffff" stop-opacity="0"/>
+<stop offset="50%" stop-color="#ffffff" stop-opacity=".10"/>
+<stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+</linearGradient>
+</defs>
+<rect width="${w}" height="${h}" fill="url(#base${id})"/>
+${orbs}
+<rect width="${(w * 0.55).toFixed(0)}" height="${h}" fill="url(#sweep${id})">
+<animate attributeName="x" values="${-w * 0.6};${w};${-w * 0.6}" dur="${(30 + rand() * 14).toFixed(1)}s" repeatCount="indefinite"/>
+</rect>
+<rect width="${w}" height="${h}" fill="${BRAND.deep}" opacity=".28"/>
+</svg>`
+}
+
 /* -------------------------------------------------------------- icon mark */
 
 const MARK = (size, fg = '#fff', bg = 'url(#gm)') => `
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="${size}" height="${size}">
 <defs><linearGradient id="gm" x1="0" y1="0" x2="1" y2="1">
-<stop offset="0%" stop-color="#7440ff"/><stop offset="100%" stop-color="#ff7d11"/>
+<stop offset="0%" stop-color="#191970"/><stop offset="100%" stop-color="#ff7d11"/>
 </linearGradient></defs>
 <rect width="64" height="64" rx="16" fill="${bg}"/>
 <path d="M20 21h24a3 3 0 0 1 3 3v5a5 5 0 0 0 0 10v5a3 3 0 0 1-3 3H20a3 3 0 0 1-3-3v-5a5 5 0 0 0 0-10v-5a3 3 0 0 1 3-3Z" fill="${fg}" fill-opacity=".95"/>
-<path d="M32 21v3m0 5v3m0 5v3m0 5v3" stroke="#7440ff" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="3 4"/>
+<path d="M32 21v3m0 5v3m0 5v3m0 5v3" stroke="#0038bd" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="3 4"/>
 </svg>`
 
 const wordmark = (dark = false) => `
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 64" width="260" height="64">
 <defs><linearGradient id="gw" x1="0" y1="0" x2="1" y2="1">
-<stop offset="0%" stop-color="#7440ff"/><stop offset="100%" stop-color="#ff7d11"/>
+<stop offset="0%" stop-color="#191970"/><stop offset="100%" stop-color="#ff7d11"/>
 </linearGradient></defs>
 <rect width="64" height="64" rx="16" fill="url(#gw)"/>
 <path d="M20 21h24a3 3 0 0 1 3 3v5a5 5 0 0 0 0 10v5a3 3 0 0 1-3 3H20a3 3 0 0 1-3-3v-5a5 5 0 0 0 0-10v-5a3 3 0 0 1 3-3Z" fill="#fff" fill-opacity=".95"/>
-<path d="M32 21v3m0 5v3m0 5v3m0 5v3" stroke="#7440ff" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="3 4"/>
-<text x="78" y="41" font-family="Plus Jakarta Sans, Inter, system-ui, sans-serif" font-size="26" font-weight="800" fill="${dark ? '#ffffff' : '#201f2c'}" letter-spacing="-.6">Events<tspan fill="#7440ff">pady</tspan></text>
+<path d="M32 21v3m0 5v3m0 5v3m0 5v3" stroke="#0038bd" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="3 4"/>
+
+<text x="78" y="41" font-family="Plus Jakarta Sans, Inter, system-ui, sans-serif" font-size="26" font-weight="800" fill="${dark ? '#ffffff' : '#201f2c'}" letter-spacing="-.6">Events<tspan fill="${dark ? '#99ade0' : '#191970'}">pady</tspan></text>
 </svg>`
 
 /* --------------------------------------------------------------- avatars */
@@ -196,7 +262,7 @@ const ogImage = () => `
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
 <defs>
 <linearGradient id="og" x1="0" y1="0" x2="1" y2="1">
-<stop offset="0%" stop-color="#240568"/><stop offset="55%" stop-color="#661cf7"/><stop offset="100%" stop-color="#ff7d11"/>
+<stop offset="0%" stop-color="#0b0b2e"/><stop offset="55%" stop-color="#191970"/><stop offset="100%" stop-color="#ff7d11"/>
 </linearGradient>
 <filter id="ob" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="60"/></filter>
 </defs>
@@ -216,7 +282,7 @@ const maintenance = () => `
 <stop offset="0%" stop-color="#9273ff"/><stop offset="100%" stop-color="#ff9b38"/></linearGradient></defs>
 <circle cx="400" cy="300" r="220" fill="url(#mg)" opacity=".16"/>
 <circle cx="400" cy="300" r="150" fill="url(#mg)" opacity=".24"/>
-<g stroke="#661cf7" stroke-width="14" stroke-linecap="round" fill="none">
+<g stroke="#191970" stroke-width="14" stroke-linecap="round" fill="none">
 <circle cx="400" cy="300" r="82"/>
 <path d="M400 218v-40M400 422v40M318 300h-40M522 300h40M342 242l-28-28M458 358l28 28M458 242l28-28M342 358l-28 28"/>
 </g>
@@ -229,8 +295,8 @@ const empty = () => `
 <stop offset="0%" stop-color="#b5a5ff"/><stop offset="100%" stop-color="#ffc071"/></linearGradient></defs>
 <ellipse cx="200" cy="248" rx="130" ry="18" fill="#131320" opacity=".07"/>
 <rect x="96" y="86" width="208" height="140" rx="18" fill="url(#eg)" opacity=".28"/>
-<rect x="96" y="86" width="208" height="140" rx="18" fill="none" stroke="#7440ff" stroke-opacity=".5" stroke-width="3" stroke-dasharray="10 8"/>
-<path d="M140 160h120M140 186h80" stroke="#7440ff" stroke-opacity=".55" stroke-width="8" stroke-linecap="round"/>
+<rect x="96" y="86" width="208" height="140" rx="18" fill="none" stroke="#384a9a" stroke-opacity=".5" stroke-width="3" stroke-dasharray="10 8"/>
+<path d="M140 160h120M140 186h80" stroke="#384a9a" stroke-opacity=".55" stroke-width="8" stroke-linecap="round"/>
 <circle cx="160" cy="126" r="14" fill="#ff7d11" opacity=".8"/>
 </svg>`
 
@@ -249,6 +315,9 @@ created.push(write('empty-state.svg', empty()))
 
 // Hero collage
 for (let i = 1; i <= 4; i++) created.push(write(`hero/hero-${i}.svg`, cover(`hero-${i}`, 800, 1000)))
+
+// Animated hero backdrops — poster + fallback for the looping hero videos
+for (let i = 1; i <= 3; i++) created.push(write(`hero/motion-${i}.svg`, motionBackdrop(`motion-${i}`)))
 
 // Event covers
 for (let i = 1; i <= 18; i++) created.push(write(`events/event-${i}.svg`, cover(`event-${i}`, 1200, 800)))

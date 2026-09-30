@@ -32,7 +32,7 @@ export const faqGroups = [
     items: [
       {
         q: 'Which payment methods can I use?',
-        a: 'Online payments run through Stripe, PayPal, Flutterwave, Razorpay or your Eventspady wallet balance. Some organizers also enable offline payment, where you pay in cash while checking in at the venue.',
+        a: 'Online payments run through MTN Mobile Money, Telecel Cash, Paystack, Flutterwave or your Eventspady wallet balance. Most organizers also enable offline payment, where you pay cash while checking in at the venue.',
       },
       {
         q: 'How do coupons work?',
@@ -40,15 +40,15 @@ export const faqGroups = [
       },
       {
         q: 'Are taxes and fees included in the price shown?',
-        a: 'Ticket prices are shown excluding tax. Applicable taxes and the service fee are itemised in your order summary before you pay, so you always see the final total first.',
+        a: 'Ticket prices are shown in Ghana cedis excluding tax. VAT, NHIL and GETFund levies are itemised in your order summary before you pay, so you always see the final total first.',
       },
       {
         q: 'How do refunds work?',
-        a: 'Refund eligibility is set by the organizer on each event and shown on the event page. Approved refunds return either to your original payment method or, if you prefer, instantly to your Eventspady wallet.',
+        a: 'Refund eligibility is set by the organizer on each event and shown on the event page. Approved refunds return either to the mobile money wallet or card you paid with, or instantly to your Eventspady wallet if you prefer.',
       },
       {
         q: 'What is the Eventspady wallet?',
-        a: 'A stored balance on your account. Refunds, credits and top-ups land there and can be spent on any future booking, either in full or alongside another payment method.',
+        a: 'A cedi balance stored on your account. Refunds, credits and MoMo top-ups land there and can be spent on any future booking, either in full or alongside another payment method.',
       },
     ],
   },
@@ -66,7 +66,7 @@ export const faqGroups = [
       },
       {
         q: 'What if my QR code will not scan?',
-        a: 'Turn your screen brightness up and clean the lens. If it still fails, door staff can look up your order by reference or the email address you booked with.',
+        a: 'Turn your screen brightness up and clean the lens. If it still fails, door staff can look up your order by reference, or by the phone number or email you booked with.',
       },
       {
         q: 'Can the same ticket be scanned twice?',
@@ -92,11 +92,11 @@ export const faqGroups = [
       },
       {
         q: 'What commission does the platform take?',
-        a: 'The admin sets the commission as either a percentage or a flat amount per booking. Your exact commission and payout figures are itemised on every order.',
+        a: 'The admin sets the commission as either a percentage or a flat cedi amount per booking. Your exact commission and payout figures are itemised on every order, and payouts settle to your bank or MoMo merchant account.',
       },
       {
         q: 'How do I create a coupon?',
-        a: 'From Organizer → Coupons, set a code, choose a percentage or flat discount, attach it to a specific event, then set the validity window, minimum order value and redemption limit.',
+        a: 'From Organizer → Coupons, set a code, choose a percentage or flat cedi discount, attach it to a specific event, then set the validity window, minimum order value and redemption limit.',
       },
     ],
   },
@@ -118,7 +118,7 @@ export const faqGroups = [
       },
       {
         q: 'What languages are supported?',
-        a: 'The website and both web panels support multiple languages. Admins can download the base language file, translate it, and upload the translation to add a new locale.',
+        a: 'The website and both web panels support multiple languages. Alongside English we ship Dagaare, Waali, Sisaali, Twi and French — admins download the base language file, translate it and upload it to add a locale.',
       },
       {
         q: 'How is my data handled?',

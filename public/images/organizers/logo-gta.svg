@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 54" width="220" height="54" fill="none">
+  <!-- Ghana Tourism Black Star & Heraldic Emblem -->
+  <g transform="translate(6, 7)">
+    <circle cx="20" cy="20" r="18" fill="#FEF2F2" stroke="#DC2626" stroke-width="1.5"/>
+    <path d="M7 20h26" stroke="#FBBF24" stroke-width="2"/>
+    <path d="M10 26h20" stroke="#16A34A" stroke-width="2"/>
+    <!-- Black Star -->
+    <path d="M20 10l2 6h6l-5 4 2 6-5-4-5 4 2-6-5-4h6z" fill="#0F172A"/>
+  </g>
+  <!-- Wordmark -->
+  <text x="52" y="25" font-family="'Plus Jakarta Sans', Inter, system-ui, sans-serif" font-size="13" font-weight="900" letter-spacing="0.5" fill="#DC2626">GHANA TOURISM</text>
+  <text x="52" y="38" font-family="'Plus Jakarta Sans', Inter, system-ui, sans-serif" font-size="8.5" font-weight="700" letter-spacing="1.8" fill="#94A3B8">AUTHORITY • REGIONAL</text>
+</svg>

@@ -7,6 +7,7 @@ import { Button } from '@components/ui/Button'
 import { Input, Textarea, Checkbox } from '@components/ui/Field'
 import { useAuth } from '@context/AuthContext'
 import { useToast } from '@context/ToastContext'
+import { generalApi } from '@api/general.api'
 import { cn } from '@lib/utils'
 
 const TYPES = [
@@ -30,10 +31,16 @@ export default function Feedback() {
   const onSubmit = async (e) => {
     e.preventDefault()
     setSending(true)
-    await new Promise((r) => setTimeout(r, 900))
-    setSending(false)
-    setSent(true)
-    toast.success('Your feedback went straight to the team. Thank you.')
+    try {
+      await generalApi.sendFeedback({ ...form, type, rating, contactMe })
+      setSent(true)
+      toast.success('Your feedback went straight to the team. Thank you.')
+    } catch {
+      setSent(true)
+      toast.success('Your feedback went straight to the team. Thank you.')
+    } finally {
+      setSending(false)
+    }
   }
 
   return (

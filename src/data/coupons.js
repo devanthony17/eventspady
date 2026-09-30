@@ -7,48 +7,48 @@ const inDays = (n) => new Date(Date.now() + n * DAY).toISOString()
  */
 export const coupons = [
   {
-    code: 'WELCOME10',
+    code: 'AKWAABA10',
     type: 'percentage',
     value: 10,
     eventId: null,
     minOrder: 0,
-    maxDiscount: 40,
+    maxDiscount: 60,
     expiresAt: inDays(60),
     usageLimit: 5000,
-    used: 3182,
-    description: '10% off your first booking, up to $40.',
+    used: 2184,
+    description: '10% off your first booking, up to ₵60.',
   },
   {
-    code: 'NOVA25',
+    code: 'DUMBA50',
     type: 'flat',
-    value: 25,
+    value: 50,
     eventId: 'evt-001',
-    minOrder: 150,
+    minOrder: 200,
     maxDiscount: null,
     expiresAt: inDays(20),
     usageLimit: 500,
-    used: 341,
-    description: '$25 off Nova Nights orders over $150.',
+    used: 287,
+    description: '₵50 off Dumba Festival orders over ₵200.',
   },
   {
-    code: 'DEVCON15',
+    code: 'JONJO15',
     type: 'percentage',
     value: 15,
     eventId: 'evt-002',
-    minOrder: 200,
-    maxDiscount: 90,
+    minOrder: 50,
+    maxDiscount: 50,
     expiresAt: inDays(30),
     usageLimit: 300,
-    used: 268,
-    description: '15% off StackForge DevCon tickets.',
+    used: 231,
+    description: '15% off Walk With Jonjo VIP and fitness kits.',
   },
   {
     code: 'EARLYBIRD',
     type: 'percentage',
     value: 20,
     eventId: null,
-    minOrder: 100,
-    maxDiscount: 75,
+    minOrder: 150,
+    maxDiscount: 100,
     expiresAt: inDays(-2),
     usageLimit: 1000,
     used: 1000,
@@ -69,7 +69,7 @@ export function validateCoupon(code, { subtotal, eventId }) {
   if (coupon.eventId && coupon.eventId !== eventId)
     return { ok: false, reason: 'This coupon is not valid for this event.' }
   if (subtotal < coupon.minOrder)
-    return { ok: false, reason: `Spend at least $${coupon.minOrder} to use this coupon.` }
+    return { ok: false, reason: `Spend at least GH₵${coupon.minOrder} to use this coupon.` }
 
   let discount =
     coupon.type === 'percentage' ? (subtotal * coupon.value) / 100 : Math.min(coupon.value, subtotal)

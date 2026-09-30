@@ -1,8 +1,15 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Container } from '@components/ui/Section'
-import { platformStats } from '@data/testimonials'
+import { useLandingCms } from '@hooks/api'
 import { formatCompact } from '@lib/utils'
 import { usePrefersReducedMotion } from '@hooks/useMediaQuery'
+
+const DEFAULT_STATS = [
+  { value: 24000, suffix: '+', label: 'Tickets booked' },
+  { value: 180, suffix: '+', label: 'Verified organizers' },
+  { value: 99, suffix: '%', label: 'Scanner uptime' },
+  { value: 380, suffix: 'k GHS', label: 'Disbursed to partners' },
+]
 
 /** Counts up once the strip scrolls into view. Static if motion is reduced. */
 function useCountUp(target, run) {
@@ -50,6 +57,13 @@ function Stat({ item, run }) {
 export function StatsStrip() {
   const ref = useRef(null)
   const [visible, setVisible] = useState(false)
+  const { data: cmsData } = useLandingCms()
+
+  const stats = useMemo(() => {
+    if (Array.isArray(cmsData?.stats) && cmsData.stats.length > 0) return cmsData.stats
+    if (Array.isArray(cmsData?.platformStats) && cmsData.platformStats.length > 0) return cmsData.platformStats
+    return DEFAULT_STATS
+  }, [cmsData])
 
   useEffect(() => {
     const el = ref.current
@@ -73,7 +87,7 @@ export function StatsStrip() {
     <div ref={ref} className="border-y border-ink-200/70 bg-white py-12 dark:border-white/10 dark:bg-ink-950 sm:py-14">
       <Container>
         <dl className="grid grid-cols-2 gap-8 lg:grid-cols-4">
-          {platformStats.map((item) => (
+          {stats.map((item) => (
             <Stat key={item.label} item={item} run={visible} />
           ))}
         </dl>

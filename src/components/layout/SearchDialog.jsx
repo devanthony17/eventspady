@@ -1,9 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { CalendarDays, CornerDownLeft, MapPin, Search, Tag, Video } from 'lucide-react'
+import { CalendarDays, CornerDownLeft, MapPin, Search, Tag, Users, Video } from 'lucide-react'
 import { Modal } from '@components/ui/Modal'
-import { events } from '@data/events'
-import { categories } from '@data/categories'
+import { useEvents, useCategories, useOrganizers } from '@hooks/api'
 import { calendarChip, cn, formatCurrency } from '@lib/utils'
 
 const QUICK_LINKS = [
@@ -13,10 +12,28 @@ const QUICK_LINKS = [
   { label: 'This weekend', to: '/events?when=weekend' },
 ]
 
-/** Command-palette style search over events and categories. */
+/** Command-palette style search over events, categories, venues, and organizers. */
 export function SearchDialog({ open, onClose }) {
   const [query, setQuery] = useState('')
   const [cursor, setCursor] = useState(0)
+  const { data: eventsData } = useEvents()
+  const { data: categoriesData } = useCategories()
+  const { data: organizersData } = useOrganizers()
+
+  const storeEvents = useMemo(() => {
+    if (Array.isArray(eventsData)) return eventsData
+    return eventsData?.events || eventsData?.data || []
+  }, [eventsData])
+
+  const categories = useMemo(() => {
+    if (Array.isArray(categoriesData)) return categoriesData
+    return categoriesData?.categories || categoriesData?.data || []
+  }, [categoriesData])
+
+  const organizers = useMemo(() => {
+    if (Array.isArray(organizersData)) return organizersData
+    return organizersData?.organizers || organizersData?.data || []
+  }, [organizersData])
   const navigate = useNavigate()
   const inputRef = useRef(null)
 
@@ -30,23 +47,31 @@ export function SearchDialog({ open, onClose }) {
 
   const results = useMemo(() => {
     const q = query.trim().toLowerCase()
-    if (!q) return { events: events.slice(0, 5), categories: [] }
+    if (!q) return { events: storeEvents.slice(0, 5), categories: [], organizers: [] }
 
-    const matchedEvents = events
+    const matchedEvents = storeEvents
       .filter((e) =>
-        [e.title, e.tagline, e.venue?.city, e.category, ...e.tags].join(' ').toLowerCase().includes(q),
+        [e.title, e.tagline, e.venue?.name, e.venue?.city, e.category, e.organizerName, ...(e.tags || [])]
+          .filter(Boolean)
+          .join(' ')
+          .toLowerCase()
+          .includes(q),
       )
       .slice(0, 6)
 
     const matchedCategories = categories.filter((c) => c.name.toLowerCase().includes(q)).slice(0, 3)
+    const matchedOrganizers = organizers
+      .filter((org) => [org.name, org.location, org.bio].join(' ').toLowerCase().includes(q))
+      .slice(0, 3)
 
-    return { events: matchedEvents, categories: matchedCategories }
-  }, [query])
+    return { events: matchedEvents, categories: matchedCategories, organizers: matchedOrganizers }
+  }, [query, storeEvents])
 
   const flat = useMemo(
     () => [
       ...results.events.map((e) => ({ kind: 'event', to: `/events/${e.slug}`, data: e })),
       ...results.categories.map((c) => ({ kind: 'category', to: `/events?category=${c.id}`, data: c })),
+      ...results.organizers.map((org) => ({ kind: 'organizer', to: `/organizers/${org.id}`, data: org })),
     ],
     [results],
   )
@@ -177,11 +202,50 @@ export function SearchDialog({ open, onClose }) {
                         cursor === index ? 'bg-brand-50 dark:bg-brand-500/15' : 'hover:bg-ink-50 dark:hover:bg-white/5',
                       )}
                     >
-                      <span className="grid size-11 shrink-0 place-items-center rounded-lg bg-ink-100 text-ink-600 dark:bg-white/10 dark:text-ink-200">
-                        <Tag className="size-4" aria-hidden="true" />
+                      <span className="flex size-10 shrink-0 items-center justify-center rounded-full border border-[#dce6fa] bg-white text-[#2d2942] shadow-xs dark:border-blue-400/20 dark:bg-ink-800 dark:text-ink-100">
+                        {category.icon ? (
+                          <category.icon className="size-5" aria-hidden="true" />
+                        ) : (
+                          <Tag className="size-4" aria-hidden="true" />
+                        )}
                       </span>
                       <span className="flex-1 text-sm font-semibold">{category.name}</span>
                       <span className="text-xs text-ink-500">{category.count} events</span>
+                    </button>
+                  </li>
+                )
+              })}
+
+              {results.organizers?.length > 0 && (
+                <li className="px-3 pb-1 pt-4 text-xs font-bold uppercase tracking-wider text-ink-400">Organizers</li>
+              )}
+              {results.organizers?.map((org, i) => {
+                const index = results.events.length + results.categories.length + i
+                return (
+                  <li key={org.id}>
+                    <button
+                      type="button"
+                      onMouseEnter={() => setCursor(index)}
+                      onClick={() => go(`/organizers/${org.id}`)}
+                      className={cn(
+                        'flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left transition',
+                        cursor === index ? 'bg-brand-50 dark:bg-brand-500/15' : 'hover:bg-ink-50 dark:hover:bg-white/5',
+                      )}
+                    >
+                      {org.logo ? (
+                        <img src={org.logo} alt="" className="size-11 shrink-0 rounded-lg object-cover" />
+                      ) : (
+                        <span className="grid size-11 shrink-0 place-items-center rounded-lg bg-brand-50 text-brand-700 dark:bg-brand-500/10 dark:text-brand-300">
+                          <Users className="size-4" aria-hidden="true" />
+                        </span>
+                      )}
+                      <span className="min-w-0 flex-1">
+                        <span className="block truncate text-sm font-semibold">{org.name}</span>
+                        <span className="mt-0.5 block truncate text-xs text-ink-500 dark:text-ink-400">
+                          {org.location} · {org.events || 1} event{org.events === 1 ? '' : 's'}
+                        </span>
+                      </span>
+                      {cursor === index && <CornerDownLeft className="size-3.5 shrink-0 text-ink-400" aria-hidden="true" />}
                     </button>
                   </li>
                 )

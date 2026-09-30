@@ -6,20 +6,35 @@ import { Container, Section } from '@components/ui/Section'
 import { Accordion } from '@components/ui/Accordion'
 import { Button } from '@components/ui/Button'
 import { EmptyState } from '@components/ui/EmptyState'
-import { allFaqs, faqGroups } from '@data/faq'
+import { allFaqs as defaultAllFaqs, faqGroups as defaultFaqGroups } from '@data/faq'
+import { useFaq } from '@hooks/api'
 import { cn } from '@lib/utils'
 
 export default function Faq() {
+  const { data: faqData } = useFaq()
+
+  const faqGroups = useMemo(() => {
+    if (Array.isArray(faqData) && faqData.length > 0) return faqData
+    if (Array.isArray(faqData?.groups) && faqData.groups.length > 0) return faqData.groups
+    if (Array.isArray(faqData?.data) && faqData.data.length > 0) return faqData.data
+    return defaultFaqGroups
+  }, [faqData])
+
+  const allFaqs = useMemo(() => {
+    const fromGroups = faqGroups.flatMap((g) => g.items || [])
+    return fromGroups.length > 0 ? fromGroups : defaultAllFaqs
+  }, [faqGroups])
+
   const [query, setQuery] = useState('')
-  const [activeGroup, setActiveGroup] = useState(faqGroups[0].id)
+  const [activeGroup, setActiveGroup] = useState(faqGroups[0]?.id || 'attendees')
 
   const results = useMemo(() => {
     const q = query.trim().toLowerCase()
     if (!q) return null
     return allFaqs.filter((item) => `${item.q} ${item.a}`.toLowerCase().includes(q))
-  }, [query])
+  }, [query, allFaqs])
 
-  const group = faqGroups.find((g) => g.id === activeGroup)
+  const group = faqGroups.find((g) => g.id === activeGroup) || faqGroups[0]
 
   return (
     <>

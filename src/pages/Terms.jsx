@@ -95,7 +95,7 @@ const SECTIONS = [
     id: 'governing-law',
     title: 'Governing law',
     body: [
-      'These terms are governed by the laws of the State of California, and the courts of San Francisco County have exclusive jurisdiction over any dispute.',
+      'These terms are governed by the laws of the Republic of Ghana, and the courts of Wa in the Upper West Region have exclusive jurisdiction over any dispute.',
       'This does not remove any protection you have under the mandatory consumer law of the country where you live.',
     ],
   },

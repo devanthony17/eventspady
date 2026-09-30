@@ -2,74 +2,140 @@ export const testimonials = [
   {
     id: 't1',
     quote:
-      'We moved four festivals onto Eventspady in a single season. The door queue that used to take ninety minutes now clears in twenty-five, and I can see the live check-in count from my phone.',
-    name: 'Marcus Vela',
-    role: 'Festival Director, Nova Collective',
-    avatar: '/images/avatars/avatar-5.svg',
+      'We moved the whole Dumba programme onto Eventspady last season. The palace gate used to take an hour to clear; now it is under twenty minutes and I can see the live count from my phone.',
+    name: 'Alhaji Mumuni Bakuri',
+    role: 'Programme Director, Wa Naa Cultural Trust',
+    avatar: '/images/avatars/avatar-alhaj-mumuni.jpg',
     rating: 5,
   },
   {
     id: 't2',
     quote:
-      'The coupon rules are the detail that sold me. I can attach an offer to one event, cap the redemptions and set an expiry, then actually measure what it did to sales.',
-    name: 'Hannah Brecht',
-    role: 'Marketing Lead, StackForge',
-    avatar: '/images/avatars/avatar-6.svg',
+      'Mobile money at checkout was the whole thing for us. Nearly nine in ten of our attendees pay with MoMo — the moment that worked properly, our advance sales doubled.',
+    name: 'Abena Sowah',
+    role: 'Operations, UBIDS Innovation Hub',
+    avatar: '/images/avatars/avatar-abena-sowah.jpg',
     rating: 5,
   },
   {
     id: 't3',
     quote:
-      'Offline payment support was non-negotiable for our community events. Half our guests still pay cash at the door and the scanner settles it without breaking the flow.',
-    name: 'Chidi Nwosu',
-    role: 'Programme Manager, Impact Lagos',
-    avatar: '/images/avatars/avatar-7.svg',
+      'Cash at the door still matters here. Half our community crowd pays on the night and the scanner settles it without holding up the queue behind them.',
+    name: 'Sulemana Iddrisu',
+    role: 'Coordinator, Jirapa Arts Collective',
+    avatar: '/images/avatars/avatar-sulemana-iddrisu.jpg',
     rating: 5,
   },
   {
     id: 't4',
     quote:
-      'As an attendee I mostly notice that nothing goes wrong. Tickets arrive instantly, the QR works, and refunds land in my wallet the same day.',
-    name: 'Sofia Marchetti',
-    role: 'Regular attendee, Milan',
-    avatar: '/images/avatars/avatar-8.svg',
+      'As someone just buying tickets, I mostly notice that nothing goes wrong. The QR arrives on MoMo confirmation and it works at the gate every time.',
+    name: 'Gifty Bawa',
+    role: 'Regular attendee, Wa',
+    avatar: '/images/avatars/avatar-gifty-bawa.jpg',
     rating: 5,
   },
   {
     id: 't5',
     quote:
-      'We run a bilingual programme and the translation upload took an afternoon. Attendees now browse in Spanish end to end, including their tickets.',
-    name: 'Elena Rojas',
-    role: 'Director, Casa Cultural',
-    avatar: '/images/avatars/avatar-9.svg',
+      'We run our listings in English and Dagaare. The translation upload took an afternoon and now our farmers’ programme reaches people who were never going to read an English page.',
+    name: 'Paulina Kuu-ire',
+    role: 'Director, Nandom Community Radio',
+    avatar: '/images/avatars/avatar-paulina-kuu-ire.jpg',
     rating: 4,
   },
   {
     id: 't6',
     quote:
-      'The payout breakdown per order is the clearest I have used. Commission, tax and refunds are all itemised, so reconciliation stopped being a monthly argument.',
-    name: 'Ravi Menon',
-    role: 'Finance, Clutch Esports',
-    avatar: '/images/avatars/avatar-10.svg',
+      'The payout breakdown per order is the clearest I have used. Commission, VAT and refunds all itemised, so reconciling with the Assembly stopped being an argument.',
+    name: 'Eric Naah',
+    role: 'Finance, Savannah Esports GH',
+    avatar: '/images/avatars/avatar-eric-naah.jpg',
     rating: 5,
   },
 ]
 
 export const platformStats = [
-  { label: 'Tickets issued', value: 2400000, suffix: '+' },
-  { label: 'Events hosted', value: 48000, suffix: '+' },
-  { label: 'Active organizers', value: 9200, suffix: '+' },
-  { label: 'Countries served', value: 74, suffix: '' },
+  { label: 'Tickets issued', value: 186000, suffix: '+' },
+  { label: 'Events hosted', value: 3400, suffix: '+' },
+  { label: 'Active organizers', value: 640, suffix: '+' },
+  { label: 'Districts covered', value: 11, suffix: '' },
 ]
 
-/** Logos rendered as text marks in the trust strip. */
-export const trustedBy = [
-  'Nova Collective',
-  'StackForge',
-  'Atlas Ventures',
-  'Lumen Arts',
-  'Clutch Esports',
-  'Mindful Co.',
-  'Peak Athletics',
-  'The Tasting Room',
+/** Organizer partners with verified vector logo assets for the trust marquee strip. */
+export const trustedOrganizers = [
+  {
+    id: 'wa-naa-cultural',
+    name: 'Wa Naa Palace Cultural Trust',
+    logo: '/images/organizers/logo-wa-naa.svg',
+    tag: 'Cultural Authority',
+  },
+  {
+    id: 'ubids-innovation',
+    name: 'SD Dombo UBIDS',
+    logo: '/images/organizers/logo-ubids.svg',
+    tag: 'Academic & Tech',
+  },
+  {
+    id: 'royal-cosy-hills',
+    name: 'Royal Cosy Hills (Jirapa Dubai)',
+    logo: '/images/organizers/logo-royal-cosy-hills.svg',
+    tag: 'Safari Resort',
+  },
+  {
+    id: 'mtn-momo',
+    name: 'MTN Mobile Money',
+    logo: '/images/organizers/logo-mtn-momo.svg',
+    tag: 'Payment Partner',
+  },
+  {
+    id: 'telecel-cash',
+    name: 'Telecel Cash',
+    logo: '/images/organizers/logo-telecel.svg',
+    tag: 'Instant Settlements',
+  },
+  {
+    id: 'savannah-hub',
+    name: 'Savannah Tech Hub',
+    logo: '/images/organizers/logo-savannah-hub.svg',
+    tag: 'Innovation & Tech',
+  },
+  {
+    id: 'ghana-tourism',
+    name: 'Ghana Tourism Authority',
+    logo: '/images/organizers/logo-gta.svg',
+    tag: 'Tourism & Culture',
+  },
+  {
+    id: 'bugatti-lounge',
+    name: 'Bugatti Lounge & Club',
+    logo: '/images/organizers/logo-bugatti.svg',
+    tag: 'Nightlife & Events',
+  },
+  {
+    id: 'sombo-sound',
+    name: 'Sombo Sound Collective',
+    logo: '/images/organizers/logo-sombo-sound.svg',
+    tag: 'Festivals & Concerts',
+  },
+  {
+    id: 'wechiau-sanctuary',
+    name: 'Wechiau Hippo Sanctuary',
+    logo: '/images/organizers/logo-wechiau.svg',
+    tag: 'Eco-Tourism',
+  },
+  {
+    id: 'jonjo-palace',
+    name: 'Jonjo Palace',
+    logo: '/images/organizers/logo-jonjo.svg',
+    tag: 'Sports & Fitness',
+  },
+  {
+    id: 'arts-council',
+    name: 'UW Arts & Heritage Council',
+    logo: '/images/organizers/logo-arts-council.svg',
+    tag: 'Arts & Heritage',
+  },
 ]
+
+export const trustedBy = trustedOrganizers.map((o) => o.name)

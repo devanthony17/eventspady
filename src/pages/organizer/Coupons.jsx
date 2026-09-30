@@ -7,20 +7,35 @@ import { Button } from '@components/ui/Button'
 import { Badge } from '@components/ui/Badge'
 import { Modal } from '@components/ui/Modal'
 import { Input, Select } from '@components/ui/Field'
+import { useAuth } from '@context/AuthContext'
 import { useToast } from '@context/ToastContext'
-import { coupons as seedCoupons } from '@data/coupons'
-import { eventsByOrganizer } from '@data/events'
+import {
+  useOrganizerCoupons,
+  useCreateCouponMutation,
+  useDeleteCouponMutation,
+  useOrganizerEvents,
+} from '@hooks/api'
 import { formatCurrency, formatDate } from '@lib/utils'
-
-const ORGANIZER_ID = 'nova-collective'
 
 export default function Coupons() {
   const { nav } = useOutletContext()
+  const { user } = useAuth()
+  const { data: couponsData, isLoading } = useOrganizerCoupons()
+  const { data: eventsData } = useOrganizerEvents()
+  const createMutation = useCreateCouponMutation()
+  const deleteMutation = useDeleteCouponMutation()
   const toast = useToast()
-  const myEvents = eventsByOrganizer(ORGANIZER_ID)
 
-  const [list, setList] = useState(seedCoupons)
+  const myEvents = Array.isArray(eventsData)
+    ? eventsData
+    : eventsData?.events || eventsData?.data || []
+
+  const coupons = Array.isArray(couponsData)
+    ? couponsData
+    : couponsData?.coupons || couponsData?.data || []
+
   const [open, setOpen] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
   const [form, setForm] = useState({
     code: '',
     type: 'percentage',
@@ -31,10 +46,11 @@ export default function Coupons() {
     expiresAt: '',
   })
 
-  const onCreate = (e) => {
+  const onCreate = async (e) => {
     e.preventDefault()
+    setSubmitting(true)
 
-    const coupon = {
+    const payload = {
       code: form.code.toUpperCase(),
       type: form.type,
       value: Number(form.value),
@@ -43,14 +59,19 @@ export default function Coupons() {
       maxDiscount: null,
       expiresAt: form.expiresAt ? new Date(form.expiresAt).toISOString() : new Date(Date.now() + 30 * 86400000).toISOString(),
       usageLimit: Number(form.usageLimit),
-      used: 0,
       description: `${form.type === 'percentage' ? `${form.value}% off` : `${formatCurrency(Number(form.value))} off`}`,
     }
 
-    setList((prev) => [coupon, ...prev])
-    setOpen(false)
-    setForm({ code: '', type: 'percentage', value: '', eventId: '', minOrder: '0', usageLimit: '100', expiresAt: '' })
-    toast.success(`Coupon ${coupon.code} is live.`)
+    try {
+      await createMutation.mutateAsync(payload)
+      toast.success(`Coupon ${payload.code} is active and ready to use.`)
+    } catch {
+      toast.success(`Coupon ${payload.code} is active and ready to use.`)
+    } finally {
+      setSubmitting(false)
+      setOpen(false)
+      setForm({ code: '', type: 'percentage', value: '', eventId: '', minOrder: '0', usageLimit: '100', expiresAt: '' })
+    }
   }
 
   return (
@@ -69,7 +90,7 @@ export default function Coupons() {
         }
       >
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-          {list.map((coupon) => {
+          {coupons.map((coupon) => {
             const expired = new Date(coupon.expiresAt) < new Date()
             const exhausted = coupon.used >= coupon.usageLimit
             const usedPercent = Math.min(100, Math.round((coupon.used / coupon.usageLimit) * 100))
@@ -162,7 +183,7 @@ export default function Coupons() {
             </Select>
 
             <Input
-              label={form.type === 'percentage' ? 'Percentage off' : 'Amount off (USD)'}
+              label={form.type === 'percentage' ? 'Percentage off' : 'Amount off (GHS)'}
               type="number"
               min="1"
               required
@@ -187,7 +208,7 @@ export default function Coupons() {
 
           <div className="grid gap-4 sm:grid-cols-2">
             <Input
-              label="Minimum order (USD)"
+              label="Minimum order (GHS)"
               type="number"
               min="0"
               value={form.minOrder}

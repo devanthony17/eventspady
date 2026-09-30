@@ -2,23 +2,43 @@ import { Link } from 'react-router-dom'
 import { Check, Quote } from 'lucide-react'
 import { Logo } from '@components/layout/Logo'
 import { Avatar } from '@components/ui/Avatar'
-import { testimonials } from '@data/testimonials'
+import { useLandingCms } from '@hooks/api'
 
-const PERKS = [
-  'All your tickets and QR codes in one place',
-  'Instant refunds straight to your wallet',
-  'Reminders before every event you book',
-  'Save events and follow your favourite organizers',
+const DEFAULT_PERKS = [
+  'All your tickets and QR passes in one pocket',
+  'Instant Mobile Money (MTN MoMo & Telecel Cash) checkout',
+  'Real-time gate check-in with zero delay',
+  'Save favorite events and follow local organizers',
 ]
 
-/** Split layout shared by sign in, sign up and password recovery. */
-export function AuthShell({ title, subtitle, children, footer }) {
-  const quote = testimonials[3]
+const DEFAULT_QUOTE = {
+  name: 'Hajia Mariama',
+  role: 'Founder, Savannah Women in Tech',
+  quote: 'Eventspady transformed our conference ticketing in Wa. MoMo checkouts were instant and door check-in was seamless.',
+  avatar: '/images/avatars/avatar-4.svg',
+}
+
+/** Split layout shared by sign in, sign up and password recovery with right-side photographic visuals. */
+export function AuthShell({
+  title,
+  subtitle,
+  children,
+  footer,
+  image = '/images/events/miss-dumba.jpg',
+  imageAlt = 'Events in Ghana',
+  headline,
+  badge = 'Eventspady Ghana',
+  perks = DEFAULT_PERKS,
+  quoteIndex = 0,
+}) {
+  const { data: cmsData } = useLandingCms()
+  const list = cmsData?.testimonials || []
+  const quote = list[quoteIndex] || list[0] || DEFAULT_QUOTE
 
   return (
     <div className="grid min-h-dvh lg:grid-cols-2">
       {/* Form side */}
-      <div className="flex flex-col px-5 py-8 sm:px-8 lg:px-12">
+      <div className="flex flex-col px-5 py-8 sm:px-8 lg:px-12 bg-white dark:bg-ink-950">
         <div className="mb-10 flex items-center justify-between gap-4">
           <Logo />
           <Link
@@ -30,7 +50,7 @@ export function AuthShell({ title, subtitle, children, footer }) {
         </div>
 
         <div className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center">
-          <h1 className="text-3xl font-extrabold sm:text-[2rem]">{title}</h1>
+          <h1 className="text-3xl font-extrabold sm:text-[2rem] text-ink-900 dark:text-white">{title}</h1>
           {subtitle && <p className="mt-2 text-ink-500 dark:text-ink-400">{subtitle}</p>}
           <div className="mt-8">{children}</div>
         </div>
@@ -38,40 +58,61 @@ export function AuthShell({ title, subtitle, children, footer }) {
         {footer && <div className="mx-auto mt-10 w-full max-w-md text-center text-sm">{footer}</div>}
       </div>
 
-      {/* Brand side */}
+      {/* Brand & photographic image side */}
       <div className="relative hidden overflow-hidden bg-ink-950 lg:block">
-        <div className="absolute inset-0 bg-gradient-to-br from-brand-800 via-brand-950 to-ink-950" aria-hidden="true" />
+        {image && (
+          <img
+            src={image}
+            alt={imageAlt}
+            className="absolute inset-0 size-full object-cover transition-transform duration-1000 hover:scale-105"
+          />
+        )}
+        {/* Layered cinematic gradients for extreme legibility and glass aesthetic */}
         <div
-          className="absolute inset-0 bg-grid-dark [background-size:56px_56px] [mask-image:radial-gradient(ellipse_at_40%_30%,black,transparent_70%)]"
+          className="absolute inset-0 bg-gradient-to-t from-ink-950 via-ink-950/75 to-ink-950/40 backdrop-blur-[1px]"
           aria-hidden="true"
         />
-        <div className="absolute -right-24 top-1/4 size-96 rounded-full bg-accent-500/20 blur-[110px]" aria-hidden="true" />
+        <div
+          className="absolute inset-0 bg-gradient-to-r from-ink-950/90 via-transparent to-brand-950/60"
+          aria-hidden="true"
+        />
+        <div
+          className="absolute -right-20 top-1/4 size-96 rounded-full bg-brand-500/20 blur-[100px]"
+          aria-hidden="true"
+        />
 
         <div className="relative flex h-full flex-col justify-between p-12 text-white">
           <div>
-            <h2 className="max-w-sm text-balance text-3xl font-extrabold leading-tight xl:text-4xl">
-              Join 92,000 people booking better nights out
+            {badge && (
+              <span className="mb-4 inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-accent-300 backdrop-blur-md shadow-sm">
+                {badge}
+              </span>
+            )}
+            <h2 className="max-w-md text-balance text-3xl font-extrabold leading-tight xl:text-4xl text-white drop-shadow-md">
+              {headline || 'Join 24,000+ people booking better events across Ghana'}
             </h2>
             <ul className="mt-8 space-y-3.5">
-              {PERKS.map((perk) => (
+              {perks.map((perk) => (
                 <li key={perk} className="flex items-start gap-3">
-                  <span className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-white/15">
+                  <span className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-brand-500 text-white shadow-sm ring-2 ring-brand-400/40">
                     <Check className="size-3" strokeWidth={3} aria-hidden="true" />
                   </span>
-                  <span className="text-sm text-white/80">{perk}</span>
+                  <span className="text-sm font-medium text-white/95 drop-shadow-sm">{perk}</span>
                 </li>
               ))}
             </ul>
           </div>
 
-          <figure className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-xl">
+          <figure className="rounded-2xl border border-white/15 bg-ink-950/70 p-6 backdrop-blur-xl shadow-2xl">
             <Quote className="mb-3 size-6 text-accent-400" aria-hidden="true" />
-            <blockquote className="text-pretty text-sm leading-relaxed text-white/85">“{quote.quote}”</blockquote>
+            <blockquote className="text-pretty text-sm leading-relaxed text-white/90 font-medium">
+              “{quote.quote}”
+            </blockquote>
             <figcaption className="mt-5 flex items-center gap-3">
               <Avatar src={quote.avatar} name={quote.name} size="sm" />
               <div>
-                <p className="text-sm font-bold">{quote.name}</p>
-                <p className="text-xs text-white/55">{quote.role}</p>
+                <p className="text-sm font-bold text-white">{quote.name}</p>
+                <p className="text-xs text-white/65">{quote.role}</p>
               </div>
             </figcaption>
           </figure>

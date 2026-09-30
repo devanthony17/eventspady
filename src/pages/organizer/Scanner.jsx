@@ -6,20 +6,10 @@ import { DashboardShell } from '@components/dashboard/DashboardShell'
 import { Button } from '@components/ui/Button'
 import { Badge } from '@components/ui/Badge'
 import { Input, Select, Switch } from '@components/ui/Field'
-import { eventsByOrganizer } from '@data/events'
-import { cn, formatTime } from '@lib/utils'
-
-const ORGANIZER_ID = 'nova-collective'
-
-/** Known good codes for the demo scanner — everything else fails validation. */
-const VALID_CODES = new Set([
-  'EVP-7K2M9X-1',
-  'EVP-7K2M9X-2',
-  'EVP-1A9C3R-1',
-  'EVP-1A9C3R-2',
-  'EVP-2Z7Y1K-1',
-  'EVP-4R2E6M-1',
-])
+import { useAuth } from '@context/AuthContext'
+import { useStore } from '@context/StoreContext'
+import { useOrganizerEvents, useCheckInTicketMutation } from '@hooks/api'
+import { cn, formatTime, formatCurrency } from '@lib/utils'
 
 const RESULT_META = {
   valid: {
@@ -44,28 +34,49 @@ const RESULT_META = {
 
 export default function Scanner() {
   const { nav } = useOutletContext()
-  const myEvents = eventsByOrganizer(ORGANIZER_ID)
+  const { user } = useAuth()
+  const { events: fallbackEvents, checkInTicket, getGateStatus } = useStore()
+  const { data: eventsData } = useOrganizerEvents()
+  const checkInMutation = useCheckInTicketMutation()
+
+  const myEvents = Array.isArray(eventsData)
+    ? eventsData
+    : (eventsData?.events || eventsData?.data || (eventsData !== undefined ? [] : ((user?.organizerId || user?.id) ? fallbackEvents.filter((e) => e.organizerId === (user?.organizerId || user?.id)) : [])))
 
   const [eventId, setEventId] = useState(myEvents[0]?.id ?? '')
   const [code, setCode] = useState('')
-  const [offline, setOffline] = useState(true)
+  const [offline, setOffline] = useState(false)
   const [scanned, setScanned] = useState(new Set())
   const [result, setResult] = useState(null)
   const [log, setLog] = useState([])
 
-  const validate = (e) => {
+  const validate = async (e) => {
     e.preventDefault()
     const value = code.trim().toUpperCase()
     if (!value) return
 
-    let status
-    if (!VALID_CODES.has(value)) status = 'invalid'
-    else if (scanned.has(value)) status = 'duplicate'
-    else status = 'valid'
+    if (!offline) {
+      try {
+        await checkInMutation.mutateAsync({ ticketCode: value, eventId })
+      } catch {
+        // Fallback to local store check-in
+      }
+    }
 
-    if (status === 'valid') setScanned((prev) => new Set(prev).add(value))
+    const check = checkInTicket(value, eventId)
+    const entry = {
+      code: value,
+      status: check.status,
+      ticket: check.ticket,
+      order: check.order,
+      message: check.message,
+      at: new Date().toISOString(),
+    }
 
-    const entry = { code: value, status, at: new Date().toISOString() }
+    if (check.status === 'valid') {
+      setScanned((prev) => new Set(prev).add(value))
+    }
+
     setResult(entry)
     setLog((prev) => [entry, ...prev].slice(0, 12))
     setCode('')
@@ -144,14 +155,48 @@ export default function Scanner() {
             {result && meta && (
               <div className={cn('mt-5 flex items-start gap-4 rounded-2xl border p-5', meta.tone)}>
                 <ResultIcon className={cn('size-8 shrink-0', meta.iconTone)} aria-hidden="true" />
-                <div className="min-w-0">
+                <div className="min-w-0 flex-1">
                   <p className="text-base font-bold">{meta.title}</p>
                   <p className="mt-1 font-mono text-sm">{result.code}</p>
-                  <p className="mt-1 text-xs opacity-75">
+                  {result.ticket && (
+                    <p className="mt-1 text-sm font-semibold">
+                      Attendee: {result.ticket.name} ({result.ticket.ticketName || result.ticket.ticket || 'Standard'})
+                    </p>
+                  )}
+
+                  {/* Pay at Gate status */}
+                  {result.order && (result.order.method === 'offline' || result.order.paymentMethod === 'offline') && (
+                    <div className="mt-3 rounded-xl border border-amber-400/40 bg-amber-500/15 p-3 text-xs text-amber-950 dark:text-amber-200">
+                      <div className="flex items-center justify-between font-bold">
+                        <span>🚪 Pay at the Gate Reservation</span>
+                        <span className="text-sm font-extrabold text-brand-600 dark:text-brand-400">
+                          Collect {formatCurrency(result.order.total)}
+                        </span>
+                      </div>
+                      <p className="mt-1 text-[11px] opacity-85">
+                        Collect payment via Cash or Mobile Money at the gate. Check-in records payment as settled.
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Gate compliance strike record */}
+                  {(() => {
+                    const email = result.ticket?.email || result.order?.buyer?.email
+                    const gate = email ? getGateStatus(email) : null
+                    if (!gate || gate.strikes === 0) return null
+                    return (
+                      <div className="mt-2 flex items-center gap-1.5 text-[11px] font-medium text-amber-700 dark:text-amber-400">
+                        <AlertTriangle className="size-3.5 shrink-0" />
+                        <span>Attendee Record: {gate.strikes} previous no-show warning. (Attended today - in good standing).</span>
+                      </div>
+                    )
+                  })()}
+
+                  <p className="mt-2 text-xs opacity-75">
                     {result.status === 'duplicate'
-                      ? 'This code was already scanned during this session — flagged for the door lead.'
+                      ? 'This ticket was already checked in. Flagged for door supervisor.'
                       : result.status === 'invalid'
-                        ? 'No matching ticket for this event. Look the guest up by order reference instead.'
+                        ? 'No matching ticket found for this event. Try looking up by order reference in Orders.'
                         : `Admitted at ${formatTime(result.at)}.`}
                   </p>
                 </div>
@@ -159,8 +204,7 @@ export default function Scanner() {
             )}
 
             <p className="mt-4 text-xs text-ink-400">
-              Try <code className="font-mono font-bold">EVP-7K2M9X-1</code> for a valid scan, scan it twice for a
-              duplicate, or enter anything else to see a failure.
+              Enter any real ticket code from your orders or guest list, or scan codes created during checkout.
             </p>
           </section>
 

@@ -13,6 +13,7 @@ export default defineConfig({
       '@context': fileURLToPath(new URL('./src/context', import.meta.url)),
       '@data': fileURLToPath(new URL('./src/data', import.meta.url)),
       '@lib': fileURLToPath(new URL('./src/lib', import.meta.url)),
+      '@api': fileURLToPath(new URL('./src/api', import.meta.url)),
     },
   },
   server: {

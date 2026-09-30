@@ -1,5 +1,6 @@
+import { useMemo, useCallback } from 'react'
 import { Link, useOutletContext } from 'react-router-dom'
-import { ArrowRight, CalendarCheck, Heart, Ticket, Wallet } from 'lucide-react'
+import { ArrowRight, CalendarCheck, CreditCard, Heart, Ticket } from 'lucide-react'
 import { Seo } from '@components/ui/Seo'
 import { DashboardShell } from '@components/dashboard/DashboardShell'
 import { StatCard } from '@components/ui/StatCard'
@@ -9,25 +10,64 @@ import { EmptyState } from '@components/ui/EmptyState'
 import { EventCard } from '@components/events/EventCard'
 import { useAuth } from '@context/AuthContext'
 import { useWishlist } from '@hooks/useWishlist'
-import { orders, notifications } from '@data/account'
-import { getEventById, upcomingEvents } from '@data/events'
+import { useUserTickets, useUserNotifications, useEvents, useUserOverview } from '@hooks/api'
 import { formatCurrency, formatDate, formatDateRange } from '@lib/utils'
 
 export default function DashboardOverview() {
   const { nav } = useOutletContext()
   const { user } = useAuth()
   const { ids: savedIds } = useWishlist()
+  const { data: ticketsData } = useUserTickets()
+  const { data: notificationsData } = useUserNotifications()
+  const { data: eventsData } = useEvents()
+  const { data: overviewData } = useUserOverview()
 
-  const upcoming = orders
-    .map((order) => ({ order, event: getEventById(order.eventId) }))
-    .filter(({ event }) => event && new Date(event.start) > new Date())
-    .sort((a, b) => new Date(a.event.start) - new Date(b.event.start))
+  const events = useMemo(() => {
+    if (Array.isArray(eventsData)) return eventsData
+    return eventsData?.events || eventsData?.data || []
+  }, [eventsData])
 
-  const totalTickets = orders.reduce((sum, o) => sum + o.items.reduce((s, i) => s + i.quantity, 0), 0)
-  const totalSpend = orders.reduce((sum, o) => sum + o.total, 0)
-  const unread = notifications.filter((n) => !n.read)
-  const recommended = upcomingEvents()
-    .filter((e) => !orders.some((o) => o.eventId === e.id))
+  const orders = useMemo(() => {
+    if (Array.isArray(ticketsData)) return ticketsData
+    return ticketsData?.tickets || ticketsData?.orders || ticketsData?.data || []
+  }, [ticketsData])
+
+  const notifications = useMemo(() => {
+    if (Array.isArray(notificationsData)) return notificationsData
+    return notificationsData?.notifications || notificationsData?.data || []
+  }, [notificationsData])
+
+  const getEventById = useCallback((id) => events.find((e) => e.id === id || e.slug === id), [events])
+
+  const enrichedOrders = orders
+    .map((order) => {
+      const event = order.event || getEventById(order.eventId) || {
+        id: order.eventId || order.id,
+        title: order.eventTitle || order.event_title || 'Booked Event',
+        start: order.eventStart || order.event_date || order.createdAt || new Date().toISOString(),
+        cover: order.eventCover || '/images/events/miss-dumba.jpg',
+        venue: { name: order.venueName || 'Wa', city: order.venueCity || 'Wa' },
+      }
+      return { order, event }
+    })
+
+  const upcoming = enrichedOrders
+    .filter(({ event }) => new Date(event.start || event.startDate) > new Date())
+    .sort((a, b) => new Date(a.event.start || a.event.startDate) - new Date(b.event.start || b.event.startDate))
+
+  const calculatedTickets = orders.reduce(
+    (sum, o) => sum + (o.items || []).reduce((s, i) => s + (i.quantity || 0), 0) || (o.quantity || 1),
+    0,
+  )
+  const calculatedSpend = orders.reduce((sum, o) => sum + (o.total || o.price || 0), 0)
+
+  const overview = overviewData?.overview || overviewData?.data || overviewData || {}
+  const totalTickets = overview.totalTickets ?? overview.totalTicketsSold ?? calculatedTickets
+  const totalSpend = overview.totalSpend ?? overview.walletBalance ?? calculatedSpend
+  const unread = notifications.filter((n) => !n.read && !n.isRead)
+  const bookedEventIds = new Set(orders.map((o) => o.eventId))
+  const recommended = events
+    .filter((e) => !bookedEventIds.has(e.id))
     .slice(0, 3)
 
   return (
@@ -47,9 +87,9 @@ export default function DashboardOverview() {
       >
         {/* Stats */}
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          <StatCard label="Tickets booked" value={totalTickets} icon={Ticket} tone="brand" delta={12} />
+          <StatCard label="Tickets booked" value={totalTickets} icon={Ticket} tone="brand" />
           <StatCard label="Upcoming events" value={upcoming.length} icon={CalendarCheck} tone="info" />
-          <StatCard label="Wallet balance" value={formatCurrency(user?.walletBalance ?? 0)} icon={Wallet} tone="success" />
+          <StatCard label="Total spent" value={formatCurrency(totalSpend)} icon={CreditCard} tone="success" />
           <StatCard label="Saved events" value={savedIds.length} icon={Heart} tone="accent" />
         </div>
 
@@ -126,7 +166,7 @@ export default function DashboardOverview() {
                       <Ticket className="size-4" aria-hidden="true" />
                     </span>
                     <span className="min-w-0 flex-1">
-                      <span className="block truncate font-semibold">{event?.title}</span>
+                      <span className="block truncate font-semibold">{event?.title || `Order #${order.id}`}</span>
                       <span className="block text-xs text-ink-400">{formatDate(order.placedAt)}</span>
                     </span>
                     <span className="shrink-0 font-bold">{formatCurrency(order.total)}</span>

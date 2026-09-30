@@ -1,208 +1,243 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { CalendarDays, MapPin, Search, Sparkles, Star, Ticket } from 'lucide-react'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import {
+  ArrowRight,
+  Briefcase,
+  Cpu,
+  HeartHandshake,
+  Landmark,
+  Music,
+  Palette,
+  Ticket,
+  Trophy,
+  UtensilsCrossed,
+} from 'lucide-react'
 import { Button } from '@components/ui/Button'
-import { Badge } from '@components/ui/Badge'
 import { Container } from '@components/ui/Section'
-import { AvatarGroup } from '@components/ui/Avatar'
-import { categories } from '@data/categories'
-import { eventCities, events } from '@data/events'
-import { calendarChip, formatCompact, formatCurrency } from '@lib/utils'
+import { usePrefersReducedMotion } from '@hooks/useMediaQuery'
+import { useLandingCms, useCategories } from '@hooks/api'
+import { cn } from '@lib/utils'
 
-const ATTENDEES = [
-  { name: 'Ada', avatar: '/images/avatars/avatar-1.svg' },
-  { name: 'Liam', avatar: '/images/avatars/avatar-2.svg' },
-  { name: 'Zoe', avatar: '/images/avatars/avatar-3.svg' },
-  { name: 'Noah', avatar: '/images/avatars/avatar-4.svg' },
-  { name: 'Mia', avatar: '/images/avatars/avatar-5.svg' },
-  { name: 'Kai', avatar: '/images/avatars/avatar-6.svg' },
+const CATEGORY_ICONS = {
+  music: Music,
+  culture: Landmark,
+  business: Briefcase,
+  sports: Trophy,
+  tech: Cpu,
+  arts: Palette,
+  food: UtensilsCrossed,
+  community: HeartHandshake,
+}
+
+const DEFAULT_CATEGORIES = [
+  { id: 'music', name: 'Music', icon: Music },
+  { id: 'culture', name: 'Culture & Festivals', icon: Landmark },
+  { id: 'business', name: 'Business & Networking', icon: Briefcase },
+  { id: 'sports', name: 'Sports & Fitness', icon: Trophy },
+  { id: 'tech', name: 'Technology & Gaming', icon: Cpu },
+  { id: 'arts', name: 'Arts & Theatre', icon: Palette },
+  { id: 'food', name: 'Food & Drink', icon: UtensilsCrossed },
+  { id: 'community', name: 'Community & Charity', icon: HeartHandshake },
 ]
 
-export function Hero() {
-  const navigate = useNavigate()
-  const [query, setQuery] = useState('')
-  const [city, setCity] = useState('')
-  const [when, setWhen] = useState('')
+/**
+ * Three looping clips crossfade behind the hero.
+ * Files live in `public/videos` (see the README there); until one loads the
+ * animated SVG in `poster` shows through, so the section is never blank.
+ */
+const HERO_MEDIA = [
+  { webp: '/videos/hero.webp', poster: '/images/hero/motion-1.svg' },
+  { webp: '/videos/hero2.webp', poster: '/images/hero/motion-2.svg' },
+  { webp: '/videos/hero3.webp', poster: '/images/hero/motion-3.svg' },
+]
 
-  const onSearch = (e) => {
-    e.preventDefault()
-    const params = new URLSearchParams()
-    if (query.trim()) params.set('q', query.trim())
-    if (city) params.set('city', city)
-    if (when) params.set('when', when)
-    navigate(`/events${params.toString() ? `?${params}` : ''}`)
+const ROTATE_MS = 7000
+
+/** A single masked line that rises into view. */
+function Reveal({ children, delay = 0, className, as: Tag = 'span' }) {
+  return (
+    <Tag className={cn('block overflow-hidden pb-[0.12em]', className)}>
+      <span className="block animate-reveal-up" style={{ animationDelay: `${delay}ms` }}>
+        {children}
+      </span>
+    </Tag>
+  )
+}
+
+export function Hero() {
+  const { data: cmsData } = useLandingCms()
+  const { data: categoriesData } = useCategories()
+
+  const categories = useMemo(() => {
+    const raw = Array.isArray(categoriesData)
+      ? categoriesData
+      : Array.isArray(categoriesData?.categories)
+        ? categoriesData.categories
+        : Array.isArray(categoriesData?.data)
+          ? categoriesData.data
+          : DEFAULT_CATEGORIES
+
+    return raw.map((cat) => ({
+      ...cat,
+      icon: cat.icon || CATEGORY_ICONS[cat.id] || Ticket,
+    }))
+  }, [categoriesData])
+
+  const hero = cmsData?.hero || cmsData?.data?.hero || {
+    badge: 'Wa · Upper West Region',
+    titleLine1: 'Find your next',
+    titleHighlight: 'unforgettable',
+    titleLine2: 'event',
+    description:
+      'Festivals, conferences and community nights across Wa and the Upper West — book in seconds and walk in with a QR code on your phone.',
+    primaryCtaText: 'Browse events',
+    secondaryCtaText: 'Create an event',
   }
 
-  const spotlight = events.find((e) => e.featured) ?? events[0]
-  const chip = calendarChip(spotlight.start)
+  const [active, setActive] = useState(0)
+  const [progress, setProgress] = useState(0)
+  const reducedMotion = usePrefersReducedMotion()
+  const frame = useRef(0)
+
+  useEffect(() => {
+    if (reducedMotion) return
+    const id = setInterval(() => setActive((i) => (i + 1) % HERO_MEDIA.length), ROTATE_MS)
+    return () => clearInterval(id)
+  }, [reducedMotion])
+
+  // Scroll-out parallax: the copy drifts up and fades as the next section arrives.
+  useEffect(() => {
+    if (reducedMotion) return
+
+    const onScroll = () => {
+      cancelAnimationFrame(frame.current)
+      frame.current = requestAnimationFrame(() => {
+        const travel = window.innerHeight * 0.85
+        setProgress(Math.min(1, Math.max(0, window.scrollY / travel)))
+      })
+    }
+
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      cancelAnimationFrame(frame.current)
+    }
+  }, [reducedMotion])
+
+  // Copy leaves faster than the backdrop, which is what sells the depth.
+  const copyStyle = reducedMotion
+    ? undefined
+    : {
+        transform: `translate3d(0, ${(-progress * 140).toFixed(1)}px, 0)`,
+        opacity: Math.max(0, 1 - progress * 1.35),
+        filter: progress > 0.35 ? `blur(${((progress - 0.35) * 8).toFixed(1)}px)` : undefined,
+      }
+
+  // The video itself drifts a little slower for a layered parallax.
+  const mediaStyle = reducedMotion
+    ? undefined
+    : { transform: `translate3d(0, ${(progress * 48).toFixed(1)}px, 0) scale(${(1 + progress * 0.06).toFixed(3)})` }
 
   return (
-    <section className="relative overflow-hidden bg-ink-950 text-white">
-      {/* Layered background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-brand-950 via-ink-950 to-ink-950" aria-hidden="true" />
-      <div
-        className="absolute inset-0 bg-grid-dark [background-size:56px_56px] [mask-image:radial-gradient(ellipse_at_50%_0%,black,transparent_72%)]"
-        aria-hidden="true"
-      />
-      <div
-        className="absolute -left-32 -top-40 size-[36rem] rounded-full bg-brand-600/30 blur-[120px]"
-        aria-hidden="true"
-      />
-      <div
-        className="absolute -bottom-56 -right-24 size-[34rem] rounded-full bg-accent-500/20 blur-[120px]"
-        aria-hidden="true"
-      />
+    <>
+      {/*
+        Fixed backdrop: it stays pinned to the viewport while the page scrolls,
+        so every following section slides over it. Sits behind the content
+        layer, which is opaque from <StatsStrip> onwards.
+      */}
+      <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden" aria-hidden="true">
+        <div className="absolute inset-0 will-change-transform" style={mediaStyle}>
+          {HERO_MEDIA.map((media, i) => (
+            <div
+              key={media.webp}
+              className={cn(
+                'absolute inset-0 transition-opacity duration-[1600ms] ease-in-out',
+                i === active ? 'opacity-100' : 'opacity-0',
+              )}
+            >
+              <img
+                src={media.webp}
+                alt=""
+                loading={i === 0 ? 'eager' : 'lazy'}
+                className="absolute inset-0 size-full object-cover"
+                onError={(e) => {
+                  e.currentTarget.src = media.poster
+                }}
+              />
+            </div>
+          ))}
+        </div>
 
-      <Container className="relative py-16 sm:py-20 lg:py-28">
-        <div className="grid items-center gap-14 lg:grid-cols-[1.05fr_1fr] lg:gap-12">
-          {/* Copy */}
-          <div className="animate-fade-up">
-            <Badge tone="glass" size="lg" icon={Sparkles} className="mb-6">
-              Over {formatCompact(2400000)} tickets issued worldwide
-            </Badge>
+        {/* Legibility scrim */}
+        <div className="absolute inset-0 bg-gradient-to-br from-ink-950/85 via-ink-950/55 to-ink-950/85" />
+        <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-ink-950 to-transparent" />
+      </div>
 
-            <h1 className="text-balance text-4xl font-extrabold leading-[1.08] tracking-tight sm:text-5xl lg:text-6xl xl:text-[4.1rem]">
-              Find your next{' '}
-              <span className="relative whitespace-nowrap">
-                <span className="bg-gradient-to-r from-brand-300 via-brand-200 to-accent-300 bg-clip-text text-transparent">
-                  unforgettable
-                </span>
-                <svg
-                  className="absolute -bottom-2 left-0 h-3 w-full text-accent-400"
-                  viewBox="0 0 300 12"
-                  fill="none"
-                  aria-hidden="true"
-                  preserveAspectRatio="none"
-                >
-                  <path
-                    d="M2 9C60 3 120 2 180 4c40 1.5 80 4 118 5"
-                    stroke="currentColor"
-                    strokeWidth="3.5"
-                    strokeLinecap="round"
-                  />
-                </svg>
-              </span>{' '}
-              event
+      <section className="relative z-10 flex min-h-[100svh] items-center text-white lg:items-start">
+        <Container className="w-full py-24 lg:pt-[17vh]">
+          <div
+            className="flex flex-col items-center text-center will-change-transform lg:max-w-3xl lg:items-start lg:text-left"
+            style={copyStyle}
+          >
+            <Reveal delay={80}>
+              <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/[.08] px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wider text-white/80 backdrop-blur-md">
+                {hero.badge}
+              </span>
+            </Reveal>
+
+            <h1 className="mt-6 text-balance text-4xl font-extrabold leading-[1.06] tracking-tight sm:text-5xl lg:text-6xl xl:text-7xl">
+              <Reveal delay={200}>{hero.titleLine1}</Reveal>
+              <Reveal delay={330}>
+                <span className="bg-gradient-to-r from-brand-200 via-white to-accent-300 bg-clip-text text-transparent">
+                  {hero.titleHighlight}
+                </span>{' '}
+                {hero.titleLine2}
+              </Reveal>
             </h1>
 
-            <p className="mt-6 max-w-xl text-pretty text-base leading-relaxed text-white/70 sm:text-lg">
-              Concerts, conferences, dinners and everything between — discover what is happening near you,
-              book in seconds and walk in with a QR code on your phone.
-            </p>
+            <Reveal delay={470} className="mt-6 max-w-xl">
+              <span className="block text-pretty text-base leading-relaxed text-white/70 sm:text-lg">
+                {hero.description}
+              </span>
+            </Reveal>
 
-            {/* Search */}
-            <form
-              onSubmit={onSearch}
-              className="mt-8 rounded-2xl border border-white/15 bg-white/[.07] p-2 backdrop-blur-xl sm:rounded-[1.4rem]"
-            >
-              <div className="grid gap-2 sm:grid-cols-[1.4fr_1fr_1fr_auto]">
-                <div className="relative">
-                  <Search className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-white/50" aria-hidden="true" />
-                  <label htmlFor="hero-q" className="sr-only">
-                    Search events
-                  </label>
-                  <input
-                    id="hero-q"
-                    value={query}
-                    onChange={(e) => setQuery(e.target.value)}
-                    placeholder="Search events…"
-                    className="h-12 w-full rounded-xl border-0 bg-white/[.06] pl-10 pr-3 text-sm text-white placeholder:text-white/45 focus:bg-white/10 focus:outline-none focus:ring-2 focus:ring-brand-400/60"
-                  />
-                </div>
-
-                <div className="relative">
-                  <MapPin className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-white/50" aria-hidden="true" />
-                  <label htmlFor="hero-city" className="sr-only">
-                    City
-                  </label>
-                  <select
-                    id="hero-city"
-                    value={city}
-                    onChange={(e) => setCity(e.target.value)}
-                    className="h-12 w-full cursor-pointer appearance-none rounded-xl border-0 bg-white/[.06] pl-10 pr-3 text-sm text-white focus:bg-white/10 focus:outline-none focus:ring-2 focus:ring-brand-400/60"
-                  >
-                    <option value="" className="text-ink-900">
-                      Anywhere
-                    </option>
-                    {eventCities().map((c) => (
-                      <option key={c} value={c} className="text-ink-900">
-                        {c}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className="relative">
-                  <CalendarDays className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-white/50" aria-hidden="true" />
-                  <label htmlFor="hero-when" className="sr-only">
-                    When
-                  </label>
-                  <select
-                    id="hero-when"
-                    value={when}
-                    onChange={(e) => setWhen(e.target.value)}
-                    className="h-12 w-full cursor-pointer appearance-none rounded-xl border-0 bg-white/[.06] pl-10 pr-3 text-sm text-white focus:bg-white/10 focus:outline-none focus:ring-2 focus:ring-brand-400/60"
-                  >
-                    <option value="" className="text-ink-900">
-                      Any date
-                    </option>
-                    <option value="today" className="text-ink-900">
-                      Today
-                    </option>
-                    <option value="weekend" className="text-ink-900">
-                      This weekend
-                    </option>
-                    <option value="month" className="text-ink-900">
-                      This month
-                    </option>
-                  </select>
-                </div>
-
-                <Button type="submit" size="lg" className="h-12 sm:px-6" iconLeft={Search}>
-                  <span className="sm:hidden lg:inline">Search</span>
+            <Reveal delay={600} className="mt-9 w-full sm:w-auto">
+              <span className="flex flex-col gap-3 sm:flex-row">
+                <Button to="/events" size="xl" iconLeft={Ticket}>
+                  {hero.primaryCtaText || 'Browse events'}
                 </Button>
-              </div>
-            </form>
+                <Button
+                  to="/organizer"
+                  size="xl"
+                  variant="outline"
+                  iconRight={ArrowRight}
+                  className="border-white/25 bg-white/5 text-white backdrop-blur-md hover:border-white/40 hover:bg-white/15 hover:text-white"
+                >
+                  {hero.secondaryCtaText || 'Create an event'}
+                </Button>
+              </span>
+            </Reveal>
 
             {/* Category shortcuts */}
-            <div className="mt-6 flex flex-wrap items-center gap-2">
-              <span className="text-xs font-semibold uppercase tracking-wider text-white/45">Popular:</span>
-              {categories.slice(0, 5).map((category) => (
-                <Button
-                  key={category.id}
-                  to={`/events?category=${category.id}`}
-                  size="xs"
-                  variant="ghost"
-                  iconLeft={category.icon}
-                  className="rounded-full border border-white/15 text-white/80 hover:bg-white/10 hover:text-white"
-                >
-                  {category.name}
-                </Button>
-              ))}
-            </div>
-
-            {/* Social proof */}
-            <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-4">
-              <div className="flex items-center gap-3">
-                <AvatarGroup people={ATTENDEES} max={5} size="sm" />
-                <p className="text-sm text-white/70">
-                  <span className="font-bold text-white">92,000+</span> people booked this month
-                </p>
-              </div>
-              <div className="flex items-center gap-1.5">
-                {Array.from({ length: 5 }, (_, i) => (
-                  <Star key={i} className="size-4 text-amber-400" fill="currentColor" aria-hidden="true" />
+            <Reveal delay={720} className="mt-12 w-full">
+              <span className="flex flex-wrap justify-center gap-2 lg:justify-start">
+                {categories.slice(0, 8).map((category) => (
+                  <Button
+                    key={category.id}
+                    to={`/events?category=${category.id}`}
+                    size="xs"
+                    variant="ghost"
+                    iconLeft={category.icon}
+                    className="rounded-full border border-white/20 bg-white/[.06] text-white/80 backdrop-blur-md hover:bg-white/15 hover:text-white"
+                  >
+                    {category.name}
+                  </Button>
                 ))}
-                <span className="ml-1 text-sm text-white/70">
-                  <span className="font-bold text-white">4.9</span>/5 average rating
-                </span>
-              </div>
-            </div>
+              </span>
+            </Reveal>
           </div>
-
-         
-        </div>
-      </Container>
-    </section>
+        </Container>
+      </section>
+    </>
   )
 }

@@ -8,18 +8,29 @@ import { Badge } from '@components/ui/Badge'
 import { Button } from '@components/ui/Button'
 import { Rating } from '@components/ui/Rating'
 import { EmptyState } from '@components/ui/EmptyState'
-import { organizers } from '@data/organizers'
-import { eventsByOrganizer } from '@data/events'
+import { useOrganizers, useEvents } from '@hooks/api'
 import { formatCompact } from '@lib/utils'
 
 export default function Organizers() {
   const [query, setQuery] = useState('')
+  const { data: organizersData, isLoading: organizersLoading } = useOrganizers()
+  const { data: eventsData } = useEvents()
+
+  const organizers = useMemo(() => {
+    if (Array.isArray(organizersData)) return organizersData
+    return organizersData?.organizers || organizersData?.data || []
+  }, [organizersData])
+
+  const allEvents = useMemo(() => {
+    if (Array.isArray(eventsData)) return eventsData
+    return eventsData?.events || eventsData?.data || []
+  }, [eventsData])
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase()
     if (!q) return organizers
-    return organizers.filter((o) => `${o.name} ${o.location} ${o.bio}`.toLowerCase().includes(q))
-  }, [query])
+    return organizers.filter((o) => `${o.name || ''} ${o.location || o.city || ''} ${o.bio || ''}`.toLowerCase().includes(q))
+  }, [query, organizers])
 
   return (
     <>
@@ -66,7 +77,9 @@ export default function Organizers() {
           ) : (
             <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {filtered.map((organizer) => {
-                const liveEvents = eventsByOrganizer(organizer.id).length
+                const liveEvents = allEvents.filter(
+                  (e) => e.organizerId === organizer.id || e.organizer?.id === organizer.id,
+                ).length
 
                 return (
                   <article
@@ -137,7 +150,7 @@ export default function Organizers() {
                 Publish your first event in minutes. You only pay commission on tickets you actually sell.
               </p>
             </div>
-            <Button to="/organizer/events/new" size="lg" variant="accent" iconRight={ArrowRight} className="shrink-0">
+            <Button to="/organizer" size="lg" variant="accent" iconRight={ArrowRight} className="shrink-0">
               Start organizing
             </Button>
           </div>

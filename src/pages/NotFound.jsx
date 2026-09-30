@@ -1,13 +1,24 @@
+import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowLeft, CalendarSearch, Home as HomeIcon, LifeBuoy } from 'lucide-react'
 import { Seo } from '@components/ui/Seo'
 import { Container, Section } from '@components/ui/Section'
 import { Button } from '@components/ui/Button'
 import { EventCard } from '@components/events/EventCard'
-import { upcomingEvents } from '@data/events'
+import { useEvents } from '@hooks/api'
 
 export default function NotFound() {
-  const suggestions = upcomingEvents().slice(0, 3)
+  const { data: eventsData } = useEvents()
+  const events = useMemo(() => {
+    if (Array.isArray(eventsData)) return eventsData
+    return eventsData?.events || eventsData?.data || []
+  }, [eventsData])
+
+  const suggestions = useMemo(() => {
+    return [...events]
+      .sort((a, b) => new Date(a.start) - new Date(b.start))
+      .slice(0, 3)
+  }, [events])
 
   return (
     <>

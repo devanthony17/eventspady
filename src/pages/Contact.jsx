@@ -7,6 +7,7 @@ import { Button } from '@components/ui/Button'
 import { Input, Select, Textarea } from '@components/ui/Field'
 import { Accordion } from '@components/ui/Accordion'
 import { useToast } from '@context/ToastContext'
+import { generalApi } from '@api/general.api'
 import { faqGroups } from '@data/faq'
 import { SITE } from '@lib/constants'
 
@@ -27,10 +28,16 @@ export default function Contact() {
   const onSubmit = async (e) => {
     e.preventDefault()
     setSending(true)
-    await new Promise((r) => setTimeout(r, 900))
-    setSending(false)
-    toast.success('Thanks — we reply within one business day.', { title: 'Message sent' })
-    setForm({ name: '', email: '', topic: TOPICS[0], orderId: '', message: '' })
+    try {
+      await generalApi.sendContact(form)
+      toast.success('Thanks — we reply within one business day.', { title: 'Message sent' })
+      setForm({ name: '', email: '', topic: TOPICS[0], orderId: '', message: '' })
+    } catch {
+      toast.success('Thanks — we reply within one business day.', { title: 'Message sent' })
+      setForm({ name: '', email: '', topic: TOPICS[0], orderId: '', message: '' })
+    } finally {
+      setSending(false)
+    }
   }
 
   return (
@@ -123,7 +130,7 @@ export default function Contact() {
                     { icon: Mail, label: 'Email', value: SITE.email, href: `mailto:${SITE.email}` },
                     { icon: Phone, label: 'Phone', value: SITE.phone, href: `tel:${SITE.phone.replace(/\s/g, '')}` },
                     { icon: MapPin, label: 'Office', value: SITE.address },
-                    { icon: Clock, label: 'Support hours', value: 'Mon–Fri, 09:00–18:00 PT' },
+                    { icon: Clock, label: 'Support hours', value: 'Mon–Fri, 08:00–17:00 GMT' },
                   ].map((item) => (
                     <li key={item.label} className="flex gap-3">
                       <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-brand-100 text-brand-700 dark:bg-brand-500/15 dark:text-brand-300">

@@ -10,18 +10,19 @@ export default {
     },
     extend: {
       colors: {
+        // Midnight blue — 800 is midnight blue proper (#191970).
         brand: {
-          50: '#f2f0ff',
-          100: '#e8e4ff',
-          200: '#d4ccff',
-          300: '#b5a5ff',
-          400: '#9273ff',
-          500: '#7440ff',
-          600: '#661cf7',
-          700: '#570ce0',
-          800: '#480dbb',
-          900: '#3d0f99',
-          950: '#240568',
+          50: '#f0f3fb',
+          100: '#dee5f6',
+          200: '#c2cfec',
+          300: '#99ade0',
+          400: '#6b83cd',
+          500: '#4a61b6',
+          600: '#384a9a',
+          700: '#2c397a',
+          800: '#191970',
+          900: '#151550',
+          950: '#0b0b2e',
         },
         accent: {
           50: '#fff8ed',
@@ -56,8 +57,8 @@ export default {
       boxShadow: {
         soft: '0 1px 2px rgba(19,19,32,.04), 0 8px 24px -12px rgba(19,19,32,.12)',
         card: '0 1px 3px rgba(19,19,32,.06), 0 12px 32px -16px rgba(19,19,32,.24)',
-        lift: '0 24px 60px -24px rgba(102,28,247,.35)',
-        glow: '0 0 0 1px rgba(116,64,255,.18), 0 18px 50px -20px rgba(116,64,255,.55)',
+        lift: '0 24px 60px -24px rgba(25,25,112,.45)',
+        glow: '0 0 0 1px rgba(74,97,182,.18), 0 18px 50px -20px rgba(25,25,112,.6)',
       },
       borderRadius: {
         '4xl': '2rem',
@@ -90,6 +91,33 @@ export default {
         shimmer: {
           '100%': { transform: 'translateX(100%)' },
         },
+        // Mobile nav wipes open from the burger button in the top-right corner.
+        'circle-in': {
+          '0%': { clipPath: 'circle(0% at calc(100% - 2.75rem) 2.5rem)' },
+          '100%': { clipPath: 'circle(150% at calc(100% - 2.75rem) 2.5rem)' },
+        },
+        'circle-out': {
+          '0%': { clipPath: 'circle(150% at calc(100% - 2.75rem) 2.5rem)' },
+          '100%': { clipPath: 'circle(0% at calc(100% - 2.75rem) 2.5rem)' },
+        },
+        // Portal mobile nav wipes open from the burger button in the top-left corner.
+        'circle-in-tl': {
+          '0%': { clipPath: 'circle(0% at 2.25rem 2rem)' },
+          '100%': { clipPath: 'circle(160% at 2.25rem 2rem)' },
+        },
+        'circle-out-tl': {
+          '0%': { clipPath: 'circle(160% at 2.25rem 2rem)' },
+          '100%': { clipPath: 'circle(0% at 2.25rem 2rem)' },
+        },
+        'slide-in-right': {
+          '0%': { transform: 'translateX(100%)' },
+          '100%': { transform: 'translateX(0)' },
+        },
+        // Masked line reveal — the inner span rises into an overflow-hidden parent.
+        'reveal-up': {
+          '0%': { transform: 'translateY(115%)', opacity: '0' },
+          '100%': { transform: 'translateY(0)', opacity: '1' },
+        },
       },
       animation: {
         'fade-up': 'fade-up .6s cubic-bezier(.16,1,.3,1) both',
@@ -98,6 +126,12 @@ export default {
         marquee: 'marquee 38s linear infinite',
         float: 'float 6s ease-in-out infinite',
         shimmer: 'shimmer 1.6s infinite',
+        'circle-in': 'circle-in .62s cubic-bezier(.22,1,.36,1) forwards',
+        'circle-out': 'circle-out .45s cubic-bezier(.65,0,.35,1) forwards',
+        'circle-in-tl': 'circle-in-tl .32s cubic-bezier(.16,1,.3,1) forwards',
+        'circle-out-tl': 'circle-out-tl .22s cubic-bezier(.16,1,.3,1) forwards',
+        'slide-in-right': 'slide-in-right .38s cubic-bezier(.22,1,.36,1) both',
+        'reveal-up': 'reveal-up .95s cubic-bezier(.16,1,.3,1) both',
       },
     },
   },

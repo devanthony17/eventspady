@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { ArrowRight, Check, Minus } from 'lucide-react'
 import { Seo } from '@components/ui/Seo'
 import { PageHero } from '@components/layout/PageHero'
@@ -6,6 +6,7 @@ import { Container, Section, SectionHeading } from '@components/ui/Section'
 import { Button } from '@components/ui/Button'
 import { Badge } from '@components/ui/Badge'
 import { Accordion } from '@components/ui/Accordion'
+import { usePlans } from '@hooks/api'
 import { formatCurrency, cn } from '@lib/utils'
 
 const PLANS = [
@@ -18,7 +19,7 @@ const PLANS = [
       'Unlimited free events',
       'All four ticket types',
       'QR check-in with the scanner app',
-      'Stripe and PayPal checkout',
+      'MTN MoMo and Paystack checkout',
       'Email support',
     ],
     missing: ['Custom branding', 'Priority payouts', 'Dedicated manager'],
@@ -65,13 +66,21 @@ const FAQ = [
   { q: 'Is it really free to list an event?', a: 'Yes. Creating an account and publishing listings costs nothing. You only pay commission on tickets you actually sell, and free tickets carry no commission at all.' },
   { q: 'When do I get paid?', a: 'Payouts are released after your event completes, minus commission and any refunds. Growth and Scale plans settle within 24 hours of the event ending; Starter settles in 3–5 business days.' },
   { q: 'Who pays the commission — me or the attendee?', a: 'That is your choice. You can absorb it into your ticket price, or pass it on as a visible service fee at checkout. Either way it is itemised on every order.' },
-  { q: 'What about payment processor fees?', a: 'Stripe, PayPal, Flutterwave and Razorpay each charge their own processing fee, billed separately by them. Wallet payments and cash at the door carry no processor fee.' },
+  { q: 'What about payment processor fees?', a: 'MTN MoMo, Telecel Cash, Paystack and Flutterwave each charge their own standard processing fee, billed separately by them. Cash payments at the door carry no processor fee.' },
   { q: 'Can I switch plans?', a: 'Any time, and it takes effect on your next event. Events already on sale keep the commission rate they were published with.' },
 ]
 
 export default function Pricing() {
+  const { data: plansData } = usePlans()
+  const plans = useMemo(() => {
+    if (Array.isArray(plansData) && plansData.length > 0) return plansData
+    if (Array.isArray(plansData?.plans) && plansData.plans.length > 0) return plansData.plans
+    if (Array.isArray(plansData?.data) && plansData.data.length > 0) return plansData.data
+    return PLANS
+  }, [plansData])
+
   const [volume, setVolume] = useState(500)
-  const [price, setPrice] = useState(45)
+  const [price, setPrice] = useState(120)
 
   const gross = volume * price
 
@@ -94,7 +103,7 @@ export default function Pricing() {
       <Section>
         <Container>
           <div className="grid gap-6 lg:grid-cols-3">
-            {PLANS.map((plan) => (
+            {plans.map((plan) => (
               <article
                 key={plan.id}
                 className={cn(
@@ -139,7 +148,7 @@ export default function Pricing() {
                 </ul>
 
                 <Button
-                  to={plan.id === 'scale' ? '/contact' : '/organizer/events/new'}
+                  to={plan.id === 'scale' ? '/contact' : '/organizer'}
                   fullWidth
                   size="lg"
                   variant={plan.popular ? 'primary' : 'outline'}
@@ -188,9 +197,9 @@ export default function Pricing() {
                 <input
                   id="price"
                   type="range"
-                  min="5"
-                  max="300"
-                  step="5"
+                  min="10"
+                  max="1500"
+                  step="10"
                   value={price}
                   onChange={(e) => setPrice(Number(e.target.value))}
                   className="w-full accent-brand-600"
@@ -244,7 +253,7 @@ export default function Pricing() {
               Publish your first event on Starter. Nothing is charged until a paid ticket is sold, and you can
               switch plans whenever you like.
             </p>
-            <Button to="/organizer/events/new" variant="accent" size="lg" iconRight={ArrowRight}>
+            <Button to="/organizer" variant="accent" size="lg" iconRight={ArrowRight}>
               Create your first event
             </Button>
           </div>

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 54" width="220" height="54" fill="none">
+  <defs>
+    <linearGradient id="waNaaGold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FBBF24"/>
+      <stop offset="60%" stop-color="#D97706"/>
+      <stop offset="100%" stop-color="#92400E"/>
+    </linearGradient>
+  </defs>
+  <!-- Palace Emblem: Royal Stool & Traditional Finial -->
+  <g transform="translate(6, 7)">
+    <rect x="2" y="2" width="36" height="36" rx="10" fill="#FEF3C7" fill-opacity="0.15" stroke="url(#waNaaGold)" stroke-width="1.5"/>
+    <!-- Traditional Stool Curve -->
+    <path d="M10 30h20M12 26c4-1 12-1 16 0M20 18v8M14 18c3 4 9 4 12 0M12 14h16" stroke="url(#waNaaGold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="20" cy="11" r="2.5" fill="#DC2626"/>
+  </g>
+  <!-- Wordmark -->
+  <text x="52" y="25" font-family="'Plus Jakarta Sans', Inter, system-ui, sans-serif" font-size="13.5" font-weight="800" letter-spacing="0.5" fill="#D97706">WA NAA PALACE</text>
+  <text x="52" y="38" font-family="'Plus Jakarta Sans', Inter, system-ui, sans-serif" font-size="8.5" font-weight="600" letter-spacing="1.8" fill="#94A3B8">CULTURAL TRUST • WA</text>
+</svg>

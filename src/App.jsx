@@ -1,11 +1,14 @@
 import { Suspense, lazy } from 'react'
-import { Outlet, Route, Routes } from 'react-router-dom'
+import { Navigate, Outlet, Route, Routes } from 'react-router-dom'
 import { Layout, ScrollToTop } from '@components/layout/Layout'
 import { RequireAuth } from '@components/auth/RequireAuth'
 import { ThemeProvider } from '@context/ThemeContext'
+import { StoreProvider } from '@context/StoreContext'
 import { AuthProvider } from '@context/AuthContext'
 import { CartProvider } from '@context/CartContext'
 import { ToastProvider } from '@context/ToastContext'
+import { LocationProvider } from '@context/LocationContext'
+import { WishlistProvider } from '@context/WishlistContext'
 
 // Eager: the landing path and the two highest-traffic pages.
 import Home from '@pages/Home'
@@ -33,24 +36,35 @@ const Maintenance = lazy(() => import('@pages/Maintenance'))
 const Login = lazy(() => import('@pages/auth/Login'))
 const Register = lazy(() => import('@pages/auth/Register'))
 const ForgotPassword = lazy(() => import('@pages/auth/ForgotPassword'))
+const AdminLogin = lazy(() => import('@pages/admin/AdminLogin'))
 
-const DashboardLayout = lazy(() => import('@pages/dashboard/DashboardLayout'))
-const DashboardOverview = lazy(() => import('@pages/dashboard/Overview'))
-const MyTickets = lazy(() => import('@pages/dashboard/MyTickets'))
-const SavedEvents = lazy(() => import('@pages/dashboard/SavedEvents'))
-const WalletPage = lazy(() => import('@pages/dashboard/WalletPage'))
-const Notifications = lazy(() => import('@pages/dashboard/Notifications'))
-const Profile = lazy(() => import('@pages/dashboard/Profile'))
-const DashboardSettings = lazy(() => import('@pages/dashboard/Settings'))
+// Attendee Portal (eagerly loaded for instant 0ms portal navigation)
+import DashboardLayout from '@pages/dashboard/DashboardLayout'
+import DashboardOverview from '@pages/dashboard/Overview'
+import MyTickets from '@pages/dashboard/MyTickets'
+import SavedEvents from '@pages/dashboard/SavedEvents'
+import Notifications from '@pages/dashboard/Notifications'
+import Profile from '@pages/dashboard/Profile'
+import DashboardSettings from '@pages/dashboard/Settings'
 
-const OrganizerLayout = lazy(() => import('@pages/organizer/OrganizerLayout'))
-const OrganizerOverview = lazy(() => import('@pages/organizer/Overview'))
-const MyEvents = lazy(() => import('@pages/organizer/MyEvents'))
-const CreateEvent = lazy(() => import('@pages/organizer/CreateEvent'))
-const Orders = lazy(() => import('@pages/organizer/Orders'))
-const Coupons = lazy(() => import('@pages/organizer/Coupons'))
-const Guests = lazy(() => import('@pages/organizer/Guests'))
-const Scanner = lazy(() => import('@pages/organizer/Scanner'))
+// Organizer Portal (eagerly loaded for instant 0ms portal navigation)
+import OrganizerLayout from '@pages/organizer/OrganizerLayout'
+import OrganizerOverview from '@pages/organizer/Overview'
+import MyEvents from '@pages/organizer/MyEvents'
+import CreateEvent from '@pages/organizer/CreateEvent'
+import Orders from '@pages/organizer/Orders'
+import Coupons from '@pages/organizer/Coupons'
+import Guests from '@pages/organizer/Guests'
+import Scanner from '@pages/organizer/Scanner'
+
+// Admin Portal (eagerly loaded for instant 0ms portal navigation)
+import AdminLayout from '@pages/admin/AdminLayout'
+import AdminOverview from '@pages/admin/Overview'
+import AdminOrganizers from '@pages/admin/Organizers'
+import AdminEvents from '@pages/admin/EventsManagement'
+import AdminUsers from '@pages/admin/UsersManagement'
+import AdminOrders from '@pages/admin/OrdersManagement'
+import AdminCms from '@pages/admin/LandingPageCms'
 
 function RouteFallback() {
   return (
@@ -64,78 +78,97 @@ export default function App() {
   return (
     <ThemeProvider>
       <ToastProvider>
-        <AuthProvider>
-          <CartProvider>
-            <Suspense fallback={<RouteFallback />}>
-              <Routes>
-                {/* Full-screen routes render outside the site chrome */}
-                <Route element={<ScrollToTopWrapper />}>
-                  <Route path="/login" element={<Login />} />
-                  <Route path="/register" element={<Register />} />
-                  <Route path="/forgot-password" element={<ForgotPassword />} />
-                  <Route path="/maintenance" element={<Maintenance />} />
-                </Route>
+        <LocationProvider>
+          <WishlistProvider>
+            <StoreProvider>
+              <AuthProvider>
+                <CartProvider>
+              <Suspense fallback={<RouteFallback />}>
+                <Routes>
+                  {/* Full-screen routes and dedicated portals render outside the marketing Layout */}
+                  <Route element={<ScrollToTopWrapper />}>
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/register" element={<Register />} />
+                    <Route path="/forgot-password" element={<ForgotPassword />} />
+                    <Route path="/maintenance" element={<Maintenance />} />
+                    <Route path="/admin/login" element={<AdminLogin />} />
 
-                <Route element={<Layout />}>
-                  <Route index element={<Home />} />
+                    {/* Attendee dashboard */}
+                    <Route element={<RequireAuth />}>
+                      <Route path="/dashboard" element={<DashboardLayout />}>
+                        <Route index element={<DashboardOverview />} />
+                        <Route path="tickets" element={<MyTickets />} />
+                        <Route path="saved" element={<SavedEvents />} />
+                        <Route path="wallet" element={<Navigate to="/dashboard" replace />} />
+                        <Route path="notifications" element={<Notifications />} />
+                        <Route path="profile" element={<Profile />} />
+                        <Route path="settings" element={<DashboardSettings />} />
+                      </Route>
+                    </Route>
 
-                  {/* Events */}
-                  <Route path="events" element={<Events />} />
-                  <Route path="events/:slug" element={<EventDetail />} />
+                    {/* Organizer panel */}
+                    <Route element={<RequireAuth role="organizer" />}>
+                      <Route path="/organizer" element={<OrganizerLayout />}>
+                        <Route index element={<OrganizerOverview />} />
+                        <Route path="events" element={<MyEvents />} />
+                        <Route path="events/new" element={<CreateEvent />} />
+                        <Route path="orders" element={<Orders />} />
+                        <Route path="coupons" element={<Coupons />} />
+                        <Route path="guests" element={<Guests />} />
+                        <Route path="scanner" element={<Scanner />} />
+                      </Route>
+                    </Route>
 
-                  {/* Organizers */}
-                  <Route path="organizers" element={<Organizers />} />
-                  <Route path="organizers/:organizerId" element={<OrganizerProfile />} />
-
-                  {/* Booking */}
-                  <Route path="checkout" element={<Checkout />} />
-                  <Route path="order/:orderId" element={<OrderConfirmation />} />
-
-                  {/* Content */}
-                  <Route path="blog" element={<Blog />} />
-                  <Route path="blog/:slug" element={<BlogPost />} />
-                  <Route path="about" element={<About />} />
-                  <Route path="how-it-works" element={<HowItWorks />} />
-                  <Route path="pricing" element={<Pricing />} />
-                  <Route path="faq" element={<Faq />} />
-                  <Route path="contact" element={<Contact />} />
-                  <Route path="feedback" element={<Feedback />} />
-                  <Route path="privacy" element={<Privacy />} />
-                  <Route path="terms" element={<Terms />} />
-
-                  {/* Attendee dashboard */}
-                  <Route element={<RequireAuth />}>
-                    <Route path="dashboard" element={<DashboardLayout />}>
-                      <Route index element={<DashboardOverview />} />
-                      <Route path="tickets" element={<MyTickets />} />
-                      <Route path="saved" element={<SavedEvents />} />
-                      <Route path="wallet" element={<WalletPage />} />
-                      <Route path="notifications" element={<Notifications />} />
-                      <Route path="profile" element={<Profile />} />
-                      <Route path="settings" element={<DashboardSettings />} />
+                    {/* Admin Console & CMS Command Center */}
+                    <Route element={<RequireAuth role="admin" />}>
+                      <Route path="/admin" element={<AdminLayout />}>
+                        <Route index element={<AdminOverview />} />
+                        <Route path="organizers" element={<AdminOrganizers />} />
+                        <Route path="events" element={<AdminEvents />} />
+                        <Route path="users" element={<AdminUsers />} />
+                        <Route path="orders" element={<AdminOrders />} />
+                        <Route path="cms" element={<AdminCms />} />
+                      </Route>
                     </Route>
                   </Route>
 
-                  {/* Organizer panel */}
-                  <Route element={<RequireAuth />}>
-                    <Route path="organizer" element={<OrganizerLayout />}>
-                      <Route index element={<OrganizerOverview />} />
-                      <Route path="events" element={<MyEvents />} />
-                      <Route path="events/new" element={<CreateEvent />} />
-                      <Route path="orders" element={<Orders />} />
-                      <Route path="coupons" element={<Coupons />} />
-                      <Route path="guests" element={<Guests />} />
-                      <Route path="scanner" element={<Scanner />} />
-                    </Route>
-                  </Route>
+                  <Route element={<Layout />}>
+                    <Route index element={<Home />} />
 
-                  <Route path="*" element={<NotFound />} />
-                </Route>
-              </Routes>
-            </Suspense>
-          </CartProvider>
-        </AuthProvider>
-      </ToastProvider>
+                    {/* Events */}
+                    <Route path="events" element={<Events />} />
+                    <Route path="events/:slug" element={<EventDetail />} />
+
+                    {/* Organizers */}
+                    <Route path="organizers" element={<Organizers />} />
+                    <Route path="organizers/:organizerId" element={<OrganizerProfile />} />
+
+                    {/* Booking */}
+                    <Route path="checkout" element={<Checkout />} />
+                    <Route path="order/:orderId" element={<OrderConfirmation />} />
+
+                    {/* Content */}
+                    <Route path="blog" element={<Blog />} />
+                    <Route path="blog/:slug" element={<BlogPost />} />
+                    <Route path="about" element={<About />} />
+                    <Route path="how-it-works" element={<HowItWorks />} />
+                    <Route path="pricing" element={<Pricing />} />
+                    <Route path="faq" element={<Faq />} />
+                    <Route path="contact" element={<Contact />} />
+                    <Route path="feedback" element={<Feedback />} />
+                    <Route path="privacy" element={<Privacy />} />
+                    <Route path="terms" element={<Terms />} />
+
+                    <Route path="*" element={<NotFound />} />
+                  </Route>
+                </Routes>
+              </Suspense>
+              </CartProvider>
+            </AuthProvider>
+          </StoreProvider>
+        </WishlistProvider>
+      </LocationProvider>
+    </ToastProvider>
     </ThemeProvider>
   )
 }

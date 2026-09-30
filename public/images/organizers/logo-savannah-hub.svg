@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 54" width="220" height="54" fill="none">
+  <defs>
+    <linearGradient id="savannahGreen" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#10B981"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+  </defs>
+  <!-- Tech Hexagon & Circuit Emblem -->
+  <g transform="translate(6, 7)">
+    <rect x="2" y="2" width="36" height="36" rx="10" fill="#D1FAE5" fill-opacity="0.15" stroke="url(#savannahGreen)" stroke-width="1.5"/>
+    <path d="M20 11l9 5v10l-9 5-9-5V16l9-5z" stroke="url(#savannahGreen)" stroke-width="1.8" fill="none"/>
+    <circle cx="20" cy="21" r="2.5" fill="#10B981"/>
+    <path d="M20 16v5M15 24l5-3M25 24l-5-3" stroke="url(#savannahGreen)" stroke-width="1.2"/>
+  </g>
+  <!-- Wordmark -->
+  <text x="52" y="25" font-family="'Plus Jakarta Sans', Inter, system-ui, sans-serif" font-size="13" font-weight="800" letter-spacing="0.5" fill="#059669">SAVANNAH HUB</text>
+  <text x="52" y="38" font-family="'Plus Jakarta Sans', Inter, system-ui, sans-serif" font-size="8.5" font-weight="700" letter-spacing="1.8" fill="#94A3B8">TECH &amp; INNOVATION GH</text>
+</svg>

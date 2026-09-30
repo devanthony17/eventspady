@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { useOutletContext } from 'react-router-dom'
 import { BadgeCheck, Camera, Mail, MapPin, Phone, Save, ShieldAlert, User } from 'lucide-react'
 import { Seo } from '@components/ui/Seo'
@@ -9,11 +9,14 @@ import { Button } from '@components/ui/Button'
 import { Input, Textarea } from '@components/ui/Field'
 import { useAuth } from '@context/AuthContext'
 import { useToast } from '@context/ToastContext'
+import { useUploadAvatarMutation } from '@hooks/api'
 import { formatDate } from '@lib/utils'
 
 export default function Profile() {
   const { nav } = useOutletContext()
   const { user, updateProfile } = useAuth()
+  const uploadAvatarMutation = useUploadAvatarMutation()
+  const fileInputRef = useRef(null)
   const toast = useToast()
 
   const [form, setForm] = useState({
@@ -25,13 +28,34 @@ export default function Profile() {
   })
   const [saving, setSaving] = useState(false)
 
+  const handleAvatarChange = async (e) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    const formData = new FormData()
+    formData.append('avatar', file)
+    try {
+      const res = await uploadAvatarMutation.mutateAsync(formData)
+      const avatarUrl = res.avatarUrl || res.url || res.data?.avatarUrl
+      if (avatarUrl) {
+        updateProfile({ avatar: avatarUrl })
+      }
+      toast.success('Avatar updated successfully.')
+    } catch (err) {
+      toast.error(err?.response?.data?.message || err.message || 'Failed to upload avatar.')
+    }
+  }
+
   const onSubmit = async (e) => {
     e.preventDefault()
     setSaving(true)
-    await new Promise((r) => setTimeout(r, 700))
-    updateProfile(form)
-    setSaving(false)
-    toast.success('Your profile has been updated.')
+    try {
+      await updateProfile(form)
+      toast.success('Your profile has been updated.')
+    } catch (err) {
+      toast.error(err?.response?.data?.message || err.message || 'Failed to update profile.')
+    } finally {
+      setSaving(false)
+    }
   }
 
   return (
@@ -44,9 +68,17 @@ export default function Profile() {
             <div className="mb-6 flex flex-wrap items-center gap-5 border-b border-ink-200/70 pb-6 dark:border-white/10">
               <div className="relative">
                 <Avatar src={user?.avatar} name={user?.name} size="2xl" />
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={handleAvatarChange}
+                  accept="image/*"
+                  className="hidden"
+                  aria-label="Upload avatar file"
+                />
                 <button
                   type="button"
-                  onClick={() => toast.info('Avatar uploads are handled by the media API in production.')}
+                  onClick={() => fileInputRef.current?.click()}
                   className="absolute -bottom-1 -right-1 grid size-8 place-items-center rounded-full bg-brand-600 text-white shadow-lift transition hover:bg-brand-700"
                   aria-label="Change avatar"
                 >

@@ -106,11 +106,11 @@ export default function Login() {
             : 'Sign in to see your tickets, upcoming events and saved bookmarks.'
         }
         image={role === 'organizer' ? '/images/events/bugatti-blackfriday.jpg' : '/images/events/miss-dumba.jpg'}
-        imageAlt={role === 'organizer' ? 'Organizer event management in Ghana' : 'Miss Dumba pageant in Wa, Ghana'}
-        badge={role === 'organizer' ? 'Organizer Command Center' : 'Eventspady Ghana'}
+        imageAlt={role === 'organizer' ? 'Organizer event management in Wa' : 'Miss Dumba pageant in Wa'}
+        badge={role === 'organizer' ? 'Organizer Command Center · Wa' : 'Eventspady Wa'}
         headline={
           role === 'organizer'
-            ? 'Sell out your events and manage admissions across Ghana'
+            ? 'Sell out your events and manage admissions across Wa'
             : 'Join 24,000+ people booking better nights out in Wa'
         }
         perks={role === 'organizer' ? ORGANIZER_PERKS : ATTENDEE_PERKS}

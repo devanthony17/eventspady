@@ -107,7 +107,7 @@ export default function Register() {
       })
       setLoading(false)
 
-      toast.success('Account created! Welcome to Eventspady Ghana.', {
+      toast.success('Account created! Welcome to Eventspady Wa.', {
         title: 'Welcome aboard',
       })
       if (user?.role === 'organizer') {
@@ -136,23 +136,23 @@ export default function Register() {
     <>
       <Seo
         title={role === 'organizer' ? 'Join as Organizer' : 'Create an account'}
-        description="Join Eventspady Ghana to book tickets or manage and sell event tickets with MTN MoMo, Telecel Cash and card."
+        description="Join Eventspady Wa to book tickets or manage and sell event tickets with MTN MoMo, Telecel Cash and card."
       />
 
       <AuthShell
         title={role === 'organizer' ? 'Become an Organizer' : 'Create your account'}
         subtitle={
           role === 'organizer'
-            ? 'Sell tickets across Ghana, scan QR codes at the gate, and receive automatic MoMo settlements.'
-            : "Free to join. Start booking Ghana's best events in under a minute."
+            ? 'Sell tickets across Wa, scan QR codes at the gate, and receive automatic MoMo settlements.'
+            : 'Free to join. Start booking the best events in Wa in under a minute.'
         }
         image={role === 'organizer' ? '/images/events/bugatti-blackfriday.jpg' : '/images/events/all-white-party.jpg'}
-        imageAlt={role === 'organizer' ? 'Event organizer hosting crowd in Wa, Ghana' : 'All White Party celebration in Wa, Ghana'}
-        badge={role === 'organizer' ? 'Eventspady Organizer Network' : 'Join Eventspady Ghana'}
+        imageAlt={role === 'organizer' ? 'Event organizer hosting crowd in Wa' : 'All White Party celebration in Wa'}
+        badge={role === 'organizer' ? 'Eventspady Organizer Network · Wa' : 'Join Eventspady Wa'}
         headline={
           role === 'organizer'
-            ? 'Publish your events, sell out venues, and get paid directly to MoMo'
-            : 'Join 24,000+ people celebrating life, sports and culture in Ghana'
+            ? 'Publish your events across Wa, sell out venues, and get paid directly to MoMo'
+            : 'Join 24,000+ people celebrating life, sports and culture in Wa'
         }
         perks={role === 'organizer' ? ORGANIZER_PERKS : ATTENDEE_PERKS}
         quoteIndex={role === 'organizer' ? 1 : 0}

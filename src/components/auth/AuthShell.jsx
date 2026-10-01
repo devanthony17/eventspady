@@ -25,9 +25,9 @@ export function AuthShell({
   children,
   footer,
   image = '/images/events/miss-dumba.jpg',
-  imageAlt = 'Events in Ghana',
+  imageAlt = 'Events in Wa',
   headline,
-  badge = 'Eventspady Ghana',
+  badge = 'Eventspady Wa',
   perks = DEFAULT_PERKS,
   quoteIndex = 0,
 }) {
@@ -89,7 +89,7 @@ export function AuthShell({
               </span>
             )}
             <h2 className="max-w-md text-balance text-3xl font-extrabold leading-tight xl:text-4xl text-white drop-shadow-md">
-              {headline || 'Join 24,000+ people booking better events across Ghana'}
+              {headline || 'Join 24,000+ people booking better events in Wa'}
             </h2>
             <ul className="mt-8 space-y-3.5">
               {perks.map((perk) => (

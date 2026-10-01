@@ -4,8 +4,18 @@ import { Badge } from '@components/ui/Badge'
 import { cn } from '@lib/utils'
 
 /** Consistent header for the static/content pages. */
-export function PageHero({ eyebrow, title, description, breadcrumbs, children, tone = 'light', className }) {
-  const isDark = tone === 'dark'
+export function PageHero({
+  eyebrow,
+  title,
+  description,
+  breadcrumbs,
+  children,
+  tone = 'light',
+  className,
+  bgImage,
+  imageAlt,
+}) {
+  const isDark = tone === 'dark' || Boolean(bgImage)
 
   return (
     <div
@@ -17,7 +27,27 @@ export function PageHero({ eyebrow, title, description, breadcrumbs, children, t
         className,
       )}
     >
-      {isDark && (
+      {bgImage ? (
+        <>
+          <img
+            src={bgImage}
+            alt={imageAlt || ''}
+            className="absolute inset-0 size-full object-cover object-center transform scale-105 transition-transform duration-1000"
+          />
+          <div
+            className="absolute inset-0 bg-gradient-to-t from-ink-950 via-ink-950/80 to-ink-950/60 backdrop-blur-[1px]"
+            aria-hidden="true"
+          />
+          <div
+            className="absolute inset-0 bg-gradient-to-r from-ink-950/95 via-ink-950/70 to-transparent"
+            aria-hidden="true"
+          />
+          <div
+            className="absolute inset-0 bg-grid-dark [background-size:48px_48px] opacity-25 [mask-image:radial-gradient(ellipse_at_50%_0%,black,transparent_70%)]"
+            aria-hidden="true"
+          />
+        </>
+      ) : isDark ? (
         <>
           <div className="absolute inset-0 bg-gradient-to-br from-brand-900 via-ink-950 to-ink-950" aria-hidden="true" />
           <div
@@ -25,7 +55,7 @@ export function PageHero({ eyebrow, title, description, breadcrumbs, children, t
             aria-hidden="true"
           />
         </>
-      )}
+      ) : null}
       <div
         className={cn(
           'pointer-events-none absolute -right-24 -top-24 size-80 rounded-full blur-3xl',

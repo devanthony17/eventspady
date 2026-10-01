@@ -1,11 +1,12 @@
-import { ArrowRight, Globe2, Heart, Lightbulb, ShieldCheck, Users } from 'lucide-react'
+import { useRef, useState, useEffect } from 'react'
+import { ArrowRight, CheckCircle2, Globe2, Heart, Lightbulb, ShieldCheck } from 'lucide-react'
 import { Seo } from '@components/ui/Seo'
 import { PageHero } from '@components/layout/PageHero'
 import { Container, Section, SectionHeading } from '@components/ui/Section'
 import { Button } from '@components/ui/Button'
-import { Avatar } from '@components/ui/Avatar'
 import { StatsStrip } from '@components/home/StatsStrip'
 import { Testimonials } from '@components/home/Testimonials'
+import { useAos } from '@hooks/useAos'
 
 const VALUES = [
   {
@@ -34,40 +35,200 @@ const VALUES = [
   },
 ]
 
-const TEAM = [
-  { name: 'Amara Diallo', role: 'Head of Organizer Success', avatar: '/images/avatars/avatar-1.svg' },
-  { name: 'Tomas Lindqvist', role: 'Product', avatar: '/images/avatars/avatar-2.svg' },
-  { name: 'Priya Raman', role: 'Community', avatar: '/images/avatars/avatar-3.svg' },
-  { name: 'Daniel Okoro', role: 'Payments', avatar: '/images/avatars/avatar-4.svg' },
-  { name: 'Lena Fischer', role: 'Engineering', avatar: '/images/avatars/avatar-12.svg' },
-  { name: 'Marco Silva', role: 'Design', avatar: '/images/avatars/avatar-9.svg' },
+const TIMELINE = [
+  {
+    year: '2016',
+    title: 'A spreadsheet and a door',
+    description: 'We started by running our own nights in Wa and hating every part of the ticketing.',
+    badge: 'Humble Origins',
+  },
+  {
+    year: '2018',
+    title: 'First 200 organizers',
+    description: 'The scanner app shipped and door queues stopped being the worst part of the night.',
+    badge: 'Mobile Scanner V1',
+  },
+  {
+    year: '2021',
+    title: 'Mobile money first',
+    description: 'MTN MoMo and Telecel Cash went live at checkout, and advance ticket sales across the region doubled within a season.',
+    badge: 'Instant Settlements',
+  },
+  {
+    year: '2023',
+    title: 'Dagaare and Waali',
+    description: 'Admins could translate the whole product, panels included, without touching code.',
+    badge: 'Indigenous Languages',
+  },
+  {
+    year: 'Today',
+    title: '186K tickets and counting',
+    description: '3,400 events across all eleven districts of the Upper West, from courtyard dinners to the Dumba festival.',
+    badge: 'Regional Leader',
+  },
 ]
 
-const TIMELINE = [
-  { year: '2016', title: 'A spreadsheet and a door', description: 'We started by running our own nights in Wa and hating every part of the ticketing.' },
-  { year: '2018', title: 'First 200 organizers', description: 'The scanner app shipped and door queues stopped being the worst part of the night.' },
-  { year: '2021', title: 'Mobile money first', description: 'MTN MoMo and Telecel Cash went live at checkout, and advance ticket sales across the region doubled within a season.' },
-  { year: '2023', title: 'Dagaare and Waali', description: 'Admins could translate the whole product, panels included, without touching code.' },
-  { year: 'Today', title: '186K tickets and counting', description: '3,400 events across all eleven districts of the Upper West, from courtyard dinners to the Dumba festival.' },
-]
+/**
+ * Animated Milestone Timeline with dynamic scroll-driven progress line.
+ * Automatically animates down as you scroll forward and retracts up as you scroll back.
+ */
+function MilestoneTimeline({ items }) {
+  const containerRef = useRef(null)
+  const [scrollProgress, setScrollProgress] = useState(0)
+
+  useEffect(() => {
+    let ticking = false
+
+    const handleScroll = () => {
+      if (!containerRef.current) return
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          if (!containerRef.current) return
+          const rect = containerRef.current.getBoundingClientRect()
+          const viewportHeight = window.innerHeight
+
+          // Start drawing as the container top enters 75% down the viewport
+          const triggerStart = viewportHeight * 0.75
+          // Reach 100% when bottom of container reaches 35% of the viewport
+          const triggerEnd = viewportHeight * 0.35
+
+          const totalDistance = rect.height
+          const scrolledDistance = triggerStart - rect.top
+          const rawProgress = scrolledDistance / (totalDistance + (triggerStart - triggerEnd) * 0.5)
+          const clamped = Math.min(Math.max(rawProgress, 0), 1)
+
+          setScrollProgress(clamped)
+          ticking = false
+        })
+        ticking = true
+      }
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    window.addEventListener('resize', handleScroll, { passive: true })
+    handleScroll()
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      window.removeEventListener('resize', handleScroll)
+    }
+  }, [])
+
+  return (
+    <div ref={containerRef} className="relative mx-auto max-w-3xl">
+      {/* Background static line track */}
+      <div
+        className="absolute left-[19px] sm:left-[23px] top-6 bottom-6 w-1 rounded-full bg-ink-200/80 dark:bg-white/10"
+        aria-hidden="true"
+      />
+
+      {/* Dynamic animated timeline line that fills down and retracts up with scroll in blue tone */}
+      <div
+        className="absolute left-[19px] sm:left-[23px] top-6 w-1 rounded-full bg-gradient-to-b from-brand-700 via-brand-500 to-sky-400 shadow-[0_0_16px_rgba(74,97,182,0.85)] dark:from-brand-600 dark:via-brand-400 dark:to-sky-300 dark:shadow-[0_0_20px_rgba(99,102,241,0.9)] transition-[height] duration-75 ease-out"
+        style={{ height: `${scrollProgress * 100}%` }}
+        aria-hidden="true"
+      >
+        {/* Animated glowing beacon at the leading tip of the line in matching blue tone */}
+        <div
+          className="absolute -bottom-2.5 -left-[6px] size-4 rounded-full bg-brand-500 shadow-[0_0_16px_rgba(74,97,182,1)] ring-2 ring-white dark:ring-ink-950 transition-opacity duration-200 flex items-center justify-center dark:bg-sky-400"
+          style={{ opacity: scrollProgress > 0.02 ? 1 : 0 }}
+        >
+          <span className="size-2 rounded-full bg-white animate-pulse" />
+          <span className="absolute -inset-1 size-6 animate-ping rounded-full bg-brand-400 opacity-60 dark:bg-sky-300" />
+        </div>
+      </div>
+
+      {/* Milestone items list */}
+      <ol className="relative space-y-10 sm:space-y-12 pl-12 sm:pl-16">
+        {items.map((item, idx) => {
+          const itemThreshold = items.length > 1 ? idx / (items.length - 1) : 0
+          const isReached = scrollProgress >= itemThreshold * 0.92
+
+          return (
+            <li
+              key={item.year}
+              data-aos="fade-up"
+              data-aos-delay={`${idx * 100}`}
+              className="relative group"
+            >
+              {/* Milestone node marker */}
+              <span
+                className={`absolute -left-[3rem] sm:-left-[3.75rem] top-1.5 grid size-7 sm:size-8 place-items-center rounded-full transition-all duration-500 ring-4 ring-white dark:ring-ink-950 ${
+                  isReached
+                    ? 'bg-brand-600 text-white shadow-[0_0_18px_rgba(74,97,182,0.7)] scale-110'
+                    : 'bg-ink-100 text-ink-400 dark:bg-ink-900 dark:text-ink-600'
+                }`}
+              >
+                {isReached ? (
+                  <CheckCircle2 className="size-4 sm:size-4.5 text-white animate-in zoom-in-50 duration-300" />
+                ) : (
+                  <span className="size-2 rounded-full bg-ink-400 dark:bg-ink-600" />
+                )}
+              </span>
+
+              {/* Milestone Card */}
+              <div
+                className={`surface p-5 sm:p-7 transition-all duration-300 group-hover:scale-[1.01] ${
+                  isReached
+                    ? 'border-brand-500/40 shadow-md dark:border-brand-400/30'
+                    : 'hover:border-ink-300 dark:hover:border-white/20'
+                }`}
+              >
+                <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
+                  <span
+                    className={`inline-block text-xs font-black uppercase tracking-wider px-3 py-1 rounded-full transition-colors ${
+                      isReached
+                        ? 'bg-brand-50 text-brand-700 dark:bg-brand-500/20 dark:text-brand-300'
+                        : 'bg-ink-100 text-ink-600 dark:bg-white/[.06] dark:text-ink-400'
+                    }`}
+                  >
+                    {item.year}
+                  </span>
+                  {item.badge && (
+                    <span className="text-[11px] font-semibold text-brand-600 dark:text-brand-300">
+                      {item.badge}
+                    </span>
+                  )}
+                </div>
+
+                <h3 className="text-lg sm:text-xl font-extrabold text-ink-900 dark:text-white">
+                  {item.title}
+                </h3>
+                <p className="mt-2 text-pretty text-sm leading-relaxed text-ink-500 dark:text-ink-400">
+                  {item.description}
+                </p>
+              </div>
+            </li>
+          )
+        })}
+      </ol>
+    </div>
+  )
+}
 
 export default function About() {
+  // Initialize Animate-On-Scroll reveals across the page
+  useAos({ threshold: 0.1, once: true })
+
   return (
     <>
       <Seo
         title="About us"
         description="Eventspady is the event booking and management platform for Wa and the Upper West Region, built by people who used to run the door themselves. 186,000 tickets across eleven districts."
-        keywords="about eventspady, event ticketing company, event management platform"
+        keywords="about eventspady, event ticketing company, event management platform, wa events, upper west events"
       />
 
+      {/* Hero with authentic background image */}
       <PageHero
         tone="dark"
+        bgImage="/images/about/hero.jpg"
+        imageAlt="Wa Cultural Festival and celebration evening"
         eyebrow="About Eventspady"
         title="We build the boring parts so your event can be the interesting one"
         description="Ticketing, payments, guest lists and check-in — handled, so you can spend your energy on the thing people actually came for."
         breadcrumbs={[{ label: 'About' }]}
       >
-        <div className="flex flex-wrap gap-3">
+        <div className="flex flex-wrap gap-3" data-aos="fade-up" data-aos-delay="200">
           <Button to="/organizer" size="lg" iconRight={ArrowRight}>
             Start organizing
           </Button>
@@ -82,13 +243,16 @@ export default function About() {
         </div>
       </PageHero>
 
-      <StatsStrip />
+      {/* Stats Strip with AOS reveal */}
+      <div data-aos="fade-up" data-aos-delay="100">
+        <StatsStrip />
+      </div>
 
-      {/* Story */}
+      {/* Our Story with real generated photographic imagery */}
       <Section>
         <Container>
-          <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
-            <div>
+          <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center">
+            <div data-aos="fade-right" data-aos-delay="100">
               <SectionHeading
                 eyebrow="Our story"
                 title="It started because we were the ones on the door"
@@ -112,32 +276,84 @@ export default function About() {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <img src="/images/gallery/gallery-1.svg" alt="" loading="lazy" className="mt-8 aspect-[3/4] w-full rounded-3xl object-cover" />
-              <img src="/images/gallery/gallery-2.svg" alt="" loading="lazy" className="aspect-[3/4] w-full rounded-3xl object-cover" />
-              <img src="/images/gallery/gallery-3.svg" alt="" loading="lazy" className="col-span-2 aspect-[16/9] w-full rounded-3xl object-cover" />
+            {/* Generated Story Images Grid */}
+            <div className="grid grid-cols-2 gap-4 sm:gap-5">
+              <div
+                data-aos="fade-down"
+                data-aos-delay="200"
+                className="group relative overflow-hidden rounded-3xl shadow-xl ring-1 ring-ink-950/10 dark:ring-white/10"
+              >
+                <img
+                  src="/images/about/story-1.jpg"
+                  alt="Young Ghanaian event organizers coordinating admissions in Wa"
+                  loading="lazy"
+                  className="aspect-[3/4] w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-ink-950/70 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100 flex items-end p-4">
+                  <p className="text-xs font-semibold text-white">Event coordination in Wa</p>
+                </div>
+              </div>
+
+              <div
+                data-aos="fade-up"
+                data-aos-delay="300"
+                className="group relative overflow-hidden rounded-3xl shadow-xl ring-1 ring-ink-950/10 dark:ring-white/10 mt-6 sm:mt-8"
+              >
+                <img
+                  src="/images/about/story-2.jpg"
+                  alt="Real-time smartphone ticket scanner check-in at Wa festival gate"
+                  loading="lazy"
+                  className="aspect-[3/4] w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-ink-950/70 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100 flex items-end p-4">
+                  <p className="text-xs font-semibold text-white">Sub-second QR gate check-in</p>
+                </div>
+              </div>
+
+              <div
+                data-aos="zoom-in-up"
+                data-aos-delay="400"
+                className="col-span-2 group relative overflow-hidden rounded-3xl shadow-xl ring-1 ring-ink-950/10 dark:ring-white/10"
+              >
+                <img
+                  src="/images/about/story-3.jpg"
+                  alt="Vibrant cultural celebration and community festival in Wa"
+                  loading="lazy"
+                  className="aspect-[16/9] w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-ink-950/75 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100 flex items-end p-5">
+                  <p className="text-xs sm:text-sm font-semibold text-white">Traditional palace festival celebration, Wa</p>
+                </div>
+              </div>
             </div>
           </div>
         </Container>
       </Section>
 
-      {/* Values */}
+      {/* Values Section */}
       <Section className="bg-ink-50 dark:bg-white/[.02]">
         <Container>
-          <SectionHeading
-            eyebrow="What we believe"
-            title="Four things we will not compromise on"
-            align="center"
-          />
+          <div data-aos="fade-up">
+            <SectionHeading
+              eyebrow="What we believe"
+              title="Four things we will not compromise on"
+              align="center"
+            />
+          </div>
 
-          <div className="grid gap-5 sm:grid-cols-2">
-            {VALUES.map((value) => (
-              <article key={value.title} className="surface p-6">
-                <span className="mb-4 grid size-11 place-items-center rounded-xl bg-brand-100 text-brand-700 dark:bg-brand-500/15 dark:text-brand-300">
-                  <value.icon className="size-5" aria-hidden="true" />
+          <div className="grid gap-5 sm:grid-cols-2 mt-10">
+            {VALUES.map((value, idx) => (
+              <article
+                key={value.title}
+                data-aos="fade-up"
+                data-aos-delay={`${(idx + 1) * 100}`}
+                className="surface p-6 sm:p-8 transition-all duration-300 hover:border-brand-500/30 hover:shadow-md"
+              >
+                <span className="mb-5 grid size-12 place-items-center rounded-2xl bg-brand-100 text-brand-700 shadow-sm dark:bg-brand-500/15 dark:text-brand-300">
+                  <value.icon className="size-6" aria-hidden="true" />
                 </span>
-                <h3 className="text-lg font-bold">{value.title}</h3>
-                <p className="mt-2 text-pretty text-sm leading-relaxed text-ink-500 dark:text-ink-400">
+                <h3 className="text-xl font-bold">{value.title}</h3>
+                <p className="mt-2.5 text-pretty text-sm leading-relaxed text-ink-500 dark:text-ink-400">
                   {value.description}
                 </p>
               </article>
@@ -146,62 +362,21 @@ export default function About() {
         </Container>
       </Section>
 
-      {/* Timeline */}
+      {/* Milestones Section with Interactive Scroll-driven Timeline Line */}
       <Section>
         <Container size="narrow">
-          <SectionHeading eyebrow="Milestones" title="How we got here" align="center" />
+          <div data-aos="fade-up">
+            <SectionHeading eyebrow="Milestones" title="How we got here" align="center" className="mb-12 sm:mb-16" />
+          </div>
 
-          <ol className="relative border-l border-ink-200 pl-8 dark:border-white/10">
-            {TIMELINE.map((item) => (
-              <li key={item.year} className="relative pb-10 last:pb-0">
-                <span className="absolute -left-[2.4rem] grid size-6 place-items-center rounded-full bg-brand-600 ring-4 ring-white dark:ring-ink-950">
-                  <span className="size-2 rounded-full bg-white" />
-                </span>
-                <p className="text-sm font-extrabold text-brand-600 dark:text-brand-400">{item.year}</p>
-                <h3 className="mt-1 text-lg font-bold">{item.title}</h3>
-                <p className="mt-1.5 text-pretty text-sm text-ink-500 dark:text-ink-400">{item.description}</p>
-              </li>
-            ))}
-          </ol>
+          <MilestoneTimeline items={TIMELINE} />
         </Container>
       </Section>
 
-      {/* Team */}
-      <Section className="bg-ink-50 dark:bg-white/[.02]">
-        <Container>
-          <SectionHeading
-            eyebrow="The team"
-            title="Small team, a lot of events"
-            description="We are all based in the Upper West and most of us still work a door somewhere every few months."
-            align="center"
-          />
-
-          <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-6">
-            {TEAM.map((person) => (
-              <div key={person.name} className="text-center">
-                <Avatar src={person.avatar} name={person.name} size="2xl" className="mx-auto" />
-                <p className="mt-3 text-sm font-bold">{person.name}</p>
-                <p className="mt-0.5 text-xs text-ink-500 dark:text-ink-400">{person.role}</p>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-12 flex flex-col items-center gap-4 text-center">
-            <span className="grid size-12 place-items-center rounded-2xl bg-brand-100 text-brand-700 dark:bg-brand-500/15 dark:text-brand-300">
-              <Users className="size-6" aria-hidden="true" />
-            </span>
-            <h3 className="text-xl font-bold">We are hiring</h3>
-            <p className="max-w-md text-sm text-ink-500 dark:text-ink-400">
-              Engineering, support and partnerships. If you have run events yourself, tell us about it.
-            </p>
-            <Button to="/contact" variant="outline">
-              Get in touch
-            </Button>
-          </div>
-        </Container>
-      </Section>
-
-      <Testimonials />
+      {/* Testimonials with AOS reveal */}
+      <div data-aos="fade-up">
+        <Testimonials />
+      </div>
     </>
   )
 }

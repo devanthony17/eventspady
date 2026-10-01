@@ -103,3 +103,66 @@
     scrollbar-width: none;
   }
 }
+
+/* ==========================================================================
+   AOS (Animate On Scroll) Framework
+   ========================================================================== */
+[data-aos] {
+  opacity: 0;
+  transition-property: opacity, transform;
+  transition-duration: 750ms;
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+[data-aos="fade-up"] {
+  transform: translate3d(0, 36px, 0);
+}
+
+[data-aos="fade-down"] {
+  transform: translate3d(0, -36px, 0);
+}
+
+[data-aos="fade-right"] {
+  transform: translate3d(-36px, 0, 0);
+}
+
+[data-aos="fade-left"] {
+  transform: translate3d(36px, 0, 0);
+}
+
+[data-aos="zoom-in"] {
+  transform: scale(0.92);
+}
+
+[data-aos="zoom-in-up"] {
+  transform: translate3d(0, 28px, 0) scale(0.94);
+}
+
+/* Active animated state */
+[data-aos].aos-animate {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) scale(1);
+}
+
+/* Delay modifiers */
+[data-aos-delay="50"] { transition-delay: 50ms; }
+[data-aos-delay="100"] { transition-delay: 100ms; }
+[data-aos-delay="150"] { transition-delay: 150ms; }
+[data-aos-delay="200"] { transition-delay: 200ms; }
+[data-aos-delay="250"] { transition-delay: 250ms; }
+[data-aos-delay="300"] { transition-delay: 300ms; }
+[data-aos-delay="350"] { transition-delay: 350ms; }
+[data-aos-delay="400"] { transition-delay: 400ms; }
+[data-aos-delay="500"] { transition-delay: 500ms; }
+[data-aos-delay="600"] { transition-delay: 600ms; }
+[data-aos-delay="700"] { transition-delay: 700ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  [data-aos] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+

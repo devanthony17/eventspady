@@ -1,11 +1,13 @@
 import { useState, useMemo } from 'react'
-import { ArrowRight, Check, Minus } from 'lucide-react'
+import { ArrowRight, Check, CreditCard, Minus, ShieldCheck, Zap } from 'lucide-react'
+import { Ticket } from '@components/icons/AppIcons'
 import { Seo } from '@components/ui/Seo'
 import { PageHero } from '@components/layout/PageHero'
 import { Container, Section, SectionHeading } from '@components/ui/Section'
 import { Button } from '@components/ui/Button'
 import { Badge } from '@components/ui/Badge'
 import { Accordion } from '@components/ui/Accordion'
+import { useAos } from '@hooks/useAos'
 import { usePlans } from '@hooks/api'
 import { formatCurrency, cn } from '@lib/utils'
 
@@ -62,6 +64,29 @@ const PLANS = [
   },
 ]
 
+const INCLUDED_IN_ALL = [
+  {
+    icon: Ticket,
+    title: 'Zero-Fee Free Events',
+    description: 'Community meetups, free workshops, and RSVPs are 100% free with 0% commission forever.',
+  },
+  {
+    icon: Zap,
+    title: 'Sub-Second QR Check-in',
+    description: 'Offline-capable mobile gate scanner validates attendee tickets in under 400 milliseconds.',
+  },
+  {
+    icon: CreditCard,
+    title: 'Local MoMo & Card Gateways',
+    description: 'Instant buyer payments via MTN MoMo, Telecel Cash, and Visa/Mastercard with transparent receipts.',
+  },
+  {
+    icon: ShieldCheck,
+    title: 'Automated 24h Payouts',
+    description: 'Direct disbursements straight into your mobile money wallet or Ghanaian bank account without delays.',
+  },
+]
+
 const FAQ = [
   { q: 'Is it really free to list an event?', a: 'Yes. Creating an account and publishing listings costs nothing. You only pay commission on tickets you actually sell, and free tickets carry no commission at all.' },
   { q: 'When do I get paid?', a: 'Payouts are released after your event completes, minus commission and any refunds. Growth and Scale plans settle within 24 hours of the event ending; Starter settles in 3–5 business days.' },
@@ -84,6 +109,9 @@ export default function Pricing() {
 
   const gross = volume * price
 
+  // Initialize Animate-On-Scroll reveals
+  useAos({ threshold: 0.1, once: true })
+
   return (
     <>
       <Seo
@@ -97,24 +125,48 @@ export default function Pricing() {
         title="Free to list. You pay when you sell."
         description="No monthly fee, no setup cost, no charge for free tickets. Commission comes out of paid ticket sales and is itemised on every single order."
         breadcrumbs={[{ label: 'Pricing' }]}
-      />
+        data-aos="fade-down"
+      >
+        <div className="flex flex-wrap items-center gap-2.5 pt-2" data-aos="fade-up" data-aos-delay="150">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-brand-500/10 px-3.5 py-1.5 text-xs font-bold text-brand-700 dark:bg-brand-400/15 dark:text-brand-300">
+            <Check className="size-3.5" strokeWidth={2.5} /> 0% commission on free events
+          </span>
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/10 px-3.5 py-1.5 text-xs font-bold text-emerald-700 dark:bg-emerald-400/15 dark:text-emerald-300">
+            <Check className="size-3.5" strokeWidth={2.5} /> No setup or monthly subscription
+          </span>
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-sky-500/10 px-3.5 py-1.5 text-xs font-bold text-sky-700 dark:bg-sky-400/15 dark:text-sky-300">
+            <Check className="size-3.5" strokeWidth={2.5} /> Fast MoMo & bank payouts
+          </span>
+        </div>
+      </PageHero>
 
       {/* Plans */}
       <Section>
         <Container>
+          <div className="mx-auto mb-10 max-w-2xl text-center" data-aos="fade-up">
+            <SectionHeading
+              eyebrow="Simple commission"
+              title="Pick the tier designed for your event"
+              description="Transparent rates with no hidden surprises. Free events never incur commission, and paid tickets are only billed when sold."
+              align="center"
+            />
+          </div>
+
           <div className="grid gap-6 lg:grid-cols-3">
-            {plans.map((plan) => (
+            {plans.map((plan, idx) => (
               <article
                 key={plan.id}
+                data-aos={plan.popular ? 'zoom-in-up' : 'fade-up'}
+                data-aos-delay={`${(idx + 1) * 100}`}
                 className={cn(
-                  'relative flex flex-col rounded-3xl border p-7 transition',
+                  'relative flex flex-col rounded-3xl border p-7 transition-all duration-300 hover:-translate-y-1',
                   plan.popular
-                    ? 'border-brand-500 bg-white shadow-lift dark:bg-ink-900 lg:-my-4 lg:py-11'
-                    : 'border-ink-200/70 bg-white dark:border-white/10 dark:bg-ink-900/60',
+                    ? 'border-brand-500 bg-white shadow-lift ring-2 ring-brand-500/20 dark:bg-ink-900 lg:-my-4 lg:py-11'
+                    : 'border-ink-200/70 bg-white hover:border-ink-300 hover:shadow-md dark:border-white/10 dark:bg-ink-900/60 dark:hover:border-white/20',
                 )}
               >
                 {plan.popular && (
-                  <Badge tone="brand" size="md" className="absolute -top-3 left-1/2 -translate-x-1/2">
+                  <Badge tone="brand" size="md" className="absolute -top-3 left-1/2 -translate-x-1/2 shadow-sm">
                     Most popular
                   </Badge>
                 )}
@@ -162,21 +214,64 @@ export default function Pricing() {
         </Container>
       </Section>
 
+      {/* Included in every plan */}
+      <Section className="border-t border-ink-100 bg-ink-50/50 py-12 dark:border-white/5 dark:bg-white/[.01]">
+        <Container>
+          <div className="mb-8 text-center" data-aos="fade-up">
+            <p className="text-xs font-extrabold uppercase tracking-wider text-brand-600 dark:text-brand-400">
+              Universal Features
+            </p>
+            <h2 className="mt-1 text-xl font-extrabold text-ink-900 dark:text-white sm:text-2xl">
+              Included in every plan with zero extra cost
+            </h2>
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {INCLUDED_IN_ALL.map((item, idx) => {
+              const Icon = item.icon
+              return (
+                <div
+                  key={item.title}
+                  data-aos="fade-up"
+                  data-aos-delay={`${(idx + 1) * 100}`}
+                  className="rounded-2xl border border-ink-200/70 bg-white p-5 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm dark:border-white/10 dark:bg-ink-900/50"
+                >
+                  <div className="mb-3 grid size-9 place-items-center rounded-xl bg-brand-50 text-brand-600 dark:bg-brand-500/10 dark:text-brand-400">
+                    <Icon className="size-5" />
+                  </div>
+                  <h3 className="text-sm font-bold text-ink-900 dark:text-white">{item.title}</h3>
+                  <p className="mt-1 text-xs leading-relaxed text-ink-500 dark:text-ink-400">{item.description}</p>
+                </div>
+              )
+            })}
+          </div>
+        </Container>
+      </Section>
+
       {/* Calculator */}
       <Section className="bg-ink-50 dark:bg-white/[.02]">
         <Container size="narrow">
-          <SectionHeading
-            eyebrow="Estimate"
-            title="What would you actually keep?"
-            description="Drag the sliders to see your payout under each plan. Processor fees are billed separately by the payment provider."
-            align="center"
-          />
+          <div data-aos="fade-up">
+            <SectionHeading
+              eyebrow="Estimate"
+              title="What would you actually keep?"
+              description="Drag the sliders to see your payout under each plan. Processor fees are billed separately by the payment provider."
+              align="center"
+            />
+          </div>
 
-          <div className="surface p-7 sm:p-9">
+          <div
+            className="surface mt-8 p-7 shadow-lg border border-ink-100 sm:p-9 dark:border-white/10"
+            data-aos="fade-up"
+            data-aos-delay="100"
+          >
             <div className="grid gap-8 sm:grid-cols-2">
-              <div>
-                <label htmlFor="volume" className="label">
-                  Tickets sold: <span className="text-brand-600 dark:text-brand-400">{volume.toLocaleString()}</span>
+              <div data-aos="fade-right" data-aos-delay="150">
+                <label htmlFor="volume" className="label flex items-center justify-between">
+                  <span>Tickets sold:</span>
+                  <span className="rounded-md bg-brand-50 px-2 py-0.5 font-bold text-brand-600 dark:bg-brand-500/10 dark:text-brand-400">
+                    {volume.toLocaleString()}
+                  </span>
                 </label>
                 <input
                   id="volume"
@@ -190,9 +285,12 @@ export default function Pricing() {
                 />
               </div>
 
-              <div>
-                <label htmlFor="price" className="label">
-                  Ticket price: <span className="text-brand-600 dark:text-brand-400">{formatCurrency(price)}</span>
+              <div data-aos="fade-left" data-aos-delay="150">
+                <label htmlFor="price" className="label flex items-center justify-between">
+                  <span>Ticket price:</span>
+                  <span className="rounded-md bg-brand-50 px-2 py-0.5 font-bold text-brand-600 dark:bg-brand-500/10 dark:text-brand-400">
+                    {formatCurrency(price)}
+                  </span>
                 </label>
                 <input
                   id="price"
@@ -207,17 +305,26 @@ export default function Pricing() {
               </div>
             </div>
 
-            <div className="mt-8 rounded-2xl bg-ink-50 p-5 dark:bg-white/[.04]">
+            <div
+              className="mt-8 rounded-2xl bg-ink-50 p-5 dark:bg-white/[.04]"
+              data-aos="fade-up"
+              data-aos-delay="200"
+            >
               <div className="mb-4 flex items-baseline justify-between">
-                <span className="text-sm text-ink-500 dark:text-ink-400">Gross ticket sales</span>
+                <span className="text-sm font-medium text-ink-500 dark:text-ink-400">Gross ticket sales</span>
                 <span className="text-2xl font-extrabold">{formatCurrency(gross)}</span>
               </div>
 
               <div className="space-y-3">
-                {PLANS.map((plan) => {
+                {PLANS.map((plan, index) => {
                   const commission = (gross * plan.commission) / 100
                   return (
-                    <div key={plan.id} className="flex flex-wrap items-center justify-between gap-2 border-t border-ink-200/70 pt-3 dark:border-white/10">
+                    <div
+                      key={plan.id}
+                      data-aos="fade-up"
+                      data-aos-delay={`${200 + (index + 1) * 50}`}
+                      className="flex flex-wrap items-center justify-between gap-2 border-t border-ink-200/70 pt-3 dark:border-white/10"
+                    >
                       <div className="flex items-center gap-2">
                         <span className="text-sm font-bold">{plan.name}</span>
                         {plan.popular && (
@@ -226,7 +333,7 @@ export default function Pricing() {
                           </Badge>
                         )}
                         <span className="text-xs text-ink-400">
-                          −{formatCurrency(commission)} commission
+                          −{formatCurrency(commission)} commission ({plan.commission}%)
                         </span>
                       </div>
                       <span className="text-lg font-extrabold text-emerald-600 dark:text-emerald-400">
@@ -244,10 +351,18 @@ export default function Pricing() {
       {/* FAQ */}
       <Section>
         <Container size="narrow">
-          <SectionHeading eyebrow="Pricing questions" title="Before you commit" align="center" />
-          <Accordion items={FAQ} defaultOpen={[0]} />
+          <div data-aos="fade-up">
+            <SectionHeading eyebrow="Pricing questions" title="Before you commit" align="center" />
+          </div>
+          <div data-aos="fade-up" data-aos-delay="100">
+            <Accordion items={FAQ} defaultOpen={[0]} />
+          </div>
 
-          <div className="mt-12 flex flex-col items-center gap-4 rounded-3xl bg-gradient-to-br from-brand-600 to-ink-950 p-9 text-center text-white">
+          <div
+            className="mt-12 flex flex-col items-center gap-4 rounded-3xl bg-gradient-to-br from-brand-600 to-ink-950 p-9 text-center text-white shadow-lift"
+            data-aos="zoom-in-up"
+            data-aos-delay="200"
+          >
             <h3 className="text-2xl font-extrabold">Still deciding?</h3>
             <p className="max-w-md text-sm text-white/75">
               Publish your first event on Starter. Nothing is charged until a paid ticket is sold, and you can

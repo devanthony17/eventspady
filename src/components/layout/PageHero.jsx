@@ -14,6 +14,7 @@ export function PageHero({
   className,
   bgImage,
   imageAlt,
+  ...props
 }) {
   const isDark = tone === 'dark' || Boolean(bgImage)
 
@@ -26,6 +27,7 @@ export function PageHero({
           : 'border-ink-200/70 bg-ink-50 dark:border-white/10 dark:bg-white/[.02]',
         className,
       )}
+      {...props}
     >
       {bgImage ? (
         <>

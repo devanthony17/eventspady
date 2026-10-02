@@ -1,6 +1,7 @@
 import { useMemo, useCallback, useState } from 'react'
 import { Link, useOutletContext } from 'react-router-dom'
-import { Download, Send, Ticket as TicketIcon, User, Mail, AlertTriangle, XCircle } from 'lucide-react'
+import { Download, Send, User, Mail, AlertTriangle, XCircle } from 'lucide-react'
+import { TicketIcon } from '@components/icons/AppIcons'
 import { Seo } from '@components/ui/Seo'
 import { DashboardShell } from '@components/dashboard/DashboardShell'
 import { Tabs } from '@components/ui/Tabs'

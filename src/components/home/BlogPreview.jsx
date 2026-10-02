@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowRight, Clock, Sparkles, ChevronLeft, ChevronRight } from 'lucide-react'
+import { ArrowRight, Clock, ChevronLeft, ChevronRight } from 'lucide-react'
+import { Sparkles } from '@components/icons/AppIcons'
 import { Container, Section, SectionHeading } from '@components/ui/Section'
 import { Button } from '@components/ui/Button'
 import { Badge } from '@components/ui/Badge'

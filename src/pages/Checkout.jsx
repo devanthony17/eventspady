@@ -15,12 +15,12 @@ import {
   ShieldAlert,
   ShieldCheck,
   Smartphone,
-  Ticket,
   Trash2,
   User,
   Users,
   X,
 } from 'lucide-react'
+import { Ticket } from '@components/icons/AppIcons'
 import { Seo } from '@components/ui/Seo'
 import { Container, Section } from '@components/ui/Section'
 import { Breadcrumbs } from '@components/ui/Breadcrumbs'

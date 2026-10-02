@@ -22,11 +22,11 @@ import {
   Settings,
   ShieldCheck,
   ShoppingBag,
-  Ticket,
   User,
   Users,
   X,
 } from 'lucide-react'
+import { Ticket } from '@components/icons/AppIcons'
 import { Logo } from '@components/layout/Logo'
 import { ThemeToggle } from '@components/layout/ThemeToggle'
 import { SearchDialog } from '@components/layout/SearchDialog'

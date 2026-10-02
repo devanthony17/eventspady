@@ -9,10 +9,10 @@ import {
   RefreshCw,
   RotateCcw,
   Save,
-  Sparkles,
   Star,
   Trash2,
 } from 'lucide-react'
+import { Sparkles } from '@components/icons/AppIcons'
 import { Seo } from '@components/ui/Seo'
 import { Badge } from '@components/ui/Badge'
 import { Button } from '@components/ui/Button'

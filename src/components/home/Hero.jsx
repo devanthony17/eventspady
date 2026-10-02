@@ -7,10 +7,10 @@ import {
   Landmark,
   Music,
   Palette,
-  Ticket,
   Trophy,
   UtensilsCrossed,
 } from 'lucide-react'
+import { Ticket } from '@components/icons/AppIcons'
 import { Button } from '@components/ui/Button'
 import { Container } from '@components/ui/Section'
 import { usePrefersReducedMotion } from '@hooks/useMediaQuery'

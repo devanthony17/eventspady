@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
-import { Heart, MapPin, Ticket, Users, Video } from 'lucide-react'
+import { Heart, MapPin, Users, Video } from 'lucide-react'
+import { Ticket } from '@components/icons/AppIcons'
 import { Badge } from '@components/ui/Badge'
 import { useWishlist } from '@hooks/useWishlist'
 import { useToast } from '@context/ToastContext'

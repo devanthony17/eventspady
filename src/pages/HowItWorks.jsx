@@ -7,13 +7,12 @@ import {
   QrCode,
   ScanLine,
   Search,
-  Ticket,
   Users,
   Smartphone,
   WifiOff,
-  Sparkles,
   UserCheck,
 } from 'lucide-react'
+import { Ticket, Sparkles } from '@components/icons/AppIcons'
 import { Seo } from '@components/ui/Seo'
 import { PageHero } from '@components/layout/PageHero'
 import { Container, Section, SectionHeading } from '@components/ui/Section'

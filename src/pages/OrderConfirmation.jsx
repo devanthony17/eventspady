@@ -7,8 +7,8 @@ import {
   Download,
   Mail,
   Printer,
-  Ticket as TicketIcon,
 } from 'lucide-react'
+import { TicketIcon } from '@components/icons/AppIcons'
 import { Seo } from '@components/ui/Seo'
 import { Container, Section } from '@components/ui/Section'
 import { Button } from '@components/ui/Button'

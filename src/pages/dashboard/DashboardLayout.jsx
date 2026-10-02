@@ -1,6 +1,7 @@
 import { Suspense, useState } from 'react'
 import { Outlet } from 'react-router-dom'
-import { Bell, Heart, LayoutDashboard, Settings, Ticket, User } from 'lucide-react'
+import { Bell, Heart, LayoutDashboard, Settings, User } from 'lucide-react'
+import { Ticket } from '@components/icons/AppIcons'
 import { PortalTopNav } from '@components/layout/PortalTopNav'
 import { PortalSideNav } from '@components/layout/PortalSideNav'
 import { useWishlist } from '@hooks/useWishlist'

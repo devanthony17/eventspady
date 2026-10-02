@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { useOutletContext } from 'react-router-dom'
-import { Bell, CalendarClock, CheckCheck, CreditCard, Megaphone, Ticket } from 'lucide-react'
+import { Bell, CalendarClock, CheckCheck, CreditCard, Megaphone } from 'lucide-react'
+import { Ticket } from '@components/icons/AppIcons'
 import { Seo } from '@components/ui/Seo'
 import { DashboardShell } from '@components/dashboard/DashboardShell'
 import { Button } from '@components/ui/Button'

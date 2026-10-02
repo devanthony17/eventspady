@@ -9,7 +9,6 @@ import {
   Search,
   Shield,
   ShieldAlert,
-  Ticket,
   Trash2,
   UserX,
   Users,

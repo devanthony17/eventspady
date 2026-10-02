@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowRight, Ticket } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
+import { Ticket } from '@components/icons/AppIcons'
 import { Container, Section, SectionHeading } from '@components/ui/Section'
 import { Button } from '@components/ui/Button'
 import { useCategories, useEvents } from '@hooks/api'

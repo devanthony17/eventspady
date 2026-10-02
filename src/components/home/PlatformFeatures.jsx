@@ -1,12 +1,10 @@
-import { Link } from 'react-router-dom'
 import {
   ArrowRight,
   CreditCard,
   QrCode,
-  Sparkles,
-  Ticket,
   Users,
 } from 'lucide-react'
+import { Sparkles, Ticket } from '@components/icons/AppIcons'
 import { Container, Section, SectionHeading } from '@components/ui/Section'
 import { Badge } from '@components/ui/Badge'
 import { Button } from '@components/ui/Button'

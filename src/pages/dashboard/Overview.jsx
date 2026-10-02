@@ -1,6 +1,7 @@
 import { useMemo, useCallback } from 'react'
 import { Link, useOutletContext } from 'react-router-dom'
-import { ArrowRight, CalendarCheck, CreditCard, Heart, Ticket } from 'lucide-react'
+import { ArrowRight, CalendarCheck, CreditCard, Heart } from 'lucide-react'
+import { Ticket } from '@components/icons/AppIcons'
 import { Seo } from '@components/ui/Seo'
 import { DashboardShell } from '@components/dashboard/DashboardShell'
 import { StatCard } from '@components/ui/StatCard'

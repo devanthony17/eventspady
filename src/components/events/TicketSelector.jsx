@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom'
-import { ArrowRight, Minus, Plus, ShieldCheck, Ticket as TicketIcon } from 'lucide-react'
+import { ArrowRight, Minus, Plus, ShieldCheck } from 'lucide-react'
+import { TicketIcon } from '@components/icons/AppIcons'
 import { Badge } from '@components/ui/Badge'
 import { Button } from '@components/ui/Button'
 import { useCart } from '@context/CartContext'

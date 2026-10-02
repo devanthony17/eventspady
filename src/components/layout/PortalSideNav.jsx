@@ -19,12 +19,11 @@ import {
   Shield,
   ShieldAlert,
   ShieldCheck,
-  Sparkles,
-  Ticket,
   User,
   Users,
   X,
 } from 'lucide-react'
+import { Sparkles, Ticket } from '@components/icons/AppIcons'
 import { Logo } from '@components/layout/Logo'
 import { Avatar } from '@components/ui/Avatar'
 import { Badge } from '@components/ui/Badge'

@@ -1,4 +1,5 @@
-import { CalendarSearch, CreditCard, QrCode, Ticket } from 'lucide-react'
+import { CalendarSearch, CreditCard, QrCode } from 'lucide-react'
+import { Ticket } from '@components/icons/AppIcons'
 import { Container, Section, SectionHeading } from '@components/ui/Section'
 import { cn } from '@lib/utils'
 

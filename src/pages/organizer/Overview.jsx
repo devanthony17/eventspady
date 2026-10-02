@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react'
 import { Link, useOutletContext } from 'react-router-dom'
-import { ArrowRight, DollarSign, Plus, Ticket, TrendingUp, Users } from 'lucide-react'
+import { ArrowRight, DollarSign, Plus, TrendingUp, Users } from 'lucide-react'
+import { Ticket } from '@components/icons/AppIcons'
 import { Seo } from '@components/ui/Seo'
 import { DashboardShell } from '@components/dashboard/DashboardShell'
 import { StatCard } from '@components/ui/StatCard'

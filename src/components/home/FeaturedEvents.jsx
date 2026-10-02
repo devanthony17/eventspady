@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
-import { ArrowRight, Flame, Sparkles, Ticket, Video } from 'lucide-react'
+import { ArrowRight, Flame, Video } from 'lucide-react'
+import { Sparkles, Ticket } from '@components/icons/AppIcons'
 import { Container, Section, SectionHeading } from '@components/ui/Section'
 import { Button } from '@components/ui/Button'
 import { Tabs } from '@components/ui/Tabs'

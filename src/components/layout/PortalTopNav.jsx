@@ -10,10 +10,9 @@ import {
   Plus,
   Settings,
   ShieldCheck,
-  Sparkles,
-  Ticket,
   User,
 } from 'lucide-react'
+import { Sparkles, Ticket } from '@components/icons/AppIcons'
 import { Logo } from '@components/layout/Logo'
 import { ThemeToggle } from '@components/layout/ThemeToggle'
 import { Avatar } from '@components/ui/Avatar'

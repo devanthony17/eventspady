@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import {
+  Briefcase,
   CalendarDays,
   ChevronDown,
   ExternalLink,
@@ -12,7 +13,7 @@ import {
   ShieldCheck,
   User,
 } from 'lucide-react'
-import { Sparkles, Ticket } from '@components/icons/AppIcons'
+import { Ticket } from '@components/icons/AppIcons'
 import { Logo } from '@components/layout/Logo'
 import { ThemeToggle } from '@components/layout/ThemeToggle'
 import { Avatar } from '@components/ui/Avatar'
@@ -62,7 +63,7 @@ export function PortalTopNav({ portal: propPortal, onToggleMobileNav }) {
     },
     organizer: {
       name: 'Organizer Hub',
-      icon: Sparkles,
+      icon: Briefcase,
       badgeClass: 'bg-accent-500 text-white shadow-sm',
       rootTo: '/organizer',
     },

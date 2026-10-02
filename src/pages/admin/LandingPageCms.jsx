@@ -4,6 +4,7 @@ import {
   ExternalLink,
   Eye,
   FileEdit,
+  LayoutTemplate,
   Plus,
   Quote,
   RefreshCw,
@@ -12,7 +13,6 @@ import {
   Star,
   Trash2,
 } from 'lucide-react'
-import { Sparkles } from '@components/icons/AppIcons'
 import { Seo } from '@components/ui/Seo'
 import { Badge } from '@components/ui/Badge'
 import { Button } from '@components/ui/Button'
@@ -237,7 +237,7 @@ export default function LandingPageCms() {
                   num: '1',
                   shortLabel: 'Hero',
                   fullLabel: 'Hero Section',
-                  icon: Sparkles,
+                  icon: LayoutTemplate,
                 },
                 {
                   id: 'spotlight',

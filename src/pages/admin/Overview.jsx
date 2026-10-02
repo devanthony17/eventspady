@@ -250,17 +250,12 @@ export default function Overview() {
           </div>
         </div>
 
-        {/* Charts Grid */}
-        <div className="grid gap-6 lg:grid-cols-3">
-          <div className="lg:col-span-2">
-            <AdminAreaChart liveTotal={totalGmv} />
-          </div>
-          <div>
-            <AdminCategoryDonut />
-          </div>
+        {/* Platform Gross Revenue Curve (Full Width) */}
+        <div>
+          <AdminAreaChart liveTotal={totalGmv} />
         </div>
 
-        {/* Payment Gateways & Organizer Verification Quick Queue */}
+        {/* Primary Operations: Payment Gateways & Organizer Verification Quick Queue */}
         <div className="grid gap-6 lg:grid-cols-2">
           <div>
             <AdminPaymentGatewaysBreakdown />
@@ -335,6 +330,11 @@ export default function Overview() {
               <span className="font-medium text-ink-600 dark:text-ink-300">Identity Verification</span>
             </div>
           </div>
+        </div>
+
+        {/* Category Breakdown & Distribution Table (Pushed down for optimal UX) */}
+        <div>
+          <AdminCategoryDonut />
         </div>
 
         {/* Quick CMS Action Card */}

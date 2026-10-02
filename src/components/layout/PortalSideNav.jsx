@@ -4,6 +4,7 @@ import {
   BadgePercent,
   BarChart3,
   Bell,
+  Briefcase,
   Calendar,
   CalendarDays,
   ExternalLink,
@@ -23,7 +24,7 @@ import {
   Users,
   X,
 } from 'lucide-react'
-import { Sparkles, Ticket } from '@components/icons/AppIcons'
+import { Ticket } from '@components/icons/AppIcons'
 import { Logo } from '@components/layout/Logo'
 import { Avatar } from '@components/ui/Avatar'
 import { Badge } from '@components/ui/Badge'
@@ -168,7 +169,7 @@ export function PortalSideNav({ portal: propPortal, mobileOpen = false, onClose 
     },
     organizer: {
       name: 'Organizer Hub',
-      icon: Sparkles,
+      icon: Briefcase,
       badgeTone: 'accent',
       rootTo: '/organizer',
       accentColor: 'text-accent-400',

@@ -310,11 +310,11 @@ export function AdminAreaChart({ liveTotal = 0 }) {
 
 export function AdminCategoryDonut() {
   const categoriesData = [
-    { label: 'Music & Concerts', percentage: 38, count: 18, color: '#6366f1', gmv: 'GH₵148,200' },
-    { label: 'Culture & Festivals', percentage: 26, count: 12, color: '#ec4899', gmv: 'GH₵101,400' },
-    { label: 'Tech & Innovation', percentage: 18, count: 8, color: '#06b6d4', gmv: 'GH₵70,200' },
-    { label: 'Sports & Marathons', percentage: 12, count: 6, color: '#10b981', gmv: 'GH₵46,800' },
-    { label: 'Food & Workshops', percentage: 6, count: 4, color: '#f59e0b', gmv: 'GH₵23,400' },
+    { label: 'Music & Concerts', percentage: 38, count: 18, color: '#6366f1', gmv: 'GH₵148,200', trend: '+24%' },
+    { label: 'Culture & Festivals', percentage: 26, count: 12, color: '#ec4899', gmv: 'GH₵101,400', trend: '+18%' },
+    { label: 'Tech & Innovation', percentage: 18, count: 8, color: '#06b6d4', gmv: 'GH₵70,200', trend: '+31%' },
+    { label: 'Sports & Marathons', percentage: 12, count: 6, color: '#10b981', gmv: 'GH₵46,800', trend: '+9%' },
+    { label: 'Food & Workshops', percentage: 6, count: 4, color: '#f59e0b', gmv: 'GH₵23,400', trend: '+12%' },
   ]
 
   // Calculate SVG stroke-dasharray and stroke-dashoffset for circular ring
@@ -324,72 +324,119 @@ export function AdminCategoryDonut() {
 
   return (
     <div className="surface p-6 sm:p-7">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-ink-100 pb-5 dark:border-white/10">
         <div>
-          <h4 className="text-sm font-extrabold uppercase tracking-wider text-ink-500 dark:text-ink-400">
-            Category Breakdown
-          </h4>
-          <p className="mt-0.5 text-xs text-ink-400">Distribution across 48 live events</p>
+          <div className="flex items-center gap-2">
+            <h4 className="text-base font-bold text-ink-900 dark:text-white">
+              Category Breakdown & Market Share
+            </h4>
+            <span className="rounded-full bg-brand-50 px-2.5 py-0.5 text-xs font-bold text-brand-700 dark:bg-brand-950/60 dark:text-brand-300">
+              Upper West
+            </span>
+          </div>
+          <p className="mt-0.5 text-xs text-ink-500 dark:text-ink-400">
+            Catalog distribution, live events, and gross ticket volume across all districts
+          </p>
         </div>
-        <span className="rounded-full bg-brand-50 px-2.5 py-1 text-xs font-bold text-brand-700 dark:bg-brand-950/60 dark:text-brand-300">
-          Upper West Focus
-        </span>
+        <div className="flex items-center gap-2 text-xs text-ink-500 dark:text-ink-400">
+          <span className="font-semibold text-ink-900 dark:text-white">5 Active Categories</span>
+          <span>·</span>
+          <span>48 Total Events</span>
+        </div>
       </div>
 
-      <div className="mt-6 flex flex-col items-center gap-6 sm:flex-row">
-        {/* SVG Donut */}
-        <div className="relative size-40 shrink-0">
-          <svg className="size-full -rotate-90" viewBox="0 0 160 160">
-            <circle
-              cx="80"
-              cy="80"
-              r={radius}
-              stroke="currentColor"
-              strokeWidth="16"
-              className="text-ink-100 dark:text-white/[.06]"
-              fill="transparent"
-            />
-            {categoriesData.map((cat) => {
-              const dasharray = (cat.percentage / 100) * circumference
-              const offset = -((accumulatedPercent / 100) * circumference)
-              accumulatedPercent += cat.percentage
-              return (
-                <circle
-                  key={cat.label}
-                  cx="80"
-                  cy="80"
-                  r={radius}
-                  stroke={cat.color}
-                  strokeWidth="16"
-                  strokeDasharray={`${dasharray} ${circumference}`}
-                  strokeDashoffset={offset}
-                  strokeLinecap="round"
-                  fill="transparent"
-                  className="transition-all duration-500 hover:stroke-width-20"
-                />
-              )
-            })}
-          </svg>
-          <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-            <span className="text-2xl font-black text-ink-900 dark:text-white">48</span>
-            <span className="text-[10px] font-bold uppercase tracking-wider text-ink-400">Events</span>
+      <div className="mt-6 grid gap-8 lg:grid-cols-12 items-center">
+        {/* SVG Donut Visual */}
+        <div className="flex flex-col items-center justify-center lg:col-span-4 xl:col-span-3">
+          <div className="relative size-44 shrink-0">
+            <svg className="size-full -rotate-90" viewBox="0 0 160 160">
+              <circle
+                cx="80"
+                cy="80"
+                r={radius}
+                stroke="currentColor"
+                strokeWidth="16"
+                className="text-ink-100 dark:text-white/[.06]"
+                fill="transparent"
+              />
+              {categoriesData.map((cat) => {
+                const dasharray = (cat.percentage / 100) * circumference
+                const offset = -((accumulatedPercent / 100) * circumference)
+                accumulatedPercent += cat.percentage
+                return (
+                  <circle
+                    key={cat.label}
+                    cx="80"
+                    cy="80"
+                    r={radius}
+                    stroke={cat.color}
+                    strokeWidth="16"
+                    strokeDasharray={`${dasharray} ${circumference}`}
+                    strokeDashoffset={offset}
+                    strokeLinecap="round"
+                    fill="transparent"
+                    className="transition-all duration-500 hover:opacity-85"
+                  />
+                )
+              })}
+            </svg>
+            <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
+              <span className="text-3xl font-black text-ink-900 dark:text-white">48</span>
+              <span className="text-[10px] font-bold uppercase tracking-wider text-ink-400">Live Events</span>
+            </div>
           </div>
+          <p className="mt-3 text-center text-[11px] text-ink-400">
+            Ranked by gross ticket volume
+          </p>
         </div>
 
-        {/* Legend */}
-        <div className="flex-1 space-y-2.5 w-full">
-          {categoriesData.map((cat) => (
-            <div key={cat.label} className="flex items-center justify-between text-xs">
-              <div className="flex items-center gap-2">
-                <span className="size-2.5 rounded-full shrink-0" style={{ backgroundColor: cat.color }} />
-                <span className="font-semibold text-ink-700 dark:text-ink-200">{cat.label}</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <span className="font-bold text-ink-900 dark:text-white">{cat.percentage}%</span>
-                <span className="text-ink-400 w-16 text-right">{cat.gmv}</span>
-              </div>
-            </div>
-          ))}
+        {/* Category Breakdown Table */}
+        <div className="lg:col-span-8 xl:col-span-9 overflow-x-auto">
+          <table className="w-full text-left text-sm">
+            <thead>
+              <tr className="border-b border-ink-100 text-[11px] font-bold uppercase tracking-wider text-ink-400 dark:border-white/10">
+                <th className="pb-3 pr-4">Category</th>
+                <th className="pb-3 px-4">Live Events</th>
+                <th className="pb-3 px-4">Market Share</th>
+                <th className="pb-3 px-4 text-right">Gross GMV</th>
+                <th className="pb-3 pl-4 text-right">Trend</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-ink-100/70 dark:divide-white/[.06]">
+              {categoriesData.map((cat) => (
+                <tr key={cat.label} className="transition hover:bg-ink-50/50 dark:hover:bg-white/[.02]">
+                  <td className="py-3.5 pr-4">
+                    <div className="flex items-center gap-2.5">
+                      <span className="size-2.5 rounded-full shrink-0" style={{ backgroundColor: cat.color }} />
+                      <span className="font-semibold text-ink-900 dark:text-white">{cat.label}</span>
+                    </div>
+                  </td>
+                  <td className="py-3.5 px-4 font-medium text-ink-600 dark:text-ink-300 text-xs">
+                    {cat.count} events
+                  </td>
+                  <td className="py-3.5 px-4">
+                    <div className="flex items-center gap-2.5">
+                      <div className="h-2 w-20 sm:w-28 rounded-full bg-ink-100 dark:bg-white/10 overflow-hidden">
+                        <div
+                          className="h-full rounded-full transition-all duration-500"
+                          style={{ width: `${cat.percentage}%`, backgroundColor: cat.color }}
+                        />
+                      </div>
+                      <span className="text-xs font-bold text-ink-700 dark:text-ink-200 tabular-nums">
+                        {cat.percentage}%
+                      </span>
+                    </div>
+                  </td>
+                  <td className="py-3.5 px-4 text-right font-bold text-ink-900 dark:text-white text-xs tabular-nums">
+                    {cat.gmv}
+                  </td>
+                  <td className="py-3.5 pl-4 text-right font-bold text-emerald-600 dark:text-emerald-400 text-xs">
+                    {cat.trend}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

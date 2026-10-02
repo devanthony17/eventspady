@@ -1,11 +1,12 @@
 import { useState } from 'react'
-import { Clock, Mail, MapPin, MessageSquare, Phone, Send } from 'lucide-react'
+import { Clock, Mail, MapPin, MessageSquare, Phone, Send, ShieldCheck, CheckCircle2 } from 'lucide-react'
 import { Seo } from '@components/ui/Seo'
 import { PageHero } from '@components/layout/PageHero'
 import { Container, Section } from '@components/ui/Section'
 import { Button } from '@components/ui/Button'
 import { Input, Select, Textarea } from '@components/ui/Field'
 import { Accordion } from '@components/ui/Accordion'
+import { useAos } from '@hooks/useAos'
 import { useToast } from '@context/ToastContext'
 import { generalApi } from '@api/general.api'
 import { faqGroups } from '@data/faq'
@@ -24,6 +25,9 @@ export default function Contact() {
   const toast = useToast()
   const [form, setForm] = useState({ name: '', email: '', topic: TOPICS[0], orderId: '', message: '' })
   const [sending, setSending] = useState(false)
+
+  // Initialize Animate-On-Scroll reveals
+  useAos({ threshold: 0.1, once: true })
 
   const onSubmit = async (e) => {
     e.preventDefault()
@@ -53,13 +57,23 @@ export default function Contact() {
         title="Talk to a human"
         description="Whether it is a ticket that will not scan or a festival you want to move onto the platform — we read everything and reply within a business day."
         breadcrumbs={[{ label: 'Contact' }]}
-      />
+        data-aos="fade-down"
+      >
+        <div className="flex flex-wrap items-center gap-2.5 pt-2" data-aos="fade-up" data-aos-delay="150">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-brand-500/10 px-3.5 py-1.5 text-xs font-bold text-brand-700 dark:bg-brand-400/15 dark:text-brand-300">
+            <CheckCircle2 className="size-3.5" strokeWidth={2.5} /> Typical reply in &lt; 4 hours
+          </span>
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/10 px-3.5 py-1.5 text-xs font-bold text-emerald-700 dark:bg-emerald-400/15 dark:text-emerald-300">
+            <ShieldCheck className="size-3.5" strokeWidth={2.5} /> Human support — no bots
+          </span>
+        </div>
+      </PageHero>
 
       <Section>
         <Container>
           <div className="grid gap-10 lg:grid-cols-[1fr_20rem] lg:gap-14">
             {/* Form */}
-            <form onSubmit={onSubmit} className="surface p-6 sm:p-8">
+            <form onSubmit={onSubmit} className="surface p-6 sm:p-8" data-aos="fade-right" data-aos-delay="100">
               <h2 className="text-xl font-bold">Send us a message</h2>
               <p className="mt-1.5 text-sm text-ink-500 dark:text-ink-400">
                 The more detail you give, the faster we can help.
@@ -121,7 +135,7 @@ export default function Contact() {
             </form>
 
             {/* Details */}
-            <aside className="space-y-5">
+            <aside className="space-y-5" data-aos="fade-left" data-aos-delay="150">
               <div className="surface p-6">
                 <h2 className="mb-5 text-base font-bold">Other ways to reach us</h2>
 
@@ -154,7 +168,7 @@ export default function Contact() {
                 </ul>
               </div>
 
-              <div className="rounded-2xl bg-gradient-to-br from-brand-600 to-ink-950 p-6 text-white">
+              <div className="rounded-2xl bg-gradient-to-br from-brand-600 to-ink-950 p-6 text-white shadow-lift">
                 <MessageSquare className="mb-3 size-6 text-accent-400" aria-hidden="true" />
                 <h2 className="text-base font-bold">Have feedback instead?</h2>
                 <p className="mt-1.5 text-sm text-white/75">
@@ -168,12 +182,14 @@ export default function Contact() {
           </div>
 
           {/* Quick answers */}
-          <div className="mx-auto mt-16 max-w-3xl">
-            <h2 className="mb-2 text-center text-2xl font-extrabold">Quick answers</h2>
-            <p className="mb-6 text-center text-sm text-ink-500 dark:text-ink-400">
+          <div className="mx-auto mt-16 max-w-3xl" data-aos="fade-up">
+            <h2 className="mb-2 text-center text-2xl font-extrabold" data-aos="fade-up">Quick answers</h2>
+            <p className="mb-6 text-center text-sm text-ink-500 dark:text-ink-400" data-aos="fade-up" data-aos-delay="50">
               These come up most often — you might not need to write to us at all.
             </p>
-            <Accordion items={faqGroups[0].items.slice(0, 4)} />
+            <div data-aos="fade-up" data-aos-delay="100">
+              <Accordion items={faqGroups[0].items.slice(0, 4)} />
+            </div>
           </div>
         </Container>
       </Section>

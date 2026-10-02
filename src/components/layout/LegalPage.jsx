@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Container, Section } from '@components/ui/Section'
 import { PageHero } from '@components/layout/PageHero'
+import { useAos } from '@hooks/useAos'
 import { cn, formatDate } from '@lib/utils'
 
 /**
@@ -10,6 +11,9 @@ import { cn, formatDate } from '@lib/utils'
  */
 export function LegalPage({ eyebrow, title, description, updatedAt, sections, breadcrumbs }) {
   const [activeId, setActiveId] = useState(sections[0]?.id)
+
+  // Initialize Animate-On-Scroll reveals
+  useAos({ threshold: 0.1, once: true })
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -37,9 +41,10 @@ export function LegalPage({ eyebrow, title, description, updatedAt, sections, br
         title={title}
         description={description}
         breadcrumbs={breadcrumbs}
+        data-aos="fade-down"
       >
-        <p className="text-sm text-ink-500 dark:text-ink-400">
-          Last updated {formatDate(updatedAt, { month: 'long' })}
+        <p className="inline-block rounded-full bg-ink-100 px-3 py-1 text-xs font-semibold text-ink-600 dark:bg-white/10 dark:text-ink-300" data-aos="fade-up" data-aos-delay="100">
+          Last updated {formatDate(updatedAt, { month: 'long', day: 'numeric', year: 'numeric' })}
         </p>
       </PageHero>
 
@@ -47,7 +52,7 @@ export function LegalPage({ eyebrow, title, description, updatedAt, sections, br
         <Container>
           <div className="grid gap-10 lg:grid-cols-[16rem_1fr] lg:gap-14">
             {/* Table of contents */}
-            <nav aria-label="On this page" className="hidden lg:block">
+            <nav aria-label="On this page" className="hidden lg:block" data-aos="fade-right" data-aos-delay="150">
               <div className="sticky top-24">
                 <p className="mb-3 text-xs font-bold uppercase tracking-wider text-ink-400">On this page</p>
                 <ul className="space-y-1 border-l border-ink-200 dark:border-white/10">
@@ -72,8 +77,14 @@ export function LegalPage({ eyebrow, title, description, updatedAt, sections, br
 
             {/* Content */}
             <div className="min-w-0 max-w-3xl">
-              {sections.map((section) => (
-                <section key={section.id} id={section.id} className="scroll-mt-24 pb-10">
+              {sections.map((section, idx) => (
+                <section
+                  key={section.id}
+                  id={section.id}
+                  className="scroll-mt-24 pb-10"
+                  data-aos="fade-up"
+                  data-aos-delay={`${Math.min((idx + 1) * 50, 250)}`}
+                >
                   <h2 className="text-2xl font-extrabold">{section.title}</h2>
 
                   <div className="mt-4 space-y-4">

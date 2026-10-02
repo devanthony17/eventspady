@@ -7,6 +7,7 @@ import { Accordion } from '@components/ui/Accordion'
 import { Button } from '@components/ui/Button'
 import { EmptyState } from '@components/ui/EmptyState'
 import { allFaqs as defaultAllFaqs, faqGroups as defaultFaqGroups } from '@data/faq'
+import { useAos } from '@hooks/useAos'
 import { useFaq } from '@hooks/api'
 import { cn } from '@lib/utils'
 
@@ -27,6 +28,9 @@ export default function Faq() {
 
   const [query, setQuery] = useState('')
   const [activeGroup, setActiveGroup] = useState(faqGroups[0]?.id || 'attendees')
+
+  // Initialize Animate-On-Scroll reveals
+  useAos({ threshold: 0.1, once: true })
 
   const results = useMemo(() => {
     const q = query.trim().toLowerCase()
@@ -50,8 +54,9 @@ export default function Faq() {
         title="Frequently asked questions"
         description="Everything about booking, paying, checking in and organizing. Cannot find it? Our team answers within a day."
         breadcrumbs={[{ label: 'FAQ' }]}
+        data-aos="fade-down"
       >
-        <div className="relative max-w-lg">
+        <div className="relative max-w-lg" data-aos="fade-up" data-aos-delay="150">
           <Search className="pointer-events-none absolute left-4 top-1/2 size-5 -translate-y-1/2 text-ink-400" aria-hidden="true" />
           <label htmlFor="faq-search" className="sr-only">
             Search the FAQ
@@ -69,30 +74,34 @@ export default function Faq() {
       <Section>
         <Container>
           {results ? (
-            <div className="mx-auto max-w-3xl">
-              <p className="mb-6 text-sm text-ink-500 dark:text-ink-400">
+            <div className="mx-auto max-w-3xl" data-aos="fade-up">
+              <p className="mb-6 text-sm text-ink-500 dark:text-ink-400" data-aos="fade-up">
                 {results.length} {results.length === 1 ? 'answer' : 'answers'} for “{query}”
               </p>
 
               {results.length === 0 ? (
-                <EmptyState
-                  icon={LifeBuoy}
-                  title="No answers matched"
-                  description="Try a different word, or ask us directly — we reply within a business day."
-                  action={
-                    <Button to="/contact" variant="outline">
-                      Contact support
-                    </Button>
-                  }
-                />
+                <div data-aos="zoom-in" data-aos-delay="100">
+                  <EmptyState
+                    icon={LifeBuoy}
+                    title="No answers matched"
+                    description="Try a different word, or ask us directly — we reply within a business day."
+                    action={
+                      <Button to="/contact" variant="outline">
+                        Contact support
+                      </Button>
+                    }
+                  />
+                </div>
               ) : (
-                <Accordion items={results} allowMultiple defaultOpen={[0]} />
+                <div data-aos="fade-up" data-aos-delay="100">
+                  <Accordion items={results} allowMultiple defaultOpen={[0]} />
+                </div>
               )}
             </div>
           ) : (
             <div className="grid gap-10 lg:grid-cols-[15rem_1fr] lg:gap-14">
               {/* Group nav */}
-              <nav aria-label="FAQ categories">
+              <nav aria-label="FAQ categories" data-aos="fade-right" data-aos-delay="100">
                 <div className="sticky top-24 space-y-1">
                   {faqGroups.map((item) => (
                     <button
@@ -120,12 +129,18 @@ export default function Faq() {
                 </div>
               </nav>
 
-              <div className="min-w-0">
-                <h2 className="text-2xl font-extrabold">{group.title}</h2>
-                <Accordion items={group.items} defaultOpen={[0]} className="mt-2" />
+              <div className="min-w-0" data-aos="fade-left" data-aos-delay="150">
+                <h2 className="text-2xl font-extrabold" data-aos="fade-up">{group.title}</h2>
+                <div data-aos="fade-up" data-aos-delay="100">
+                  <Accordion items={group.items} defaultOpen={[0]} className="mt-2" />
+                </div>
 
                 {/* Support CTA */}
-                <div className="mt-12 flex flex-col items-start gap-5 rounded-3xl bg-gradient-to-br from-brand-600 to-ink-950 p-7 text-white sm:flex-row sm:items-center sm:justify-between sm:p-9">
+                <div
+                  className="mt-12 flex flex-col items-start gap-5 rounded-3xl bg-gradient-to-br from-brand-600 to-ink-950 p-7 text-white shadow-lift sm:flex-row sm:items-center sm:justify-between sm:p-9"
+                  data-aos="zoom-in-up"
+                  data-aos-delay="200"
+                >
                   <div>
                     <h3 className="text-xl font-extrabold">Still stuck?</h3>
                     <p className="mt-2 max-w-md text-sm text-white/75">

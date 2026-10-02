@@ -1,10 +1,11 @@
 import { useState } from 'react'
-import { Bug, Heart, Lightbulb, Send, Star, ThumbsUp } from 'lucide-react'
+import { Bug, Heart, Lightbulb, MessageSquare, Send, Star, ThumbsUp, ShieldCheck } from 'lucide-react'
 import { Seo } from '@components/ui/Seo'
 import { PageHero } from '@components/layout/PageHero'
 import { Container, Section } from '@components/ui/Section'
 import { Button } from '@components/ui/Button'
 import { Input, Textarea, Checkbox } from '@components/ui/Field'
+import { useAos } from '@hooks/useAos'
 import { useAuth } from '@context/AuthContext'
 import { useToast } from '@context/ToastContext'
 import { generalApi } from '@api/general.api'
@@ -27,6 +28,9 @@ export default function Feedback() {
   const [contactMe, setContactMe] = useState(true)
   const [sending, setSending] = useState(false)
   const [sent, setSent] = useState(false)
+
+  // Initialize Animate-On-Scroll reveals
+  useAos({ threshold: 0.1, once: true })
 
   const onSubmit = async (e) => {
     e.preventDefault()
@@ -56,12 +60,22 @@ export default function Feedback() {
         title="Tell us what would make this better"
         description="Feedback goes to the admin team and straight into our planning. We read every submission — including the blunt ones."
         breadcrumbs={[{ label: 'Feedback' }]}
-      />
+        data-aos="fade-down"
+      >
+        <div className="flex flex-wrap items-center gap-2.5 pt-2" data-aos="fade-up" data-aos-delay="150">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-brand-500/10 px-3.5 py-1.5 text-xs font-bold text-brand-700 dark:bg-brand-400/15 dark:text-brand-300">
+            <MessageSquare className="size-3.5" strokeWidth={2.5} /> Direct to product team
+          </span>
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/10 px-3.5 py-1.5 text-xs font-bold text-emerald-700 dark:bg-emerald-400/15 dark:text-emerald-300">
+            <ShieldCheck className="size-3.5" strokeWidth={2.5} /> Every submission reviewed
+          </span>
+        </div>
+      </PageHero>
 
       <Section>
         <Container size="narrow">
           {sent ? (
-            <div className="surface p-10 text-center">
+            <div className="surface p-10 text-center" data-aos="zoom-in-up">
               <span className="mx-auto mb-5 grid size-16 place-items-center rounded-2xl bg-emerald-100 text-emerald-600 dark:bg-emerald-500/15 dark:text-emerald-400">
                 <ThumbsUp className="size-8" aria-hidden="true" />
               </span>
@@ -85,18 +99,18 @@ export default function Feedback() {
               </div>
             </div>
           ) : (
-            <form onSubmit={onSubmit} className="surface p-6 sm:p-9">
+            <form onSubmit={onSubmit} className="surface p-6 sm:p-9" data-aos="fade-up" data-aos-delay="100">
               {/* Type */}
-              <fieldset className="mb-7">
+              <fieldset className="mb-7" data-aos="fade-up" data-aos-delay="150">
                 <legend className="label">What kind of feedback is this?</legend>
                 <div className="grid gap-3 sm:grid-cols-3">
                   {TYPES.map((option) => (
                     <label
                       key={option.id}
                       className={cn(
-                        'flex cursor-pointer flex-col items-center gap-3 rounded-2xl border p-5 text-center transition',
+                        'flex cursor-pointer flex-col items-center gap-3 rounded-2xl border p-5 text-center transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm',
                         type === option.id
-                          ? 'border-brand-600 bg-brand-50 dark:border-brand-500 dark:bg-brand-500/10'
+                          ? 'border-brand-600 bg-brand-50 shadow-sm dark:border-brand-500 dark:bg-brand-500/10'
                           : 'border-ink-200 hover:border-ink-300 dark:border-white/10 dark:hover:border-white/20',
                       )}
                     >
@@ -109,7 +123,7 @@ export default function Feedback() {
                       />
                       <span
                         className={cn(
-                          'grid size-11 place-items-center rounded-xl bg-gradient-to-br text-white',
+                          'grid size-11 place-items-center rounded-xl bg-gradient-to-br text-white shadow-sm',
                           option.tone,
                         )}
                       >
@@ -122,7 +136,7 @@ export default function Feedback() {
               </fieldset>
 
               {/* Rating */}
-              <fieldset className="mb-7">
+              <fieldset className="mb-7" data-aos="fade-up" data-aos-delay="200">
                 <legend className="label">How would you rate Eventspady overall?</legend>
                 <div className="flex items-center gap-2">
                   {Array.from({ length: 5 }, (_, i) => {
@@ -155,7 +169,7 @@ export default function Feedback() {
                 </div>
               </fieldset>
 
-              <div className="grid gap-4 sm:grid-cols-2">
+              <div className="grid gap-4 sm:grid-cols-2" data-aos="fade-up" data-aos-delay="250">
                 <Input
                   label="Your name"
                   value={form.name}
@@ -189,17 +203,21 @@ export default function Feedback() {
                 />
               </div>
 
-              <Checkbox
-                checked={contactMe}
-                onChange={(e) => setContactMe(e.target.checked)}
-                label="You can contact me about this"
-                description="We will only get in touch if we need more detail or have shipped a fix."
-                className="mt-5"
-              />
+              <div data-aos="fade-up" data-aos-delay="300">
+                <Checkbox
+                  checked={contactMe}
+                  onChange={(e) => setContactMe(e.target.checked)}
+                  label="You can contact me about this"
+                  description="We will only get in touch if we need more detail or have shipped a fix."
+                  className="mt-5"
+                />
+              </div>
 
-              <Button type="submit" size="lg" loading={sending} iconLeft={Send} className="mt-7">
-                Send feedback
-              </Button>
+              <div data-aos="fade-up" data-aos-delay="350">
+                <Button type="submit" size="lg" loading={sending} iconLeft={Send} className="mt-7">
+                  Send feedback
+                </Button>
+              </div>
             </form>
           )}
         </Container>

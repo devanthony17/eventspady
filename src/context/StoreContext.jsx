@@ -168,8 +168,14 @@ function getInitialData() {
         cms: {
           ...DEFAULT_CMS,
           ...(parsed.cms || {}),
-          testimonials: seedTestimonials,
-          blogPosts: seedPosts,
+          testimonials:
+            Array.isArray(parsed.cms?.testimonials) && parsed.cms.testimonials.length > 0
+              ? parsed.cms.testimonials
+              : seedTestimonials,
+          blogPosts:
+            Array.isArray(parsed.cms?.blogPosts) && parsed.cms.blogPosts.length > 0
+              ? parsed.cms.blogPosts
+              : seedPosts,
         },
         gateViolations: parsed.gateViolations || {},
       }

@@ -305,8 +305,6 @@ const empty = () => `
 const created = []
 
 // Brand
-created.push(write('logo.svg', wordmark(false)))
-created.push(write('logo-dark.svg', wordmark(true)))
 created.push(write('mark.svg', MARK(64)))
 created.push(write('favicon.svg', MARK(64)))
 created.push(write('og-image.svg', ogImage()))

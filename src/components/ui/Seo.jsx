@@ -116,7 +116,7 @@ export function articleJsonLd(post) {
     publisher: {
       '@type': 'Organization',
       name: SITE.name,
-      logo: { '@type': 'ImageObject', url: `${SITE.url}/images/logo.svg` },
+      logo: { '@type': 'ImageObject', url: `${SITE.url}/images/logo.webp` },
     },
     mainEntityOfPage: `${SITE.url}/blog/${post.slug}`,
   }

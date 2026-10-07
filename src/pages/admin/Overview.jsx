@@ -252,13 +252,13 @@ export default function Overview() {
 
         {/* Platform Gross Revenue Curve (Full Width) */}
         <div>
-          <AdminAreaChart liveTotal={totalGmv} />
+          <AdminAreaChart liveTotal={totalGmv} orders={orders} />
         </div>
 
         {/* Primary Operations: Payment Gateways & Organizer Verification Quick Queue */}
         <div className="grid gap-6 lg:grid-cols-2">
           <div>
-            <AdminPaymentGatewaysBreakdown />
+            <AdminPaymentGatewaysBreakdown orders={orders} liveTotal={totalGmv} />
           </div>
 
           {/* Organizer Quick Verification Board */}
@@ -334,7 +334,7 @@ export default function Overview() {
 
         {/* Category Breakdown & Distribution Table (Pushed down for optimal UX) */}
         <div>
-          <AdminCategoryDonut />
+          <AdminCategoryDonut events={events} orders={orders} />
         </div>
 
         {/* Quick CMS Action Card */}

@@ -9,17 +9,21 @@ import { Button } from '@components/ui/Button'
 import { Avatar } from '@components/ui/Avatar'
 import { EmptyState } from '@components/ui/EmptyState'
 import { useBlogPosts } from '@hooks/api'
+import { useStore } from '@context/StoreContext'
 import { cn, formatDate, readingTime } from '@lib/utils'
 
 export default function Blog() {
+  const { cms: storeCms } = useStore()
   const [query, setQuery] = useState('')
   const [category, setCategory] = useState('All')
   const { data: blogData, isLoading: blogLoading } = useBlogPosts()
 
   const posts = useMemo(() => {
-    if (Array.isArray(blogData)) return blogData
-    return blogData?.posts || blogData?.data || []
-  }, [blogData])
+    if (Array.isArray(blogData) && blogData.length > 0) return blogData
+    if (Array.isArray(blogData?.posts) && blogData.posts.length > 0) return blogData.posts
+    if (Array.isArray(blogData?.data) && blogData.data.length > 0) return blogData.data
+    return storeCms?.blogPosts || []
+  }, [blogData, storeCms])
 
   const blogCategories = useMemo(() => {
     const set = new Set(posts.map((p) => p.category).filter(Boolean))

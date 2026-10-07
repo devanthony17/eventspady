@@ -2,10 +2,7 @@ import { Link } from 'react-router-dom'
 import { cn } from '@lib/utils'
 
 /**
- * Brand logo, served from `public/images`.
- * Two files are shipped so the wordmark stays legible on both themes:
- * `logo.svg` (dark text) and `logo-dark.svg` (light text). Swap those files
- * to rebrand — no code change needed.
+ * Brand logo, served from `public/images/logo.webp`.
  */
 export function Logo({ className, showWordmark = true, to = '/', tone = 'auto', size = 'md' }) {
   const heights = {
@@ -15,8 +12,8 @@ export function Logo({ className, showWordmark = true, to = '/', tone = 'auto', 
   }
   const height = heights[size] ?? heights.md
 
-  const src = showWordmark ? '/images/logo.jpeg' : '/images/logo.jpeg'
-  const darkSrc = showWordmark ? '/images/logo.jpeg' : '/images/logo.jpeg'
+  const src = '/images/logo.webp'
+  const darkSrc = '/images/logo.webp'
 
   return (
     <Link

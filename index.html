@@ -35,19 +35,6 @@
     </script>
   </head>
   <body class="bg-white text-ink-900 antialiased dark:bg-ink-950 dark:text-ink-100">
-    <script>
-      const originalConsoleError = console.error;
-      console.error = function(...args) {
-        fetch('/log_error.php', { method: 'POST', body: 'CONSOLE ERROR: ' + args.join(' ') }).catch(()=>null);
-        originalConsoleError.apply(console, args);
-      };
-      window.addEventListener('error', function(e) {
-        fetch('/log_error.php', { method: 'POST', body: 'WINDOW ERROR: ' + e.message + ' ' + (e.error ? e.error.stack : '') }).catch(()=>null);
-      });
-      window.addEventListener('unhandledrejection', function(e) {
-        fetch('/log_error.php', { method: 'POST', body: 'PROMISE ERROR: ' + (e.reason ? (e.reason.stack || e.reason) : e) }).catch(()=>null);
-      });
-    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

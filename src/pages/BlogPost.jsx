@@ -8,6 +8,7 @@ import { Badge } from '@components/ui/Badge'
 import { Button } from '@components/ui/Button'
 import { Avatar } from '@components/ui/Avatar'
 import { useToast } from '@context/ToastContext'
+import { useStore } from '@context/StoreContext'
 import { useBlogPost, useBlogPosts } from '@hooks/api'
 import { SITE } from '@lib/constants'
 import { formatDate, readingTime } from '@lib/utils'
@@ -15,13 +16,16 @@ import NotFound from '@pages/NotFound'
 
 export default function BlogPost() {
   const { slug } = useParams()
+  const { cms: storeCms } = useStore()
   const { data: postData, isLoading: postLoading } = useBlogPost(slug)
   const { data: allPostsData } = useBlogPosts()
   const [copied, setCopied] = useState(false)
   const toast = useToast()
 
-  const post = postData?.post || postData?.data || postData
-  const allPosts = Array.isArray(allPostsData) ? allPostsData : (allPostsData?.posts || allPostsData?.data || [])
+  const storePost = storeCms?.blogPosts?.find((p) => p.slug === slug || p.id === slug)
+  const post = postData?.post || postData?.data || (postData?.title ? postData : storePost)
+  const apiPosts = Array.isArray(allPostsData) ? allPostsData : (allPostsData?.posts || allPostsData?.data || [])
+  const allPosts = apiPosts.length > 0 ? apiPosts : (storeCms?.blogPosts || [])
 
   if (postLoading && !post) {
     return (

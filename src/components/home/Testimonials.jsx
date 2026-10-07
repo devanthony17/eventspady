@@ -3,6 +3,7 @@ import { Quote, ChevronLeft, ChevronRight, ShieldCheck } from 'lucide-react'
 import { Container, Section, SectionHeading } from '@components/ui/Section'
 import { Rating } from '@components/ui/Rating'
 import { useLandingCms } from '@hooks/api'
+import { useStore } from '@context/StoreContext'
 import { trustedOrganizers as defaultTrustedOrganizers } from '@data/testimonials'
 
 const DEFAULT_TESTIMONIALS = [
@@ -42,8 +43,9 @@ const DEFAULT_ORGANIZERS = [
 ]
 
 export function Testimonials() {
+  const { cms: storeCms } = useStore()
   const { data: cmsData } = useLandingCms()
-  const cmsTestimonials = cmsData?.testimonials || cmsData?.data?.testimonials
+  const cmsTestimonials = cmsData?.testimonials || cmsData?.data?.testimonials || storeCms?.testimonials
   const list = cmsTestimonials && cmsTestimonials.length > 0 ? cmsTestimonials : DEFAULT_TESTIMONIALS
 
   const trustedOrganizers = useMemo(() => {

@@ -7,11 +7,14 @@ import { Button } from '@components/ui/Button'
 import { Badge } from '@components/ui/Badge'
 import { Avatar } from '@components/ui/Avatar'
 import { useBlogPosts } from '@hooks/api'
+import { useStore } from '@context/StoreContext'
 import { formatDate, readingTime } from '@lib/utils'
 
 export function BlogPreview() {
+  const { cms: storeCms } = useStore()
   const { data: blogData } = useBlogPosts()
-  const allPosts = (Array.isArray(blogData) ? blogData : (blogData?.posts || blogData?.data || [])).slice(0, 6)
+  const apiPosts = Array.isArray(blogData) ? blogData : (blogData?.posts || blogData?.data || [])
+  const allPosts = (apiPosts.length > 0 ? apiPosts : (storeCms?.blogPosts || [])).slice(0, 6)
 
   // Top 3 dynamic stories for the upper featured hero card
   const featuredStories = allPosts.slice(0, 3)
@@ -166,13 +169,13 @@ export function BlogPreview() {
                 {/* Footer with Author info and Direct CTA */}
                 <div className="mt-8 flex flex-wrap items-center justify-between gap-4 border-t border-ink-200/70 pt-5 dark:border-white/10">
                   <div className="flex items-center gap-3">
-                    <Avatar src={currentStory.author.avatar} name={currentStory.author.name} size="md" />
+                    <Avatar src={currentStory.author?.avatar} name={currentStory.author?.name} size="md" />
                     <div className="min-w-0">
                       <p className="truncate text-xs font-bold text-ink-900 dark:text-white">
-                        {currentStory.author.name}
+                        {currentStory.author?.name}
                       </p>
                       <p className="truncate text-[11px] text-ink-400">
-                        {currentStory.author.role} · {formatDate(currentStory.publishedAt)}
+                        {currentStory.author?.role} · {formatDate(currentStory.publishedAt)}
                       </p>
                     </div>
                   </div>
@@ -234,9 +237,9 @@ export function BlogPreview() {
                     </div>
 
                     <div className="mt-5 flex items-center gap-3 border-t border-ink-200/70 pt-4 dark:border-white/10">
-                      <Avatar src={post.author.avatar} name={post.author.name} size="sm" />
+                      <Avatar src={post.author?.avatar} name={post.author?.name} size="sm" />
                       <div className="min-w-0 flex-1">
-                        <p className="truncate text-xs font-bold">{post.author.name}</p>
+                        <p className="truncate text-xs font-bold">{post.author?.name}</p>
                         <p className="truncate text-[11px] text-ink-400">{formatDate(post.publishedAt)}</p>
                       </div>
                     </div>

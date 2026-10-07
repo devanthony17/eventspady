@@ -155,6 +155,75 @@ export function useResetCmsMutation() {
   })
 }
 
+export function useCreateCmsTestimonialMutation() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (payload) => adminApi.createCmsTestimonial(payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin', 'cms'] })
+      queryClient.invalidateQueries({ queryKey: ['cms'] })
+    },
+  })
+}
+
+export function useUpdateCmsTestimonialMutation() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: ({ id, ...payload }) => adminApi.updateCmsTestimonial(id, payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin', 'cms'] })
+      queryClient.invalidateQueries({ queryKey: ['cms'] })
+    },
+  })
+}
+
+export function useDeleteCmsTestimonialMutation() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (id) => adminApi.deleteCmsTestimonial(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin', 'cms'] })
+      queryClient.invalidateQueries({ queryKey: ['cms'] })
+    },
+  })
+}
+
+export function useCreateCmsBlogPostMutation() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (payload) => adminApi.createCmsBlogPost(payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin', 'cms'] })
+      queryClient.invalidateQueries({ queryKey: ['cms'] })
+      queryClient.invalidateQueries({ queryKey: ['blog'] })
+    },
+  })
+}
+
+export function useUpdateCmsBlogPostMutation() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: ({ id, ...payload }) => adminApi.updateCmsBlogPost(id, payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin', 'cms'] })
+      queryClient.invalidateQueries({ queryKey: ['cms'] })
+      queryClient.invalidateQueries({ queryKey: ['blog'] })
+    },
+  })
+}
+
+export function useDeleteCmsBlogPostMutation() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (id) => adminApi.deleteCmsBlogPost(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin', 'cms'] })
+      queryClient.invalidateQueries({ queryKey: ['cms'] })
+      queryClient.invalidateQueries({ queryKey: ['blog'] })
+    },
+  })
+}
+
 export function useAdminGateViolations(options = {}) {
   return useQuery({
     queryKey: ['admin', 'gate-violations'],

@@ -5,6 +5,7 @@ import { Badge } from '@components/ui/Badge'
 import { Button } from '@components/ui/Button'
 import { useCountdown } from '@hooks/useCountdown'
 import { useEvents, useLandingCms } from '@hooks/api'
+import { useStore } from '@context/StoreContext'
 import { formatCurrency, formatDateRange } from '@lib/utils'
 
 function CountdownUnit({ value, label }) {
@@ -20,11 +21,12 @@ function CountdownUnit({ value, label }) {
 
 /** Countdown banner for the next big featured event. */
 export function SpotlightBanner() {
+  const { cms: storeCms } = useStore()
   const { data: eventsData } = useEvents()
   const { data: cmsData } = useLandingCms()
 
   const activeEvents = Array.isArray(eventsData) ? eventsData : (eventsData?.events || eventsData?.data || [])
-  const spotlightConfig = cmsData?.spotlight || cmsData?.data?.spotlight
+  const spotlightConfig = cmsData?.spotlight || cmsData?.data?.spotlight || storeCms?.spotlight
 
   const spotlight =
     (spotlightConfig?.eventSlug && activeEvents.find((e) => e.slug === spotlightConfig.eventSlug)) ||
@@ -40,7 +42,7 @@ export function SpotlightBanner() {
       <Container>
         <div className="relative overflow-hidden rounded-[2rem] bg-ink-950 text-white">
           <img
-            src={spotlight.cover}
+            src={spotlightConfig?.customImage || spotlightConfig?.image || spotlightConfig?.cover || spotlight.cover}
             alt=""
             className="absolute inset-0 size-full object-cover opacity-40"
             loading="lazy"

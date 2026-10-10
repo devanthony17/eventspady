@@ -1,12 +1,11 @@
-import apiClient from './client'
+import { categories } from '../data/categories'
 
 export const categoriesApi = {
   /**
-   * Fetch all event categories
+   * Fetch all event categories (MOCK)
    */
   async getCategories() {
-    const res = await apiClient.get('/api/categories')
-    return res.data
+    return categories
   },
 }
 

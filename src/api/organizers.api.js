@@ -1,20 +1,13 @@
-import apiClient from './client'
+import { organizers, getOrganizer } from '../data/organizers'
 
 export const organizersApi = {
-  /**
-   * Fetch all published organizers
-   */
   async getOrganizers(params = {}) {
-    const res = await apiClient.get('/api/organizers', { params })
-    return res.data
+    return { data: organizers, meta: { total: organizers.length } }
   },
 
-  /**
-   * Fetch organizer profile by id
-   */
   async getOrganizerById(id) {
-    const res = await apiClient.get(`/api/organizers/${encodeURIComponent(id)}`)
-    return res.data
+    const organizer = getOrganizer(id)
+    return { data: organizer }
   },
 }
 

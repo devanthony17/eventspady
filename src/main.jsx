@@ -12,7 +12,7 @@ createRoot(document.getElementById('root')).render(
     <QueryClientProvider client={queryClient}>
       <HelmetProvider>
         <BrowserRouter
-          basename="/eventspady"
+          basename="/"
           future={{
             v7_startTransition: true,
             v7_relativeSplatPath: true,

@@ -48,27 +48,51 @@ export default function Overview() {
   const toast = useToast()
 
   const organizers = useMemo(() => {
-    if (Array.isArray(organizersData)) return organizersData
-    if (Array.isArray(organizersData?.organizers)) return organizersData.organizers
-    if (organizersData?.data) return organizersData.data
-    if (organizersData !== undefined) return []
-    return storeOrganizers
+    const apiList = Array.isArray(organizersData)
+      ? organizersData
+      : Array.isArray(organizersData?.organizers)
+        ? organizersData.organizers
+        : Array.isArray(organizersData?.data)
+          ? organizersData.data
+          : []
+    if (apiList.length > 0) {
+      const apiIds = new Set(apiList.map((o) => o.id))
+      const extraStore = (storeOrganizers || []).filter((o) => !apiIds.has(o.id))
+      return [...apiList, ...extraStore]
+    }
+    return storeOrganizers || []
   }, [organizersData, storeOrganizers])
 
   const events = useMemo(() => {
-    if (Array.isArray(eventsData)) return eventsData
-    if (Array.isArray(eventsData?.events)) return eventsData.events
-    if (eventsData?.data) return eventsData.data
-    if (eventsData !== undefined) return []
-    return storeEvents
+    const apiList = Array.isArray(eventsData)
+      ? eventsData
+      : Array.isArray(eventsData?.events)
+        ? eventsData.events
+        : Array.isArray(eventsData?.data)
+          ? eventsData.data
+          : []
+    if (apiList.length > 0) {
+      const apiIds = new Set(apiList.map((e) => e.id))
+      const extraStore = (storeEvents || []).filter((e) => !apiIds.has(e.id))
+      return [...apiList, ...extraStore]
+    }
+    return storeEvents || []
   }, [eventsData, storeEvents])
 
   const orders = useMemo(() => {
-    if (Array.isArray(ordersData)) return ordersData
-    if (Array.isArray(ordersData?.orders)) return ordersData.orders
-    if (ordersData?.data) return ordersData.data
-    if (ordersData !== undefined) return []
-    return storeOrders
+    const apiList = Array.isArray(ordersData)
+      ? ordersData
+      : Array.isArray(ordersData?.orders)
+        ? ordersData.orders
+        : Array.isArray(ordersData?.data)
+          ? ordersData.data
+          : []
+    if (apiList.length > 0) {
+      const apiIds = new Set(apiList.map((o) => o.id))
+      const extraStore = (storeOrders || []).filter((o) => !apiIds.has(o.id))
+      return [...apiList, ...extraStore]
+    }
+    return storeOrders || []
   }, [ordersData, storeOrders])
 
   const pendingOrganizers = useMemo(

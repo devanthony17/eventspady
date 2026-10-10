@@ -7,7 +7,7 @@ import { testimonials as seedTestimonials } from '@data/testimonials'
 import { posts as seedPosts } from '@data/blog'
 import { generateOrderId, getEventCoordinates } from '@lib/utils'
 
-const STORAGE_KEY = 'eventspady:store_v3'
+const STORAGE_KEY = 'eventspady:store_v4'
 const StoreContext = createContext(null)
 
 function enrichEvent(event) {
@@ -48,134 +48,87 @@ function enrichEvent(event) {
     sold,
     priceFrom: prices.length ? Math.min(...prices) : 0,
     priceTo: prices.length ? Math.max(...prices) : 0,
-    isFree: prices.every((p) => p === 0),
+    isFree: prices.length ? prices.every((p) => p === 0) : true,
     isSoldOut: capacity > 0 && sold >= capacity,
     category: getCategory(event.category),
     organizer: getOrganizer(event.organizerId) || {
       id: event.organizerId || 'eventspady',
-      name: 'Eventspady Verified Organizer',
+      name: event.organizerName || 'Eventspady Verified Organizer',
       logo: '/images/organizers/organizer-1.svg',
       verified: true,
-      rating: 4.8,
-      reviews: 120,
+      rating: 5.0,
+      reviews: 0,
     },
   }
 }
 
 const DEFAULT_CMS = {
   hero: {
-    badgeText: 'Discover the Upper West Region',
+    badgeText: 'Discover live events in Ghana',
     titleLine1: 'The heartbeat of live events',
-    titleLine2: 'across the Upper West',
-    gradientText: 'Upper West',
+    titleLine2: 'across Ghana',
+    gradientText: 'Ghana',
     description:
-      'Tickets for Dumba festival, sports championships, tech summits and sound clashes in Wa, Jirapa, Nandom and beyond. Real-time Mobile Money checkout, zero booking fees.',
+      'Tickets for festivals, sports championships, tech summits and concerts. Real-time Mobile Money checkout, zero booking fees.',
     ctaPrimaryText: 'Explore events',
     ctaPrimaryLink: '/events',
     ctaSecondaryText: 'List your event',
     ctaSecondaryLink: '/organizer',
   },
   spotlight: {
-    eventSlug: 'miss-dumba',
+    eventSlug: '',
     customBadge: 'Spotlight event',
     customTitle: '',
     customTagline: '',
   },
-  testimonials: seedTestimonials,
-  blogPosts: seedPosts,
+  testimonials: [],
+  blogPosts: [],
 }
 
-const seedOrganizersList = [
-  ...baseOrganizers.map((o) => ({
-    ...o,
-    status: o.verified ? 'verified' : 'pending',
-    email: `${o.id}@eventspady.com`,
-    phone: '+233 24 000 1122',
-    contactPerson: `${o.name.split(' ')[0]} Lead`,
-    appliedAt: '2024-01-15T09:00:00.000Z',
-    commissionRate: 7.5,
-  })),
-  {
-    id: 'savannah-sound-clash',
-    name: 'Savannah Sound Arena',
-    logo: '/images/organizers/organizer-2.svg',
-    verified: false,
-    status: 'pending',
-    email: 'info@savannahsound.gh',
-    phone: '+233 50 112 3344',
-    contactPerson: 'Kofi Mensah',
-    appliedAt: '2024-03-01T10:30:00.000Z',
-    commissionRate: 8.0,
-    rating: 0,
-    reviews: 0,
-    events: 0,
-    followers: 0,
-    since: 2024,
-    location: 'Wa, Upper West Region',
-    bio: 'Premier sound-system and live band battle promoters in Wa Municipal.',
-  },
-  {
-    id: 'wa-foodies-guild',
-    name: 'Wa Foodies Guild',
-    logo: '/images/organizers/organizer-4.svg',
-    verified: false,
-    status: 'pending',
-    email: 'contact@wa-foodies.org',
-    phone: '+233 20 445 6677',
-    contactPerson: 'Fatima Adams',
-    appliedAt: '2024-03-10T14:15:00.000Z',
-    commissionRate: 7.5,
-    rating: 0,
-    reviews: 0,
-    events: 0,
-    followers: 0,
-    since: 2024,
-    location: 'Wa, Upper West Region',
-    bio: 'Regional network of caterers, street food artists and indigenous culinary innovators.',
-  },
-]
-
+const seedOrganizersList = []
 const defaultGateViolations = {}
 
 function getInitialData() {
   if (typeof window === 'undefined') {
     return {
-      events: seedEvents.map(enrichEvent),
+      events: [],
       orders: [],
-      coupons: seedCoupons,
+      coupons: [],
       transactions: [],
       drafts: [],
       comps: [],
-      organizers: seedOrganizersList,
+      organizers: [],
       cms: DEFAULT_CMS,
       gateViolations: {},
     }
   }
   try {
+    // Purge legacy mock caches
+    localStorage.removeItem('eventspady:store_v3')
+    localStorage.removeItem('eventspady:store_v2')
+    localStorage.removeItem('eventspady:store_v1')
+    localStorage.removeItem('eventspady:store')
+
     const raw = localStorage.getItem(STORAGE_KEY)
     if (raw) {
       const parsed = JSON.parse(raw)
       return {
-        events: parsed.customEvents?.length
-          ? [...seedEvents.map(enrichEvent), ...parsed.customEvents.map(enrichEvent)]
-          : seedEvents.map(enrichEvent),
+        events: (parsed.events || []).map(enrichEvent),
         orders: parsed.orders || [],
-        coupons: parsed.coupons || seedCoupons,
+        coupons: parsed.coupons || [],
         transactions: parsed.transactions || [],
         drafts: parsed.drafts || [],
         comps: parsed.comps || [],
-        organizers: parsed.organizers?.length ? parsed.organizers : seedOrganizersList,
+        organizers: parsed.organizers || [],
         cms: {
           ...DEFAULT_CMS,
           ...(parsed.cms || {}),
-          testimonials:
-            Array.isArray(parsed.cms?.testimonials) && parsed.cms.testimonials.length > 0
-              ? parsed.cms.testimonials
-              : seedTestimonials,
-          blogPosts:
-            Array.isArray(parsed.cms?.blogPosts) && parsed.cms.blogPosts.length > 0
-              ? parsed.cms.blogPosts
-              : seedPosts,
+          spotlight: {
+            ...DEFAULT_CMS.spotlight,
+            ...(parsed.cms?.spotlight || {}),
+          },
+          testimonials: Array.isArray(parsed.cms?.testimonials) ? parsed.cms.testimonials : [],
+          blogPosts: Array.isArray(parsed.cms?.blogPosts) ? parsed.cms.blogPosts : [],
         },
         gateViolations: parsed.gateViolations || {},
       }
@@ -184,13 +137,13 @@ function getInitialData() {
     console.error('Failed to parse eventspady store:', e)
   }
   return {
-    events: seedEvents.map(enrichEvent),
+    events: [],
     orders: [],
-    coupons: seedCoupons,
+    coupons: [],
     transactions: [],
     drafts: [],
     comps: [],
-    organizers: seedOrganizersList,
+    organizers: [],
     cms: DEFAULT_CMS,
     gateViolations: {},
   }
@@ -213,11 +166,10 @@ export function StoreProvider({ children }) {
   useEffect(() => {
     if (!hydrated) return
     try {
-      const customEvents = events.filter((e) => e.isCustom)
       localStorage.setItem(
         STORAGE_KEY,
         JSON.stringify({
-          customEvents,
+          events,
           orders,
           coupons,
           transactions,
@@ -235,16 +187,25 @@ export function StoreProvider({ children }) {
 
   /* ---------------- Event operations ---------------- */
   const createEvent = useCallback((eventData) => {
-    const id = `evt-${Date.now()}`
+    const id = eventData.id || `evt-${Date.now()}`
     const enriched = enrichEvent({
       ...eventData,
       id,
-      slug: eventData.slug || `${eventData.title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-${Date.now().toString().slice(-4)}`,
-      createdAt: new Date().toISOString(),
-      isCustom: true,
-      sold: 0,
+      slug:
+        eventData.slug ||
+        `${(eventData.title || 'event').toLowerCase().replace(/[^a-z0-9]+/g, '-')}-${Date.now().toString().slice(-4)}`,
+      createdAt: eventData.createdAt || new Date().toISOString(),
+      sold: Number(eventData.sold) || 0,
     })
-    setEvents((prev) => [enriched, ...prev])
+    setEvents((prev) => {
+      const idx = prev.findIndex((e) => e.id === id || e.slug === enriched.slug)
+      if (idx >= 0) {
+        const next = [...prev]
+        next[idx] = enriched
+        return next
+      }
+      return [enriched, ...prev]
+    })
     return enriched
   }, [])
 
@@ -284,16 +245,24 @@ export function StoreProvider({ children }) {
   /* ---------------- Order operations ---------------- */
   const placeOrder = useCallback(
     (orderInput) => {
-      const orderId = generateOrderId()
-      const placedAt = new Date().toISOString()
+      const orderId = orderInput.id || generateOrderId()
+      const placedAt = orderInput.placedAt || new Date().toISOString()
       const newOrder = {
-        id: orderId,
-        placedAt,
         status: 'confirmed',
         ...orderInput,
+        id: orderId,
+        placedAt,
       }
 
-      setOrders((prev) => [newOrder, ...prev])
+      setOrders((prev) => {
+        const idx = prev.findIndex((o) => o.id === orderId)
+        if (idx >= 0) {
+          const next = [...prev]
+          next[idx] = newOrder
+          return next
+        }
+        return [newOrder, ...prev]
+      })
 
       // Decrement ticket quantities
       if (orderInput.eventId && orderInput.items) {

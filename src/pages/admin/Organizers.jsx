@@ -44,11 +44,19 @@ export default function OrganizersManagement() {
   const toast = useToast()
 
   const organizers = useMemo(() => {
-    if (Array.isArray(organizersData)) return organizersData
-    if (Array.isArray(organizersData?.organizers)) return organizersData.organizers
-    if (organizersData?.data) return organizersData.data
-    if (organizersData !== undefined) return []
-    return storeOrganizers
+    const apiList = Array.isArray(organizersData)
+      ? organizersData
+      : Array.isArray(organizersData?.organizers)
+        ? organizersData.organizers
+        : Array.isArray(organizersData?.data)
+          ? organizersData.data
+          : []
+    if (apiList.length > 0) {
+      const apiIds = new Set(apiList.map((o) => o.id))
+      const extraStore = (storeOrganizers || []).filter((o) => !apiIds.has(o.id))
+      return [...apiList, ...extraStore]
+    }
+    return storeOrganizers || []
   }, [organizersData, storeOrganizers])
 
   const [activeTab, setActiveTab] = useState('all') // 'all' | 'pending' | 'verified' | 'suspended'

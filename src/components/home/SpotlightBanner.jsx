@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowRight, CalendarDays, MapPin, Users } from 'lucide-react'
 import { Container, Section } from '@components/ui/Section'
@@ -21,11 +22,22 @@ function CountdownUnit({ value, label }) {
 
 /** Countdown banner for the next big featured event. */
 export function SpotlightBanner() {
-  const { cms: storeCms } = useStore()
+  const { cms: storeCms, events: storeEvents = [] } = useStore()
   const { data: eventsData } = useEvents()
   const { data: cmsData } = useLandingCms()
 
-  const activeEvents = Array.isArray(eventsData) ? eventsData : (eventsData?.events || eventsData?.data || [])
+  const activeEvents = useMemo(() => {
+    const apiList = Array.isArray(eventsData)
+      ? eventsData
+      : eventsData?.events || eventsData?.data || []
+    if (apiList.length > 0) {
+      const apiIds = new Set(apiList.map((e) => e.id))
+      const extraStore = (storeEvents || []).filter((e) => !apiIds.has(e.id))
+      return [...apiList, ...extraStore]
+    }
+    return storeEvents || []
+  }, [eventsData, storeEvents])
+
   const spotlightConfig = cmsData?.spotlight || cmsData?.data?.spotlight || storeCms?.spotlight
 
   const spotlight =

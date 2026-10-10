@@ -6,58 +6,22 @@ import { useLandingCms } from '@hooks/api'
 import { useStore } from '@context/StoreContext'
 import { trustedOrganizers as defaultTrustedOrganizers } from '@data/testimonials'
 
-const DEFAULT_TESTIMONIALS = [
-  {
-    id: 'test-1',
-    name: 'Hajia Mariama',
-    role: 'Founder, Savannah Women in Tech',
-    quote: 'Eventspady transformed our conference ticketing in Wa. MoMo checkouts were instant and door check-in was seamless.',
-    avatar: '/images/avatars/avatar-4.svg',
-    rating: 5,
-  },
-  {
-    id: 'test-2',
-    name: 'Naa Fuseini Pelpuo IV',
-    role: 'Wa Naa Cultural Affairs',
-    quote: 'Moving the Dumba Festival tickets to digital QR codes eliminated gate bottlenecks completely.',
-    avatar: '/images/avatars/avatar-1.svg',
-    rating: 5,
-  },
-  {
-    id: 'test-3',
-    name: 'Cynthia Boakye',
-    role: 'Event Producer, Royal Cosy Hills',
-    quote: 'Real-time sales tracking and automatic MoMo disbursements give us complete financial transparency.',
-    avatar: '/images/avatars/avatar-3.svg',
-    rating: 5,
-  },
-]
-
-const DEFAULT_ORGANIZERS = [
-  { name: 'Wa Naa Palace Cultural Heritage', city: 'Wa', count: 14 },
-  { name: 'Royal Cosy Hills (Jirapa Dubai)', city: 'Jirapa', count: 28 },
-  { name: 'Savannah Tech Hub', city: 'Wa', count: 9 },
-  { name: 'Upper West Music Awards (UWMAs)', city: 'Wa', count: 6 },
-  { name: 'Nandom Heritage Crafts & Tourism', city: 'Nandom', count: 11 },
-  { name: 'Dumba Festival Planning Committee', city: 'Wa', count: 8 },
-]
-
 export function Testimonials() {
   const { cms: storeCms } = useStore()
   const { data: cmsData } = useLandingCms()
   const cmsTestimonials = cmsData?.testimonials || cmsData?.data?.testimonials || storeCms?.testimonials
-  const list = cmsTestimonials && cmsTestimonials.length > 0 ? cmsTestimonials : DEFAULT_TESTIMONIALS
+  const list = Array.isArray(cmsTestimonials) ? cmsTestimonials : []
 
   const trustedOrganizers = useMemo(() => {
-    const fromCms = cmsData?.trustedOrganizers || cmsData?.data?.trustedOrganizers
+    const fromCms = cmsData?.trustedOrganizers || cmsData?.data?.trustedOrganizers || storeCms?.trustedOrganizers
     if (Array.isArray(fromCms) && fromCms.length > 0) {
       return fromCms.map((org, i) => ({
         ...org,
-        logo: org.logo || defaultTrustedOrganizers[i % defaultTrustedOrganizers.length]?.logo,
+        logo: org.logo || defaultTrustedOrganizers[i % (defaultTrustedOrganizers.length || 1)]?.logo || '/images/organizers/logo-arts-council.svg',
       }))
     }
-    return defaultTrustedOrganizers
-  }, [cmsData])
+    return defaultTrustedOrganizers || []
+  }, [cmsData, storeCms])
 
   const [activeIndex, setActiveIndex] = useState(0)
   const [isPaused, setIsPaused] = useState(false)
@@ -117,25 +81,29 @@ export function Testimonials() {
     return diff
   }
 
+  if (!list.length && !trustedOrganizers.length) return null
+
   return (
     <Section className="bg-ink-50/70 overflow-hidden dark:bg-white/[.02]">
       <Container>
-        <SectionHeading
-          eyebrow="Loved by organizers & attendees"
-          title="Trusted for events of every size"
-          description="From palace cultural festivals to university innovation summits — here is what our community says."
-          align="center"
-        />
+        {list.length > 0 && (
+          <>
+            <SectionHeading
+              eyebrow="Loved by organizers & attendees"
+              title="Trusted for events of every size"
+              description="From cultural festivals to university innovation summits — here is what our community says."
+              align="center"
+            />
 
-        {/* 3-Card Sleek Sliding Stage */}
-        <div
-          className="relative mx-auto mt-10 h-[400px] sm:h-[370px] md:h-[350px] w-full max-w-6xl overflow-hidden"
-          onMouseEnter={() => setIsPaused(true)}
-          onMouseLeave={() => setIsPaused(false)}
-          onTouchStart={onTouchStart}
-          onTouchMove={onTouchMove}
-          onTouchEnd={onTouchEnd}
-        >
+            {/* 3-Card Sleek Sliding Stage */}
+            <div
+              className="relative mx-auto mt-10 h-[400px] sm:h-[370px] md:h-[350px] w-full max-w-6xl overflow-hidden"
+              onMouseEnter={() => setIsPaused(true)}
+              onMouseLeave={() => setIsPaused(false)}
+              onTouchStart={onTouchStart}
+              onTouchMove={onTouchMove}
+              onTouchEnd={onTouchEnd}
+            >
           {list.map((item, index) => {
             const diff = getOffset(index, activeIndex, list.length)
 
@@ -278,47 +246,51 @@ export function Testimonials() {
             ))}
           </div>
 
-          <button
-            type="button"
-            onClick={handleNext}
-            aria-label="Next testimonial"
-            className="grid size-9 place-items-center rounded-full border border-ink-200/80 bg-white text-ink-600 shadow-sm transition hover:scale-105 hover:bg-ink-50 hover:text-brand-600 dark:border-white/10 dark:bg-ink-900 dark:text-ink-300 dark:hover:bg-ink-800"
-          >
-            <ChevronRight className="size-4" />
-          </button>
-        </div>
+              <button
+                type="button"
+                onClick={handleNext}
+                aria-label="Next testimonial"
+                className="grid size-9 place-items-center rounded-full border border-ink-200/80 bg-white text-ink-600 shadow-sm transition hover:scale-105 hover:bg-ink-50 hover:text-brand-600 dark:border-white/10 dark:bg-ink-900 dark:text-ink-300 dark:hover:bg-ink-800"
+              >
+                <ChevronRight className="size-4" />
+              </button>
+            </div>
+          </>
+        )}
 
-        {/* Sleek Organizer Logo Marquee */}
-        <div className="mt-16 sm:mt-20 border-t border-ink-200/60 pt-12 dark:border-white/10">
-          <div className="text-center">
-            <p className="inline-flex items-center gap-2 rounded-full border border-ink-200/80 bg-white/80 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-ink-700 shadow-sm backdrop-blur-md dark:border-white/10 dark:bg-ink-900/80 dark:text-ink-200">
-              <span className="size-2 rounded-full bg-emerald-500 animate-pulse" />
-              Trusted by 640+ organizers, cultural palaces & institutions
-            </p>
-          </div>
+        {/* Organizer Logo Marquee */}
+        {trustedOrganizers.length > 0 && (
+          <div className={`${list.length > 0 ? 'mt-16 sm:mt-20 border-t border-ink-200/60 pt-12 dark:border-white/10' : ''}`}>
+            <div className="text-center">
+              <p className="inline-flex items-center gap-2 rounded-full border border-ink-200/80 bg-white/80 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-ink-700 shadow-sm backdrop-blur-md dark:border-white/10 dark:bg-ink-900/80 dark:text-ink-200">
+                <span className="size-2 rounded-full bg-emerald-500 animate-pulse" />
+                Trusted by organizers, cultural authorities & partners
+              </p>
+            </div>
 
-          <div className="relative mt-8 overflow-hidden [mask-image:linear-gradient(to_right,transparent_0%,black_10%,black_90%,transparent_100%)]">
-            <div className="flex w-max animate-marquee items-center gap-6 sm:gap-8 hover:[animation-play-state:paused] py-3">
-              {[...trustedOrganizers, ...trustedOrganizers].map((org, i) => (
-                <div
-                  key={`${org.id || org.name}-${i}`}
-                  className="group relative flex h-14 sm:h-16 shrink-0 items-center justify-center rounded-2xl border border-ink-200/70 bg-white/90 px-6 sm:px-7 shadow-sm backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 hover:border-brand-500/50 hover:bg-white hover:shadow-md dark:border-white/15 dark:bg-white/[.07] dark:hover:border-brand-400/60 dark:hover:bg-white/[.12]"
-                  title={`${org.name}${org.tag ? ` — ${org.tag}` : ''}`}
-                >
-                  <img
-                    src={org.logo}
-                    alt={org.name}
-                    loading="lazy"
-                    className="h-8 sm:h-9 w-auto max-w-[160px] sm:max-w-[190px] object-contain transition-all duration-300 group-hover:scale-105"
-                    onError={(e) => {
-                      e.currentTarget.src = '/images/organizers/logo-arts-council.svg'
-                    }}
-                  />
-                </div>
-              ))}
+            <div className="relative mt-8 overflow-hidden [mask-image:linear-gradient(to_right,transparent_0%,black_10%,black_90%,transparent_100%)]">
+              <div className="flex w-max animate-marquee items-center gap-6 sm:gap-8 hover:[animation-play-state:paused] py-3">
+                {[...trustedOrganizers, ...trustedOrganizers].map((org, i) => (
+                  <div
+                    key={`${org.id || org.name}-${i}`}
+                    className="group relative flex h-14 sm:h-16 shrink-0 items-center justify-center rounded-2xl border border-ink-200/70 bg-white/90 px-6 sm:px-7 shadow-sm backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 hover:border-brand-500/50 hover:bg-white hover:shadow-md dark:border-white/15 dark:bg-white/[.07] dark:hover:border-brand-400/60 dark:hover:bg-white/[.12]"
+                    title={`${org.name}${org.tag ? ` — ${org.tag}` : ''}`}
+                  >
+                    <img
+                      src={org.logo}
+                      alt={org.name}
+                      loading="lazy"
+                      className="h-8 sm:h-9 w-auto max-w-[160px] sm:max-w-[190px] object-contain transition-all duration-300 group-hover:scale-105"
+                      onError={(e) => {
+                        e.currentTarget.src = '/images/organizers/logo-arts-council.svg'
+                      }}
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </Container>
     </Section>
   )

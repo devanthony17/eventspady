@@ -9,6 +9,7 @@ import { Select } from '@components/ui/Field'
 import { EmptyState } from '@components/ui/EmptyState'
 import { useAuth } from '@context/AuthContext'
 import { useToast } from '@context/ToastContext'
+import { useStore } from '@context/StoreContext'
 import { useOrganizerOrders, useEvents } from '@hooks/api'
 import organizerApi from '@api/organizer.api'
 import { PAYMENT_METHODS } from '@lib/constants'
@@ -20,6 +21,7 @@ const STATUS_TONE = { paid: 'success', pending: 'warning', refunded: 'danger' }
 export default function Orders() {
   const { nav } = useOutletContext()
   const { user } = useAuth()
+  const { orders: storeOrders = [], events: storeEvents = [] } = useStore()
   const { data: ordersData, isLoading } = useOrganizerOrders()
   const { data: eventsData } = useEvents()
   const toast = useToast()
@@ -29,16 +31,26 @@ export default function Orders() {
   const [method, setMethod] = useState('')
 
   const events = useMemo(() => {
-    if (Array.isArray(eventsData)) return eventsData
-    return eventsData?.events || eventsData?.data || []
-  }, [eventsData])
+    const apiList = Array.isArray(eventsData)
+      ? eventsData
+      : eventsData?.events || eventsData?.data || []
+    if (apiList.length > 0) return apiList
+    return storeEvents || []
+  }, [eventsData, storeEvents])
 
   const getEventById = (id) => events.find((e) => e.id === id || e._id === id || e.slug === id)
 
   const baseOrders = useMemo(() => {
-    if (Array.isArray(ordersData)) return ordersData
-    return ordersData?.orders || ordersData?.data || []
-  }, [ordersData])
+    const apiList = Array.isArray(ordersData)
+      ? ordersData
+      : ordersData?.orders || ordersData?.data || []
+    if (apiList.length > 0) {
+      const apiIds = new Set(apiList.map((o) => o.id))
+      const extraStore = (storeOrders || []).filter((o) => !apiIds.has(o.id))
+      return [...apiList, ...extraStore]
+    }
+    return storeOrders || []
+  }, [ordersData, storeOrders])
 
   const filtered = useMemo(
     () =>

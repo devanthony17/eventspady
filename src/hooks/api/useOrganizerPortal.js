@@ -23,7 +23,10 @@ export function useCreateEventMutation() {
     mutationFn: (eventData) => organizerApi.createEvent(eventData),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['organizer', 'events'] })
+      queryClient.invalidateQueries({ queryKey: ['organizer', 'overview'] })
       queryClient.invalidateQueries({ queryKey: ['events'] })
+      queryClient.invalidateQueries({ queryKey: ['admin', 'events'] })
+      queryClient.invalidateQueries({ queryKey: ['admin', 'overview'] })
     },
   })
 }
@@ -44,8 +47,11 @@ export function useUpdateEventMutation() {
     mutationFn: ({ id, data }) => organizerApi.updateEvent(id, data),
     onSuccess: (_data, { id }) => {
       queryClient.invalidateQueries({ queryKey: ['organizer', 'events'] })
+      queryClient.invalidateQueries({ queryKey: ['organizer', 'overview'] })
       queryClient.invalidateQueries({ queryKey: ['event', id] })
       queryClient.invalidateQueries({ queryKey: ['events'] })
+      queryClient.invalidateQueries({ queryKey: ['admin', 'events'] })
+      queryClient.invalidateQueries({ queryKey: ['admin', 'overview'] })
     },
   })
 }
@@ -56,7 +62,10 @@ export function useDeleteEventMutation() {
     mutationFn: (id) => organizerApi.deleteEvent(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['organizer', 'events'] })
+      queryClient.invalidateQueries({ queryKey: ['organizer', 'overview'] })
       queryClient.invalidateQueries({ queryKey: ['events'] })
+      queryClient.invalidateQueries({ queryKey: ['admin', 'events'] })
+      queryClient.invalidateQueries({ queryKey: ['admin', 'overview'] })
     },
   })
 }
@@ -67,7 +76,10 @@ export function useUnpublishEventMutation() {
     mutationFn: (id) => organizerApi.unpublishEvent(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['organizer', 'events'] })
+      queryClient.invalidateQueries({ queryKey: ['organizer', 'overview'] })
       queryClient.invalidateQueries({ queryKey: ['events'] })
+      queryClient.invalidateQueries({ queryKey: ['admin', 'events'] })
+      queryClient.invalidateQueries({ queryKey: ['admin', 'overview'] })
     },
   })
 }
@@ -100,6 +112,7 @@ export function useCreateCouponMutation() {
     mutationFn: (data) => organizerApi.createCoupon(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['organizer', 'coupons'] })
+      queryClient.invalidateQueries({ queryKey: ['coupons'] })
     },
   })
 }
@@ -110,6 +123,7 @@ export function useDeleteCouponMutation() {
     mutationFn: (id) => organizerApi.deleteCoupon(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['organizer', 'coupons'] })
+      queryClient.invalidateQueries({ queryKey: ['coupons'] })
     },
   })
 }
@@ -138,6 +152,8 @@ export function useCheckInTicketMutation() {
     mutationFn: (payload) => organizerApi.checkInTicket(payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['organizer', 'guests'] })
+      queryClient.invalidateQueries({ queryKey: ['organizer', 'overview'] })
+      queryClient.invalidateQueries({ queryKey: ['admin', 'overview'] })
     },
   })
 }

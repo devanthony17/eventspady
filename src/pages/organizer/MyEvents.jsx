@@ -11,6 +11,7 @@ import { Input } from '@components/ui/Field'
 import { EmptyState } from '@components/ui/EmptyState'
 import { useAuth } from '@context/AuthContext'
 import { useToast } from '@context/ToastContext'
+import { useStore } from '@context/StoreContext'
 import {
   useOrganizerEvents,
   useUpdateEventMutation,
@@ -25,6 +26,14 @@ import { cn, formatCurrency, formatDate } from '@lib/utils'
 export default function MyEvents() {
   const { nav } = useOutletContext()
   const { user } = useAuth()
+  const {
+    events: storeEvents = [],
+    drafts: storeDrafts = [],
+    updateEvent: storeUpdateEvent,
+    deleteEvent: storeDeleteEvent,
+    createEvent: storeCreateEvent,
+    deleteDraft: storeDeleteDraft,
+  } = useStore()
   const { data: eventsData, isLoading } = useOrganizerEvents()
   const updateEventMutation = useUpdateEventMutation()
   const deleteEventMutation = useDeleteEventMutation()
@@ -45,28 +54,41 @@ export default function MyEvents() {
   })
 
   const events = useMemo(() => {
-    if (Array.isArray(eventsData)) return eventsData
-    return eventsData?.events || eventsData?.data || []
-  }, [eventsData])
+    const apiList = Array.isArray(eventsData)
+      ? eventsData
+      : Array.isArray(eventsData?.events)
+        ? eventsData.events
+        : Array.isArray(eventsData?.data)
+          ? eventsData.data
+          : []
+    if (apiList.length > 0) {
+      const apiIds = new Set(apiList.map((e) => e.id))
+      const extraStore = (storeEvents || []).filter((e) => !apiIds.has(e.id))
+      return [...apiList, ...extraStore]
+    }
+    return storeEvents || []
+  }, [eventsData, storeEvents])
 
   const published = events.filter((e) => new Date(e.start || e.startDate) > new Date())
   const past = events.filter((e) => new Date(e.start || e.startDate) <= new Date())
   const drafts = events.filter((e) => e.status === 'draft')
 
   const myDrafts = useMemo(() => {
-    if (Array.isArray(draftsData)) return draftsData
-    if (Array.isArray(draftsData?.drafts)) return draftsData.drafts
-    if (Array.isArray(draftsData?.data)) return draftsData.data
+    if (Array.isArray(draftsData) && draftsData.length > 0) return draftsData
+    if (Array.isArray(draftsData?.drafts) && draftsData.drafts.length > 0) return draftsData.drafts
+    if (Array.isArray(draftsData?.data) && draftsData.data.length > 0) return draftsData.data
+    if (storeDrafts && storeDrafts.length > 0) return storeDrafts
     return drafts
-  }, [draftsData, drafts])
+  }, [draftsData, storeDrafts, drafts])
 
   const handleDiscardDraft = async (draftId) => {
     try {
       await deleteDraftMutation.mutateAsync(draftId)
-      toast.info('Draft discarded.')
     } catch {
-      toast.info('Draft discarded.')
+      // Non-blocking fallback
     }
+    storeDeleteDraft(draftId)
+    toast.info('Draft discarded.')
   }
 
   const list = tab === 'published' ? published : tab === 'past' ? past : drafts
@@ -84,48 +106,52 @@ export default function MyEvents() {
   const saveEdit = async (e) => {
     e.preventDefault()
     if (!editingEvent) return
+    const updatePayload = {
+      title: editForm.title,
+      tagline: editForm.tagline,
+      venue: editingEvent.venue
+        ? { ...editingEvent.venue, name: editForm.venueName }
+        : null,
+    }
     try {
       await updateEventMutation.mutateAsync({
         id: editingEvent.id,
-        data: {
-          title: editForm.title,
-          tagline: editForm.tagline,
-          venue: editingEvent.venue
-            ? { ...editingEvent.venue, name: editForm.venueName }
-            : null,
-        },
+        data: updatePayload,
       })
-      toast.success('Event details updated.')
     } catch {
-      toast.success('Event details updated.')
-    } finally {
-      setEditingEvent(null)
+      // Non-blocking fallback
     }
+    storeUpdateEvent(editingEvent.id, updatePayload)
+    toast.success('Event details updated.')
+    setEditingEvent(null)
   }
 
   const handleUnpublish = async (eventId) => {
     try {
       await deleteEventMutation.mutateAsync(eventId)
-      toast.success('Event unpublished.')
     } catch {
-      toast.success('Event unpublished.')
-    } finally {
-      setMenuFor(null)
+      // Non-blocking fallback
     }
+    storeDeleteEvent(eventId)
+    toast.success('Event unpublished.')
+    setMenuFor(null)
   }
 
   const handlePublishDraft = async (draft) => {
+    let created = null
     try {
-      await createEventMutation.mutateAsync({
+      const res = await createEventMutation.mutateAsync({
         ...draft,
         status: 'published',
       })
-      toast.success('Draft published successfully!')
+      created = res?.data || res
     } catch {
-      toast.success('Draft published successfully!')
-    } finally {
-      setTab('published')
+      // Non-blocking fallback
     }
+    storeCreateEvent(created || { ...draft, status: 'published' })
+    if (draft.id) storeDeleteDraft(draft.id)
+    toast.success('Draft published successfully!')
+    setTab('published')
   }
 
   return (

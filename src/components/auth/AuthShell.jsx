@@ -11,29 +11,22 @@ const DEFAULT_PERKS = [
   'Save favorite events and follow local organizers',
 ]
 
-const DEFAULT_QUOTE = {
-  name: 'Hajia Mariama',
-  role: 'Founder, Savannah Women in Tech',
-  quote: 'Eventspady transformed our conference ticketing in Wa. MoMo checkouts were instant and door check-in was seamless.',
-  avatar: '/images/avatars/avatar-4.svg',
-}
-
 /** Split layout shared by sign in, sign up and password recovery with right-side photographic visuals. */
 export function AuthShell({
   title,
   subtitle,
   children,
   footer,
-  image = '/images/events/miss-dumba.jpg',
-  imageAlt = 'Events in Wa',
+  image = '/images/events/all-white-party.jpg',
+  imageAlt = 'Events in Ghana',
   headline,
-  badge = 'Eventspady Wa',
+  badge = 'Eventspady Ghana',
   perks = DEFAULT_PERKS,
   quoteIndex = 0,
 }) {
   const { data: cmsData } = useLandingCms()
   const list = cmsData?.testimonials || []
-  const quote = list[quoteIndex] || list[0] || DEFAULT_QUOTE
+  const quote = list[quoteIndex] || list[0] || null
 
   return (
     <div className="grid min-h-dvh lg:grid-cols-2">
@@ -103,19 +96,21 @@ export function AuthShell({
             </ul>
           </div>
 
-          <figure className="rounded-2xl border border-white/15 bg-ink-950/70 p-6 backdrop-blur-xl shadow-2xl">
-            <Quote className="mb-3 size-6 text-accent-400" aria-hidden="true" />
-            <blockquote className="text-pretty text-sm leading-relaxed text-white/90 font-medium">
-              “{quote.quote}”
-            </blockquote>
-            <figcaption className="mt-5 flex items-center gap-3">
-              <Avatar src={quote.avatar} name={quote.name} size="sm" />
-              <div>
-                <p className="text-sm font-bold text-white">{quote.name}</p>
-                <p className="text-xs text-white/65">{quote.role}</p>
-              </div>
-            </figcaption>
-          </figure>
+          {quote && quote.quote && (
+            <figure className="rounded-2xl border border-white/15 bg-ink-950/70 p-6 backdrop-blur-xl shadow-2xl">
+              <Quote className="mb-3 size-6 text-accent-400" aria-hidden="true" />
+              <blockquote className="text-pretty text-sm leading-relaxed text-white/90 font-medium">
+                “{quote.quote}”
+              </blockquote>
+              <figcaption className="mt-5 flex items-center gap-3">
+                <Avatar src={quote.avatar} name={quote.name} size="sm" />
+                <div>
+                  <p className="text-sm font-bold text-white">{quote.name}</p>
+                  <p className="text-xs text-white/65">{quote.role}</p>
+                </div>
+              </figcaption>
+            </figure>
+          )}
         </div>
       </div>
     </div>

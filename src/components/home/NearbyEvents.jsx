@@ -5,6 +5,7 @@ import { Button } from '@components/ui/Button'
 import { EventCard } from '@components/events/EventCard'
 import { useGeolocation } from '@hooks/useGeolocation'
 import { useEvents } from '@hooks/api'
+import { useStore } from '@context/StoreContext'
 import { distanceKm, getEventCoordinates } from '@lib/utils'
 
 /**
@@ -12,11 +13,19 @@ import { distanceKm, getEventCoordinates } from '@lib/utils'
  * Falls back to the soonest upcoming events until then.
  */
 export function NearbyEvents() {
+  const { events: storeEvents = [] } = useStore()
   const { data: eventsData } = useEvents()
   const events = useMemo(() => {
-    if (Array.isArray(eventsData)) return eventsData
-    return eventsData?.events || eventsData?.data || []
-  }, [eventsData])
+    const apiList = Array.isArray(eventsData)
+      ? eventsData
+      : eventsData?.events || eventsData?.data || []
+    if (apiList.length > 0) {
+      const apiIds = new Set(apiList.map((e) => e.id))
+      const extraStore = (storeEvents || []).filter((e) => !apiIds.has(e.id))
+      return [...apiList, ...extraStore]
+    }
+    return storeEvents || []
+  }, [eventsData, storeEvents])
   const { position, locationName, status, error, request, openModal, clearLocation } = useGeolocation()
 
   const list = useMemo(() => {

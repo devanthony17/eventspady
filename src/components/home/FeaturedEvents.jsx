@@ -6,6 +6,7 @@ import { Button } from '@components/ui/Button'
 import { Tabs } from '@components/ui/Tabs'
 import { EventCard } from '@components/events/EventCard'
 import { useEvents } from '@hooks/api'
+import { useStore } from '@context/StoreContext'
 
 const TABS = [
   { id: 'featured', label: 'Featured', icon: Sparkles },
@@ -15,11 +16,19 @@ const TABS = [
 ]
 
 export function FeaturedEvents() {
+  const { events: storeEvents = [] } = useStore()
   const { data: eventsData, isLoading } = useEvents()
   const events = useMemo(() => {
-    if (Array.isArray(eventsData)) return eventsData
-    return eventsData?.events || eventsData?.data || []
-  }, [eventsData])
+    const apiList = Array.isArray(eventsData)
+      ? eventsData
+      : eventsData?.events || eventsData?.data || []
+    if (apiList.length > 0) {
+      const apiIds = new Set(apiList.map((e) => e.id))
+      const extraStore = (storeEvents || []).filter((e) => !apiIds.has(e.id))
+      return [...apiList, ...extraStore]
+    }
+    return storeEvents || []
+  }, [eventsData, storeEvents])
   const [tab, setTab] = useState('featured')
 
   const sources = useMemo(

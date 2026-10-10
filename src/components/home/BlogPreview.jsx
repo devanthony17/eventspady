@@ -44,6 +44,8 @@ export function BlogPreview() {
 
   const currentStory = featuredStories[activeStory] || featuredStories[0]
 
+  if (allPosts.length === 0) return null
+
   return (
     <Section>
       <Container>

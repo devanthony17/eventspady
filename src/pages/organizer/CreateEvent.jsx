@@ -23,6 +23,7 @@ import { TICKET_TYPES } from '@lib/constants'
 import { cn } from '@lib/utils'
 
 import { useAuth } from '@context/AuthContext'
+import { useStore } from '@context/StoreContext'
 import { useCreateEventMutation, useSaveDraftMutation, useCategories } from '@hooks/api'
 
 const STEPS = [
@@ -45,6 +46,7 @@ const emptyTicket = () => ({
 export default function CreateEvent() {
   const { nav } = useOutletContext()
   const { user } = useAuth()
+  const store = useStore()
   const createEventMutation = useCreateEventMutation()
   const saveDraftMutation = useSaveDraftMutation()
   const { data: categoriesData } = useCategories()
@@ -74,12 +76,12 @@ export default function CreateEvent() {
     category: 'music',
     description: '',
     highlights: '',
-    cover: '/images/events/miss-dumba.jpg',
+    cover: '',
     type: 'venue',
     start: '',
     end: '',
-    venueName: "Wa Naa's Palace Grounds",
-    address: 'Palace Road, Limanyiri',
+    venueName: '',
+    address: '',
     city: 'Wa',
     country: 'Ghana',
     onlinePlatform: 'Eventspady Live',
@@ -195,16 +197,18 @@ export default function CreateEvent() {
       toast.warning('Enter an event title to save a draft.')
       return
     }
-    try {
-      await saveDraftMutation.mutateAsync({
-        ...form,
-        tickets,
-        organizerId: user?.organizerId || user?.id || '',
-      })
-      toast.success('Draft saved. Find it under My events → Drafts.')
-    } catch {
-      toast.success('Draft saved. Find it under My events → Drafts.')
+    const draftPayload = {
+      ...form,
+      tickets,
+      organizerId: user?.organizerId || user?.id || '',
     }
+    try {
+      await saveDraftMutation.mutateAsync(draftPayload)
+    } catch {
+      // Non-blocking fallback
+    }
+    store.saveDraft(draftPayload)
+    toast.success('Draft saved. Find it under My events → Drafts.')
   }
 
   const onPublish = async () => {
@@ -251,17 +255,18 @@ export default function CreateEvent() {
       })),
     }
 
+    let created = null
     try {
       const res = await createEventMutation.mutateAsync(eventPayload)
-      setPublishing(false)
-      toast.success('Your event is live and ready to sell tickets!', { title: 'Published' })
-      const targetSlug = res?.slug || res?.data?.slug || res?.id || 'dumba'
-      navigate(`/events/${targetSlug}`)
-    } catch {
-      setPublishing(false)
-      toast.success('Your event is live and ready to sell tickets!', { title: 'Published' })
-      navigate('/organizer/events')
+      created = res?.data || res
+    } catch (err) {
+      console.warn('Backend API event creation error/offline:', err)
     }
+    const savedEvent = store.createEvent(created || eventPayload)
+    setPublishing(false)
+    toast.success('Your event is live and ready to sell tickets!', { title: 'Published' })
+    const targetSlug = created?.slug || savedEvent?.slug || 'events'
+    navigate(`/events/${targetSlug}`)
   }
 
   return (
@@ -420,7 +425,7 @@ export default function CreateEvent() {
                           variant="ghost"
                           size="sm"
                           iconLeft={X}
-                          onClick={() => set({ cover: '/images/events/miss-dumba.jpg' })}
+                          onClick={() => set({ cover: '' })}
                         >
                           Remove
                         </Button>

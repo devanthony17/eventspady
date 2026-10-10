@@ -13,6 +13,7 @@ import { EmptyState } from '@components/ui/EmptyState'
 import { TicketStub } from '@components/events/TicketStub'
 import { useAuth } from '@context/AuthContext'
 import { useToast } from '@context/ToastContext'
+import { useStore } from '@context/StoreContext'
 import { useUserTickets, useEvents, useUserGateStatus, useTransferTicketMutation } from '@hooks/api'
 import { PAYMENT_METHODS } from '@lib/constants'
 import { formatCurrency, formatDate } from '@lib/utils'
@@ -20,6 +21,7 @@ import { formatCurrency, formatDate } from '@lib/utils'
 export default function MyTickets() {
   const { nav } = useOutletContext()
   const { user } = useAuth()
+  const { orders: storeOrders = [], events: storeEvents = [] } = useStore()
   const { data: ticketsData, isLoading: ticketsLoading } = useUserTickets()
   const { data: eventsData } = useEvents()
   const { data: gateStatusData } = useUserGateStatus()
@@ -34,14 +36,24 @@ export default function MyTickets() {
   const userGateStatus = gateStatusData || null
 
   const events = useMemo(() => {
-    if (Array.isArray(eventsData)) return eventsData
-    return eventsData?.events || eventsData?.data || []
-  }, [eventsData])
+    const apiList = Array.isArray(eventsData)
+      ? eventsData
+      : eventsData?.events || eventsData?.data || []
+    if (apiList.length > 0) return apiList
+    return storeEvents || []
+  }, [eventsData, storeEvents])
 
   const orders = useMemo(() => {
-    if (Array.isArray(ticketsData)) return ticketsData
-    return ticketsData?.tickets || ticketsData?.orders || ticketsData?.data || []
-  }, [ticketsData])
+    const apiList = Array.isArray(ticketsData)
+      ? ticketsData
+      : ticketsData?.tickets || ticketsData?.orders || ticketsData?.data || []
+    if (apiList.length > 0) return apiList
+    return (storeOrders || []).filter((o) => {
+      if (!user?.email) return true
+      const buyerEmail = o.buyerEmail || o.attendeeEmail || o.buyer?.email
+      return !buyerEmail || buyerEmail.toLowerCase() === user.email.toLowerCase()
+    })
+  }, [ticketsData, storeOrders, user])
 
   const getEventById = useCallback((id) => events.find((e) => e.id === id || e.slug === id), [events])
 
@@ -51,7 +63,7 @@ export default function MyTickets() {
         id: order.eventId || order.id,
         title: order.eventTitle || order.event_title || 'Booked Event',
         start: order.eventStart || order.event_date || order.createdAt || new Date().toISOString(),
-        cover: order.eventCover || '/images/events/miss-dumba.jpg',
+        cover: order.eventCover || '/images/events/event-1.svg',
         venue: { name: order.venueName || 'Wa', city: order.venueCity || 'Wa', country: 'Ghana' },
       }
       return { order, event }

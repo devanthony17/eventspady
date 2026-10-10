@@ -24,6 +24,8 @@ export function useVerifyOrganizerMutation() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin', 'organizers'] })
       queryClient.invalidateQueries({ queryKey: ['organizers'] })
+      queryClient.invalidateQueries({ queryKey: ['admin', 'overview'] })
+      queryClient.invalidateQueries({ queryKey: ['organizer', 'overview'] })
     },
   })
 }
@@ -34,6 +36,9 @@ export function useRejectOrganizerMutation() {
     mutationFn: ({ id, reason }) => adminApi.rejectOrganizer(id, { reason }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin', 'organizers'] })
+      queryClient.invalidateQueries({ queryKey: ['organizers'] })
+      queryClient.invalidateQueries({ queryKey: ['admin', 'overview'] })
+      queryClient.invalidateQueries({ queryKey: ['organizer', 'overview'] })
     },
   })
 }
@@ -44,6 +49,9 @@ export function useSuspendOrganizerMutation() {
     mutationFn: ({ id, reason }) => adminApi.suspendOrganizer(id, { reason }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin', 'organizers'] })
+      queryClient.invalidateQueries({ queryKey: ['organizers'] })
+      queryClient.invalidateQueries({ queryKey: ['admin', 'overview'] })
+      queryClient.invalidateQueries({ queryKey: ['organizer', 'overview'] })
     },
   })
 }
@@ -63,6 +71,8 @@ export function useSetEventFeaturedMutation() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin', 'events'] })
       queryClient.invalidateQueries({ queryKey: ['events'] })
+      queryClient.invalidateQueries({ queryKey: ['admin', 'overview'] })
+      queryClient.invalidateQueries({ queryKey: ['organizer', 'events'] })
     },
   })
 }
@@ -74,6 +84,9 @@ export function useUpdateEventStatusMutation() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin', 'events'] })
       queryClient.invalidateQueries({ queryKey: ['events'] })
+      queryClient.invalidateQueries({ queryKey: ['admin', 'overview'] })
+      queryClient.invalidateQueries({ queryKey: ['organizer', 'events'] })
+      queryClient.invalidateQueries({ queryKey: ['organizer', 'overview'] })
     },
   })
 }
@@ -110,6 +123,11 @@ export function useRefundOrderMutation() {
     mutationFn: ({ id, reason }) => adminApi.refundOrder(id, { reason }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin', 'orders'] })
+      queryClient.invalidateQueries({ queryKey: ['orders'] })
+      queryClient.invalidateQueries({ queryKey: ['admin', 'overview'] })
+      queryClient.invalidateQueries({ queryKey: ['organizer', 'orders'] })
+      queryClient.invalidateQueries({ queryKey: ['organizer', 'overview'] })
+      queryClient.invalidateQueries({ queryKey: ['user', 'tickets'] })
     },
   })
 }
@@ -291,6 +309,9 @@ export function useAdminDeleteEventMutation() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin', 'events'] })
       queryClient.invalidateQueries({ queryKey: ['events'] })
+      queryClient.invalidateQueries({ queryKey: ['admin', 'overview'] })
+      queryClient.invalidateQueries({ queryKey: ['organizer', 'events'] })
+      queryClient.invalidateQueries({ queryKey: ['organizer', 'overview'] })
     },
   })
 }

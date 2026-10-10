@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import {
   BadgeCheck,
@@ -32,6 +32,7 @@ import { Modal } from '@components/ui/Modal'
 import { Input, Select, Textarea } from '@components/ui/Field'
 import { useWishlist } from '@hooks/useWishlist'
 import { useToast } from '@context/ToastContext'
+import { useStore } from '@context/StoreContext'
 import {
   useEvent,
   useEvents,
@@ -45,16 +46,29 @@ import NotFound from '@pages/NotFound'
 
 export default function EventDetail() {
   const { slug } = useParams()
+  const { events: storeEvents = [] } = useStore()
   const { data: apiEvent, isLoading: eventLoading } = useEvent(slug)
   const { data: allEventsData } = useEvents()
   const inquiryMutation = useSubmitInquiryMutation()
 
   const allEvents = useMemo(() => {
-    if (Array.isArray(allEventsData)) return allEventsData
-    return allEventsData?.events || allEventsData?.data || []
-  }, [allEventsData])
+    const apiList = Array.isArray(allEventsData)
+      ? allEventsData
+      : allEventsData?.events || allEventsData?.data || []
+    if (apiList.length > 0) {
+      const apiIds = new Set(apiList.map((e) => e.id))
+      const extraStore = (storeEvents || []).filter((e) => !apiIds.has(e.id))
+      return [...apiList, ...extraStore]
+    }
+    return storeEvents || []
+  }, [allEventsData, storeEvents])
 
-  const event = apiEvent?.event || apiEvent?.data || apiEvent
+  const event = useMemo(() => {
+    if (apiEvent?.event) return apiEvent.event
+    if (apiEvent?.data) return apiEvent.data
+    if (apiEvent?.id) return apiEvent
+    return allEvents.find((e) => e.slug === slug || e.id === slug) || null
+  }, [apiEvent, allEvents, slug])
 
   const [activeTab, setActiveTab] = useState('about')
   const [scheduleDay, setScheduleDay] = useState(0)

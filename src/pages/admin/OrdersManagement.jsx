@@ -30,25 +30,32 @@ export default function OrdersManagement() {
   const { data: selectedOrderDetails } = useAdminOrder(selectedOrderId, { enabled: Boolean(selectedOrderId) })
 
   const combinedOrders = useMemo(() => {
-    const rawOrders = Array.isArray(ordersData)
+    const apiList = Array.isArray(ordersData)
       ? ordersData
       : Array.isArray(ordersData?.orders)
         ? ordersData.orders
         : Array.isArray(ordersData?.data)
           ? ordersData.data
-          : ordersData !== undefined
-            ? []
-            : storeOrders
+          : []
+
+    let rawOrders = []
+    if (apiList.length > 0) {
+      const apiIds = new Set(apiList.map((o) => o.id))
+      const extraStore = (storeOrders || []).filter((o) => !apiIds.has(o.id))
+      rawOrders = [...apiList, ...extraStore]
+    } else {
+      rawOrders = storeOrders || []
+    }
 
     return rawOrders.map((o) => ({
       id: o.id || `ORD-${Math.random().toString(36).slice(2, 8).toUpperCase()}`,
-      attendeeName: o.attendeeName || o.buyer || o.customerName || 'Online Attendee',
-      attendeeEmail: o.attendeeEmail || o.buyerEmail || o.customerEmail || 'attendee@eventspady.com',
+      attendeeName: o.attendeeName || o.buyer || o.customerName || (o.buyer?.name) || 'Online Attendee',
+      attendeeEmail: o.attendeeEmail || o.buyerEmail || o.customerEmail || (o.buyer?.email) || 'attendee@eventspady.com',
       eventTitle: o.eventTitle || o.event?.title || 'Event',
       tickets: o.quantity || o.tickets || o.items?.reduce((sum, i) => sum + (i.quantity || 1), 0) || 1,
       amount: o.total || o.amount || 0,
       paymentMethod: o.paymentMethod || o.method || 'MTN MoMo',
-      momoRef: o.reference || o.momoRef || `MTN-GH-${Math.floor(10000000 + Math.random() * 90000000)}`,
+      momoRef: o.reference || o.momoRef || (o.id ? `TX-${o.id}` : 'PENDING'),
       date: o.createdAt || o.placedAt || o.date || new Date().toISOString(),
       status: o.paymentStatus || o.status || 'completed',
     }))

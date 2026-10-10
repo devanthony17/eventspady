@@ -105,13 +105,13 @@ export default function Login() {
             ? 'Sign in to access your event command center, sales and check-in scanner.'
             : 'Sign in to see your tickets, upcoming events and saved bookmarks.'
         }
-        image={role === 'organizer' ? '/images/events/bugatti-blackfriday.jpg' : '/images/events/miss-dumba.jpg'}
-        imageAlt={role === 'organizer' ? 'Organizer event management in Wa' : 'Miss Dumba pageant in Wa'}
-        badge={role === 'organizer' ? 'Organizer Command Center · Wa' : 'Eventspady Wa'}
+        image={role === 'organizer' ? '/images/events/all-white-party.jpg' : '/images/events/royal-cosy-hills.jpg'}
+        imageAlt={role === 'organizer' ? 'Organizer portal' : 'Eventspady Ghana'}
+        badge={role === 'organizer' ? 'Organizer Portal' : 'Eventspady Ghana'}
         headline={
           role === 'organizer'
-            ? 'Sell out your events and manage admissions across Wa'
-            : 'Join 24,000+ people booking better nights out in Wa'
+            ? 'Sell tickets and manage admissions with ease'
+            : 'Join thousands of attendees discovering live events across Ghana'
         }
         perks={role === 'organizer' ? ORGANIZER_PERKS : ATTENDEE_PERKS}
         quoteIndex={role === 'organizer' ? 1 : 3}

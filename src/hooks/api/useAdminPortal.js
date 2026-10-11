@@ -245,6 +245,72 @@ export function useDeleteCmsBlogPostMutation() {
   })
 }
 
+export function useUpdateCmsAnnouncementMutation() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (payload) => adminApi.updateCmsAnnouncement(payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin', 'cms'] })
+      queryClient.invalidateQueries({ queryKey: ['cms'] })
+    },
+  })
+}
+
+export function useUpdateCmsStatsMutation() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (payload) => adminApi.updateCmsStats(payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin', 'cms'] })
+      queryClient.invalidateQueries({ queryKey: ['cms'] })
+    },
+  })
+}
+
+export function useUpdateCmsSectionsMutation() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (payload) => adminApi.updateCmsSections(payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin', 'cms'] })
+      queryClient.invalidateQueries({ queryKey: ['cms'] })
+    },
+  })
+}
+
+export function useCreateCmsCustomSectionMutation() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (payload) => adminApi.createCmsCustomSection(payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin', 'cms'] })
+      queryClient.invalidateQueries({ queryKey: ['cms'] })
+    },
+  })
+}
+
+export function useUpdateCmsCustomSectionMutation() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: ({ id, ...payload }) => adminApi.updateCmsCustomSection(id, payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin', 'cms'] })
+      queryClient.invalidateQueries({ queryKey: ['cms'] })
+    },
+  })
+}
+
+export function useDeleteCmsCustomSectionMutation() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (id) => adminApi.deleteCmsCustomSection(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin', 'cms'] })
+      queryClient.invalidateQueries({ queryKey: ['cms'] })
+    },
+  })
+}
+
 export function useAdminGateViolations(options = {}) {
   return useQuery({
     queryKey: ['admin', 'gate-violations'],

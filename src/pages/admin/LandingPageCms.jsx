@@ -1,19 +1,27 @@
 import { useState, useRef, useMemo, useEffect } from 'react'
 import {
+  BarChart3,
   Check,
   ExternalLink,
   Eye,
   FileEdit,
   FolderOpen,
   Image as ImageIcon,
+  Layers,
+  LayoutGrid,
   LayoutTemplate,
+  Megaphone,
   Pencil,
   Plus,
   Quote,
   RefreshCw,
   RotateCcw,
   Save,
+  Sliders,
+  Sparkles,
   Star,
+  ToggleLeft,
+  ToggleRight,
   Trash2,
   Upload,
   X,
@@ -21,7 +29,7 @@ import {
 import { Seo } from '@components/ui/Seo'
 import { Badge } from '@components/ui/Badge'
 import { Button } from '@components/ui/Button'
-import { Input, Textarea } from '@components/ui/Field'
+import { Input, Textarea, Select } from '@components/ui/Field'
 import { useStore } from '@context/StoreContext'
 import { useToast } from '@context/ToastContext'
 import {
@@ -36,6 +44,12 @@ import {
   useCreateCmsBlogPostMutation,
   useUpdateCmsBlogPostMutation,
   useDeleteCmsBlogPostMutation,
+  useUpdateCmsAnnouncementMutation,
+  useUpdateCmsStatsMutation,
+  useUpdateCmsSectionsMutation,
+  useCreateCmsCustomSectionMutation,
+  useUpdateCmsCustomSectionMutation,
+  useDeleteCmsCustomSectionMutation,
 } from '@hooks/api'
 import { cn } from '@lib/utils'
 
@@ -45,6 +59,12 @@ export default function LandingPageCms() {
     events: storeEvents = [],
     updateHeroCms,
     updateSpotlightCms,
+    updateAnnouncementCms,
+    updateStatsCms,
+    updateSectionsCms,
+    addCustomSection,
+    updateCustomSection,
+    deleteCustomSection,
     addTestimonial,
     updateTestimonial,
     deleteTestimonial,
@@ -64,6 +84,12 @@ export default function LandingPageCms() {
   const createBlogPostMutation = useCreateCmsBlogPostMutation()
   const updateBlogPostMutation = useUpdateCmsBlogPostMutation()
   const deleteBlogPostMutation = useDeleteCmsBlogPostMutation()
+  const updateAnnouncementMutation = useUpdateCmsAnnouncementMutation()
+  const updateStatsMutation = useUpdateCmsStatsMutation()
+  const updateSectionsMutation = useUpdateCmsSectionsMutation()
+  const createCustomSectionMutation = useCreateCmsCustomSectionMutation()
+  const updateCustomSectionMutation = useUpdateCmsCustomSectionMutation()
+  const deleteCustomSectionMutation = useDeleteCmsCustomSectionMutation()
   const toast = useToast()
 
   const cms = cmsData || storeCms
@@ -77,7 +103,7 @@ export default function LandingPageCms() {
           ? []
           : storeEvents
 
-  const [activeTab, setActiveTab] = useState('hero') // 'hero' | 'spotlight' | 'reviews' | 'blog'
+  const [activeTab, setActiveTab] = useState('hero') // 'hero' | 'spotlight' | 'reviews' | 'blog' | 'sections' | 'stats'
 
   // Local form states synced from context
   const [heroForm, setHeroForm] = useState({
@@ -99,6 +125,53 @@ export default function LandingPageCms() {
     highlightNote: cms?.spotlight?.highlightNote || cms?.spotlight?.customTagline || '',
     customImage: cms?.spotlight?.customImage || cms?.spotlight?.image || cms?.spotlight?.cover || '',
   })
+
+  // Announcement state
+  const [announcementForm, setAnnouncementForm] = useState({
+    enabled: cms?.announcement?.enabled || false,
+    text: cms?.announcement?.text || '',
+    badge: cms?.announcement?.badge || 'Announcement',
+    link: cms?.announcement?.link || '',
+    linkText: cms?.announcement?.linkText || 'Learn more',
+  })
+
+  // Sections toggle state
+  const [sectionsForm, setSectionsForm] = useState(
+    cms?.sections || {
+      stats: true,
+      categories: true,
+      featured: true,
+      spotlight: true,
+      howItWorks: true,
+      nearby: true,
+      features: true,
+      organizerCta: true,
+      testimonials: true,
+      blog: true,
+    },
+  )
+
+  // Custom section modal states
+  const [showSectionModal, setShowSectionModal] = useState(false)
+  const [editingSection, setEditingSection] = useState(null)
+  const [sectionForm, setSectionForm] = useState({
+    title: '',
+    eyebrow: '',
+    description: '',
+    layout: 'cards', // 'cards' | 'banner' | 'split'
+    tone: 'light', // 'light' | 'dark' | 'brand'
+    ctaText: '',
+    ctaLink: '',
+    image: '',
+    items: [],
+  })
+  const [newItemTitle, setNewItemTitle] = useState('')
+  const [newItemDesc, setNewItemDesc] = useState('')
+
+  // Milestone stats modal / state
+  const [showStatModal, setShowStatModal] = useState(false)
+  const [editingStatIndex, setEditingStatIndex] = useState(null)
+  const [statForm, setStatForm] = useState({ value: '', suffix: '+', label: '' })
 
   // Keep form fields synced when CMS data loads or updates
   useEffect(() => {
@@ -122,6 +195,18 @@ export default function LandingPageCms() {
         highlightNote: cms.spotlight.highlightNote || cms.spotlight.customTagline || prev.highlightNote,
         customImage: cms.spotlight.customImage || cms.spotlight.image || cms.spotlight.cover || prev.customImage,
       }))
+    }
+    if (cms?.announcement) {
+      setAnnouncementForm({
+        enabled: Boolean(cms.announcement.enabled),
+        text: cms.announcement.text || '',
+        badge: cms.announcement.badge || 'Announcement',
+        link: cms.announcement.link || '',
+        linkText: cms.announcement.linkText || 'Learn more',
+      })
+    }
+    if (cms?.sections) {
+      setSectionsForm((prev) => ({ ...prev, ...cms.sections }))
     }
   }, [cms])
 
@@ -355,6 +440,146 @@ export default function LandingPageCms() {
     toast.info('Blog article removed.')
   }
 
+  const handleSaveAnnouncement = async (e) => {
+    e.preventDefault()
+    try {
+      await updateAnnouncementMutation.mutateAsync(announcementForm)
+    } catch {
+      // Non-blocking fallback
+    }
+    updateAnnouncementCms(announcementForm)
+    toast.success('Announcement banner updated and live on website!')
+  }
+
+  const handleToggleSection = async (sectionKey) => {
+    const nextVal = !sectionsForm[sectionKey]
+    const updated = { ...sectionsForm, [sectionKey]: nextVal }
+    setSectionsForm(updated)
+    try {
+      await updateSectionsMutation.mutateAsync(updated)
+    } catch {
+      // Non-blocking fallback
+    }
+    updateSectionsCms(updated)
+    toast.info(`Homepage section "${sectionKey}" is now ${nextVal ? 'visible' : 'hidden'}.`)
+  }
+
+  const handleSaveCustomSection = async (e) => {
+    e.preventDefault()
+    if (!sectionForm.title.trim()) {
+      toast.warning('Please enter a section title.')
+      return
+    }
+
+    if (editingSection) {
+      try {
+        await updateCustomSectionMutation.mutateAsync({ id: editingSection.id, ...sectionForm })
+      } catch {
+        // Non-blocking
+      }
+      updateCustomSection(editingSection.id, sectionForm)
+      toast.success(`Section "${sectionForm.title}" updated successfully!`)
+      setEditingSection(null)
+    } else {
+      const payload = {
+        ...sectionForm,
+        id: `sec-${Date.now()}`,
+      }
+      try {
+        await createCustomSectionMutation.mutateAsync(payload)
+      } catch {
+        // Non-blocking
+      }
+      addCustomSection(payload)
+      toast.success(`Custom section "${sectionForm.title}" published to website!`)
+      setShowSectionModal(false)
+    }
+
+    setSectionForm({
+      title: '',
+      eyebrow: '',
+      description: '',
+      layout: 'cards',
+      tone: 'light',
+      ctaText: '',
+      ctaLink: '',
+      image: '',
+      items: [],
+    })
+    setNewItemTitle('')
+    setNewItemDesc('')
+  }
+
+  const handleDeleteCustomSection = async (id, title) => {
+    if (window.confirm(`Delete custom website section "${title || 'Untitled'}"?`)) {
+      try {
+        await deleteCustomSectionMutation.mutateAsync(id)
+      } catch {
+        // Non-blocking
+      }
+      deleteCustomSection(id)
+      toast.info('Website section deleted.')
+    }
+  }
+
+  const handleSaveStat = async (e) => {
+    e.preventDefault()
+    if (!statForm.label.trim()) {
+      toast.warning('Please enter a stat label.')
+      return
+    }
+
+    const currentStats = Array.isArray(cms?.stats) ? [...cms.stats] : []
+    const valNum = Number(statForm.value) || 0
+    const newEntry = {
+      value: valNum,
+      suffix: statForm.suffix || '+',
+      label: statForm.label.trim(),
+    }
+
+    let updatedStats
+    if (editingStatIndex !== null) {
+      updatedStats = currentStats.map((s, idx) => (idx === editingStatIndex ? newEntry : s))
+      setEditingStatIndex(null)
+    } else {
+      updatedStats = [...currentStats, newEntry]
+    }
+
+    try {
+      await updateStatsMutation.mutateAsync(updatedStats)
+    } catch {
+      // Non-blocking
+    }
+    updateStatsCms(updatedStats)
+    toast.success('Platform milestone stats updated!')
+    setShowStatModal(false)
+    setStatForm({ value: '', suffix: '+', label: '' })
+  }
+
+  const handleDeleteStat = async (index) => {
+    const currentStats = Array.isArray(cms?.stats) ? [...cms.stats] : []
+    const updatedStats = currentStats.filter((_, idx) => idx !== index)
+    try {
+      await updateStatsMutation.mutateAsync(updatedStats)
+    } catch {
+      // Non-blocking
+    }
+    updateStatsCms(updatedStats)
+    toast.info('Stat metric removed.')
+  }
+
+  const handleClearCustomStats = async () => {
+    if (window.confirm('Reset stats to automatic live platform telemetry calculation?')) {
+      try {
+        await updateStatsMutation.mutateAsync([])
+      } catch {
+        // Non-blocking
+      }
+      updateStatsCms([])
+      toast.success('Stats reset to live telemetry!')
+    }
+  }
+
   const handleResetDefaults = async () => {
     if (window.confirm('Reset all landing page sections (Hero, Spotlight, Reviews, Blogs) to default content?')) {
       try {
@@ -444,6 +669,22 @@ export default function LandingPageCms() {
                   icon: FileEdit,
                   badge: cms?.blogPosts?.length || 0,
                 },
+                {
+                  id: 'sections',
+                  num: '5',
+                  shortLabel: 'Sections',
+                  fullLabel: 'Website Sections',
+                  icon: LayoutGrid,
+                  badge: cms?.customSections?.length || 0,
+                },
+                {
+                  id: 'stats',
+                  num: '6',
+                  shortLabel: 'Stats',
+                  fullLabel: 'Milestone Stats',
+                  icon: BarChart3,
+                  badge: cms?.stats?.length > 0 ? cms.stats.length : 'Live',
+                },
               ].map((tab) => {
                 const isActive = activeTab === tab.id
                 return (
@@ -487,7 +728,7 @@ export default function LandingPageCms() {
           <div className="flex items-center justify-between px-1 text-[11px] text-ink-400 sm:hidden">
             <span>Swipe tabs to switch sections</span>
             <span className="font-semibold text-brand-600 dark:text-brand-400">
-              Active: {activeTab === 'hero' ? 'Hero' : activeTab === 'spotlight' ? 'Spotlight' : activeTab === 'reviews' ? 'Reviews' : 'Blog'}
+              Active: {activeTab === 'hero' ? 'Hero' : activeTab === 'spotlight' ? 'Spotlight' : activeTab === 'reviews' ? 'Reviews' : activeTab === 'blog' ? 'Blog' : activeTab === 'sections' ? 'Sections' : 'Stats'}
             </span>
           </div>
         </div>
@@ -1629,6 +1870,615 @@ export default function LandingPageCms() {
                     </Button>
                   </div>
                 </form>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* TAB 5: WEBSITE SECTIONS & ANNOUNCEMENTS */}
+        {activeTab === 'sections' && (
+          <div className="space-y-8">
+            {/* 1. TOP ANNOUNCEMENT BANNER */}
+            <form onSubmit={handleSaveAnnouncement} className="surface p-5 sm:p-7 space-y-5">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-ink-200/80 pb-4 dark:border-white/10">
+                <div>
+                  <h3 className="text-base font-black text-ink-900 dark:text-white flex items-center gap-2">
+                    <Megaphone className="size-4 text-brand-600 dark:text-brand-400" />
+                    Top Announcement Banner
+                  </h3>
+                  <p className="text-xs text-ink-500 dark:text-ink-400 mt-0.5">
+                    Display an urgent alert or promotion across the very top of the website.
+                  </p>
+                </div>
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={announcementForm.enabled}
+                    onChange={(e) => setAnnouncementForm({ ...announcementForm, enabled: e.target.checked })}
+                    className="sr-only peer"
+                  />
+                  <div className="w-11 h-6 bg-ink-200 peer-focus:outline-hidden rounded-full peer dark:bg-ink-800 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-ink-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-ink-600 peer-checked:bg-brand-600"></div>
+                  <span className="ml-2.5 text-xs font-bold text-ink-700 dark:text-ink-200">
+                    {announcementForm.enabled ? 'Banner Active' : 'Banner Disabled'}
+                  </span>
+                </label>
+              </div>
+
+              {announcementForm.enabled && (
+                <div className="space-y-4 pt-1 animate-in fade-in duration-200">
+                  <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
+                    <Input
+                      label="Badge Tag"
+                      value={announcementForm.badge}
+                      onChange={(e) => setAnnouncementForm({ ...announcementForm, badge: e.target.value })}
+                      placeholder="e.g. UPDATE or NEW"
+                    />
+                    <div className="sm:col-span-3">
+                      <Input
+                        label="Announcement Message"
+                        value={announcementForm.text}
+                        onChange={(e) => setAnnouncementForm({ ...announcementForm, text: e.target.value })}
+                        placeholder="e.g. Welcome to Eventspady Ghana — Early bird tickets are now available!"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <Input
+                      label="Button Link URL"
+                      value={announcementForm.link}
+                      onChange={(e) => setAnnouncementForm({ ...announcementForm, link: e.target.value })}
+                      placeholder="e.g. /events or https://..."
+                    />
+                    <Input
+                      label="Button Label"
+                      value={announcementForm.linkText}
+                      onChange={(e) => setAnnouncementForm({ ...announcementForm, linkText: e.target.value })}
+                      placeholder="e.g. Explore events"
+                    />
+                  </div>
+                </div>
+              )}
+
+              <div className="flex justify-end pt-2">
+                <Button type="submit" size="sm" iconLeft={Save}>
+                  Save Announcement Banner
+                </Button>
+              </div>
+            </form>
+
+            {/* 2. HOMEPAGE SECTIONS VISIBILITY TOGGLES */}
+            <div className="surface p-5 sm:p-7 space-y-4">
+              <div className="border-b border-ink-200/80 pb-3 dark:border-white/10">
+                <h3 className="text-base font-black text-ink-900 dark:text-white flex items-center gap-2">
+                  <Sliders className="size-4 text-brand-600 dark:text-brand-400" />
+                  Homepage Default Sections Visibility
+                </h3>
+                <p className="text-xs text-ink-500 dark:text-ink-400 mt-0.5">
+                  Turn default homepage sections on or off with immediate real-time reflection.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 pt-2">
+                {[
+                  { key: 'stats', label: 'Platform Milestone Stats', desc: 'Summary metrics & telemetry counter' },
+                  { key: 'categories', label: 'Category Grid', desc: 'Interactive category explorer' },
+                  { key: 'featured', label: 'Featured Events', desc: 'Featured, trending & free tabs' },
+                  { key: 'spotlight', label: 'Spotlight Banner', desc: 'Heroic countdown spotlight callout' },
+                  { key: 'howItWorks', label: 'How It Works', desc: '4-step attendee guide rail' },
+                  { key: 'nearby', label: 'Nearby Events', desc: 'Geolocation proximity events feed' },
+                  { key: 'features', label: 'Platform Features', desc: 'Check-in, ticket types & payments showcase' },
+                  { key: 'organizerCta', label: 'Organizer CTA', desc: 'Callout to onboard new hosts' },
+                  { key: 'testimonials', label: 'Testimonials & Partners', desc: 'Reviews slider and brand marquee' },
+                  { key: 'blog', label: 'Blog Highlights', desc: 'Editorial guides & updates preview' },
+                ].map(({ key, label, desc }) => {
+                  const isVisible = sectionsForm[key] !== false
+                  return (
+                    <div
+                      key={key}
+                      onClick={() => handleToggleSection(key)}
+                      className={cn(
+                        'flex items-center justify-between p-3.5 rounded-2xl border transition-all cursor-pointer select-none',
+                        isVisible
+                          ? 'border-brand-500/40 bg-brand-50/30 dark:border-brand-400/30 dark:bg-brand-500/5'
+                          : 'border-ink-200/70 bg-ink-50/50 opacity-60 dark:border-white/10 dark:bg-white/[.02]',
+                      )}
+                    >
+                      <div className="min-w-0 pr-3">
+                        <p className="text-xs font-bold text-ink-900 dark:text-white">{label}</p>
+                        <p className="text-[11px] text-ink-500 dark:text-ink-400 truncate">{desc}</p>
+                      </div>
+                      <span
+                        className={cn(
+                          'grid size-7 shrink-0 place-items-center rounded-xl text-xs font-bold transition',
+                          isVisible
+                            ? 'bg-brand-600 text-white'
+                            : 'bg-ink-200 text-ink-500 dark:bg-ink-800 dark:text-ink-400',
+                        )}
+                      >
+                        {isVisible ? <Check className="size-4" strokeWidth={3} /> : <X className="size-4" />}
+                      </span>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+
+            {/* 3. CUSTOM WEBSITE SECTIONS MANAGER */}
+            <div className="surface p-5 sm:p-7 space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-ink-200/80 pb-4 dark:border-white/10">
+                <div>
+                  <h3 className="text-base font-black text-ink-900 dark:text-white flex items-center gap-2">
+                    <Layers className="size-4 text-brand-600 dark:text-brand-400" />
+                    Custom Website Sections ({cms?.customSections?.length || 0})
+                  </h3>
+                  <p className="text-xs text-ink-500 dark:text-ink-400 mt-0.5">
+                    Add custom marketing sections, festival spotlights, or partner hubs to the homepage.
+                  </p>
+                </div>
+                <Button
+                  size="sm"
+                  iconLeft={Plus}
+                  onClick={() => {
+                    setEditingSection(null)
+                    setSectionForm({
+                      title: '',
+                      eyebrow: '',
+                      description: '',
+                      layout: 'cards',
+                      tone: 'light',
+                      ctaText: '',
+                      ctaLink: '',
+                      image: '',
+                      items: [],
+                    })
+                    setShowSectionModal(true)
+                  }}
+                >
+                  Add Website Section
+                </Button>
+              </div>
+
+              {(!cms?.customSections || cms.customSections.length === 0) ? (
+                <div className="py-12 text-center rounded-2xl border-2 border-dashed border-ink-200/80 dark:border-white/10 p-6">
+                  <div className="mx-auto grid size-12 place-items-center rounded-2xl bg-brand-50 text-brand-600 dark:bg-brand-500/10 dark:text-brand-400 mb-3">
+                    <LayoutGrid className="size-6" />
+                  </div>
+                  <h4 className="text-sm font-bold text-ink-900 dark:text-white">No custom sections added yet</h4>
+                  <p className="mt-1 text-xs text-ink-500 dark:text-ink-400 max-w-sm mx-auto">
+                    Create tailored campaign banners, cards grids, or split photo sections to showcase special offerings on the website.
+                  </p>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    iconLeft={Plus}
+                    className="mt-4"
+                    onClick={() => {
+                      setEditingSection(null)
+                      setShowSectionModal(true)
+                    }}
+                  >
+                    Add First Section
+                  </Button>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+                  {cms.customSections.map((sec) => (
+                    <div
+                      key={sec.id}
+                      className="rounded-2xl border border-ink-200/80 bg-white p-5 shadow-xs dark:border-white/10 dark:bg-ink-900 space-y-3"
+                    >
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          {sec.eyebrow && (
+                            <Badge tone="accent" size="sm" className="mb-1">
+                              {sec.eyebrow}
+                            </Badge>
+                          )}
+                          <h4 className="text-base font-bold text-ink-900 dark:text-white">
+                            {sec.title}
+                          </h4>
+                          {sec.description && (
+                            <p className="mt-1 text-xs text-ink-500 dark:text-ink-400 line-clamp-2">
+                              {sec.description}
+                            </p>
+                          )}
+                        </div>
+                        <div className="flex items-center gap-1 shrink-0">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setEditingSection(sec)
+                              setSectionForm({
+                                title: sec.title || '',
+                                eyebrow: sec.eyebrow || '',
+                                description: sec.description || '',
+                                layout: sec.layout || 'cards',
+                                tone: sec.tone || 'light',
+                                ctaText: sec.ctaText || '',
+                                ctaLink: sec.ctaLink || '',
+                                image: sec.image || '',
+                                items: Array.isArray(sec.items) ? sec.items : [],
+                              })
+                              setShowSectionModal(true)
+                            }}
+                            className="grid size-8 place-items-center rounded-lg text-ink-500 hover:bg-ink-100 hover:text-brand-600 dark:hover:bg-white/10"
+                            title="Edit section"
+                          >
+                            <Pencil className="size-4" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleDeleteCustomSection(sec.id, sec.title)}
+                            className="grid size-8 place-items-center rounded-lg text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10"
+                            title="Delete section"
+                          >
+                            <Trash2 className="size-4" />
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-ink-100 dark:border-white/5 text-[11px] text-ink-500 dark:text-ink-400">
+                        <span className="font-semibold uppercase tracking-wider bg-ink-100 dark:bg-white/10 px-2 py-0.5 rounded-md">
+                          Layout: {sec.layout || 'cards'}
+                        </span>
+                        <span className="font-semibold uppercase tracking-wider bg-ink-100 dark:bg-white/10 px-2 py-0.5 rounded-md">
+                          Tone: {sec.tone || 'light'}
+                        </span>
+                        <span>{sec.items?.length || 0} items</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* CUSTOM SECTION MODAL */}
+            {showSectionModal && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs overflow-y-auto">
+                <div className="surface max-w-xl w-full p-6 sm:p-7 rounded-3xl space-y-4 max-h-[90vh] overflow-y-auto my-auto shadow-2xl">
+                  <div className="flex items-center justify-between border-b border-ink-200/80 pb-3 dark:border-white/10">
+                    <h3 className="text-base font-bold text-ink-900 dark:text-white">
+                      {editingSection ? 'Edit Website Section' : 'Add New Website Section'}
+                    </h3>
+                    <button
+                      type="button"
+                      onClick={() => setShowSectionModal(false)}
+                      className="text-ink-400 hover:text-ink-600 dark:hover:text-white"
+                    >
+                      <X className="size-5" />
+                    </button>
+                  </div>
+
+                  <form onSubmit={handleSaveCustomSection} className="space-y-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <Input
+                        label="Section Title"
+                        value={sectionForm.title}
+                        onChange={(e) => setSectionForm({ ...sectionForm, title: e.target.value })}
+                        placeholder="e.g. Festival Season Specials"
+                        required
+                      />
+                      <Input
+                        label="Eyebrow Badge"
+                        value={sectionForm.eyebrow}
+                        onChange={(e) => setSectionForm({ ...sectionForm, eyebrow: e.target.value })}
+                        placeholder="e.g. Curated Spotlight"
+                      />
+                    </div>
+
+                    <Textarea
+                      label="Description"
+                      rows={2}
+                      value={sectionForm.description}
+                      onChange={(e) => setSectionForm({ ...sectionForm, description: e.target.value })}
+                      placeholder="Brief headline or marketing summary..."
+                    />
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-xs font-bold text-ink-700 dark:text-ink-300 mb-1">
+                          Layout Structure
+                        </label>
+                        <select
+                          value={sectionForm.layout}
+                          onChange={(e) => setSectionForm({ ...sectionForm, layout: e.target.value })}
+                          className="field h-10 w-full text-xs"
+                        >
+                          <option value="cards">Feature Cards Grid</option>
+                          <option value="banner">Full-Width Callout Banner</option>
+                          <option value="split">Split Photo & Feature List</option>
+                        </select>
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-bold text-ink-700 dark:text-ink-300 mb-1">
+                          Background Tone
+                        </label>
+                        <select
+                          value={sectionForm.tone}
+                          onChange={(e) => setSectionForm({ ...sectionForm, tone: e.target.value })}
+                          className="field h-10 w-full text-xs"
+                        >
+                          <option value="light">Clean Light (Subtle)</option>
+                          <option value="dark">Dark Charcoal / Ink</option>
+                          <option value="brand">Brand Blue Gradient</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <Input
+                        label="Button Action Label"
+                        value={sectionForm.ctaText}
+                        onChange={(e) => setSectionForm({ ...sectionForm, ctaText: e.target.value })}
+                        placeholder="e.g. View All Events"
+                      />
+                      <Input
+                        label="Button Link URL"
+                        value={sectionForm.ctaLink}
+                        onChange={(e) => setSectionForm({ ...sectionForm, ctaLink: e.target.value })}
+                        placeholder="e.g. /events"
+                      />
+                    </div>
+
+                    {/* Items Builder */}
+                    <div className="border border-ink-200/80 dark:border-white/10 rounded-2xl p-4 space-y-3 bg-ink-50/50 dark:bg-white/[.02]">
+                      <h4 className="text-xs font-bold text-ink-900 dark:text-white uppercase tracking-wider">
+                        Section Cards / Bullet Points ({sectionForm.items.length})
+                      </h4>
+
+                      <div className="flex gap-2">
+                        <input
+                          type="text"
+                          value={newItemTitle}
+                          onChange={(e) => setNewItemTitle(e.target.value)}
+                          placeholder="Card / Item Title"
+                          className="field h-9 text-xs flex-1"
+                        />
+                        <input
+                          type="text"
+                          value={newItemDesc}
+                          onChange={(e) => setNewItemDesc(e.target.value)}
+                          placeholder="Short description"
+                          className="field h-9 text-xs flex-1"
+                        />
+                        <Button
+                          type="button"
+                          size="sm"
+                          onClick={() => {
+                            if (!newItemTitle.trim()) return
+                            setSectionForm({
+                              ...sectionForm,
+                              items: [
+                                ...sectionForm.items,
+                                { title: newItemTitle.trim(), description: newItemDesc.trim() },
+                              ],
+                            })
+                            setNewItemTitle('')
+                            setNewItemDesc('')
+                          }}
+                        >
+                          Add
+                        </Button>
+                      </div>
+
+                      {sectionForm.items.length > 0 && (
+                        <div className="space-y-1.5 max-h-36 overflow-y-auto pr-1">
+                          {sectionForm.items.map((item, idx) => (
+                            <div
+                              key={idx}
+                              className="flex items-center justify-between p-2 rounded-xl bg-white dark:bg-ink-800 border border-ink-200/60 dark:border-white/5 text-xs"
+                            >
+                              <div className="min-w-0 pr-2">
+                                <span className="font-bold text-ink-900 dark:text-white">
+                                  {typeof item === 'string' ? item : item.title}
+                                </span>
+                                {item.description && (
+                                  <span className="text-ink-500 dark:text-ink-400 ml-2">
+                                    — {item.description}
+                                  </span>
+                                )}
+                              </div>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setSectionForm({
+                                    ...sectionForm,
+                                    items: sectionForm.items.filter((_, i) => i !== idx),
+                                  })
+                                }}
+                                className="text-rose-500 hover:text-rose-700"
+                              >
+                                <X className="size-3.5" />
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-ink-200/80 dark:border-white/10">
+                      <Button variant="ghost" type="button" onClick={() => setShowSectionModal(false)}>
+                        Cancel
+                      </Button>
+                      <Button type="submit">
+                        {editingSection ? 'Save Section Changes' : 'Publish Section to Website'}
+                      </Button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* TAB 6: MILESTONE PLATFORM STATS */}
+        {activeTab === 'stats' && (
+          <div className="surface p-5 sm:p-7 space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-ink-200/80 pb-4 dark:border-white/10">
+              <div>
+                <h3 className="text-base font-black text-ink-900 dark:text-white flex items-center gap-2">
+                  <BarChart3 className="size-4 text-brand-600 dark:text-brand-400" />
+                  Homepage Milestone Statistics
+                </h3>
+                <p className="text-xs text-ink-500 dark:text-ink-400 mt-0.5">
+                  When empty, the platform calculates live system telemetry in real time. Add custom goals to override.
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2">
+                {cms?.stats?.length > 0 && (
+                  <Button size="sm" variant="outline" onClick={handleClearCustomStats}>
+                    Reset to Live Telemetry
+                  </Button>
+                )}
+                <Button
+                  size="sm"
+                  iconLeft={Plus}
+                  onClick={() => {
+                    setEditingStatIndex(null)
+                    setStatForm({ value: '', suffix: '+', label: '' })
+                    setShowStatModal(true)
+                  }}
+                >
+                  Add Custom Stat
+                </Button>
+              </div>
+            </div>
+
+            {/* Current Stats Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {cms?.stats?.length > 0 ? (
+                cms.stats.map((stat, idx) => (
+                  <div
+                    key={idx}
+                    className="p-5 rounded-2xl border border-brand-500/30 bg-brand-50/20 dark:border-brand-400/20 dark:bg-brand-500/5 relative group"
+                  >
+                    <div className="absolute top-3 right-3 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setEditingStatIndex(idx)
+                          setStatForm({
+                            value: stat.value,
+                            suffix: stat.suffix || '+',
+                            label: stat.label,
+                          })
+                          setShowStatModal(true)
+                        }}
+                        className="grid size-7 place-items-center rounded-md bg-white dark:bg-ink-800 text-ink-600 hover:text-brand-600 shadow-xs"
+                      >
+                        <Pencil className="size-3.5" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteStat(idx)}
+                        className="grid size-7 place-items-center rounded-md bg-white dark:bg-ink-800 text-rose-500 hover:text-rose-700 shadow-xs"
+                      >
+                        <Trash2 className="size-3.5" />
+                      </button>
+                    </div>
+                    <p className="text-3xl font-extrabold text-ink-900 dark:text-white">
+                      {stat.value}{stat.suffix}
+                    </p>
+                    <p className="mt-1 text-xs font-semibold text-ink-500 dark:text-ink-400">{stat.label}</p>
+                    <span className="mt-3 inline-block text-[10px] font-bold uppercase tracking-wider text-brand-600 dark:text-brand-400">
+                      Custom Goal
+                    </span>
+                  </div>
+                ))
+              ) : (
+                <>
+                  <div className="p-5 rounded-2xl border border-emerald-500/30 bg-emerald-50/30 dark:border-emerald-400/20 dark:bg-emerald-500/5">
+                    <p className="text-3xl font-extrabold text-ink-900 dark:text-white">Live Data</p>
+                    <p className="mt-1 text-xs font-semibold text-ink-500 dark:text-ink-400">Tickets booked</p>
+                    <span className="mt-3 inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
+                      <span className="size-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                      Live Automatic Telemetry
+                    </span>
+                  </div>
+                  <div className="p-5 rounded-2xl border border-emerald-500/30 bg-emerald-50/30 dark:border-emerald-400/20 dark:bg-emerald-500/5">
+                    <p className="text-3xl font-extrabold text-ink-900 dark:text-white">Live Data</p>
+                    <p className="mt-1 text-xs font-semibold text-ink-500 dark:text-ink-400">Verified organizers</p>
+                    <span className="mt-3 inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
+                      <span className="size-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                      Live Automatic Telemetry
+                    </span>
+                  </div>
+                  <div className="p-5 rounded-2xl border border-emerald-500/30 bg-emerald-50/30 dark:border-emerald-400/20 dark:bg-emerald-500/5">
+                    <p className="text-3xl font-extrabold text-ink-900 dark:text-white">Live Data</p>
+                    <p className="mt-1 text-xs font-semibold text-ink-500 dark:text-ink-400">Live events listed</p>
+                    <span className="mt-3 inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
+                      <span className="size-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                      Live Automatic Telemetry
+                    </span>
+                  </div>
+                  <div className="p-5 rounded-2xl border border-emerald-500/30 bg-emerald-50/30 dark:border-emerald-400/20 dark:bg-emerald-500/5">
+                    <p className="text-3xl font-extrabold text-ink-900 dark:text-white">99.9%</p>
+                    <p className="mt-1 text-xs font-semibold text-ink-500 dark:text-ink-400">Gate scanner uptime</p>
+                    <span className="mt-3 inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
+                      <span className="size-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                      High-Availability Gateway
+                    </span>
+                  </div>
+                </>
+              )}
+            </div>
+
+            {/* Stat Modal */}
+            {showStatModal && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
+                <div className="surface max-w-sm w-full p-6 rounded-3xl space-y-4 shadow-2xl">
+                  <div className="flex items-center justify-between border-b border-ink-200/80 pb-3 dark:border-white/10">
+                    <h3 className="text-base font-bold text-ink-900 dark:text-white">
+                      {editingStatIndex !== null ? 'Edit Milestone Stat' : 'Add Milestone Stat'}
+                    </h3>
+                    <button
+                      type="button"
+                      onClick={() => setShowStatModal(false)}
+                      className="text-ink-400 hover:text-ink-600 dark:hover:text-white"
+                    >
+                      <X className="size-5" />
+                    </button>
+                  </div>
+
+                  <form onSubmit={handleSaveStat} className="space-y-4">
+                    <div className="grid grid-cols-2 gap-3">
+                      <Input
+                        label="Metric Value"
+                        type="number"
+                        value={statForm.value}
+                        onChange={(e) => setStatForm({ ...statForm, value: e.target.value })}
+                        placeholder="e.g. 50000"
+                        required
+                      />
+                      <Input
+                        label="Suffix"
+                        value={statForm.suffix}
+                        onChange={(e) => setStatForm({ ...statForm, suffix: e.target.value })}
+                        placeholder="e.g. +, %, k GHS"
+                      />
+                    </div>
+
+                    <Input
+                      label="Stat Label"
+                      value={statForm.label}
+                      onChange={(e) => setStatForm({ ...statForm, label: e.target.value })}
+                      placeholder="e.g. Satisfied Attendees"
+                      required
+                    />
+
+                    <div className="flex items-center justify-end gap-2.5 pt-3">
+                      <Button variant="ghost" type="button" onClick={() => setShowStatModal(false)}>
+                        Cancel
+                      </Button>
+                      <Button type="submit">
+                        Save Stat
+                      </Button>
+                    </div>
+                  </form>
+                </div>
               </div>
             )}
           </div>

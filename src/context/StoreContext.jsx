@@ -80,6 +80,28 @@ const DEFAULT_CMS = {
     customTitle: '',
     customTagline: '',
   },
+  announcement: {
+    enabled: false,
+    text: '',
+    badge: 'Announcement',
+    link: '',
+    linkText: 'Learn more',
+  },
+  stats: [],
+  sections: {
+    announcement: true,
+    stats: true,
+    categories: true,
+    featured: true,
+    spotlight: true,
+    howItWorks: true,
+    nearby: true,
+    features: true,
+    organizerCta: true,
+    testimonials: true,
+    blog: true,
+  },
+  customSections: [],
   testimonials: [],
   blogPosts: [],
 }
@@ -128,6 +150,10 @@ function getInitialData() {
           ...(parsed.cms || {}),
           testimonials: Array.isArray(parsed.cms?.testimonials) ? parsed.cms.testimonials : [],
           blogPosts: Array.isArray(parsed.cms?.blogPosts) ? parsed.cms.blogPosts : [],
+          stats: Array.isArray(parsed.cms?.stats) ? parsed.cms.stats : [],
+          customSections: Array.isArray(parsed.cms?.customSections) ? parsed.cms.customSections : [],
+          sections: { ...DEFAULT_CMS.sections, ...(parsed.cms?.sections || {}) },
+          announcement: { ...DEFAULT_CMS.announcement, ...(parsed.cms?.announcement || {}) },
         },
         gateViolations: parsed.gateViolations || {},
       }
@@ -614,6 +640,61 @@ export function StoreProvider({ children }) {
     setCms(DEFAULT_CMS)
   }, [])
 
+  const updateAnnouncementCms = useCallback((patch) => {
+    setCms((prev) => ({
+      ...prev,
+      announcement: { ...prev.announcement, ...patch },
+    }))
+  }, [])
+
+  const updateStatsCms = useCallback((statsList) => {
+    setCms((prev) => ({
+      ...prev,
+      stats: Array.isArray(statsList) ? statsList : [],
+    }))
+  }, [])
+
+  const updateSectionsCms = useCallback((patch) => {
+    setCms((prev) => ({
+      ...prev,
+      sections: { ...prev.sections, ...patch },
+    }))
+  }, [])
+
+  const addCustomSection = useCallback((section) => {
+    const newSection = {
+      id: `sec-${Date.now()}`,
+      layout: 'cards', // 'cards' | 'banner' | 'split'
+      tone: 'light', // 'light' | 'dark' | 'brand'
+      title: '',
+      eyebrow: '',
+      description: '',
+      ctaText: '',
+      ctaLink: '',
+      items: [],
+      ...section,
+    }
+    setCms((prev) => ({
+      ...prev,
+      customSections: [...(prev.customSections || []), newSection],
+    }))
+    return newSection
+  }, [])
+
+  const updateCustomSection = useCallback((id, patch) => {
+    setCms((prev) => ({
+      ...prev,
+      customSections: (prev.customSections || []).map((s) => (s.id === id ? { ...s, ...patch } : s)),
+    }))
+  }, [])
+
+  const deleteCustomSection = useCallback((id) => {
+    setCms((prev) => ({
+      ...prev,
+      customSections: (prev.customSections || []).filter((s) => s.id !== id),
+    }))
+  }, [])
+
   /* ---------------- Pay at the Gate Violation & Barring System ---------------- */
   const getGateStatus = useCallback(
     (email) => {
@@ -904,6 +985,12 @@ export function StoreProvider({ children }) {
       isOrganizerVerified,
       updateHeroCms,
       updateSpotlightCms,
+      updateAnnouncementCms,
+      updateStatsCms,
+      updateSectionsCms,
+      addCustomSection,
+      updateCustomSection,
+      deleteCustomSection,
       addTestimonial,
       updateTestimonial,
       deleteTestimonial,

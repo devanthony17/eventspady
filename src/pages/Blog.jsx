@@ -53,7 +53,7 @@ export default function Blog() {
       <PageHero
         eyebrow="The Eventspady blog"
         title="Ideas for people who run events"
-        description="Selling tickets, running a calm door, getting paid and everything else we have learned from 3,400 events across the Upper West."
+        description="Selling tickets, running a calm door, getting paid and practical insights from event creators across the region."
         breadcrumbs={[{ label: 'Blog' }]}
       >
         <div className="relative max-w-lg">

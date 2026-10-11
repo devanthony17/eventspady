@@ -6,42 +6,6 @@ import { useLandingCms } from '@hooks/api'
 import { useStore } from '@context/StoreContext'
 import { trustedOrganizers as defaultTrustedOrganizers } from '@data/testimonials'
 
-const DEFAULT_TESTIMONIALS = [
-  {
-    id: 'test-1',
-    name: 'Hajia Mariama',
-    role: 'Founder, Savannah Women in Tech',
-    quote: 'Eventspady transformed our conference ticketing in Wa. MoMo checkouts were instant and door check-in was seamless.',
-    avatar: '/images/avatars/avatar-4.svg',
-    rating: 5,
-  },
-  {
-    id: 'test-2',
-    name: 'Naa Fuseini Pelpuo IV',
-    role: 'Wa Naa Cultural Affairs',
-    quote: 'Moving the Dumba Festival tickets to digital QR codes eliminated gate bottlenecks completely.',
-    avatar: '/images/avatars/avatar-1.svg',
-    rating: 5,
-  },
-  {
-    id: 'test-3',
-    name: 'Cynthia Boakye',
-    role: 'Event Producer, Royal Cosy Hills',
-    quote: 'Real-time sales tracking and automatic MoMo disbursements give us complete financial transparency.',
-    avatar: '/images/avatars/avatar-3.svg',
-    rating: 5,
-  },
-]
-
-const DEFAULT_ORGANIZERS = [
-  { name: 'Wa Naa Palace Cultural Heritage', city: 'Wa', count: 14 },
-  { name: 'Royal Cosy Hills (Jirapa Dubai)', city: 'Jirapa', count: 28 },
-  { name: 'Savannah Tech Hub', city: 'Wa', count: 9 },
-  { name: 'Upper West Music Awards (UWMAs)', city: 'Wa', count: 6 },
-  { name: 'Nandom Heritage Crafts & Tourism', city: 'Nandom', count: 11 },
-  { name: 'Dumba Festival Planning Committee', city: 'Wa', count: 8 },
-]
-
 export function Testimonials() {
   const { cms: storeCms } = useStore()
   const { data: cmsData } = useLandingCms()
@@ -331,7 +295,7 @@ export function Testimonials() {
           <div className="text-center">
             <p className="inline-flex items-center gap-2 rounded-full border border-ink-200/80 bg-white/80 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-ink-700 shadow-sm backdrop-blur-md dark:border-white/10 dark:bg-ink-900/80 dark:text-ink-200">
               <span className="size-2 rounded-full bg-emerald-500 animate-pulse" />
-              Trusted by 640+ organizers, cultural palaces & institutions
+              Verified Event Partners & Payment Networks
             </p>
           </div>
 

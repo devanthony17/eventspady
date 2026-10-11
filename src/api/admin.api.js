@@ -204,6 +204,54 @@ export const adminApi = {
   },
 
   /**
+   * Update CMS announcement banner
+   */
+  async updateCmsAnnouncement(payload) {
+    const res = await apiClient.put('/api/admin/cms/announcement', payload)
+    return res.data
+  },
+
+  /**
+   * Update CMS milestone statistics
+   */
+  async updateCmsStats(payload) {
+    const res = await apiClient.put('/api/admin/cms/stats', payload)
+    return res.data
+  },
+
+  /**
+   * Update CMS section visibility
+   */
+  async updateCmsSections(payload) {
+    const res = await apiClient.put('/api/admin/cms/sections', payload)
+    return res.data
+  },
+
+  /**
+   * Create custom CMS website section
+   */
+  async createCmsCustomSection(payload) {
+    const res = await apiClient.post('/api/admin/cms/sections/custom', payload)
+    return res.data
+  },
+
+  /**
+   * Update custom CMS website section
+   */
+  async updateCmsCustomSection(id, payload) {
+    const res = await apiClient.put(`/api/admin/cms/sections/custom/${encodeURIComponent(id)}`, payload)
+    return res.data
+  },
+
+  /**
+   * Delete custom CMS website section
+   */
+  async deleteCmsCustomSection(id) {
+    const res = await apiClient.delete(`/api/admin/cms/sections/custom/${encodeURIComponent(id)}`)
+    return res.data
+  },
+
+  /**
    * Reset CMS configuration to system defaults
    */
   async resetCms() {

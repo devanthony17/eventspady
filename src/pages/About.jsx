@@ -62,8 +62,8 @@ const TIMELINE = [
   },
   {
     year: 'Today',
-    title: '186K tickets and counting',
-    description: '3,400 events across all eleven districts of the Upper West, from courtyard dinners to the Dumba festival.',
+    title: 'Platform scale & reach',
+    description: 'Empowering organizers across all eleven districts of the Upper West, from community gatherings to festival celebrations.',
     badge: 'Regional Leader',
   },
 ]
@@ -214,7 +214,7 @@ export default function About() {
     <>
       <Seo
         title="About us"
-        description="Eventspady is the event booking and management platform for Wa and the Upper West Region, built by people who used to run the door themselves. 186,000 tickets across eleven districts."
+        description="Eventspady is the event booking and management platform for Wa and the Upper West Region, built by people who used to run the door themselves."
         keywords="about eventspady, event ticketing company, event management platform, wa events, upper west events"
       />
 

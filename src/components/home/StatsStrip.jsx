@@ -1,15 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Container } from '@components/ui/Section'
-import { useLandingCms } from '@hooks/api'
+import { useLandingCms, useEvents, useOrganizers } from '@hooks/api'
+import { useStore } from '@context/StoreContext'
 import { formatCompact } from '@lib/utils'
 import { usePrefersReducedMotion } from '@hooks/useMediaQuery'
-
-const DEFAULT_STATS = [
-  { value: 24000, suffix: '+', label: 'Tickets booked' },
-  { value: 180, suffix: '+', label: 'Verified organizers' },
-  { value: 99, suffix: '%', label: 'Scanner uptime' },
-  { value: 380, suffix: 'k GHS', label: 'Disbursed to partners' },
-]
 
 /** Counts up once the strip scrolls into view. Static if motion is reduced. */
 function useCountUp(target, run) {
@@ -58,12 +52,38 @@ export function StatsStrip() {
   const ref = useRef(null)
   const [visible, setVisible] = useState(false)
   const { data: cmsData } = useLandingCms()
+  const { events: storeEvents = [], orders: storeOrders = [], organizers: storeOrganizers = [], cms: storeCms } = useStore()
+  const { data: eventsData } = useEvents()
+  const { data: organizersData } = useOrganizers()
+
+  const liveEvents = useMemo(() => {
+    if (Array.isArray(eventsData)) return eventsData
+    return eventsData?.events || eventsData?.data || storeEvents
+  }, [eventsData, storeEvents])
+
+  const liveOrganizers = useMemo(() => {
+    if (Array.isArray(organizersData)) return organizersData
+    return organizersData?.organizers || organizersData?.data || storeOrganizers
+  }, [organizersData, storeOrganizers])
+
+  const cmsStats = cmsData?.stats || cmsData?.platformStats || storeCms?.stats
 
   const stats = useMemo(() => {
-    if (Array.isArray(cmsData?.stats) && cmsData.stats.length > 0) return cmsData.stats
-    if (Array.isArray(cmsData?.platformStats) && cmsData.platformStats.length > 0) return cmsData.platformStats
-    return DEFAULT_STATS
-  }, [cmsData])
+    if (Array.isArray(cmsStats) && cmsStats.length > 0) return cmsStats
+
+    const totalTicketsSold = storeOrders.reduce(
+      (sum, o) => sum + (o.items || []).reduce((s, i) => s + (i.quantity || 0), 0) || (o.quantity || 0),
+      0,
+    )
+    const verifiedOrgCount = liveOrganizers.filter((o) => o.status === 'verified' || o.verified).length || liveOrganizers.length
+
+    return [
+      { value: totalTicketsSold, suffix: '+', label: 'Tickets booked' },
+      { value: verifiedOrgCount, suffix: '+', label: 'Verified organizers' },
+      { value: liveEvents.length, suffix: '+', label: 'Live events listed' },
+      { value: 99.9, suffix: '%', label: 'Gate scanner uptime' },
+    ]
+  }, [cmsStats, storeOrders, liveOrganizers, liveEvents])
 
   useEffect(() => {
     const el = ref.current

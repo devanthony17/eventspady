@@ -1,4 +1,7 @@
-/** Production initial organizers catalogue: starts empty and populates dynamically from APIs or organizer portal */
+/**
+ * Production organizers repository — clean initial state.
+ * Organizers registered and verified in production will be populated dynamically.
+ */
 export const organizers = []
 
 export const getOrganizer = (id) => {

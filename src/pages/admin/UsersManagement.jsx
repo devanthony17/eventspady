@@ -82,21 +82,10 @@ export default function UsersManagement() {
         id: authUser.id || 'admin-1',
         name: authUser.name || 'Platform Administrator',
         email: authUser.email,
-        phone: authUser.phone || '+233 24 123 4567',
-        city: 'Wa',
-        region: 'Upper West',
+        phone: authUser.phone || '',
+        city: authUser.city || 'Wa',
+        region: authUser.region || 'Upper West',
         role: authUser.role || 'admin',
-        totalSpent: 0,
-      })
-    } else {
-      userMap.set('admin@eventspady.com', {
-        id: 'usr-admin',
-        name: 'Platform Administrator',
-        email: 'admin@eventspady.com',
-        phone: '+233 24 000 0001',
-        city: 'Wa',
-        region: 'Upper West',
-        role: 'admin',
         totalSpent: 0,
       })
     }
@@ -115,9 +104,9 @@ export default function UsersManagement() {
           id: order.userId || `usr-${Math.random().toString(36).slice(2, 8)}`,
           name: order.attendeeName || order.buyer || order.customerName || email.split('@')[0],
           email,
-          phone: order.attendeePhone || order.phone || '+233 55 987 6543',
+          phone: order.attendeePhone || order.phone || '',
           city: order.city || 'Wa',
-          region: 'Upper West',
+          region: order.region || 'Upper West',
           role: 'attendee',
           totalSpent: amt,
         })
@@ -134,7 +123,7 @@ export default function UsersManagement() {
           id: org.id || `usr-org-${Math.random().toString(36).slice(2, 8)}`,
           name: org.name || org.contactPerson || 'Organizer',
           email,
-          phone: org.phone || '+233 20 444 8888',
+          phone: org.phone || '',
           city: org.city || 'Wa',
           region: org.region || 'Upper West',
           role: 'organizer',

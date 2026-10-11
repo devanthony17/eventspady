@@ -1,16 +1,13 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
-import { events as seedEvents } from '@data/events'
-import { coupons as seedCoupons } from '@data/coupons'
 import { getCategory } from '@data/categories'
-import { getOrganizer, organizers as baseOrganizers } from '@data/organizers'
-import { testimonials as seedTestimonials } from '@data/testimonials'
-import { posts as seedPosts } from '@data/blog'
+import { getOrganizer } from '@data/organizers'
 import { generateOrderId, getEventCoordinates } from '@lib/utils'
 
-const STORAGE_KEY = 'eventspady:store_v4'
+const STORAGE_KEY = 'eventspady:store_prod'
 const StoreContext = createContext(null)
 
 function enrichEvent(event) {
+  if (!event) return null
   const coords = getEventCoordinates(event)
   const venue = event.venue
     ? {
@@ -48,28 +45,30 @@ function enrichEvent(event) {
     sold,
     priceFrom: prices.length ? Math.min(...prices) : 0,
     priceTo: prices.length ? Math.max(...prices) : 0,
-    isFree: prices.length ? prices.every((p) => p === 0) : true,
+    isFree: prices.length > 0 && prices.every((p) => p === 0),
     isSoldOut: capacity > 0 && sold >= capacity,
-    category: getCategory(event.category),
-    organizer: getOrganizer(event.organizerId) || {
-      id: event.organizerId || 'eventspady',
-      name: event.organizerName || 'Eventspady Verified Organizer',
-      logo: '/images/organizers/organizer-1.svg',
-      verified: true,
-      rating: 5.0,
-      reviews: 0,
-    },
+    category: getCategory(typeof event.category === 'object' ? event.category?.id : event.category) || (event.category ? { id: event.category, name: event.category } : null),
+    organizer:
+      (typeof event.organizer === 'object' && event.organizer) ||
+      getOrganizer(event.organizerId) || {
+        id: event.organizerId || 'eventspady',
+        name: event.organizerName || 'Eventspady Verified Organizer',
+        logo: '/images/organizers/organizer-1.svg',
+        verified: true,
+        rating: 5.0,
+        reviews: 0,
+      },
   }
 }
 
 const DEFAULT_CMS = {
   hero: {
-    badgeText: 'Discover live events in Ghana',
+    badgeText: 'Discover the Upper West Region',
     titleLine1: 'The heartbeat of live events',
-    titleLine2: 'across Ghana',
-    gradientText: 'Ghana',
+    titleLine2: 'across the Upper West',
+    gradientText: 'Upper West',
     description:
-      'Tickets for festivals, sports championships, tech summits and concerts. Real-time Mobile Money checkout, zero booking fees.',
+      'Tickets for festivals, sports championships, tech summits and sound clashes in Wa, Jirapa, Nandom and beyond. Real-time Mobile Money checkout, zero booking fees.',
     ctaPrimaryText: 'Explore events',
     ctaPrimaryLink: '/events',
     ctaSecondaryText: 'List your event',
@@ -85,7 +84,6 @@ const DEFAULT_CMS = {
   blogPosts: [],
 }
 
-const seedOrganizersList = []
 const defaultGateViolations = {}
 
 function getInitialData() {
@@ -103,30 +101,31 @@ function getInitialData() {
     }
   }
   try {
-    // Purge legacy mock caches
-    localStorage.removeItem('eventspady:store_v3')
-    localStorage.removeItem('eventspady:store_v2')
+    // Purge legacy development stores
     localStorage.removeItem('eventspady:store_v1')
-    localStorage.removeItem('eventspady:store')
+    localStorage.removeItem('eventspady:store_v2')
+    localStorage.removeItem('eventspady:store_v3')
 
     const raw = localStorage.getItem(STORAGE_KEY)
     if (raw) {
       const parsed = JSON.parse(raw)
+      const rawEvents = Array.isArray(parsed.events)
+        ? parsed.events
+        : Array.isArray(parsed.customEvents)
+          ? parsed.customEvents
+          : []
+
       return {
-        events: (parsed.events || []).map(enrichEvent),
-        orders: parsed.orders || [],
-        coupons: parsed.coupons || [],
-        transactions: parsed.transactions || [],
-        drafts: parsed.drafts || [],
-        comps: parsed.comps || [],
-        organizers: parsed.organizers || [],
+        events: rawEvents.map(enrichEvent).filter(Boolean),
+        orders: Array.isArray(parsed.orders) ? parsed.orders : [],
+        coupons: Array.isArray(parsed.coupons) ? parsed.coupons : [],
+        transactions: Array.isArray(parsed.transactions) ? parsed.transactions : [],
+        drafts: Array.isArray(parsed.drafts) ? parsed.drafts : [],
+        comps: Array.isArray(parsed.comps) ? parsed.comps : [],
+        organizers: Array.isArray(parsed.organizers) ? parsed.organizers : [],
         cms: {
           ...DEFAULT_CMS,
           ...(parsed.cms || {}),
-          spotlight: {
-            ...DEFAULT_CMS.spotlight,
-            ...(parsed.cms?.spotlight || {}),
-          },
           testimonials: Array.isArray(parsed.cms?.testimonials) ? parsed.cms.testimonials : [],
           blogPosts: Array.isArray(parsed.cms?.blogPosts) ? parsed.cms.blogPosts : [],
         },
@@ -134,7 +133,7 @@ function getInitialData() {
       }
     }
   } catch (e) {
-    console.error('Failed to parse eventspady store:', e)
+    console.error('Failed to parse eventspady production store:', e)
   }
   return {
     events: [],
@@ -195,17 +194,10 @@ export function StoreProvider({ children }) {
         eventData.slug ||
         `${(eventData.title || 'event').toLowerCase().replace(/[^a-z0-9]+/g, '-')}-${Date.now().toString().slice(-4)}`,
       createdAt: eventData.createdAt || new Date().toISOString(),
-      sold: Number(eventData.sold) || 0,
+      isCustom: true,
+      sold: eventData.sold || 0,
     })
-    setEvents((prev) => {
-      const idx = prev.findIndex((e) => e.id === id || e.slug === enriched.slug)
-      if (idx >= 0) {
-        const next = [...prev]
-        next[idx] = enriched
-        return next
-      }
-      return [enriched, ...prev]
-    })
+    setEvents((prev) => [enriched, ...prev.filter((e) => e.id !== enriched.id)])
     return enriched
   }, [])
 
@@ -245,24 +237,16 @@ export function StoreProvider({ children }) {
   /* ---------------- Order operations ---------------- */
   const placeOrder = useCallback(
     (orderInput) => {
-      const orderId = orderInput.id || generateOrderId()
-      const placedAt = orderInput.placedAt || new Date().toISOString()
+      const orderId = generateOrderId()
+      const placedAt = new Date().toISOString()
       const newOrder = {
-        status: 'confirmed',
-        ...orderInput,
         id: orderId,
         placedAt,
+        status: 'confirmed',
+        ...orderInput,
       }
 
-      setOrders((prev) => {
-        const idx = prev.findIndex((o) => o.id === orderId)
-        if (idx >= 0) {
-          const next = [...prev]
-          next[idx] = newOrder
-          return next
-        }
-        return [newOrder, ...prev]
-      })
+      setOrders((prev) => [newOrder, ...prev])
 
       // Decrement ticket quantities
       if (orderInput.eventId && orderInput.items) {
@@ -777,17 +761,53 @@ export function StoreProvider({ children }) {
     [orders, comps],
   )
 
+  const refundOrder = useCallback((orderId, reason = '') => {
+    setOrders((prev) =>
+      prev.map((order) => {
+        if (order.id !== orderId) return order
+        return {
+          ...order,
+          status: 'refunded',
+          paymentStatus: 'refunded',
+          refundReason: reason,
+          refundedAt: new Date().toISOString(),
+        }
+      }),
+    )
+
+    setEvents((prev) =>
+      prev.map((event) => {
+        const order = orders.find((o) => o.id === orderId)
+        if (!order || order.eventId !== event.id) return event
+        const updatedTickets = (event.tickets || []).map((ticket) => {
+          const bought = order.items?.find((it) => it.ticketId === ticket.id)
+          if (!bought) return ticket
+          const sold = Math.max(0, (ticket.sold || 0) - bought.quantity)
+          const remaining = Math.min(ticket.quantity || 0, (ticket.remaining || 0) + bought.quantity)
+          return { ...ticket, sold, remaining }
+        })
+        const totalSold = updatedTickets.reduce((sum, t) => sum + (t.sold || 0), 0)
+        return enrichEvent({
+          ...event,
+          tickets: updatedTickets,
+          sold: totalSold,
+        })
+      }),
+    )
+  }, [orders])
+
   const resetStore = useCallback(() => {
     localStorage.removeItem(STORAGE_KEY)
+    localStorage.removeItem('eventspady:store_v3')
     localStorage.removeItem('eventspady:store_v2')
     localStorage.removeItem('eventspady:store_v1')
-    setEvents(seedEvents.map(enrichEvent))
+    setEvents([])
     setOrders([])
-    setCoupons(seedCoupons)
+    setCoupons([])
     setTransactions([])
     setDrafts([])
     setComps([])
-    setOrganizers(seedOrganizersList)
+    setOrganizers([])
     setCms(DEFAULT_CMS)
     setGateViolations({})
   }, [])
@@ -803,11 +823,13 @@ export function StoreProvider({ children }) {
       organizers,
       cms,
       createEvent,
+      addEvent: createEvent,
       updateEvent,
       deleteEvent,
       saveDraft,
       deleteDraft,
       placeOrder,
+      refundOrder,
       topUpWallet,
       createCoupon,
       validateCoupon,
@@ -857,6 +879,7 @@ export function StoreProvider({ children }) {
       saveDraft,
       deleteDraft,
       placeOrder,
+      refundOrder,
       topUpWallet,
       createCoupon,
       validateCoupon,

@@ -48,51 +48,27 @@ export default function Overview() {
   const toast = useToast()
 
   const organizers = useMemo(() => {
-    const apiList = Array.isArray(organizersData)
-      ? organizersData
-      : Array.isArray(organizersData?.organizers)
-        ? organizersData.organizers
-        : Array.isArray(organizersData?.data)
-          ? organizersData.data
-          : []
-    if (apiList.length > 0) {
-      const apiIds = new Set(apiList.map((o) => o.id))
-      const extraStore = (storeOrganizers || []).filter((o) => !apiIds.has(o.id))
-      return [...apiList, ...extraStore]
-    }
-    return storeOrganizers || []
+    if (Array.isArray(organizersData)) return organizersData
+    if (Array.isArray(organizersData?.organizers)) return organizersData.organizers
+    if (organizersData?.data) return organizersData.data
+    if (organizersData !== undefined) return []
+    return storeOrganizers
   }, [organizersData, storeOrganizers])
 
   const events = useMemo(() => {
-    const apiList = Array.isArray(eventsData)
-      ? eventsData
-      : Array.isArray(eventsData?.events)
-        ? eventsData.events
-        : Array.isArray(eventsData?.data)
-          ? eventsData.data
-          : []
-    if (apiList.length > 0) {
-      const apiIds = new Set(apiList.map((e) => e.id))
-      const extraStore = (storeEvents || []).filter((e) => !apiIds.has(e.id))
-      return [...apiList, ...extraStore]
-    }
-    return storeEvents || []
+    if (Array.isArray(eventsData)) return eventsData
+    if (Array.isArray(eventsData?.events)) return eventsData.events
+    if (eventsData?.data) return eventsData.data
+    if (eventsData !== undefined) return []
+    return storeEvents
   }, [eventsData, storeEvents])
 
   const orders = useMemo(() => {
-    const apiList = Array.isArray(ordersData)
-      ? ordersData
-      : Array.isArray(ordersData?.orders)
-        ? ordersData.orders
-        : Array.isArray(ordersData?.data)
-          ? ordersData.data
-          : []
-    if (apiList.length > 0) {
-      const apiIds = new Set(apiList.map((o) => o.id))
-      const extraStore = (storeOrders || []).filter((o) => !apiIds.has(o.id))
-      return [...apiList, ...extraStore]
-    }
-    return storeOrders || []
+    if (Array.isArray(ordersData)) return ordersData
+    if (Array.isArray(ordersData?.orders)) return ordersData.orders
+    if (ordersData?.data) return ordersData.data
+    if (ordersData !== undefined) return []
+    return storeOrders
   }, [ordersData, storeOrders])
 
   const pendingOrganizers = useMemo(
@@ -202,10 +178,16 @@ export default function Overview() {
               <p className="text-2xl font-black text-ink-900 dark:text-white">
                 {formatCurrency(totalGmv)}
               </p>
-              <div className="mt-1.5 flex items-center gap-1.5 text-xs font-bold text-emerald-600 dark:text-emerald-400">
-                <TrendingUp className="size-3.5" />
-                <span>+31.2% this quarter</span>
-              </div>
+              {totalGmv > 0 ? (
+                <div className="mt-1.5 flex items-center gap-1.5 text-xs font-bold text-emerald-600 dark:text-emerald-400">
+                  <TrendingUp className="size-3.5" />
+                  <span>Real-time transactions</span>
+                </div>
+              ) : (
+                <p className="mt-1.5 text-xs text-ink-400">
+                  Awaiting initial ticket transactions
+                </p>
+              )}
             </div>
           </div>
 
@@ -241,8 +223,8 @@ export default function Overview() {
               <p className="text-2xl font-black text-ink-900 dark:text-white">
                 {totalTicketsSold.toLocaleString()}
               </p>
-              <p className="mt-1.5 text-xs text-emerald-600 dark:text-emerald-400 font-semibold">
-                Across {events.length || 48} live events in Upper West
+              <p className="mt-1.5 text-xs text-ink-500 dark:text-ink-400 font-medium">
+                Across {events.length} live event{events.length === 1 ? '' : 's'}
               </p>
             </div>
           </div>

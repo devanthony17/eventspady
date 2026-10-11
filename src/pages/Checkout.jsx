@@ -195,10 +195,10 @@ export default function Checkout() {
       // Non-blocking fallback
     }
 
-    // Always record order in store so Admin, Organizer, and Attendee dashboards stay in sync
-    const storedOrder = store.placeOrder(placedOrder ? { ...orderPayload, ...placedOrder } : orderPayload)
     if (!placedOrder) {
-      placedOrder = storedOrder
+      placedOrder = store.placeOrder(orderPayload)
+    } else {
+      store.placeOrder({ ...orderPayload, ...placedOrder })
     }
 
     if (isMomo && (method === 'mtn-momo' || method === 'telecel-cash')) {

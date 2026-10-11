@@ -37,6 +37,7 @@ export function useSaveDraftMutation() {
     mutationFn: (eventData) => organizerApi.saveDraft(eventData),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['organizer', 'events'] })
+      queryClient.invalidateQueries({ queryKey: ['organizer', 'events', 'drafts'] })
     },
   })
 }
@@ -112,7 +113,6 @@ export function useCreateCouponMutation() {
     mutationFn: (data) => organizerApi.createCoupon(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['organizer', 'coupons'] })
-      queryClient.invalidateQueries({ queryKey: ['coupons'] })
     },
   })
 }
@@ -123,7 +123,6 @@ export function useDeleteCouponMutation() {
     mutationFn: (id) => organizerApi.deleteCoupon(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['organizer', 'coupons'] })
-      queryClient.invalidateQueries({ queryKey: ['coupons'] })
     },
   })
 }
@@ -152,8 +151,6 @@ export function useCheckInTicketMutation() {
     mutationFn: (payload) => organizerApi.checkInTicket(payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['organizer', 'guests'] })
-      queryClient.invalidateQueries({ queryKey: ['organizer', 'overview'] })
-      queryClient.invalidateQueries({ queryKey: ['admin', 'overview'] })
     },
   })
 }

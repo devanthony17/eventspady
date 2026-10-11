@@ -17,13 +17,14 @@ export function useCheckoutMutation() {
     mutationFn: (orderData) => ordersApi.checkout(orderData),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['user', 'tickets'] })
+      queryClient.invalidateQueries({ queryKey: ['user', 'overview'] })
       queryClient.invalidateQueries({ queryKey: ['events'] })
-      queryClient.invalidateQueries({ queryKey: ['orders'] })
-      queryClient.invalidateQueries({ queryKey: ['admin', 'orders'] })
-      queryClient.invalidateQueries({ queryKey: ['admin', 'overview'] })
+      queryClient.invalidateQueries({ queryKey: ['event'] })
       queryClient.invalidateQueries({ queryKey: ['organizer', 'orders'] })
       queryClient.invalidateQueries({ queryKey: ['organizer', 'overview'] })
       queryClient.invalidateQueries({ queryKey: ['organizer', 'guests'] })
+      queryClient.invalidateQueries({ queryKey: ['admin', 'orders'] })
+      queryClient.invalidateQueries({ queryKey: ['admin', 'overview'] })
     },
   })
 }

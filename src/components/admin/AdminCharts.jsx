@@ -73,19 +73,26 @@ export function AdminAreaChart({ liveTotal = 0, orders = [] }) {
 
   const rawData = useMemo(() => {
     const base = TIME_SERIES_DATA[timeframe]
-    if (!liveTotal || liveTotal <= 0) return base
+    if ((!liveTotal || liveTotal <= 0) && (!orders || orders.length === 0)) {
+      return base.map((item) => ({
+        ...item,
+        revenue: 0,
+        tickets: 0,
+        orders: 0,
+      }))
+    }
 
     // Scale time series so latest data point aligns with live GMV
     const latestBase = base[base.length - 1].revenue || 1
-    const factor = liveTotal / latestBase
+    const factor = liveTotal > 0 ? liveTotal / latestBase : 1
 
     return base.map((item, idx) => {
       if (idx === base.length - 1) {
         return {
           ...item,
           revenue: liveTotal,
-          tickets: Math.max(item.tickets, orders.length > 0 ? orders.reduce((sum, o) => sum + (o.quantity || 1), 0) : Math.round(liveTotal / 45)),
-          orders: Math.max(item.orders, orders.length || Math.round(liveTotal / 75)),
+          tickets: orders.length > 0 ? orders.reduce((sum, o) => sum + (o.quantity || 1), 0) : Math.round(liveTotal / 45),
+          orders: orders.length || Math.round(liveTotal / 75),
         }
       }
       return {
@@ -145,10 +152,16 @@ export function AdminAreaChart({ liveTotal = 0, orders = [] }) {
             <h3 className="text-3xl font-extrabold tracking-tight text-ink-900 dark:text-white">
               {formatCurrency(activePoint?.revenue ?? totalPeriodRevenue)}
             </h3>
-            <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-xs font-bold text-emerald-600 dark:text-emerald-400">
-              <TrendingUp className="size-3.5" />
-              +28.4%
-            </span>
+            {totalPeriodRevenue > 0 ? (
+              <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-xs font-bold text-emerald-600 dark:text-emerald-400">
+                <TrendingUp className="size-3.5" />
+                Live GMV
+              </span>
+            ) : (
+              <span className="inline-flex items-center gap-1 rounded-full bg-ink-100 px-2 py-0.5 text-xs font-semibold text-ink-500 dark:bg-white/10 dark:text-ink-400">
+                Zero Baseline
+              </span>
+            )}
           </div>
           <p className="mt-0.5 text-xs text-ink-400">
             {activePoint ? `Selected: ${activePoint.date} · ${activePoint.tickets} tickets` : 'Interactive curve'}
@@ -383,18 +396,12 @@ export function AdminCategoryDonut({ events = [], orders = [] }) {
       return entries
     }
 
-    return [
-      { label: 'Music & Concerts', percentage: 38, count: 18, color: '#6366f1', gmv: 'GH₵148,200', rawGmv: 148200, trend: '+24%' },
-      { label: 'Culture & Festivals', percentage: 26, count: 12, color: '#ec4899', gmv: 'GH₵101,400', rawGmv: 101400, trend: '+18%' },
-      { label: 'Tech & Innovation', percentage: 18, count: 8, color: '#06b6d4', gmv: 'GH₵70,200', rawGmv: 70200, trend: '+31%' },
-      { label: 'Sports & Marathons', percentage: 12, count: 6, color: '#10b981', gmv: 'GH₵46,800', rawGmv: 46800, trend: '+9%' },
-      { label: 'Food & Workshops', percentage: 6, count: 4, color: '#f59e0b', gmv: 'GH₵23,400', rawGmv: 23400, trend: '+12%' },
-    ]
+    return []
   }, [events, orders])
 
-  const totalEventCount = events.length || 48
+  const totalEventCount = events.length
   const activeCategoriesCount = categoriesData.length
-  const topCategory = categoriesData[0] || { label: 'Music & Concerts', percentage: 38, count: 18 }
+  const topCategory = categoriesData[0] || { label: 'None', percentage: 0, count: 0 }
   const totalGmvAcrossCategories = useMemo(
     () => categoriesData.reduce((sum, c) => sum + (c.rawGmv || 0), 0),
     [categoriesData],
@@ -429,12 +436,21 @@ export function AdminCategoryDonut({ events = [], orders = [] }) {
         </div>
       </div>
 
-      {/* Top Section: Donut Visual & Category Insights Grid */}
-      <div className="grid gap-6 md:grid-cols-12 items-center">
-        {/* SVG Donut Visual */}
-        <div className="flex flex-col items-center justify-center md:col-span-5 lg:col-span-4">
-          <div className="relative size-44 sm:size-48 shrink-0">
-            <svg className="size-full -rotate-90" viewBox="0 0 160 160">
+      {categoriesData.length === 0 ? (
+        <div className="rounded-2xl border border-dashed border-ink-200 p-8 text-center dark:border-white/10">
+          <p className="text-sm font-semibold text-ink-900 dark:text-white">No categorized events published yet</p>
+          <p className="mt-1 text-xs text-ink-500 dark:text-ink-400">
+            Events published by organizers will automatically populate the live market share distribution and metrics here.
+          </p>
+        </div>
+      ) : (
+        <>
+          {/* Top Section: Donut Visual & Category Insights Grid */}
+          <div className="grid gap-6 md:grid-cols-12 items-center">
+            {/* SVG Donut Visual */}
+            <div className="flex flex-col items-center justify-center md:col-span-5 lg:col-span-4">
+              <div className="relative size-44 sm:size-48 shrink-0">
+                <svg className="size-full -rotate-90" viewBox="0 0 160 160">
               <circle
                 cx="80"
                 cy="80"
@@ -620,6 +636,8 @@ export function AdminCategoryDonut({ events = [], orders = [] }) {
           ))}
         </div>
       </div>
+        </>
+      )}
     </div>
   )
 }
@@ -647,16 +665,16 @@ export function AdminPaymentGatewaysBreakdown({ orders = [], liveTotal = 0 }) {
       })
 
       const total = mtnTotal + telecelTotal + cardTotal + gateTotal || liveTotal || 1
-      const mtnShare = Math.max(10, Math.round((mtnTotal / total) * 100))
-      const telecelShare = Math.max(5, Math.round((telecelTotal / total) * 100))
-      const cardShare = Math.max(2, Math.round((cardTotal / total) * 100))
+      const mtnShare = Math.max(0, Math.round((mtnTotal / total) * 100))
+      const telecelShare = Math.max(0, Math.round((telecelTotal / total) * 100))
+      const cardShare = Math.max(0, Math.round((cardTotal / total) * 100))
       const gateShare = Math.max(0, 100 - (mtnShare + telecelShare + cardShare))
 
       const result = [
         {
           name: 'MTN MoMo',
           share: mtnShare,
-          amount: formatCurrency(mtnTotal || Math.round(total * 0.68)),
+          amount: formatCurrency(mtnTotal),
           successRate: '99.7%',
           speed: '1.2s',
           color: 'bg-amber-400',
@@ -665,7 +683,7 @@ export function AdminPaymentGatewaysBreakdown({ orders = [], liveTotal = 0 }) {
         {
           name: 'Telecel Cash',
           share: telecelShare,
-          amount: formatCurrency(telecelTotal || Math.round(total * 0.24)),
+          amount: formatCurrency(telecelTotal),
           successRate: '99.1%',
           speed: '1.8s',
           color: 'bg-red-500',
@@ -674,7 +692,7 @@ export function AdminPaymentGatewaysBreakdown({ orders = [], liveTotal = 0 }) {
         {
           name: 'Visa & Mastercard / GH-Link',
           share: cardShare,
-          amount: formatCurrency(cardTotal || Math.round(total * 0.08)),
+          amount: formatCurrency(cardTotal),
           successRate: '98.5%',
           speed: '2.4s',
           color: 'bg-blue-500',
@@ -697,31 +715,30 @@ export function AdminPaymentGatewaysBreakdown({ orders = [], liveTotal = 0 }) {
       return result
     }
 
-    const total = liveTotal || 390000
     return [
       {
         name: 'MTN MoMo',
-        share: 68,
-        amount: formatCurrency(Math.round(total * 0.68)),
-        successRate: '99.7%',
+        share: 0,
+        amount: formatCurrency(0),
+        successRate: '100%',
         speed: '1.2s',
         color: 'bg-amber-400',
         textColor: 'text-amber-600 dark:text-amber-400',
       },
       {
         name: 'Telecel Cash',
-        share: 24,
-        amount: formatCurrency(Math.round(total * 0.24)),
-        successRate: '99.1%',
+        share: 0,
+        amount: formatCurrency(0),
+        successRate: '100%',
         speed: '1.8s',
         color: 'bg-red-500',
         textColor: 'text-red-600 dark:text-red-400',
       },
       {
         name: 'Visa & Mastercard / GH-Link',
-        share: 8,
-        amount: formatCurrency(Math.round(total * 0.08)),
-        successRate: '98.5%',
+        share: 0,
+        amount: formatCurrency(0),
+        successRate: '100%',
         speed: '2.4s',
         color: 'bg-blue-500',
         textColor: 'text-blue-600 dark:text-blue-400',
@@ -729,7 +746,7 @@ export function AdminPaymentGatewaysBreakdown({ orders = [], liveTotal = 0 }) {
     ]
   }, [orders, liveTotal])
 
-  const momoShare = gateways.find((g) => g.name.includes('MTN'))?.share || 68
+  const momoShare = gateways.find((g) => g.name.includes('MTN'))?.share || 0
 
   return (
     <div className="surface p-6 sm:p-7">

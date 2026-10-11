@@ -5,7 +5,6 @@ import { Button } from '@components/ui/Button'
 import { EventCard } from '@components/events/EventCard'
 import { useGeolocation } from '@hooks/useGeolocation'
 import { useEvents } from '@hooks/api'
-import { useStore } from '@context/StoreContext'
 import { distanceKm, getEventCoordinates } from '@lib/utils'
 
 /**
@@ -13,19 +12,11 @@ import { distanceKm, getEventCoordinates } from '@lib/utils'
  * Falls back to the soonest upcoming events until then.
  */
 export function NearbyEvents() {
-  const { events: storeEvents = [] } = useStore()
   const { data: eventsData } = useEvents()
   const events = useMemo(() => {
-    const apiList = Array.isArray(eventsData)
-      ? eventsData
-      : eventsData?.events || eventsData?.data || []
-    if (apiList.length > 0) {
-      const apiIds = new Set(apiList.map((e) => e.id))
-      const extraStore = (storeEvents || []).filter((e) => !apiIds.has(e.id))
-      return [...apiList, ...extraStore]
-    }
-    return storeEvents || []
-  }, [eventsData, storeEvents])
+    if (Array.isArray(eventsData)) return eventsData
+    return eventsData?.events || eventsData?.data || []
+  }, [eventsData])
   const { position, locationName, status, error, request, openModal, clearLocation } = useGeolocation()
 
   const list = useMemo(() => {
@@ -97,11 +88,15 @@ export function NearbyEvents() {
           </div>
         )}
 
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {list.map((event) => (
-            <EventCard key={event.id} event={event} />
-          ))}
-        </div>
+        {list.length === 0 ? (
+          <p className="py-12 text-center text-sm text-ink-500">No events currently scheduled in this area.</p>
+        ) : (
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {list.map((event) => (
+              <EventCard key={event.id} event={event} />
+            ))}
+          </div>
+        )}
       </Container>
     </Section>
   )

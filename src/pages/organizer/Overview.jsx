@@ -9,7 +9,6 @@ import { Button } from '@components/ui/Button'
 import { Badge } from '@components/ui/Badge'
 import { useAuth } from '@context/AuthContext'
 import { useToast } from '@context/ToastContext'
-import { useStore } from '@context/StoreContext'
 import {
   useOrganizerOverview,
   useOrganizerEvents,
@@ -47,7 +46,6 @@ function SalesChart({ data }) {
 export default function OrganizerOverview() {
   const { nav } = useOutletContext()
   const { user } = useAuth()
-  const { events: storeEvents = [], orders: storeOrders = [] } = useStore()
   const { data: overviewData } = useOrganizerOverview()
   const { data: eventsData } = useOrganizerEvents()
   const { data: ordersData } = useOrganizerOrders()
@@ -65,28 +63,14 @@ export default function OrganizerOverview() {
   }, [payoutsData])
 
   const myEvents = useMemo(() => {
-    const apiList = Array.isArray(eventsData)
-      ? eventsData
-      : eventsData?.events || eventsData?.data || []
-    if (apiList.length > 0) {
-      const apiIds = new Set(apiList.map((e) => e.id))
-      const extraStore = (storeEvents || []).filter((e) => !apiIds.has(e.id))
-      return [...apiList, ...extraStore]
-    }
-    return storeEvents || []
-  }, [eventsData, storeEvents])
+    if (Array.isArray(eventsData)) return eventsData
+    return eventsData?.events || eventsData?.data || []
+  }, [eventsData])
 
   const displayOrders = useMemo(() => {
-    const apiList = Array.isArray(ordersData)
-      ? ordersData
-      : ordersData?.orders || ordersData?.data || []
-    if (apiList.length > 0) {
-      const apiIds = new Set(apiList.map((o) => o.id))
-      const extraStore = (storeOrders || []).filter((o) => !apiIds.has(o.id))
-      return [...apiList, ...extraStore]
-    }
-    return storeOrders || []
-  }, [ordersData, storeOrders])
+    if (Array.isArray(ordersData)) return ordersData
+    return ordersData?.orders || ordersData?.data || []
+  }, [ordersData])
 
   const overview = overviewData?.overview || overviewData?.data || overviewData || {}
 

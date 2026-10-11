@@ -23,8 +23,8 @@ export function useVerifyOrganizerMutation() {
     mutationFn: (id) => adminApi.verifyOrganizer(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin', 'organizers'] })
-      queryClient.invalidateQueries({ queryKey: ['organizers'] })
       queryClient.invalidateQueries({ queryKey: ['admin', 'overview'] })
+      queryClient.invalidateQueries({ queryKey: ['organizers'] })
       queryClient.invalidateQueries({ queryKey: ['organizer', 'overview'] })
     },
   })
@@ -36,9 +36,8 @@ export function useRejectOrganizerMutation() {
     mutationFn: ({ id, reason }) => adminApi.rejectOrganizer(id, { reason }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin', 'organizers'] })
-      queryClient.invalidateQueries({ queryKey: ['organizers'] })
       queryClient.invalidateQueries({ queryKey: ['admin', 'overview'] })
-      queryClient.invalidateQueries({ queryKey: ['organizer', 'overview'] })
+      queryClient.invalidateQueries({ queryKey: ['organizers'] })
     },
   })
 }
@@ -49,9 +48,8 @@ export function useSuspendOrganizerMutation() {
     mutationFn: ({ id, reason }) => adminApi.suspendOrganizer(id, { reason }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin', 'organizers'] })
-      queryClient.invalidateQueries({ queryKey: ['organizers'] })
       queryClient.invalidateQueries({ queryKey: ['admin', 'overview'] })
-      queryClient.invalidateQueries({ queryKey: ['organizer', 'overview'] })
+      queryClient.invalidateQueries({ queryKey: ['organizers'] })
     },
   })
 }
@@ -70,9 +68,9 @@ export function useSetEventFeaturedMutation() {
     mutationFn: ({ id, featured }) => adminApi.setEventFeatured(id, { featured }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin', 'events'] })
-      queryClient.invalidateQueries({ queryKey: ['events'] })
       queryClient.invalidateQueries({ queryKey: ['admin', 'overview'] })
-      queryClient.invalidateQueries({ queryKey: ['organizer', 'events'] })
+      queryClient.invalidateQueries({ queryKey: ['events'] })
+      queryClient.invalidateQueries({ queryKey: ['cms'] })
     },
   })
 }
@@ -83,8 +81,8 @@ export function useUpdateEventStatusMutation() {
     mutationFn: ({ id, status, reason }) => adminApi.updateEventStatus(id, { status, reason }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin', 'events'] })
-      queryClient.invalidateQueries({ queryKey: ['events'] })
       queryClient.invalidateQueries({ queryKey: ['admin', 'overview'] })
+      queryClient.invalidateQueries({ queryKey: ['events'] })
       queryClient.invalidateQueries({ queryKey: ['organizer', 'events'] })
       queryClient.invalidateQueries({ queryKey: ['organizer', 'overview'] })
     },
@@ -120,14 +118,19 @@ export function useAdminOrders(params = {}, options = {}) {
 export function useRefundOrderMutation() {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: ({ id, reason }) => adminApi.refundOrder(id, { reason }),
+    mutationFn: (arg) => {
+      const id = typeof arg === 'string' ? arg : arg?.id
+      const reason = typeof arg === 'string' ? 'Refunded by administrator' : arg?.reason
+      return adminApi.refundOrder(id, { reason })
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin', 'orders'] })
-      queryClient.invalidateQueries({ queryKey: ['orders'] })
       queryClient.invalidateQueries({ queryKey: ['admin', 'overview'] })
       queryClient.invalidateQueries({ queryKey: ['organizer', 'orders'] })
       queryClient.invalidateQueries({ queryKey: ['organizer', 'overview'] })
       queryClient.invalidateQueries({ queryKey: ['user', 'tickets'] })
+      queryClient.invalidateQueries({ queryKey: ['user', 'overview'] })
+      queryClient.invalidateQueries({ queryKey: ['events'] })
     },
   })
 }
@@ -308,8 +311,8 @@ export function useAdminDeleteEventMutation() {
     mutationFn: (id) => adminApi.deleteEvent(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin', 'events'] })
-      queryClient.invalidateQueries({ queryKey: ['events'] })
       queryClient.invalidateQueries({ queryKey: ['admin', 'overview'] })
+      queryClient.invalidateQueries({ queryKey: ['events'] })
       queryClient.invalidateQueries({ queryKey: ['organizer', 'events'] })
       queryClient.invalidateQueries({ queryKey: ['organizer', 'overview'] })
     },

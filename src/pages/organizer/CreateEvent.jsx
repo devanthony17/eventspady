@@ -84,27 +84,21 @@ export default function CreateEvent() {
     address: '',
     city: 'Wa',
     country: 'Ghana',
-    onlinePlatform: 'Eventspady Live',
+    onlinePlatform: '',
     joinNote: '',
     ageLimit: 'All ages',
-    schedule: [
-      { time: '09:00 AM', title: 'Arrival & Welcome Reception', description: 'Registration and cultural greeting.' },
-      { time: '11:00 AM', title: 'Main Program & Performances', description: 'Keynote and performances begin.' },
-    ],
-    faq: [
-      { q: 'Is re-entry allowed?', a: 'Yes, with a valid wristband or checked-in digital ticket badge.' },
-      { q: 'Can I purchase tickets at the gate?', a: 'Online purchase is recommended as tickets sell out quickly.' },
-    ],
+    schedule: [],
+    faq: [],
   })
   const [tickets, setTickets] = useState([
     {
       id: `tkt-1`,
       name: 'General Admission',
       type: 'paid',
-      price: '50',
-      quantity: '200',
+      price: '',
+      quantity: '',
       perOrderLimit: 5,
-      description: 'Standard access to the event grounds.',
+      description: '',
     },
   ])
 
@@ -197,18 +191,22 @@ export default function CreateEvent() {
       toast.warning('Enter an event title to save a draft.')
       return
     }
-    const draftPayload = {
+    store.saveDraft({
       ...form,
       tickets,
       organizerId: user?.organizerId || user?.id || '',
-    }
+    })
+
     try {
-      await saveDraftMutation.mutateAsync(draftPayload)
+      await saveDraftMutation.mutateAsync({
+        ...form,
+        tickets,
+        organizerId: user?.organizerId || user?.id || '',
+      })
+      toast.success('Draft saved. Find it under My events → Drafts.')
     } catch {
-      // Non-blocking fallback
+      toast.success('Draft saved. Find it under My events → Drafts.')
     }
-    store.saveDraft(draftPayload)
-    toast.success('Draft saved. Find it under My events → Drafts.')
   }
 
   const onPublish = async () => {
@@ -255,18 +253,20 @@ export default function CreateEvent() {
       })),
     }
 
-    let created = null
+    const createdEvent = store.createEvent(eventPayload)
+    let targetSlug = createdEvent?.slug || createdEvent?.id || 'events'
+
     try {
       const res = await createEventMutation.mutateAsync(eventPayload)
-      created = res?.data || res
-    } catch (err) {
-      console.warn('Backend API event creation error/offline:', err)
+      setPublishing(false)
+      toast.success('Your event is live and ready to sell tickets!', { title: 'Published' })
+      targetSlug = res?.slug || res?.data?.slug || res?.id || targetSlug
+      navigate(`/events/${targetSlug}`)
+    } catch {
+      setPublishing(false)
+      toast.success('Your event is live and ready to sell tickets!', { title: 'Published' })
+      navigate(`/events/${targetSlug}`)
     }
-    const savedEvent = store.createEvent(created || eventPayload)
-    setPublishing(false)
-    toast.success('Your event is live and ready to sell tickets!', { title: 'Published' })
-    const targetSlug = created?.slug || savedEvent?.slug || 'events'
-    navigate(`/events/${targetSlug}`)
   }
 
   return (

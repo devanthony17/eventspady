@@ -34,19 +34,11 @@ export default function EventsManagement() {
   const toast = useToast()
 
   const events = useMemo(() => {
-    const apiList = Array.isArray(eventsData)
-      ? eventsData
-      : Array.isArray(eventsData?.events)
-        ? eventsData.events
-        : Array.isArray(eventsData?.data)
-          ? eventsData.data
-          : []
-    if (apiList.length > 0) {
-      const apiIds = new Set(apiList.map((e) => e.id))
-      const extraStore = (storeEvents || []).filter((e) => !apiIds.has(e.id))
-      return [...apiList, ...extraStore]
-    }
-    return storeEvents || []
+    if (Array.isArray(eventsData)) return eventsData
+    if (Array.isArray(eventsData?.events)) return eventsData.events
+    if (eventsData?.data) return eventsData.data
+    if (eventsData !== undefined) return []
+    return storeEvents
   }, [eventsData, storeEvents])
 
   const [search, setSearch] = useState('')

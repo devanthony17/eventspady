@@ -94,7 +94,7 @@ export default function LandingPageCms() {
 
   // Spotlight form state & file input
   const [spotlightForm, setSpotlightForm] = useState({
-    eventSlug: cms?.spotlight?.eventSlug || '',
+    eventSlug: cms?.spotlight?.eventSlug || (events && events[0]?.slug) || '',
     badgeText: cms?.spotlight?.badgeText || cms?.spotlight?.customBadge || 'Spotlight event',
     highlightNote: cms?.spotlight?.highlightNote || cms?.spotlight?.customTagline || '',
     customImage: cms?.spotlight?.customImage || cms?.spotlight?.image || cms?.spotlight?.cover || '',

@@ -62,6 +62,19 @@ export function useAdminEvents(params = {}, options = {}) {
   })
 }
 
+export function useAdminCreateEventMutation() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (payload) => adminApi.createEvent(payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin', 'events'] })
+      queryClient.invalidateQueries({ queryKey: ['admin', 'overview'] })
+      queryClient.invalidateQueries({ queryKey: ['events'] })
+      queryClient.invalidateQueries({ queryKey: ['cms'] })
+    },
+  })
+}
+
 export function useSetEventFeaturedMutation() {
   const queryClient = useQueryClient()
   return useMutation({

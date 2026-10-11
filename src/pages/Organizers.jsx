@@ -67,7 +67,7 @@ export default function Organizers() {
             <EmptyState
               icon={Users}
               title="No organizers found"
-              description="Try a different name or city."
+              description={query ? 'Try a different name or city.' : 'No verified organizers registered yet. Organizations will appear here once approved.'}
               action={
                 <Button variant="outline" onClick={() => setQuery('')}>
                   Clear search

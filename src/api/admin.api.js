@@ -48,6 +48,20 @@ export const adminApi = {
   },
 
   /**
+   * Create an event directly from admin console independently
+   */
+  async createEvent(payload) {
+    try {
+      const res = await apiClient.post('/api/admin/events', payload)
+      return res.data
+    } catch {
+      // Fallback to standard events endpoint
+      const res = await apiClient.post('/api/events', payload)
+      return res.data
+    }
+  },
+
+  /**
    * Fetch platform events for moderation
    */
   async getEvents(params = {}) {

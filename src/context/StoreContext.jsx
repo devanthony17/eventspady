@@ -6,6 +6,35 @@ import { generateOrderId, getEventCoordinates } from '@lib/utils'
 const STORAGE_KEY = 'eventspady:store_prod'
 const StoreContext = createContext(null)
 
+const LEGACY_MOCK_EVENT_IDS = new Set([
+  'wa-city-marathon',
+  'dumba-festival',
+  'sombo-sound-clash',
+  'shea-agro-expo',
+  'kulpawn-cinema',
+  'savannah-devcon',
+  'savannah-esports',
+  'nandom-pottery',
+  'inter-communities-soccer',
+  'blackfriday-night',
+  'miss-dumba',
+  'wechiau-safari',
+  'event-1',
+  'event-2',
+  'event-3',
+  'bugatti-blackfriday',
+  'walk-with-jonjo',
+  'all-white-party',
+])
+
+const LEGACY_MOCK_ORGANIZER_IDS = new Set([
+  'org-1',
+  'org-2',
+  'org-3',
+  'wa-marathon-club',
+  'damba-fest-cmte',
+])
+
 function enrichEvent(event) {
   if (!event) return null
   const coords = getEventCoordinates(event)
@@ -51,9 +80,9 @@ function enrichEvent(event) {
     organizer:
       (typeof event.organizer === 'object' && event.organizer) ||
       getOrganizer(event.organizerId) || {
-        id: event.organizerId || 'eventspady',
-        name: event.organizerName || 'Eventspady Verified Organizer',
-        logo: '/images/organizers/organizer-1.svg',
+        id: event.organizerId || 'eventspady-verified',
+        name: event.organizerName || 'Verified Partner',
+        logo: '/images/mark.svg',
         verified: true,
         rating: 5.0,
         reviews: 0,
@@ -137,14 +166,27 @@ function getInitialData() {
           ? parsed.customEvents
           : []
 
+      const cleanedEvents = rawEvents
+        .filter((e) => e && !LEGACY_MOCK_EVENT_IDS.has(String(e.id)) && !LEGACY_MOCK_EVENT_IDS.has(String(e.slug)))
+        .map(enrichEvent)
+        .filter(Boolean)
+
+      const cleanedOrganizers = (Array.isArray(parsed.organizers) ? parsed.organizers : []).filter(
+        (o) => o && !LEGACY_MOCK_ORGANIZER_IDS.has(String(o.id))
+      )
+
+      const cleanedOrders = (Array.isArray(parsed.orders) ? parsed.orders : []).filter(
+        (ord) => ord && !LEGACY_MOCK_EVENT_IDS.has(String(ord.eventId))
+      )
+
       return {
-        events: rawEvents.map(enrichEvent).filter(Boolean),
-        orders: Array.isArray(parsed.orders) ? parsed.orders : [],
+        events: cleanedEvents,
+        orders: cleanedOrders,
         coupons: Array.isArray(parsed.coupons) ? parsed.coupons : [],
         transactions: Array.isArray(parsed.transactions) ? parsed.transactions : [],
         drafts: Array.isArray(parsed.drafts) ? parsed.drafts : [],
         comps: Array.isArray(parsed.comps) ? parsed.comps : [],
-        organizers: Array.isArray(parsed.organizers) ? parsed.organizers : [],
+        organizers: cleanedOrganizers,
         cms: {
           ...DEFAULT_CMS,
           ...(parsed.cms || {}),

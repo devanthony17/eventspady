@@ -59,9 +59,13 @@ export function EventCard({ event, variant = 'default', className, showSave = tr
         className={cn('group flex items-center gap-3 rounded-2xl p-2 transition hover:bg-ink-50 dark:hover:bg-white/5', className)}
       >
         <img
-          src={event.cover}
+          src={event.cover || '/images/events/event-1.svg'}
           alt=""
           loading="lazy"
+          onError={(e) => {
+            e.currentTarget.onerror = null
+            e.currentTarget.src = '/images/events/event-1.svg'
+          }}
           className="size-16 shrink-0 rounded-xl object-cover"
         />
         <div className="min-w-0 flex-1">
@@ -72,7 +76,7 @@ export function EventCard({ event, variant = 'default', className, showSave = tr
             {event.title}
           </h3>
           <p className="mt-0.5 truncate text-xs text-ink-500 dark:text-ink-400">
-            {isOnline ? 'Online event' : event.venue.city}
+            {isOnline ? 'Online event' : event.venue?.city || 'Wa'}
           </p>
         </div>
         <span className="shrink-0 text-sm font-bold text-brand-600 dark:text-brand-400">
@@ -92,9 +96,13 @@ export function EventCard({ event, variant = 'default', className, showSave = tr
       >
         <Link to={`/events/${event.slug}`} className="relative block aspect-[16/10] overflow-hidden sm:aspect-auto">
           <img
-            src={event.cover}
+            src={event.cover || '/images/events/event-1.svg'}
             alt=""
             loading="lazy"
+            onError={(e) => {
+              e.currentTarget.onerror = null
+              e.currentTarget.src = '/images/events/event-1.svg'
+            }}
             className="size-full object-cover transition duration-500 group-hover:scale-105"
           />
           <div className="absolute left-3 top-3 flex flex-col gap-1.5">
@@ -108,7 +116,7 @@ export function EventCard({ event, variant = 'default', className, showSave = tr
               {event.categoryMeta?.name}
             </Badge>
             <Badge tone={isOnline ? 'info' : 'neutral'} size="sm" icon={isOnline ? Video : MapPin}>
-              {isOnline ? 'Online' : event.venue.city}
+              {isOnline ? 'Online' : event.venue?.city || 'Wa'}
             </Badge>
             {event.distanceKm != null && (
               <Badge tone="accent" size="sm" icon={MapPin}>
@@ -185,9 +193,13 @@ export function EventCard({ event, variant = 'default', className, showSave = tr
     >
       <div className="relative aspect-[16/10] overflow-hidden">
         <img
-          src={event.cover}
+          src={event.cover || '/images/events/event-1.svg'}
           alt=""
           loading="lazy"
+          onError={(e) => {
+            e.currentTarget.onerror = null
+            e.currentTarget.src = '/images/events/event-1.svg'
+          }}
           className="size-full object-cover transition duration-500 group-hover:scale-105"
         />
         <div className="absolute inset-x-3 top-3 flex items-start justify-between gap-2">
@@ -198,7 +210,7 @@ export function EventCard({ event, variant = 'default', className, showSave = tr
 
         <div className="absolute inset-x-3 bottom-3 flex flex-wrap items-center gap-1.5">
           <Badge tone="glass" size="sm" icon={isOnline ? Video : MapPin}>
-            {isOnline ? 'Online' : event.venue.city}
+            {isOnline ? 'Online' : event.venue?.city || 'Wa'}
           </Badge>
           {event.distanceKm != null && (
             <Badge tone="glass" size="sm" icon={MapPin} className="bg-brand-950/80 text-brand-300 ring-1 ring-brand-400/40">
@@ -243,12 +255,12 @@ export function EventCard({ event, variant = 'default', className, showSave = tr
 
         <div className="mt-4 flex items-center gap-2.5 border-t border-ink-200/70 pt-4 dark:border-white/10">
           <img
-            src={event.organizer?.logo || '/images/organizers/organizer-1.svg'}
+            src={event.organizer?.logo || '/images/mark.svg'}
             alt={event.organizer?.name || 'Organizer'}
             loading="lazy"
             onError={(e) => {
               e.currentTarget.onerror = null
-              e.currentTarget.src = '/images/organizers/organizer-1.svg'
+              e.currentTarget.src = '/images/mark.svg'
             }}
             className="size-7 shrink-0 rounded-full object-cover ring-1 ring-black/10 dark:ring-white/10"
           />

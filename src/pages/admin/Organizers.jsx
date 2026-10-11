@@ -286,7 +286,7 @@ export default function OrganizersManagement() {
                             {org.email || 'No email provided'}
                           </p>
                           <p className="text-[11px] text-ink-400">
-                            {org.phone || '+233 24 000 0000'} · {org.city || 'Wa'}, Ghana
+                            {org.phone || 'No phone'} · {org.city || 'Wa'}, Ghana
                           </p>
                         </td>
 
@@ -294,11 +294,11 @@ export default function OrganizersManagement() {
                         <td className="px-4 py-4">
                           <div className="flex items-center gap-1.5">
                             <span className="font-mono text-[11px] font-bold text-ink-700 dark:text-ink-300">
-                              {org.regNumber || 'GH-TIN-89241-W'}
+                              {org.regNumber || 'Pending verification'}
                             </span>
                           </div>
                           <p className="text-[10px] text-ink-400">
-                            MoMo: {org.momoMerchant || 'MTN Business'}
+                            MoMo: {org.momoMerchant || 'Not provided'}
                           </p>
                         </td>
 
@@ -464,7 +464,7 @@ export default function OrganizersManagement() {
                   <div className="rounded-xl border border-ink-200/60 p-3 dark:border-white/10">
                     <span className="text-ink-400">Contact Number</span>
                     <p className="mt-0.5 font-bold text-ink-900 dark:text-white">
-                      {selectedOrganizer.phone || '+233 24 555 1234'}
+                      {selectedOrganizer.phone || '—'}
                     </p>
                   </div>
                 </div>
@@ -473,13 +473,13 @@ export default function OrganizersManagement() {
                   <div className="rounded-xl border border-ink-200/60 p-3 dark:border-white/10">
                     <span className="text-ink-400">Ghana Business TIN / Reg</span>
                     <p className="mt-0.5 font-mono font-bold text-ink-900 dark:text-white">
-                      {selectedOrganizer.regNumber || 'GH-TIN-89241-W'}
+                      {selectedOrganizer.regNumber || 'Not submitted'}
                     </p>
                   </div>
                   <div className="rounded-xl border border-ink-200/60 p-3 dark:border-white/10">
                     <span className="text-ink-400">MoMo Settlement Account</span>
                     <p className="mt-0.5 font-bold text-ink-900 dark:text-white">
-                      {selectedOrganizer.momoMerchant || 'MTN MoMo: 0244123456'}
+                      {selectedOrganizer.momoMerchant || 'Not provided'}
                     </p>
                   </div>
                 </div>

@@ -32,7 +32,7 @@ export function FeaturedEvents() {
     [events],
   )
 
-  const list = (sources[tab] ?? events).slice(0, 6)
+  const list = (sources[tab]?.length ? sources[tab] : events).slice(0, 6)
 
   return (
     <Section className="bg-ink-50 dark:bg-white/[.02]">

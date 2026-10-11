@@ -477,22 +477,26 @@ export default function EventDetail() {
                 <div className="surface mt-4 p-6">
                   <div className="flex flex-wrap items-start gap-5">
                     <img
-                      src={event.organizer?.logo || '/images/organizers/organizer-1.svg'}
+                      src={event.organizer?.logo || '/images/mark.svg'}
                       alt=""
+                      onError={(e) => {
+                        e.currentTarget.onerror = null
+                        e.currentTarget.src = '/images/mark.svg'
+                      }}
                       className="size-16 shrink-0 rounded-2xl object-cover"
                       loading="lazy"
                     />
                     <div className="min-w-0 flex-1">
                       <div className="flex flex-wrap items-center gap-2">
-                        <h3 className="text-lg font-bold">{event.organizer?.name || 'Eventspady Organizer'}</h3>
-                        {event.organizer?.verified && (
+                        <h3 className="text-lg font-bold">{event.organizer?.name || 'Verified Partner'}</h3>
+                        {event.organizer?.verified !== false && (
                           <Badge tone="info" size="sm" icon={BadgeCheck}>
                             Verified
                           </Badge>
                         )}
                       </div>
                       <p className="mt-1 text-sm text-ink-500 dark:text-ink-400">
-                        {event.organizer?.location || 'Wa, Ghana'} · organizing since {event.organizer?.since || '2024'}
+                        {event.organizer?.location || (event.venue?.city ? `${event.venue.city}, Ghana` : 'Ghana')}
                       </p>
                       <p className="mt-3 text-pretty text-sm leading-relaxed text-ink-600 dark:text-ink-300">
                         {event.organizer?.bio || 'Verified organizer on Eventspady.'}

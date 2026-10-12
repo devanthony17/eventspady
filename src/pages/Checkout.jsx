@@ -15,9 +15,11 @@ import {
   ShieldAlert,
   ShieldCheck,
   Smartphone,
+  Store,
   Trash2,
   User,
   Users,
+  Wine,
   X,
 } from 'lucide-react'
 import { Ticket } from '@components/icons/AppIcons'
@@ -404,9 +406,22 @@ export default function Checkout() {
                   {items.map(({ ticket, quantity, lineTotal }) => (
                     <li key={ticket.id} className="flex flex-wrap items-center gap-4 py-4 first:pt-0 last:pb-0">
                       <div className="min-w-0 flex-1">
-                        <p className="text-sm font-bold">{ticket.name}</p>
+                        <div className="flex flex-wrap items-center gap-1.5">
+                          <p className="text-sm font-bold">{ticket.name}</p>
+                          {ticket.type === 'table' && (
+                            <span className="inline-flex items-center gap-1 rounded bg-purple-100 px-1.5 py-0.5 text-[10px] font-bold text-purple-700 dark:bg-purple-900/40 dark:text-purple-300">
+                              <Wine className="size-2.5" /> Table ({ticket.seatsPerTable || 4} Guests)
+                            </span>
+                          )}
+                          {ticket.type === 'vendor' && (
+                            <span className="inline-flex items-center gap-1 rounded bg-emerald-100 px-1.5 py-0.5 text-[10px] font-bold text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300">
+                              <Store className="size-2.5" /> Vendor Space ({ticket.spaceSize || '10x10 ft'})
+                            </span>
+                          )}
+                        </div>
                         <p className="mt-0.5 text-xs text-ink-500 dark:text-ink-400">
                           {ticket.price === 0 ? 'Free' : formatCurrency(ticket.price)} each
+                          {ticket.type === 'table' && ticket.tableLocation && ` · ${ticket.tableLocation}`}
                         </p>
                       </div>
 

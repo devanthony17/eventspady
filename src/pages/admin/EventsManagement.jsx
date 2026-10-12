@@ -17,7 +17,10 @@ import {
   UploadCloud,
   Users,
   Video,
+  Wine,
+  Store,
   X,
+  Zap,
 } from 'lucide-react'
 import { Seo } from '@components/ui/Seo'
 import { Badge } from '@components/ui/Badge'
@@ -26,6 +29,7 @@ import { Input, Select, Textarea } from '@components/ui/Field'
 import { Modal } from '@components/ui/Modal'
 import { useStore } from '@context/StoreContext'
 import { useToast } from '@context/ToastContext'
+import { TICKET_TYPES } from '@lib/constants'
 import {
   useAdminEvents,
   useSetEventFeaturedMutation,
@@ -200,16 +204,39 @@ export default function EventsManagement() {
     reader.readAsDataURL(file)
   }
 
-  const addTicketTier = () => {
+  const addTicketTier = (type = 'paid') => {
+    const isTable = type === 'table'
+    const isVendor = type === 'vendor'
     setTickets((prev) => [
       ...prev,
       {
         id: `tkt-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
-        name: 'VIP Pass',
-        price: 150,
-        quantity: 50,
-        perOrderLimit: 5,
-        description: 'Priority access and VIP seating',
+        name: isTable
+          ? 'VIP Table for 6 (Stage Front)'
+          : isVendor
+            ? 'Vendor Exhibition Space (10x10 ft)'
+            : 'Standard Admission',
+        type,
+        price: isTable ? 1200 : isVendor ? 450 : 50,
+        quantity: isTable ? 10 : isVendor ? 12 : 100,
+        perOrderLimit: isTable || isVendor ? 2 : 10,
+        description: isTable
+          ? 'Reserved table seating for up to 6 guests with dedicated server and bottle service.'
+          : isVendor
+            ? '10x10 ft covered space, standard 220V power point, 1 table, 2 chairs, and 2 vendor admission badges.'
+            : 'Standard admission entry ticket',
+        seatsPerTable: isTable ? 6 : 4,
+        tableLocation: isTable ? 'Stage Front / Golden Circle' : '',
+        tablePackage: isTable ? '1 Champagne bottle + 6 Chasers & VIP fruit platter' : '',
+        dedicatedWaiter: isTable ? true : false,
+        vipParking: isTable ? 2 : 0,
+        expressEntry: isTable ? true : false,
+        spaceSize: isVendor ? '10x10 ft Canopy' : '',
+        vendorCategory: isVendor ? 'Food & Drink, Crafts or Retail' : '',
+        passesIncluded: isVendor ? 2 : 1,
+        tablesChairsIncluded: isVendor ? '1 Table + 2 Chairs' : '',
+        powerIncluded: isVendor ? true : false,
+        waterIncluded: isVendor ? false : false,
       },
     ])
   }
@@ -286,11 +313,23 @@ export default function EventsManagement() {
       tickets: tickets.map((t) => ({
         id: t.id,
         name: t.name,
-        type: form.isFree ? 'free' : 'paid',
+        type: form.isFree ? 'free' : (t.type || 'paid'),
         price: form.isFree ? 0 : Number(t.price) || 0,
         quantity: Number(t.quantity) || 100,
-        perOrderLimit: Number(t.perOrderLimit) || 10,
+        perOrderLimit: Number(t.perOrderLimit) || (t.type === 'table' || t.type === 'vendor' ? 2 : 10),
         description: t.description || '',
+        seatsPerTable: t.type === 'table' ? Number(t.seatsPerTable) || 4 : undefined,
+        tableLocation: t.type === 'table' ? t.tableLocation : undefined,
+        tablePackage: t.type === 'table' ? t.tablePackage : undefined,
+        dedicatedWaiter: t.type === 'table' ? Boolean(t.dedicatedWaiter) : undefined,
+        vipParking: t.type === 'table' ? Number(t.vipParking) || 0 : undefined,
+        expressEntry: t.type === 'table' ? Boolean(t.expressEntry) : undefined,
+        spaceSize: t.type === 'vendor' ? t.spaceSize || '10x10 ft' : undefined,
+        vendorCategory: t.type === 'vendor' ? t.vendorCategory : undefined,
+        passesIncluded: t.type === 'vendor' ? Number(t.passesIncluded) || 2 : undefined,
+        tablesChairsIncluded: t.type === 'vendor' ? t.tablesChairsIncluded : undefined,
+        powerIncluded: t.type === 'vendor' ? Boolean(t.powerIncluded) : undefined,
+        waterIncluded: t.type === 'vendor' ? Boolean(t.waterIncluded) : undefined,
         sold: 0,
         salesEnd: form.start,
       })),
@@ -853,12 +892,17 @@ export default function EventsManagement() {
 
               {/* Tickets & Pricing */}
               <div className="space-y-4 rounded-xl border border-ink-200/70 p-4 dark:border-white/10">
-                <div className="flex items-center justify-between">
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-ink-500 dark:text-ink-400">
-                    4. Ticket Tiers & Capacity
-                  </h4>
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                  <div>
+                    <h4 className="text-xs font-bold uppercase tracking-wider text-ink-500 dark:text-ink-400">
+                      4. Ticket Tiers, Tables & Vendor Spaces
+                    </h4>
+                    <p className="mt-0.5 text-[11px] text-ink-400">
+                      Add standard admission tickets, VIP bottle service tables, and commercial exhibition spaces.
+                    </p>
+                  </div>
 
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-3">
                     <label className="inline-flex items-center gap-1.5 text-xs font-medium text-ink-700 dark:text-ink-300 cursor-pointer">
                       <input
                         type="checkbox"
@@ -868,75 +912,280 @@ export default function EventsManagement() {
                       />
                       <span>Free Event</span>
                     </label>
+
+                    <div className="flex flex-wrap items-center gap-1.5">
+                      <button
+                        type="button"
+                        onClick={() => addTicketTier('paid')}
+                        className="inline-flex items-center gap-1 rounded-lg border border-ink-200 bg-white px-2.5 py-1 text-xs font-semibold text-ink-700 hover:bg-ink-50 dark:border-white/10 dark:bg-ink-800 dark:text-ink-200"
+                      >
+                        <Plus className="size-3" /> Ticket
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => addTicketTier('table')}
+                        className="inline-flex items-center gap-1 rounded-lg border border-purple-200 bg-purple-50 px-2.5 py-1 text-xs font-semibold text-purple-700 hover:bg-purple-100 dark:border-purple-800/40 dark:bg-purple-950/40 dark:text-purple-300"
+                      >
+                        <Wine className="size-3" /> Table
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => addTicketTier('vendor')}
+                        className="inline-flex items-center gap-1 rounded-lg border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700 hover:bg-emerald-100 dark:border-emerald-800/40 dark:bg-emerald-950/40 dark:text-emerald-300"
+                      >
+                        <Store className="size-3" /> Vendor
+                      </button>
+                    </div>
                   </div>
                 </div>
 
                 <div className="space-y-3">
-                  {tickets.map((t, idx) => (
-                    <div
-                      key={t.id}
-                      className="grid gap-3 rounded-xl border border-ink-100 bg-ink-50/50 p-3 sm:grid-cols-4 sm:items-center dark:border-white/5 dark:bg-white/[.02]"
-                    >
-                      <div className="sm:col-span-2">
-                        <label className="block text-[10px] font-bold uppercase text-ink-400">
-                          Tier Name
-                        </label>
-                        <input
-                          type="text"
-                          value={t.name}
-                          onChange={(e) => updateTicketTier(t.id, { name: e.target.value })}
-                          placeholder="e.g. Regular, VIP, Student"
-                          className="mt-1 w-full rounded-lg border border-ink-200 bg-white px-2.5 py-1.5 text-xs text-ink-900 outline-none dark:border-white/10 dark:bg-ink-800 dark:text-white"
-                        />
-                      </div>
+                  {tickets.map((t, idx) => {
+                    const isTable = t.type === 'table'
+                    const isVendor = t.type === 'vendor'
 
-                      <div>
-                        <label className="block text-[10px] font-bold uppercase text-ink-400">
-                          Price (GH₵)
-                        </label>
-                        <input
-                          type="number"
-                          disabled={form.isFree}
-                          value={form.isFree ? 0 : t.price}
-                          onChange={(e) => updateTicketTier(t.id, { price: e.target.value })}
-                          className="mt-1 w-full rounded-lg border border-ink-200 bg-white px-2.5 py-1.5 text-xs text-ink-900 outline-none disabled:bg-ink-100 dark:border-white/10 dark:bg-ink-800 dark:text-white dark:disabled:bg-ink-950"
-                        />
-                      </div>
+                    return (
+                      <div
+                        key={t.id}
+                        className={cn(
+                          'rounded-xl border p-3.5 transition space-y-3',
+                          isTable
+                            ? 'border-purple-200/80 bg-purple-50/20 dark:border-purple-800/40 dark:bg-purple-950/10'
+                            : isVendor
+                              ? 'border-emerald-200/80 bg-emerald-50/20 dark:border-emerald-800/40 dark:bg-emerald-950/10'
+                              : 'border-ink-200/70 bg-white dark:border-white/10 dark:bg-ink-900/40',
+                        )}
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <span className="text-xs font-bold text-ink-900 dark:text-white">Tier {idx + 1}</span>
+                            {isTable ? (
+                              <span className="inline-flex items-center gap-1 rounded-md border border-purple-200 bg-purple-50 px-2 py-0.5 text-[11px] font-semibold text-purple-700 dark:border-purple-800/40 dark:bg-purple-950/40 dark:text-purple-300">
+                                <Wine className="size-3" /> Table Reservation
+                              </span>
+                            ) : isVendor ? (
+                              <span className="inline-flex items-center gap-1 rounded-md border border-emerald-200 bg-emerald-50 px-2 py-0.5 text-[11px] font-semibold text-emerald-700 dark:border-emerald-800/40 dark:bg-emerald-950/40 dark:text-emerald-300">
+                                <Store className="size-3" /> Vendor Space
+                              </span>
+                            ) : (
+                              <span className="inline-flex items-center gap-1 rounded-md border border-ink-200 bg-ink-50 px-2 py-0.5 text-[11px] font-semibold text-ink-700 dark:border-white/10 dark:bg-white/5 dark:text-ink-300">
+                                Standard Admission
+                              </span>
+                            )}
+                          </div>
 
-                      <div className="flex items-center gap-2">
-                        <div className="flex-1">
-                          <label className="block text-[10px] font-bold uppercase text-ink-400">
-                            Quantity
-                          </label>
-                          <input
-                            type="number"
-                            value={t.quantity}
-                            onChange={(e) => updateTicketTier(t.id, { quantity: e.target.value })}
-                            className="mt-1 w-full rounded-lg border border-ink-200 bg-white px-2.5 py-1.5 text-xs text-ink-900 outline-none dark:border-white/10 dark:bg-ink-800 dark:text-white"
-                          />
+                          {tickets.length > 1 && (
+                            <button
+                              type="button"
+                              onClick={() => removeTicketTier(t.id)}
+                              className="grid size-6 place-items-center rounded-lg text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/40"
+                            >
+                              <Trash2 className="size-3.5" />
+                            </button>
+                          )}
                         </div>
 
-                        {tickets.length > 1 && (
-                          <button
-                            type="button"
-                            onClick={() => removeTicketTier(t.id)}
-                            className="mt-5 grid size-7 place-items-center rounded-lg text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/40"
-                          >
-                            <Trash2 className="size-3.5" />
-                          </button>
+                        <div className="grid gap-3 sm:grid-cols-4">
+                          <div className="sm:col-span-2">
+                            <label className="block text-[10px] font-bold uppercase text-ink-400">
+                              {isTable ? 'Table Name / Tier' : isVendor ? 'Vendor Space / Stall Name' : 'Tier Name'}
+                            </label>
+                            <input
+                              type="text"
+                              value={t.name}
+                              onChange={(e) => updateTicketTier(t.id, { name: e.target.value })}
+                              placeholder={
+                                isTable
+                                  ? 'e.g. VIP Table for 6 (Stage Front)'
+                                  : isVendor
+                                    ? 'e.g. Food & Beverage Canopy (10x10 ft)'
+                                    : 'e.g. Regular Pass'
+                              }
+                              className="mt-1 w-full rounded-lg border border-ink-200 bg-white px-2.5 py-1.5 text-xs text-ink-900 outline-none dark:border-white/10 dark:bg-ink-800 dark:text-white"
+                            />
+                          </div>
+
+                          <div>
+                            <label className="block text-[10px] font-bold uppercase text-ink-400">
+                              {isTable ? 'Table Price (GH₵)' : isVendor ? 'Booth Price (GH₵)' : 'Price (GH₵)'}
+                            </label>
+                            <input
+                              type="number"
+                              disabled={form.isFree || t.type === 'free'}
+                              value={form.isFree || t.type === 'free' ? 0 : t.price}
+                              onChange={(e) => updateTicketTier(t.id, { price: e.target.value })}
+                              className="mt-1 w-full rounded-lg border border-ink-200 bg-white px-2.5 py-1.5 text-xs text-ink-900 outline-none disabled:bg-ink-100 dark:border-white/10 dark:bg-ink-800 dark:text-white dark:disabled:bg-ink-950"
+                            />
+                          </div>
+
+                          <div>
+                            <label className="block text-[10px] font-bold uppercase text-ink-400">
+                              {isTable ? 'Total Tables' : isVendor ? 'Total Booths' : 'Total Quantity'}
+                            </label>
+                            <input
+                              type="number"
+                              value={t.quantity}
+                              onChange={(e) => updateTicketTier(t.id, { quantity: e.target.value })}
+                              className="mt-1 w-full rounded-lg border border-ink-200 bg-white px-2.5 py-1.5 text-xs text-ink-900 outline-none dark:border-white/10 dark:bg-ink-800 dark:text-white"
+                            />
+                          </div>
+                        </div>
+
+                        {/* Table Specific Fields */}
+                        {isTable && (
+                          <div className="grid gap-3 sm:grid-cols-3 pt-1 border-t border-purple-100 dark:border-purple-900/30">
+                            <div>
+                              <label className="block text-[10px] font-bold uppercase text-purple-600 dark:text-purple-400">
+                                Seats per Table
+                              </label>
+                              <input
+                                type="number"
+                                min="1"
+                                max="30"
+                                value={t.seatsPerTable ?? 6}
+                                onChange={(e) => updateTicketTier(t.id, { seatsPerTable: e.target.value })}
+                                className="mt-1 w-full rounded-lg border border-ink-200 bg-white px-2.5 py-1.5 text-xs text-ink-900 outline-none dark:border-white/10 dark:bg-ink-800 dark:text-white"
+                              />
+                            </div>
+
+                            <div>
+                              <label className="block text-[10px] font-bold uppercase text-purple-600 dark:text-purple-400">
+                                Zone / Placement
+                              </label>
+                              <input
+                                type="text"
+                                value={t.tableLocation || ''}
+                                onChange={(e) => updateTicketTier(t.id, { tableLocation: e.target.value })}
+                                placeholder="Stage Front / VIP Terrace"
+                                className="mt-1 w-full rounded-lg border border-ink-200 bg-white px-2.5 py-1.5 text-xs text-ink-900 outline-none dark:border-white/10 dark:bg-ink-800 dark:text-white"
+                              />
+                            </div>
+
+                            <div>
+                              <label className="block text-[10px] font-bold uppercase text-purple-600 dark:text-purple-400">
+                                VIP Parking Passes
+                              </label>
+                              <input
+                                type="number"
+                                min="0"
+                                max="10"
+                                value={t.vipParking ?? 2}
+                                onChange={(e) => updateTicketTier(t.id, { vipParking: e.target.value })}
+                                className="mt-1 w-full rounded-lg border border-ink-200 bg-white px-2.5 py-1.5 text-xs text-ink-900 outline-none dark:border-white/10 dark:bg-ink-800 dark:text-white"
+                              />
+                            </div>
+
+                            <div className="sm:col-span-3">
+                              <label className="block text-[10px] font-bold uppercase text-purple-600 dark:text-purple-400">
+                                Hospitality & Bottle Package
+                              </label>
+                              <input
+                                type="text"
+                                value={t.tablePackage || ''}
+                                onChange={(e) => updateTicketTier(t.id, { tablePackage: e.target.value })}
+                                placeholder="e.g. 1 Champagne bottle + 6 Energy Drinks & Chasers, Gourmet Finger Food Platter"
+                                className="mt-1 w-full rounded-lg border border-ink-200 bg-white px-2.5 py-1.5 text-xs text-ink-900 outline-none dark:border-white/10 dark:bg-ink-800 dark:text-white"
+                              />
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Vendor Space Specific Fields */}
+                        {isVendor && (
+                          <div className="grid gap-3 sm:grid-cols-3 pt-1 border-t border-emerald-100 dark:border-emerald-900/30">
+                            <div>
+                              <label className="block text-[10px] font-bold uppercase text-emerald-600 dark:text-emerald-400">
+                                Space Dimensions
+                              </label>
+                              <input
+                                type="text"
+                                value={t.spaceSize || '10x10 ft Canopy'}
+                                onChange={(e) => updateTicketTier(t.id, { spaceSize: e.target.value })}
+                                placeholder="10x10 ft Canopy or 6x3 Table"
+                                className="mt-1 w-full rounded-lg border border-ink-200 bg-white px-2.5 py-1.5 text-xs text-ink-900 outline-none dark:border-white/10 dark:bg-ink-800 dark:text-white"
+                              />
+                            </div>
+
+                            <div>
+                              <label className="block text-[10px] font-bold uppercase text-emerald-600 dark:text-emerald-400">
+                                Permitted Category
+                              </label>
+                              <input
+                                type="text"
+                                value={t.vendorCategory || 'Food & Beverages'}
+                                onChange={(e) => updateTicketTier(t.id, { vendorCategory: e.target.value })}
+                                placeholder="Food, Fashion, Crafts, Tech"
+                                className="mt-1 w-full rounded-lg border border-ink-200 bg-white px-2.5 py-1.5 text-xs text-ink-900 outline-none dark:border-white/10 dark:bg-ink-800 dark:text-white"
+                              />
+                            </div>
+
+                            <div>
+                              <label className="block text-[10px] font-bold uppercase text-emerald-600 dark:text-emerald-400">
+                                Staff Badges Included
+                              </label>
+                              <input
+                                type="number"
+                                min="1"
+                                max="10"
+                                value={t.passesIncluded ?? 2}
+                                onChange={(e) => updateTicketTier(t.id, { passesIncluded: e.target.value })}
+                                className="mt-1 w-full rounded-lg border border-ink-200 bg-white px-2.5 py-1.5 text-xs text-ink-900 outline-none dark:border-white/10 dark:bg-ink-800 dark:text-white"
+                              />
+                            </div>
+
+                            <div className="sm:col-span-3 flex flex-wrap gap-4 pt-1">
+                              <label className="inline-flex items-center gap-1.5 text-xs font-medium text-ink-700 dark:text-ink-300 cursor-pointer">
+                                <input
+                                  type="checkbox"
+                                  checked={t.powerIncluded ?? true}
+                                  onChange={(e) => updateTicketTier(t.id, { powerIncluded: e.target.checked })}
+                                  className="rounded border-ink-300 text-emerald-600 focus:ring-emerald-500"
+                                />
+                                <span>220V Electricity Outlet Included</span>
+                              </label>
+
+                              <label className="inline-flex items-center gap-1.5 text-xs font-medium text-ink-700 dark:text-ink-300 cursor-pointer">
+                                <input
+                                  type="checkbox"
+                                  checked={t.waterIncluded ?? false}
+                                  onChange={(e) => updateTicketTier(t.id, { waterIncluded: e.target.checked })}
+                                  className="rounded border-ink-300 text-emerald-600 focus:ring-emerald-500"
+                                />
+                                <span>Running Water Access</span>
+                              </label>
+                            </div>
+                          </div>
                         )}
                       </div>
-                    </div>
-                  ))}
+                    )
+                  })}
 
-                  <button
-                    type="button"
-                    onClick={addTicketTier}
-                    className="inline-flex items-center gap-1.5 rounded-lg border border-dashed border-ink-300 px-3 py-1.5 text-xs font-semibold text-ink-700 hover:bg-ink-50 dark:border-white/20 dark:text-ink-200 dark:hover:bg-white/5"
-                  >
-                    <Plus className="size-3.5" />
-                    <span>Add Another Ticket Tier</span>
-                  </button>
+                  <div className="flex flex-wrap gap-2 pt-1">
+                    <button
+                      type="button"
+                      onClick={() => addTicketTier('paid')}
+                      className="inline-flex items-center gap-1.5 rounded-lg border border-dashed border-ink-300 px-3 py-1.5 text-xs font-semibold text-ink-700 hover:bg-ink-50 dark:border-white/20 dark:text-ink-200 dark:hover:bg-white/5"
+                    >
+                      <Plus className="size-3.5" />
+                      <span>Add Ticket Tier</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => addTicketTier('table')}
+                      className="inline-flex items-center gap-1.5 rounded-lg border border-dashed border-purple-300 bg-purple-50/50 px-3 py-1.5 text-xs font-semibold text-purple-700 hover:bg-purple-100/60 dark:border-purple-800/40 dark:bg-purple-950/20 dark:text-purple-300"
+                    >
+                      <Wine className="size-3.5" />
+                      <span>Add Table Reservation</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => addTicketTier('vendor')}
+                      className="inline-flex items-center gap-1.5 rounded-lg border border-dashed border-emerald-300 bg-emerald-50/50 px-3 py-1.5 text-xs font-semibold text-emerald-700 hover:bg-emerald-100/60 dark:border-emerald-800/40 dark:bg-emerald-950/20 dark:text-emerald-300"
+                    >
+                      <Store className="size-3.5" />
+                      <span>Add Vendor Space</span>
+                    </button>
+                  </div>
                 </div>
               </div>
 

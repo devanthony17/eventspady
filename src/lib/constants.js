@@ -22,10 +22,12 @@ export const SITE = {
 
 /** Ticket types supported by the platform. */
 export const TICKET_TYPES = {
-  free: { label: 'Free', description: 'No charge — registration only' },
-  paid: { label: 'Paid', description: 'Standard priced ticket' },
-  oneDay: { label: 'One Day', description: 'Valid for a single chosen day' },
-  allDay: { label: 'All Days', description: 'Valid for every day of the event' },
+  free: { label: 'Free Admission', description: 'No charge — registration only' },
+  paid: { label: 'Standard Ticket', description: 'Standard priced admission ticket' },
+  oneDay: { label: 'Single Day Pass', description: 'Valid for a single chosen day' },
+  allDay: { label: 'Festival Pass (All Days)', description: 'Valid for every day of the event' },
+  table: { label: 'Table Reservation', description: 'Reserved table with group seating & hospitality package' },
+  vendor: { label: 'Vendor / Exhibition Space', description: 'Commercial booth space for sellers, food vendors & brands' },
 }
 
 export const EVENT_TYPES = {

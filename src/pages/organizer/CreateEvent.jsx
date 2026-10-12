@@ -1,17 +1,30 @@
 import { useMemo, useRef, useState } from 'react'
 import { useNavigate, useOutletContext } from 'react-router-dom'
 import {
+  Car,
   Check,
   ChevronLeft,
   ChevronRight,
+  Clock,
+  Crown,
+  Droplets,
+  HelpCircle,
   ImagePlus,
+  Layers,
   MapPin,
   Plus,
   Save,
+  ShieldCheck,
+  Sparkles,
+  Store,
   Trash2,
   UploadCloud,
+  Users,
   Video,
+  Wifi,
+  Wine,
   X,
+  Zap,
 } from 'lucide-react'
 import { Seo } from '@components/ui/Seo'
 import { DashboardShell } from '@components/dashboard/DashboardShell'
@@ -29,19 +42,231 @@ import { useCreateEventMutation, useSaveDraftMutation, useCategories } from '@ho
 const STEPS = [
   { id: 'basics', label: 'Basics', description: 'Name, category and description' },
   { id: 'when', label: 'Date & place', description: 'Schedule and location' },
-  { id: 'tickets', label: 'Tickets', description: 'Types, prices and limits' },
+  { id: 'tickets', label: 'Tickets & Space', description: 'Admission, tables & vendor booths' },
   { id: 'review', label: 'Review', description: 'Check and publish' },
 ]
 
-const emptyTicket = () => ({
-  id: `tkt-${Math.random().toString(36).slice(2, 8)}`,
-  name: '',
-  type: 'paid',
-  price: '',
-  quantity: '',
-  perOrderLimit: 10,
-  description: '',
-})
+export const TICKET_PRESETS = [
+  // Admission passes
+  {
+    category: 'admission',
+    badge: 'Standard',
+    label: 'Standard Pass',
+    type: 'paid',
+    name: 'General Admission',
+    price: '50',
+    quantity: '250',
+    perOrderLimit: 10,
+    description: 'General admission pass granting entry to all standard stage and festival areas.',
+  },
+  {
+    category: 'admission',
+    badge: 'VIP Pass',
+    label: 'VIP Fast-Track Pass',
+    type: 'paid',
+    name: 'VIP Fast-Track Pass',
+    price: '150',
+    quantity: '75',
+    perOrderLimit: 5,
+    description: 'Express queue jump, elevated viewing deck access, and 1 welcome drink voucher.',
+  },
+  {
+    category: 'admission',
+    badge: 'Early Bird',
+    label: 'Early Bird Pass',
+    type: 'paid',
+    name: 'Early Bird Discount Pass',
+    price: '35',
+    quantity: '100',
+    perOrderLimit: 4,
+    description: 'Special early supporter pass at discounted rate. Limited allocation.',
+  },
+
+  // Table Reservations
+  {
+    category: 'table',
+    badge: '6 Guests',
+    label: 'VIP Table for 6 (Stage Front)',
+    type: 'table',
+    name: 'VIP Table for 6 (Stage Front)',
+    price: '1200',
+    quantity: '10',
+    perOrderLimit: 2,
+    seatsPerTable: 6,
+    tableLocation: 'Stage Front / Golden Circle',
+    tablePackage: '1 Moët Champagne + 6 Energy Drinks & Chasers, Gourmet Finger Food Platter',
+    minSpend: 0,
+    dedicatedWaiter: true,
+    vipParking: 2,
+    expressEntry: true,
+    description: 'Front-row stage view with table seating for 6, dedicated waiter, and bottle service.',
+  },
+  {
+    category: 'table',
+    badge: '10 Guests',
+    label: 'VVIP Royal Lounge for 10',
+    type: 'table',
+    name: 'VVIP Royal Lounge for 10',
+    price: '2500',
+    quantity: '5',
+    perOrderLimit: 1,
+    seatsPerTable: 10,
+    tableLocation: 'VIP Elevated Deck / Private Terrace',
+    tablePackage: '2 Premium Champagnes + 1 Cognac VSOP + Unlimited Soft Mixers + Chef Luxury Platter',
+    minSpend: 0,
+    dedicatedWaiter: true,
+    vipParking: 3,
+    expressEntry: true,
+    description: 'Ultra-exclusive private sofa lounge for 10 on the elevated deck with dedicated security and butler.',
+  },
+  {
+    category: 'table',
+    badge: '4 Guests',
+    label: 'High-Top Cocktail Table for 4',
+    type: 'table',
+    name: 'High-Top Cocktail Table for 4',
+    price: '600',
+    quantity: '15',
+    perOrderLimit: 2,
+    seatsPerTable: 4,
+    tableLocation: 'Lounge / Bar Perimeter',
+    tablePackage: '1 Spirit Bottle of Choice + 4 Chasers + Bar Nibbles',
+    minSpend: 0,
+    dedicatedWaiter: false,
+    vipParking: 1,
+    expressEntry: true,
+    description: 'Reserved cocktail table with 4 high stools near the bar area.',
+  },
+
+  // Vendor Spaces
+  {
+    category: 'vendor',
+    badge: '10x10 ft',
+    label: 'Food & Beverage Canopy (10x10 ft)',
+    type: 'vendor',
+    name: 'Food & Beverage Canopy (10x10 ft)',
+    price: '500',
+    quantity: '12',
+    perOrderLimit: 2,
+    spaceSize: '10x10 ft Canopy Pitch',
+    vendorCategory: 'Cooked Food, Grills, Cocktails & Beverages',
+    passesIncluded: 3,
+    tablesChairsIncluded: '1 Table + 2 Chairs',
+    powerIncluded: true,
+    waterIncluded: true,
+    wifiIncluded: true,
+    securityIncluded: true,
+    setupHours: 'Setup: 8:00 AM – 11:30 AM',
+    teardownHours: 'Teardown: 11:00 PM – 1:30 AM',
+    description: 'Covered canopy space with dedicated 220V electricity point, water access, and 3 vendor badges.',
+  },
+  {
+    category: 'vendor',
+    badge: '10x10 ft',
+    label: 'Fashion & Retail Booth (10x10 ft)',
+    type: 'vendor',
+    name: 'Fashion & Retail Booth (10x10 ft)',
+    price: '400',
+    quantity: '16',
+    perOrderLimit: 2,
+    spaceSize: '10x10 ft Covered Stall',
+    vendorCategory: 'Clothing, Smocks, Footwear, Accessories & Crafts',
+    passesIncluded: 2,
+    tablesChairsIncluded: '1 Table + 2 Chairs',
+    powerIncluded: true,
+    waterIncluded: false,
+    wifiIncluded: true,
+    securityIncluded: true,
+    setupHours: 'Setup: 8:30 AM – 12:00 PM',
+    teardownHours: 'Teardown: 10:30 PM – midnight',
+    description: 'Exhibition space in the retail marquee for fashion, artisanal wear, and merchandise.',
+  },
+  {
+    category: 'vendor',
+    badge: '6x3 ft',
+    label: 'Artisan Tabletop Display (6x3 ft)',
+    type: 'vendor',
+    name: 'Artisan & Craft Tabletop (6x3 ft)',
+    price: '200',
+    quantity: '20',
+    perOrderLimit: 2,
+    spaceSize: '6x3 ft Tabletop Stall',
+    vendorCategory: 'Handmade Crafts, Art, Jewelry & Souvenirs',
+    passesIncluded: 1,
+    tablesChairsIncluded: '1 Table + 1 Chair',
+    powerIncluded: false,
+    waterIncluded: false,
+    wifiIncluded: true,
+    securityIncluded: false,
+    setupHours: 'Setup: 9:00 AM – 12:00 PM',
+    teardownHours: 'Teardown: 9:30 PM – 11:00 PM',
+    description: 'Compact display space for solo artisans and craft makers.',
+  },
+  {
+    category: 'vendor',
+    badge: '20x10 ft',
+    label: 'Food Truck / Mobile Cart Pitch',
+    type: 'vendor',
+    name: 'Food Truck / Mobile Cart Pitch (20x10 ft)',
+    price: '750',
+    quantity: '6',
+    perOrderLimit: 1,
+    spaceSize: '20x10 ft Vehicle Pitch',
+    vendorCategory: 'Food Trucks, Mobile Coffee/Smoothie Vans, Grills',
+    passesIncluded: 4,
+    tablesChairsIncluded: 'Pitch space only',
+    powerIncluded: true,
+    waterIncluded: true,
+    wifiIncluded: true,
+    securityIncluded: true,
+    setupHours: 'Setup: 7:00 AM – 10:00 AM',
+    teardownHours: 'Teardown: 11:30 PM – 2:00 AM',
+    description: 'Vehicle parking pitch with heavy-duty 16A/220V power point and 4 vendor staff badges.',
+  },
+]
+
+const emptyTicket = (type = 'paid') => {
+  const isTable = type === 'table'
+  const isVendor = type === 'vendor'
+  const isFree = type === 'free'
+
+  return {
+    id: `tkt-${Math.random().toString(36).slice(2, 8)}`,
+    name: isTable
+      ? 'VIP Table for 6 (Bottle Service)'
+      : isVendor
+        ? 'Vendor Exhibition Space (10x10 ft)'
+        : '',
+    type,
+    price: isFree ? '0' : isTable ? '1200' : isVendor ? '450' : '',
+    quantity: isTable ? '8' : isVendor ? '12' : '',
+    perOrderLimit: isTable ? 2 : isVendor ? 2 : 10,
+    description: isTable
+      ? 'Reserved table seating for up to 6 guests with dedicated server and hospitality package.'
+      : isVendor
+        ? '10x10 ft covered space, standard 220V power point, 1 table, 2 chairs, and 2 vendor admission badges.'
+        : '',
+    // Table specifics
+    seatsPerTable: isTable ? 6 : 4,
+    tableLocation: isTable ? 'VIP Elevated Terrace / Stage Deck' : '',
+    tablePackage: isTable ? '1 Champagne bottle + chasers & VIP fruit platter' : '',
+    minSpend: 0,
+    dedicatedWaiter: isTable ? true : false,
+    vipParking: isTable ? 2 : 0,
+    expressEntry: isTable ? true : false,
+    // Vendor specifics
+    spaceSize: isVendor ? '10x10 ft' : '',
+    vendorCategory: isVendor ? 'Food & Drink, Crafts or Retail' : '',
+    passesIncluded: isVendor ? 2 : 1,
+    tablesChairsIncluded: isVendor ? '1 Table + 2 Chairs' : '',
+    powerIncluded: isVendor ? true : false,
+    waterIncluded: isVendor ? false : false,
+    wifiIncluded: isVendor ? true : false,
+    securityIncluded: isVendor ? true : false,
+    setupHours: isVendor ? 'Setup: 8:00 AM – 11:30 AM' : '',
+    teardownHours: isVendor ? 'Teardown: 11:00 PM – midnight' : '',
+  }
+}
 
 export default function CreateEvent() {
   const { nav } = useOutletContext()
@@ -101,6 +326,60 @@ export default function CreateEvent() {
       description: '',
     },
   ])
+
+  const applyPreset = (preset) => {
+    setTickets((prev) => [
+      ...prev,
+      {
+        ...preset,
+        id: `tkt-${Math.random().toString(36).slice(2, 8)}`,
+      },
+    ])
+    toast.success(`Added ${preset.label} to your ticket tiers.`)
+  }
+
+  const ticketStats = useMemo(() => {
+    let admissionsCount = 0
+    let admissionsRev = 0
+    let tablesCount = 0
+    let tableSeats = 0
+    let tablesRev = 0
+    let vendorsCount = 0
+    let vendorsRev = 0
+
+    tickets.forEach((t) => {
+      const qty = Number(t.quantity) || 0
+      const price = Number(t.price) || 0
+      const rev = qty * price
+
+      if (t.type === 'table') {
+        tablesCount += qty
+        tableSeats += qty * (Number(t.seatsPerTable) || 4)
+        tablesRev += rev
+      } else if (t.type === 'vendor') {
+        vendorsCount += qty
+        vendorsRev += rev
+      } else {
+        admissionsCount += qty
+        admissionsRev += rev
+      }
+    })
+
+    const totalCapacity = admissionsCount + tableSeats
+    const totalGrossRevenue = admissionsRev + tablesRev + vendorsRev
+
+    return {
+      admissionsCount,
+      admissionsRev,
+      tablesCount,
+      tableSeats,
+      tablesRev,
+      vendorsCount,
+      vendorsRev,
+      totalCapacity,
+      totalGrossRevenue,
+    }
+  }, [tickets])
 
   const fileInputRef = useRef(null)
   const [dragOver, setDragOver] = useState(false)
@@ -247,8 +526,27 @@ export default function CreateEvent() {
         type: t.type,
         price: Number(t.price) || 0,
         quantity: Number(t.quantity) || 100,
-        perOrderLimit: Number(t.perOrderLimit) || 10,
-        description: t.description,
+        perOrderLimit: Number(t.perOrderLimit) || (t.type === 'table' || t.type === 'vendor' ? 2 : 10),
+        description: t.description || '',
+        // Table specific
+        seatsPerTable: t.type === 'table' ? Number(t.seatsPerTable) || 4 : undefined,
+        tableLocation: t.type === 'table' ? t.tableLocation : undefined,
+        tablePackage: t.type === 'table' ? t.tablePackage : undefined,
+        minSpend: t.type === 'table' ? Number(t.minSpend) || 0 : undefined,
+        dedicatedWaiter: t.type === 'table' ? Boolean(t.dedicatedWaiter) : undefined,
+        vipParking: t.type === 'table' ? Number(t.vipParking) || 0 : undefined,
+        expressEntry: t.type === 'table' ? Boolean(t.expressEntry) : undefined,
+        // Vendor specific
+        spaceSize: t.type === 'vendor' ? t.spaceSize || '10x10 ft' : undefined,
+        vendorCategory: t.type === 'vendor' ? t.vendorCategory : undefined,
+        passesIncluded: t.type === 'vendor' ? Number(t.passesIncluded) || 2 : undefined,
+        tablesChairsIncluded: t.type === 'vendor' ? t.tablesChairsIncluded : undefined,
+        powerIncluded: t.type === 'vendor' ? Boolean(t.powerIncluded) : undefined,
+        waterIncluded: t.type === 'vendor' ? Boolean(t.waterIncluded) : undefined,
+        wifiIncluded: t.type === 'vendor' ? Boolean(t.wifiIncluded) : undefined,
+        securityIncluded: t.type === 'vendor' ? Boolean(t.securityIncluded) : undefined,
+        setupHours: t.type === 'vendor' ? t.setupHours : undefined,
+        teardownHours: t.type === 'vendor' ? t.teardownHours : undefined,
         salesEnd: form.start,
       })),
     }
@@ -720,105 +1018,440 @@ export default function CreateEvent() {
 
           {/* Step 3 — tickets */}
           {step === 2 && (
-            <div className="space-y-5">
-              <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="space-y-6">
+              {/* Header */}
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                  <h2 className="text-lg font-bold">Ticket types</h2>
+                  <h2 className="text-lg font-bold">Ticket Tiers, Tables & Vendor Spaces</h2>
                   <p className="mt-1 text-sm text-ink-500 dark:text-ink-400">
-                    Mix free, paid, one-day and all-days tickets on the same event.
+                    Add standard admission passes, VIP table reservations with bottle service, and commercial vendor exhibition booths.
                   </p>
                 </div>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  iconLeft={Plus}
-                  onClick={() => setTickets((prev) => [...prev, emptyTicket()])}
-                >
-                  Add ticket
-                </Button>
+                <div className="flex flex-wrap items-center gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    iconLeft={Plus}
+                    onClick={() => setTickets((prev) => [...prev, emptyTicket('paid')])}
+                  >
+                    Add Ticket
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    iconLeft={Wine}
+                    onClick={() => setTickets((prev) => [...prev, emptyTicket('table')])}
+                    className="border-purple-200 text-purple-700 hover:bg-purple-50 dark:border-purple-800/60 dark:text-purple-300 dark:hover:bg-purple-950/30"
+                  >
+                    Add Table Reservation
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    iconLeft={Store}
+                    onClick={() => setTickets((prev) => [...prev, emptyTicket('vendor')])}
+                    className="border-emerald-200 text-emerald-700 hover:bg-emerald-50 dark:border-emerald-800/60 dark:text-emerald-300 dark:hover:bg-emerald-950/30"
+                  >
+                    Add Vendor Space
+                  </Button>
+                </div>
               </div>
 
-              <div className="space-y-4">
-                {tickets.map((ticket, index) => (
-                  <div key={ticket.id} className="rounded-2xl border border-ink-200/70 p-5 dark:border-white/10">
-                    <div className="mb-4 flex items-center justify-between">
-                      <h3 className="text-sm font-bold">Ticket {index + 1}</h3>
-                      {tickets.length > 1 && (
-                        <button
-                          type="button"
-                          onClick={() => setTickets((prev) => prev.filter((t) => t.id !== ticket.id))}
-                          aria-label={`Remove ticket ${index + 1}`}
-                          className="grid size-8 place-items-center rounded-lg text-ink-400 transition hover:bg-rose-50 hover:text-rose-600 dark:hover:bg-rose-500/10"
-                        >
-                          <Trash2 className="size-4" />
-                        </button>
-                      )}
-                    </div>
-
-                    <div className="grid gap-4 sm:grid-cols-2">
-                      <Input
-                        label="Ticket name"
-                        required
-                        value={ticket.name}
-                        onChange={(e) => updateTicket(ticket.id, { name: e.target.value })}
-                        placeholder="All Nights Pass"
-                      />
-
-                      <Select
-                        label="Type"
-                        value={ticket.type}
-                        onChange={(e) =>
-                          updateTicket(ticket.id, {
-                            type: e.target.value,
-                            price: e.target.value === 'free' ? 0 : ticket.price,
-                          })
-                        }
-                      >
-                        {Object.entries(TICKET_TYPES).map(([id, meta]) => (
-                          <option key={id} value={id}>
-                            {meta.label}
-                          </option>
-                        ))}
-                      </Select>
-
-                      <Input
-                        label="Price (GHS)"
-                        type="number"
-                        min="0"
-                        step="1"
-                        disabled={ticket.type === 'free'}
-                        value={ticket.type === 'free' ? 0 : ticket.price}
-                        onChange={(e) => updateTicket(ticket.id, { price: e.target.value })}
-                        placeholder="250"
-                      />
-
-                      <Input
-                        label="Quantity available"
-                        type="number"
-                        min="1"
-                        required
-                        value={ticket.quantity}
-                        onChange={(e) => updateTicket(ticket.id, { quantity: e.target.value })}
-                        placeholder="1500"
-                      />
-
-                      <Input
-                        label="Max per order"
-                        type="number"
-                        min="1"
-                        value={ticket.perOrderLimit}
-                        onChange={(e) => updateTicket(ticket.id, { perOrderLimit: e.target.value })}
-                      />
-
-                      <Input
-                        label="Short description"
-                        value={ticket.description}
-                        onChange={(e) => updateTicket(ticket.id, { description: e.target.value })}
-                        placeholder="All three nights with free re-entry."
-                      />
-                    </div>
+              {/* Live Inventory & Gross Financial Projection Banner */}
+              <div className="overflow-hidden rounded-2xl border border-ink-200/80 bg-white p-5 shadow-sm dark:border-white/10 dark:bg-ink-900/60">
+                <div className="mb-3 flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="flex size-7 items-center justify-center rounded-lg bg-brand-500/10 text-brand-600 dark:text-brand-400">
+                      <Sparkles className="size-4" />
+                    </span>
+                    <h3 className="text-xs font-bold uppercase tracking-wider text-ink-500 dark:text-ink-400">
+                      Inventory & Revenue Projection
+                    </h3>
                   </div>
-                ))}
+                  <span className="text-xs font-semibold text-ink-400">
+                    {tickets.length} active {tickets.length === 1 ? 'tier' : 'tiers'}
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+                  <div className="rounded-xl border border-ink-100 bg-ink-50/60 p-3.5 dark:border-white/5 dark:bg-white/[.02]">
+                    <p className="text-[11px] font-semibold text-ink-500 dark:text-ink-400">Total Gross Potential</p>
+                    <p className="mt-1 text-lg font-extrabold text-brand-600 dark:text-brand-400">
+                      GH₵ {ticketStats.totalGrossRevenue.toLocaleString()}
+                    </p>
+                    <p className="mt-0.5 text-[10px] text-ink-400">Projected full sell-out</p>
+                  </div>
+
+                  <div className="rounded-xl border border-ink-100 bg-ink-50/60 p-3.5 dark:border-white/5 dark:bg-white/[.02]">
+                    <p className="text-[11px] font-semibold text-ink-500 dark:text-ink-400">Standard Admissions</p>
+                    <p className="mt-1 text-lg font-extrabold text-ink-900 dark:text-white">
+                      {ticketStats.admissionsCount.toLocaleString()} <span className="text-xs font-normal text-ink-400">passes</span>
+                    </p>
+                    <p className="mt-0.5 text-[10px] text-ink-400">
+                      GH₵ {ticketStats.admissionsRev.toLocaleString()} capacity
+                    </p>
+                  </div>
+
+                  <div className="rounded-xl border border-purple-200/50 bg-purple-50/30 p-3.5 dark:border-purple-800/30 dark:bg-purple-950/20">
+                    <div className="flex items-center gap-1.5">
+                      <Wine className="size-3.5 text-purple-600 dark:text-purple-400" />
+                      <p className="text-[11px] font-semibold text-purple-700 dark:text-purple-300">Table Reservations</p>
+                    </div>
+                    <p className="mt-1 text-lg font-extrabold text-purple-900 dark:text-purple-100">
+                      {ticketStats.tablesCount} <span className="text-xs font-normal text-purple-600 dark:text-purple-400">tables ({ticketStats.tableSeats} seats)</span>
+                    </p>
+                    <p className="mt-0.5 text-[10px] text-purple-600 dark:text-purple-400">
+                      GH₵ {ticketStats.tablesRev.toLocaleString()} value
+                    </p>
+                  </div>
+
+                  <div className="rounded-xl border border-emerald-200/50 bg-emerald-50/30 p-3.5 dark:border-emerald-800/30 dark:bg-emerald-950/20">
+                    <div className="flex items-center gap-1.5">
+                      <Store className="size-3.5 text-emerald-600 dark:text-emerald-400" />
+                      <p className="text-[11px] font-semibold text-emerald-700 dark:text-emerald-300">Vendor Spaces</p>
+                    </div>
+                    <p className="mt-1 text-lg font-extrabold text-emerald-900 dark:text-emerald-100">
+                      {ticketStats.vendorsCount} <span className="text-xs font-normal text-emerald-600 dark:text-emerald-400">booths</span>
+                    </p>
+                    <p className="mt-0.5 text-[10px] text-emerald-600 dark:text-emerald-400">
+                      GH₵ {ticketStats.vendorsRev.toLocaleString()} value
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Quick Template Presets */}
+              <div className="rounded-2xl border border-dashed border-ink-300/80 p-4 dark:border-white/15">
+                <div className="mb-2.5 flex items-center gap-2">
+                  <Layers className="size-4 text-brand-500" />
+                  <p className="text-xs font-bold text-ink-700 dark:text-ink-200">
+                    Quick One-Click Presets & Templates:
+                  </p>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {TICKET_PRESETS.map((preset) => (
+                    <button
+                      key={preset.name}
+                      type="button"
+                      onClick={() => applyPreset(preset)}
+                      className={cn(
+                        'inline-flex items-center gap-1.5 rounded-xl border px-3 py-1.5 text-xs font-medium transition',
+                        preset.type === 'table'
+                          ? 'border-purple-200 bg-purple-50/70 text-purple-700 hover:bg-purple-100 dark:border-purple-800/40 dark:bg-purple-950/40 dark:text-purple-300 dark:hover:bg-purple-900/40'
+                          : preset.type === 'vendor'
+                            ? 'border-emerald-200 bg-emerald-50/70 text-emerald-700 hover:bg-emerald-100 dark:border-emerald-800/40 dark:bg-emerald-950/40 dark:text-emerald-300 dark:hover:bg-emerald-900/40'
+                            : 'border-ink-200 bg-ink-50 text-ink-700 hover:bg-ink-100 dark:border-white/10 dark:bg-white/5 dark:text-ink-200 dark:hover:bg-white/10',
+                      )}
+                    >
+                      {preset.type === 'table' ? (
+                        <Wine className="size-3 text-purple-600 dark:text-purple-400" />
+                      ) : preset.type === 'vendor' ? (
+                        <Store className="size-3 text-emerald-600 dark:text-emerald-400" />
+                      ) : (
+                        <Plus className="size-3 text-ink-500" />
+                      )}
+                      <span>+ {preset.label}</span>
+                      <span className="rounded bg-black/10 px-1 py-0.2 text-[10px] font-bold dark:bg-white/10">
+                        GH₵{preset.price}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Ticket Cards List */}
+              <div className="space-y-5">
+                {tickets.map((ticket, index) => {
+                  const isTable = ticket.type === 'table'
+                  const isVendor = ticket.type === 'vendor'
+
+                  return (
+                    <div
+                      key={ticket.id}
+                      className={cn(
+                        'rounded-2xl border p-5 transition shadow-sm',
+                        isTable
+                          ? 'border-purple-200/90 bg-purple-50/[.04] dark:border-purple-800/50 dark:bg-purple-950/[.07]'
+                          : isVendor
+                            ? 'border-emerald-200/90 bg-emerald-50/[.04] dark:border-emerald-800/50 dark:bg-emerald-950/[.07]'
+                            : 'border-ink-200/80 bg-white dark:border-white/10 dark:bg-ink-900/50',
+                      )}
+                    >
+                      <div className="mb-4 flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <h3 className="text-sm font-bold">Tier {index + 1}</h3>
+                          {isTable ? (
+                            <span className="inline-flex items-center gap-1 rounded-md border border-purple-200/70 bg-purple-50 px-2.5 py-0.5 text-xs font-semibold text-purple-700 dark:border-purple-800/40 dark:bg-purple-950/50 dark:text-purple-300">
+                              <Wine className="size-3" /> Table Reservation
+                            </span>
+                          ) : isVendor ? (
+                            <span className="inline-flex items-center gap-1 rounded-md border border-emerald-200/70 bg-emerald-50 px-2.5 py-0.5 text-xs font-semibold text-emerald-700 dark:border-emerald-800/40 dark:bg-emerald-950/50 dark:text-emerald-300">
+                              <Store className="size-3" /> Vendor Exhibition Space
+                            </span>
+                          ) : ticket.type === 'free' ? (
+                            <span className="inline-flex items-center gap-1 rounded-md border border-blue-200/60 bg-blue-50 px-2.5 py-0.5 text-xs font-semibold text-blue-700 dark:border-blue-800/40 dark:bg-blue-950/40 dark:text-blue-300">
+                              Free Registration
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center gap-1 rounded-md border border-ink-200/60 bg-ink-50 px-2.5 py-0.5 text-xs font-semibold text-ink-700 dark:border-white/10 dark:bg-white/[.04] dark:text-ink-300">
+                              Standard Admission
+                            </span>
+                          )}
+                        </div>
+
+                        {tickets.length > 1 && (
+                          <button
+                            type="button"
+                            onClick={() => setTickets((prev) => prev.filter((t) => t.id !== ticket.id))}
+                            aria-label={`Remove tier ${index + 1}`}
+                            className="grid size-8 place-items-center rounded-lg text-ink-400 transition hover:bg-rose-50 hover:text-rose-600 dark:hover:bg-rose-500/10"
+                          >
+                            <Trash2 className="size-4" />
+                          </button>
+                        )}
+                      </div>
+
+                      <div className="grid gap-4 sm:grid-cols-2">
+                        <Input
+                          label={isTable ? 'Table Name / Tier Title' : isVendor ? 'Vendor Space / Stall Name' : 'Ticket Name'}
+                          required
+                          value={ticket.name}
+                          onChange={(e) => updateTicket(ticket.id, { name: e.target.value })}
+                          placeholder={
+                            isTable
+                              ? 'e.g. VIP Table for 6 (Stage Front)'
+                              : isVendor
+                                ? 'e.g. Food & Beverage Canopy (10x10 ft)'
+                                : 'e.g. Regular Pass'
+                          }
+                        />
+
+                        <Select
+                          label="Inventory Category"
+                          value={ticket.type}
+                          onChange={(e) =>
+                            updateTicket(ticket.id, {
+                              type: e.target.value,
+                              price: e.target.value === 'free' ? 0 : ticket.price,
+                            })
+                          }
+                        >
+                          {Object.entries(TICKET_TYPES).map(([id, meta]) => (
+                            <option key={id} value={id}>
+                              {meta.label}
+                            </option>
+                          ))}
+                        </Select>
+
+                        <Input
+                          label={isTable ? 'Price per Table (GHS)' : isVendor ? 'Rental Price per Space (GHS)' : 'Price (GHS)'}
+                          type="number"
+                          min="0"
+                          step="1"
+                          disabled={ticket.type === 'free'}
+                          value={ticket.type === 'free' ? 0 : ticket.price}
+                          onChange={(e) => updateTicket(ticket.id, { price: e.target.value })}
+                          placeholder={isTable ? '1200' : isVendor ? '500' : '50'}
+                        />
+
+                        <Input
+                          label={isTable ? 'Total Tables Available' : isVendor ? 'Total Booths Available' : 'Quantity Available'}
+                          type="number"
+                          min="1"
+                          required
+                          value={ticket.quantity}
+                          onChange={(e) => updateTicket(ticket.id, { quantity: e.target.value })}
+                          placeholder={isTable ? '10' : isVendor ? '15' : '500'}
+                        />
+
+                        {/* Table Reservation Specific Fields */}
+                        {isTable && (
+                          <>
+                            <Input
+                              label="Seats / Guests Included per Table"
+                              type="number"
+                              min="1"
+                              max="30"
+                              value={ticket.seatsPerTable ?? 6}
+                              onChange={(e) => updateTicket(ticket.id, { seatsPerTable: e.target.value })}
+                              placeholder="6"
+                            />
+
+                            <Input
+                              label="Table Zone / Placement"
+                              value={ticket.tableLocation || ''}
+                              onChange={(e) => updateTicket(ticket.id, { tableLocation: e.target.value })}
+                              placeholder="e.g. Stage Front / Golden Circle, VIP Deck, Poolside"
+                            />
+
+                            <div className="sm:col-span-2">
+                              <Input
+                                label="Included Hospitality & Bottle Package"
+                                value={ticket.tablePackage || ''}
+                                onChange={(e) => updateTicket(ticket.id, { tablePackage: e.target.value })}
+                                placeholder="e.g. 1 Champagne bottle + 6 Energy Drinks, Mixers & Gourmet Finger Food Platter"
+                              />
+                            </div>
+
+                            <Input
+                              label="Included Bar Credit / Min Spend (GHS)"
+                              type="number"
+                              min="0"
+                              value={ticket.minSpend ?? 0}
+                              onChange={(e) => updateTicket(ticket.id, { minSpend: e.target.value })}
+                              placeholder="0 (leave 0 if included in table price)"
+                            />
+
+                            <Input
+                              label="VIP Parking Passes Included"
+                              type="number"
+                              min="0"
+                              max="10"
+                              value={ticket.vipParking ?? 2}
+                              onChange={(e) => updateTicket(ticket.id, { vipParking: e.target.value })}
+                              placeholder="2"
+                            />
+
+                            <div className="sm:col-span-2 grid gap-3 sm:grid-cols-2 pt-1">
+                              <label className="flex items-center gap-2 text-xs font-semibold text-ink-700 dark:text-ink-300 cursor-pointer">
+                                <input
+                                  type="checkbox"
+                                  checked={ticket.dedicatedWaiter ?? true}
+                                  onChange={(e) => updateTicket(ticket.id, { dedicatedWaiter: e.target.checked })}
+                                  className="rounded border-ink-300 text-purple-600 focus:ring-purple-500"
+                                />
+                                <span>Dedicated Waiter / Butler Service</span>
+                              </label>
+
+                              <label className="flex items-center gap-2 text-xs font-semibold text-ink-700 dark:text-ink-300 cursor-pointer">
+                                <input
+                                  type="checkbox"
+                                  checked={ticket.expressEntry ?? true}
+                                  onChange={(e) => updateTicket(ticket.id, { expressEntry: e.target.checked })}
+                                  className="rounded border-ink-300 text-purple-600 focus:ring-purple-500"
+                                />
+                                <span>VIP Fast-Track Express Entry Gate</span>
+                              </label>
+                            </div>
+                          </>
+                        )}
+
+                        {/* Vendor Space Specific Fields */}
+                        {isVendor && (
+                          <>
+                            <Input
+                              label="Space Dimensions & Format"
+                              value={ticket.spaceSize || '10x10 ft Canopy Pitch'}
+                              onChange={(e) => updateTicket(ticket.id, { spaceSize: e.target.value })}
+                              placeholder="e.g. 10x10 ft Canopy, 10x20 ft Double Booth, 6x3 ft Tabletop"
+                            />
+
+                            <Input
+                              label="Permitted Vendor Category"
+                              value={ticket.vendorCategory || 'Food & Beverages, Crafts or Retail'}
+                              onChange={(e) => updateTicket(ticket.id, { vendorCategory: e.target.value })}
+                              placeholder="e.g. Cooked Food, Grills, Fashion & Apparel, Tech"
+                            />
+
+                            <Input
+                              label="Staff Badges / Passes Included"
+                              type="number"
+                              min="1"
+                              max="12"
+                              value={ticket.passesIncluded ?? 2}
+                              onChange={(e) => updateTicket(ticket.id, { passesIncluded: e.target.value })}
+                              placeholder="2"
+                            />
+
+                            <Input
+                              label="Tables & Chairs Provided"
+                              value={ticket.tablesChairsIncluded || '1 Table + 2 Chairs'}
+                              onChange={(e) => updateTicket(ticket.id, { tablesChairsIncluded: e.target.value })}
+                              placeholder="e.g. 1 Table + 2 Chairs, or Bring Own Stand"
+                            />
+
+                            <Input
+                              label="Setup Hours Access"
+                              value={ticket.setupHours || 'Setup: 8:00 AM – 11:30 AM'}
+                              onChange={(e) => updateTicket(ticket.id, { setupHours: e.target.value })}
+                              placeholder="e.g. Setup: 8:00 AM – 11:30 AM"
+                            />
+
+                            <Input
+                              label="Teardown Hours Access"
+                              value={ticket.teardownHours || 'Teardown: 11:00 PM – 1:30 AM'}
+                              onChange={(e) => updateTicket(ticket.id, { teardownHours: e.target.value })}
+                              placeholder="e.g. Teardown: 11:00 PM – 1:30 AM"
+                            />
+
+                            <div className="sm:col-span-2 grid gap-3 sm:grid-cols-2 pt-1">
+                              <label className="flex items-center gap-2 text-xs font-semibold text-ink-700 dark:text-ink-300 cursor-pointer">
+                                <input
+                                  type="checkbox"
+                                  checked={ticket.powerIncluded ?? true}
+                                  onChange={(e) => updateTicket(ticket.id, { powerIncluded: e.target.checked })}
+                                  className="rounded border-ink-300 text-emerald-600 focus:ring-emerald-500"
+                                />
+                                <span>220V Electricity Outlet Included</span>
+                              </label>
+
+                              <label className="flex items-center gap-2 text-xs font-semibold text-ink-700 dark:text-ink-300 cursor-pointer">
+                                <input
+                                  type="checkbox"
+                                  checked={ticket.waterIncluded ?? false}
+                                  onChange={(e) => updateTicket(ticket.id, { waterIncluded: e.target.checked })}
+                                  className="rounded border-ink-300 text-emerald-600 focus:ring-emerald-500"
+                                />
+                                <span>Running Water Access Point</span>
+                              </label>
+
+                              <label className="flex items-center gap-2 text-xs font-semibold text-ink-700 dark:text-ink-300 cursor-pointer">
+                                <input
+                                  type="checkbox"
+                                  checked={ticket.wifiIncluded ?? true}
+                                  onChange={(e) => updateTicket(ticket.id, { wifiIncluded: e.target.checked })}
+                                  className="rounded border-ink-300 text-emerald-600 focus:ring-emerald-500"
+                                />
+                                <span>High-Speed Wi-Fi for POS / MoMo</span>
+                              </label>
+
+                              <label className="flex items-center gap-2 text-xs font-semibold text-ink-700 dark:text-ink-300 cursor-pointer">
+                                <input
+                                  type="checkbox"
+                                  checked={ticket.securityIncluded ?? true}
+                                  onChange={(e) => updateTicket(ticket.id, { securityIncluded: e.target.checked })}
+                                  className="rounded border-ink-300 text-emerald-600 focus:ring-emerald-500"
+                                />
+                                <span>Overnight Security Guarding</span>
+                              </label>
+                            </div>
+                          </>
+                        )}
+
+                        <Input
+                          label="Max Quantity per Order"
+                          type="number"
+                          min="1"
+                          value={ticket.perOrderLimit ?? (isTable || isVendor ? 2 : 10)}
+                          onChange={(e) => updateTicket(ticket.id, { perOrderLimit: e.target.value })}
+                        />
+
+                        <Input
+                          label={isTable ? 'Table Notes / Perks' : isVendor ? 'Logistics / Setup Guidelines' : 'Perks / Description'}
+                          value={ticket.description || ''}
+                          onChange={(e) => updateTicket(ticket.id, { description: e.target.value })}
+                          placeholder={
+                            isTable
+                              ? 'e.g. VIP priority parking pass included. Table reserved until 11:30 PM.'
+                              : isVendor
+                                ? 'e.g. Vehicle unloading permitted between 7am and 9am via Gate B.'
+                                : 'e.g. General admission into all concert areas.'
+                          }
+                        />
+                      </div>
+                    </div>
+                  )
+                })}
               </div>
             </div>
           )}
@@ -840,10 +1473,26 @@ export default function CreateEvent() {
                   { label: 'Starts', value: form.start ? new Date(form.start).toLocaleString() : '—' },
                   { label: 'Ends', value: form.end ? new Date(form.end).toLocaleString() : '—' },
                   { label: 'Age limit', value: form.ageLimit },
-                  { label: 'Ticket types', value: `${tickets.length}` },
+                  { label: 'Ticket types', value: `${tickets.length} tier(s)` },
                   {
-                    label: 'Total capacity',
-                    value: tickets.reduce((sum, t) => sum + (Number(t.quantity) || 0), 0).toLocaleString(),
+                    label: 'Standard Admissions',
+                    value: `${ticketStats.admissionsCount.toLocaleString()} passes (GH₵ ${ticketStats.admissionsRev.toLocaleString()})`,
+                  },
+                  {
+                    label: 'Table Reservations',
+                    value: `${ticketStats.tablesCount} tables (${ticketStats.tableSeats} seats, GH₵ ${ticketStats.tablesRev.toLocaleString()})`,
+                  },
+                  {
+                    label: 'Vendor Exhibition Spaces',
+                    value: `${ticketStats.vendorsCount} booths (GH₵ ${ticketStats.vendorsRev.toLocaleString()})`,
+                  },
+                  {
+                    label: 'Total Capacity',
+                    value: `${ticketStats.totalCapacity.toLocaleString()} attendees & seated guests`,
+                  },
+                  {
+                    label: 'Projected Gross Inventory Value',
+                    value: `GH₵ ${ticketStats.totalGrossRevenue.toLocaleString()}`,
                   },
                 ].map((row) => (
                   <div key={row.label} className="flex flex-wrap justify-between gap-2 py-3">
@@ -858,8 +1507,8 @@ export default function CreateEvent() {
                   Before you publish
                 </Badge>
                 <p className="text-sm text-ink-600 dark:text-ink-300">
-                  Publishing makes the listing visible immediately and opens ticket sales. You can edit the
-                  description, images and schedule at any time — changing prices only affects future orders.
+                  Publishing makes the listing visible immediately on the Eventspady website and opens ticket, table, and vendor sales. You can edit the
+                  description, images, and schedule at any time.
                 </p>
               </div>
             </div>

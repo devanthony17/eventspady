@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { ArrowRight, Minus, Plus, ShieldCheck } from 'lucide-react'
+import { ArrowRight, Car, Check, Clock, Droplets, Minus, Plus, ShieldCheck, Sparkles, Store, Users, Wine, Zap } from 'lucide-react'
 import { TicketIcon } from '@components/icons/AppIcons'
 import { Badge } from '@components/ui/Badge'
 import { Button } from '@components/ui/Button'
@@ -81,16 +81,36 @@ export function TicketSelector({ event, className }) {
           const salesClosed = ticket.salesEnd ? new Date(ticket.salesEnd).getTime() < Date.now() : false
           const disabled = soldOut || salesClosed
           const max = Math.min(ticket.perOrderLimit || 10, ticket.remaining ?? 100)
+          const isTable = ticket.type === 'table'
+          const isVendor = ticket.type === 'vendor'
 
           return (
-            <div key={ticket.id} className={cn('p-5', disabled && 'opacity-60')}>
+            <div
+              key={ticket.id}
+              className={cn(
+                'p-5 transition',
+                disabled && 'opacity-60',
+                isTable && 'bg-purple-500/[.02] dark:bg-purple-950/[.04]',
+                isVendor && 'bg-emerald-500/[.02] dark:bg-emerald-950/[.04]',
+              )}
+            >
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-center gap-2">
-                    <h3 className="text-sm font-bold">{ticket.name}</h3>
-                    <Badge tone="neutral" size="sm">
-                      {TICKET_TYPES[ticket.type]?.label ?? ticket.type}
-                    </Badge>
+                    <h3 className="text-sm font-bold text-ink-900 dark:text-white">{ticket.name}</h3>
+                    {isTable ? (
+                      <span className="inline-flex items-center gap-1 rounded-md border border-purple-200/60 bg-purple-50 px-2 py-0.5 text-xs font-semibold text-purple-700 dark:border-purple-800/40 dark:bg-purple-950/40 dark:text-purple-300">
+                        <Wine className="size-3" /> Table Reservation
+                      </span>
+                    ) : isVendor ? (
+                      <span className="inline-flex items-center gap-1 rounded-md border border-emerald-200/60 bg-emerald-50 px-2 py-0.5 text-xs font-semibold text-emerald-700 dark:border-emerald-800/40 dark:bg-emerald-950/40 dark:text-emerald-300">
+                        <Store className="size-3" /> Vendor Space
+                      </span>
+                    ) : (
+                      <Badge tone="neutral" size="sm">
+                        {TICKET_TYPES[ticket.type]?.label ?? ticket.type}
+                      </Badge>
+                    )}
                     {ticket.popular && !disabled && (
                       <Badge tone="accent" size="sm">
                         Popular
@@ -98,16 +118,96 @@ export function TicketSelector({ event, className }) {
                     )}
                   </div>
 
-                  <p className="mt-1.5 text-xs leading-relaxed text-ink-500 dark:text-ink-400">
-                    {ticket.description}
-                  </p>
+                  {/* Micro Specs for Tables and Vendors */}
+                  {isTable && (
+                    <div className="mt-2 flex flex-wrap items-center gap-2 text-xs">
+                      <span className="inline-flex items-center gap-1 rounded-md bg-purple-50 px-2 py-0.5 font-semibold text-purple-700 dark:bg-purple-950/40 dark:text-purple-300">
+                        <Users className="size-3" /> Seats {ticket.seatsPerTable || 4} guests
+                      </span>
+                      {ticket.tableLocation && (
+                        <span className="text-ink-500 dark:text-ink-400 font-medium">
+                          Zone: {ticket.tableLocation}
+                        </span>
+                      )}
+                      {ticket.dedicatedWaiter && (
+                        <span className="inline-flex items-center gap-1 rounded bg-purple-100/70 px-1.5 py-0.5 text-[11px] font-semibold text-purple-800 dark:bg-purple-900/40 dark:text-purple-200">
+                          <Check className="size-3" /> Dedicated Server
+                        </span>
+                      )}
+                      {ticket.vipParking > 0 && (
+                        <span className="inline-flex items-center gap-1 rounded bg-purple-100/70 px-1.5 py-0.5 text-[11px] font-semibold text-purple-800 dark:bg-purple-900/40 dark:text-purple-200">
+                          <Car className="size-3" /> {ticket.vipParking} VIP Parking
+                        </span>
+                      )}
+                      {ticket.expressEntry && (
+                        <span className="inline-flex items-center gap-1 rounded bg-purple-100/70 px-1.5 py-0.5 text-[11px] font-semibold text-purple-800 dark:bg-purple-900/40 dark:text-purple-200">
+                          <Sparkles className="size-3" /> Express Gate
+                        </span>
+                      )}
+                      {ticket.minSpend > 0 && (
+                        <span className="font-semibold text-purple-700 dark:text-purple-300">
+                          · GH₵{ticket.minSpend} Bar Credit Included
+                        </span>
+                      )}
+                    </div>
+                  )}
+
+                  {isTable && ticket.tablePackage && (
+                    <div className="mt-2.5 flex items-start gap-1.5 rounded-xl border border-purple-200/60 bg-purple-50/70 p-2.5 text-xs font-medium text-purple-800 dark:border-purple-800/40 dark:bg-purple-950/30 dark:text-purple-200">
+                      <Wine className="mt-0.5 size-3.5 shrink-0 text-purple-600 dark:text-purple-400" />
+                      <span>{ticket.tablePackage}</span>
+                    </div>
+                  )}
+
+                  {isVendor && (
+                    <div className="mt-2 flex flex-wrap items-center gap-2 text-xs">
+                      <span className="inline-flex items-center gap-1 rounded-md bg-emerald-50 px-2 py-0.5 font-semibold text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300">
+                        <Store className="size-3" /> {ticket.spaceSize || '10x10 ft Space'}
+                      </span>
+                      <span className="inline-flex items-center gap-1 text-ink-600 dark:text-ink-400 font-medium">
+                        <Zap className="size-3 text-amber-500" />
+                        {ticket.powerIncluded !== false ? 'Power Included' : 'No power hookup'}
+                      </span>
+                      {ticket.waterIncluded && (
+                        <span className="inline-flex items-center gap-1 text-ink-600 dark:text-ink-400 font-medium">
+                          <Droplets className="size-3 text-cyan-500" /> Water Point
+                        </span>
+                      )}
+                      {ticket.passesIncluded && (
+                        <span className="text-ink-500 dark:text-ink-400 font-medium">
+                          · {ticket.passesIncluded} staff passes
+                        </span>
+                      )}
+                      {ticket.tablesChairsIncluded && (
+                        <span className="text-ink-500 dark:text-ink-400 font-medium">
+                          · {ticket.tablesChairsIncluded}
+                        </span>
+                      )}
+                      {ticket.vendorCategory && (
+                        <span className="text-ink-500 dark:text-ink-400 font-medium">
+                          · {ticket.vendorCategory}
+                        </span>
+                      )}
+                      {ticket.setupHours && (
+                        <span className="inline-flex items-center gap-1 text-[11px] text-ink-400">
+                          <Clock className="size-3" /> {ticket.setupHours}
+                        </span>
+                      )}
+                    </div>
+                  )}
+
+                  {ticket.description && (
+                    <p className="mt-1.5 text-xs leading-relaxed text-ink-500 dark:text-ink-400">
+                      {ticket.description}
+                    </p>
+                  )}
 
                   <p className="mt-2 text-xs text-ink-400">
                     {soldOut
                       ? 'Sold out'
                       : salesClosed
                         ? 'Sales have closed'
-                        : `Sales close ${formatDate(ticket.salesEnd)} · max ${ticket.perOrderLimit} per order`}
+                        : `Sales close ${formatDate(ticket.salesEnd)} · max ${ticket.perOrderLimit || 10} per order`}
                   </p>
                 </div>
 

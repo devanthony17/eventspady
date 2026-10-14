@@ -62,6 +62,20 @@ export const adminApi = {
   },
 
   /**
+   * Update an existing event from admin console
+   */
+  async updateEvent(id, payload) {
+    try {
+      const res = await apiClient.put(`/api/admin/events/${encodeURIComponent(id)}`, payload)
+      return res.data
+    } catch {
+      // Fallback to standard events endpoint
+      const res = await apiClient.put(`/api/events/${encodeURIComponent(id)}`, payload)
+      return res.data
+    }
+  },
+
+  /**
    * Fetch platform events for moderation
    */
   async getEvents(params = {}) {

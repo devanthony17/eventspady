@@ -8,6 +8,7 @@ import {
   Eye,
   ImagePlus,
   MapPin,
+  Pencil,
   Plus,
   Search,
   Sparkles,
@@ -36,6 +37,7 @@ import {
   useUpdateEventStatusMutation,
   useAdminDeleteEventMutation,
   useAdminCreateEventMutation,
+  useAdminUpdateEventMutation,
 } from '@hooks/api'
 import { formatCurrency, formatDate, cn } from '@lib/utils'
 
@@ -66,6 +68,7 @@ export default function EventsManagement() {
   const updateStatusMutation = useUpdateEventStatusMutation()
   const deleteMutation = useAdminDeleteEventMutation()
   const createMutation = useAdminCreateEventMutation()
+  const updateMutation = useAdminUpdateEventMutation()
   const toast = useToast()
 
   const events = useMemo(() => {
@@ -84,6 +87,15 @@ export default function EventsManagement() {
   const [submitting, setSubmitting] = useState(false)
   const fileInputRef = useRef(null)
   const [uploadingImage, setUploadingImage] = useState(false)
+
+  // Edit Event Modal state
+  const [isEditOpen, setIsEditOpen] = useState(false)
+  const [editingEvent, setEditingEvent] = useState(null)
+  const [editSubmitting, setEditSubmitting] = useState(false)
+  const editFileInputRef = useRef(null)
+  const [editUploadingImage, setEditUploadingImage] = useState(false)
+  const [editForm, setEditForm] = useState(null)
+  const [editTickets, setEditTickets] = useState([])
 
   const initialForm = {
     title: '',
@@ -156,6 +168,207 @@ export default function EventsManagement() {
       toast.info(`Event "${ev.title}" removed.`)
     }
   }
+
+  // ── Edit helpers ─────────────────────────────────────────────
+  const openEditModal = (ev) => {
+    setEditingEvent(ev)
+    setEditForm({
+      title: ev.title || '',
+      tagline: ev.tagline || '',
+      category: (typeof ev.category === 'object' ? ev.category?.id : ev.category) || 'music',
+      organizerName: ev.organizer?.name || ev.organizerName || 'Eventspady Official',
+      cover: ev.cover || '/images/events/event-1.svg',
+      type: ev.type || 'venue',
+      venueName: ev.venue?.name || '',
+      address: ev.venue?.address || '',
+      city: ev.venue?.city || 'Wa',
+      onlinePlatform: ev.online?.platform || 'Google Meet',
+      joinNote: ev.online?.joinInstructions || '',
+      start: ev.start ? ev.start.slice(0, 16) : '',
+      end: ev.end ? ev.end.slice(0, 16) : '',
+      description: ev.description || '',
+      highlights: Array.isArray(ev.highlights) ? ev.highlights.join('\n') : (ev.highlights || ''),
+      isFree: Boolean(ev.isFree),
+      featured: Boolean(ev.featured),
+    })
+    setEditTickets(
+      Array.isArray(ev.tickets) && ev.tickets.length > 0
+        ? ev.tickets.map((t) => ({ ...t }))
+        : [
+            {
+              id: `tkt-1`,
+              name: 'General Admission',
+              price: 50,
+              quantity: 100,
+              perOrderLimit: 10,
+              description: 'Standard admission entry ticket',
+            },
+          ],
+    )
+    setIsEditOpen(true)
+  }
+
+  const processEditImageFile = (file) => {
+    if (!file) return
+    if (!file.type.startsWith('image/')) {
+      toast.warning('Please select an image file (PNG, JPG, WebP, etc.).')
+      return
+    }
+    setEditUploadingImage(true)
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      const img = new window.Image()
+      img.onload = () => {
+        const maxW = 1200, maxH = 800
+        let w = img.width, h = img.height
+        if (w > maxW || h > maxH) {
+          const ratio = Math.min(maxW / w, maxH / h)
+          w = Math.round(w * ratio)
+          h = Math.round(h * ratio)
+        }
+        const canvas = document.createElement('canvas')
+        canvas.width = w; canvas.height = h
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h)
+        setEditForm((prev) => ({ ...prev, cover: canvas.toDataURL('image/jpeg', 0.85) }))
+        setEditUploadingImage(false)
+        toast.success('Event poster updated!')
+      }
+      img.onerror = () => { setEditUploadingImage(false); toast.error('Failed to parse the image.') }
+      img.src = e.target.result
+    }
+    reader.onerror = () => { setEditUploadingImage(false); toast.error('Could not read the file.') }
+    reader.readAsDataURL(file)
+  }
+
+  const addEditTicketTier = (type = 'paid') => {
+    const isTable = type === 'table'
+    const isVendor = type === 'vendor'
+    setEditTickets((prev) => [
+      ...prev,
+      {
+        id: `tkt-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+        name: isTable ? 'VIP Table for 6 (Stage Front)' : isVendor ? 'Vendor Exhibition Space (10x10 ft)' : 'Standard Admission',
+        type,
+        price: isTable ? 1200 : isVendor ? 450 : 50,
+        quantity: isTable ? 10 : isVendor ? 12 : 100,
+        perOrderLimit: isTable || isVendor ? 2 : 10,
+        description: 'Ticket tier',
+        seatsPerTable: isTable ? 6 : 4,
+        tableLocation: isTable ? 'Stage Front' : '',
+        tablePackage: '',
+        dedicatedWaiter: isTable,
+        vipParking: isTable ? 2 : 0,
+        expressEntry: isTable,
+        spaceSize: isVendor ? '10x10 ft' : '',
+        vendorCategory: isVendor ? 'Food & Drink' : '',
+        passesIncluded: isVendor ? 2 : 1,
+        tablesChairsIncluded: isVendor ? '1 Table + 2 Chairs' : '',
+        powerIncluded: isVendor,
+        waterIncluded: false,
+      },
+    ])
+  }
+
+  const updateEditTicketTier = (id, patch) => {
+    setEditTickets((prev) => prev.map((t) => (t.id === id ? { ...t, ...patch } : t)))
+  }
+
+  const removeEditTicketTier = (id) => {
+    if (editTickets.length <= 1) {
+      toast.warning('Events must have at least one ticket tier.')
+      return
+    }
+    setEditTickets((prev) => prev.filter((t) => t.id !== id))
+  }
+
+  const handleEditSubmit = async (e) => {
+    e.preventDefault()
+    if (!editForm.title.trim()) { toast.warning('Please enter an event title.'); return }
+    if (!editForm.start) { toast.warning('Please specify an event start date and time.'); return }
+    setEditSubmitting(true)
+
+    const highlightList = editForm.highlights
+      ? editForm.highlights.split('\n').map((h) => h.trim()).filter(Boolean)
+      : []
+
+    const organizerName = editForm.organizerName.trim() || 'Eventspady Official'
+    const capacity = editTickets.reduce((sum, t) => sum + (Number(t.quantity) || 0), 0)
+
+    const patch = {
+      title: editForm.title.trim(),
+      tagline: editForm.tagline.trim() || editForm.title.trim(),
+      category: editForm.category,
+      cover: editForm.cover || '/images/events/event-1.svg',
+      start: editForm.start,
+      end: editForm.end || editForm.start,
+      type: editForm.type,
+      venue:
+        editForm.type === 'venue'
+          ? {
+              name: editForm.venueName || 'Wa Regional Center',
+              address: editForm.address || 'Wa Central',
+              city: editForm.city || 'Wa',
+              country: 'Ghana',
+              mapQuery: `${editForm.venueName || 'Wa'}, ${editForm.city || 'Wa'}, Ghana`,
+            }
+          : null,
+      online:
+        editForm.type === 'online'
+          ? { platform: editForm.onlinePlatform || 'Google Meet', joinInstructions: editForm.joinNote || '' }
+          : null,
+      organizerName,
+      organizer: {
+        ...(editingEvent?.organizer || {}),
+        name: organizerName,
+      },
+      tickets: editTickets.map((t) => ({
+        id: t.id,
+        name: t.name,
+        type: editForm.isFree ? 'free' : (t.type || 'paid'),
+        price: editForm.isFree ? 0 : Number(t.price) || 0,
+        quantity: Number(t.quantity) || 100,
+        perOrderLimit: Number(t.perOrderLimit) || 10,
+        description: t.description || '',
+        seatsPerTable: t.type === 'table' ? Number(t.seatsPerTable) || 4 : undefined,
+        tableLocation: t.type === 'table' ? t.tableLocation : undefined,
+        tablePackage: t.type === 'table' ? t.tablePackage : undefined,
+        dedicatedWaiter: t.type === 'table' ? Boolean(t.dedicatedWaiter) : undefined,
+        vipParking: t.type === 'table' ? Number(t.vipParking) || 0 : undefined,
+        expressEntry: t.type === 'table' ? Boolean(t.expressEntry) : undefined,
+        spaceSize: t.type === 'vendor' ? t.spaceSize : undefined,
+        vendorCategory: t.type === 'vendor' ? t.vendorCategory : undefined,
+        passesIncluded: t.type === 'vendor' ? Number(t.passesIncluded) || 2 : undefined,
+        tablesChairsIncluded: t.type === 'vendor' ? t.tablesChairsIncluded : undefined,
+        powerIncluded: t.type === 'vendor' ? Boolean(t.powerIncluded) : undefined,
+        waterIncluded: t.type === 'vendor' ? Boolean(t.waterIncluded) : undefined,
+        sold: t.sold || 0,
+        salesEnd: editForm.start,
+      })),
+      description: editForm.description.trim(),
+      highlights: highlightList,
+      featured: Boolean(editForm.featured),
+      isFree: Boolean(editForm.isFree),
+      capacity,
+    }
+
+    try {
+      updateEvent(editingEvent.id, patch)
+      try {
+        await updateMutation.mutateAsync({ id: editingEvent.id, ...patch })
+      } catch {
+        // Mutation sync fallback — store already updated locally
+      }
+      toast.success(`Event "${editForm.title}" has been updated successfully!`, { title: 'Event Updated' })
+      setIsEditOpen(false)
+      setEditingEvent(null)
+      setEditForm(null)
+    } catch (err) {
+      toast.error(err.message || 'Failed to update event.')
+    } finally {
+      setEditSubmitting(false)
+    }
+  }
+  // ─────────────────────────────────────────────────────────────
 
   const processImageFile = (file) => {
     if (!file) return
@@ -580,6 +793,14 @@ export default function EventsManagement() {
                               <span>View</span>
                               <ExternalLink className="size-3" />
                             </Link>
+                            <button
+                              type="button"
+                              onClick={() => openEditModal(ev)}
+                              className="grid size-7 place-items-center rounded-lg text-ink-400 hover:bg-brand-50 hover:text-brand-600 dark:hover:bg-brand-500/10 dark:hover:text-brand-400"
+                              title="Edit event"
+                            >
+                              <Pencil className="size-3.5" />
+                            </button>
                             <button
                               type="button"
                               onClick={() => handleDelete(ev)}
@@ -1262,6 +1483,299 @@ export default function EventsManagement() {
                 >
                   {submitting ? 'Publishing Event...' : 'Publish Event to Website'}
                 </Button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* ── Edit Event Modal ───────────────────────────────────── */}
+      {isEditOpen && editForm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto p-4 sm:p-6">
+          <div
+            className="fixed inset-0 bg-ink-950/70 backdrop-blur-xs transition-opacity"
+            onClick={() => setIsEditOpen(false)}
+          />
+
+          <div className="relative w-full max-w-3xl rounded-2xl border border-ink-200 bg-white p-6 shadow-2xl dark:border-white/10 dark:bg-ink-900 sm:p-8 my-8 max-h-[90vh] overflow-y-auto">
+            <button
+              type="button"
+              onClick={() => setIsEditOpen(false)}
+              className="absolute right-5 top-5 grid size-8 place-items-center rounded-lg text-ink-400 hover:text-ink-700 dark:hover:text-white"
+            >
+              <X className="size-5" />
+            </button>
+
+            <div className="flex items-center gap-3">
+              <div className="grid size-12 place-items-center rounded-2xl bg-brand-500/10 text-brand-600 dark:text-brand-400">
+                <Pencil className="size-6" />
+              </div>
+              <div>
+                <h3 className="text-xl font-black text-ink-900 dark:text-white">
+                  Edit Event
+                </h3>
+                <p className="text-xs text-ink-500 dark:text-ink-400">
+                  Update the details of <span className="font-semibold text-ink-700 dark:text-ink-200">{editingEvent?.title}</span>
+                </p>
+              </div>
+            </div>
+
+            <form onSubmit={handleEditSubmit} className="mt-6 space-y-6">
+              {/* Basic Info */}
+              <div className="space-y-4 rounded-xl border border-ink-200/70 p-4 dark:border-white/10">
+                <h4 className="text-xs font-bold uppercase tracking-wider text-ink-500 dark:text-ink-400">1. Basic Details</h4>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div className="sm:col-span-2">
+                    <label className="block text-xs font-semibold text-ink-700 dark:text-ink-300">Event Title <span className="text-rose-500">*</span></label>
+                    <input type="text" required placeholder="Event title" value={editForm.title}
+                      onChange={(e) => setEditForm({ ...editForm, title: e.target.value })}
+                      className="mt-1 w-full rounded-xl border border-ink-200 bg-white px-3.5 py-2.5 text-xs text-ink-900 outline-none transition focus:border-brand-500 dark:border-white/10 dark:bg-ink-800 dark:text-white" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-ink-700 dark:text-ink-300">Category</label>
+                    <select value={editForm.category} onChange={(e) => setEditForm({ ...editForm, category: e.target.value })}
+                      className="mt-1 w-full rounded-xl border border-ink-200 bg-white px-3 py-2.5 text-xs text-ink-900 outline-none transition focus:border-brand-500 dark:border-white/10 dark:bg-ink-800 dark:text-white">
+                      {CATEGORIES.map((c) => <option key={c.id} value={c.id}>{c.label}</option>)}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-ink-700 dark:text-ink-300">Organizer Name</label>
+                    <input type="text" placeholder="Organizer name" value={editForm.organizerName}
+                      onChange={(e) => setEditForm({ ...editForm, organizerName: e.target.value })}
+                      className="mt-1 w-full rounded-xl border border-ink-200 bg-white px-3.5 py-2.5 text-xs text-ink-900 outline-none transition focus:border-brand-500 dark:border-white/10 dark:bg-ink-800 dark:text-white" />
+                  </div>
+                  <div className="sm:col-span-2">
+                    <label className="block text-xs font-semibold text-ink-700 dark:text-ink-300">Tagline / Short Teaser</label>
+                    <input type="text" placeholder="A short teaser line" value={editForm.tagline}
+                      onChange={(e) => setEditForm({ ...editForm, tagline: e.target.value })}
+                      className="mt-1 w-full rounded-xl border border-ink-200 bg-white px-3.5 py-2.5 text-xs text-ink-900 outline-none transition focus:border-brand-500 dark:border-white/10 dark:bg-ink-800 dark:text-white" />
+                  </div>
+                </div>
+              </div>
+
+              {/* Event Poster */}
+              <div className="space-y-4 rounded-xl border border-ink-200/70 p-4 dark:border-white/10">
+                <h4 className="text-xs font-bold uppercase tracking-wider text-ink-500 dark:text-ink-400">2. Event Poster / Banner</h4>
+                <div className="grid gap-4 sm:grid-cols-[160px_1fr] sm:items-center">
+                  <div className="relative aspect-[16/10] overflow-hidden rounded-xl border border-ink-200 bg-ink-100 dark:border-white/10 dark:bg-ink-800">
+                    <img src={editForm.cover || '/images/events/event-1.svg'} alt="Preview"
+                      onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = '/images/events/event-1.svg' }}
+                      className="size-full object-cover" />
+                    <span className="absolute bottom-1 right-1 rounded bg-black/70 px-1 text-[9px] font-bold text-white">Preview</span>
+                  </div>
+                  <div className="space-y-3">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <input ref={editFileInputRef} type="file" accept="image/*"
+                        onChange={(e) => processEditImageFile(e.target.files?.[0])} className="hidden" />
+                      <button type="button" disabled={editUploadingImage}
+                        onClick={() => editFileInputRef.current?.click()}
+                        className="inline-flex items-center gap-1.5 rounded-lg border border-ink-200 px-3 py-1.5 text-xs font-medium text-ink-700 hover:bg-ink-50 dark:border-white/10 dark:text-ink-300 dark:hover:bg-white/5">
+                        <ImagePlus className="size-3.5" />
+                        {editUploadingImage ? 'Processing...' : 'Upload New Poster'}
+                      </button>
+                    </div>
+                    <div>
+                      <p className="text-[11px] font-medium text-ink-500 dark:text-ink-400">Or pick from presets:</p>
+                      <div className="mt-1.5 flex flex-wrap gap-2">
+                        {PRESET_BANNERS.map((preset) => (
+                          <button key={preset.id} type="button" onClick={() => setEditForm({ ...editForm, cover: preset.url })}
+                            className={cn('flex items-center gap-1.5 rounded-lg border px-2.5 py-1 text-xs transition',
+                              editForm.cover === preset.url
+                                ? 'border-brand-500 bg-brand-50 text-brand-700 dark:bg-brand-950/40 dark:text-brand-300'
+                                : 'border-ink-200 bg-white text-ink-600 hover:bg-ink-50 dark:border-white/10 dark:bg-ink-800 dark:text-ink-300')}>
+                            <span className="size-2 rounded-full bg-brand-500" />{preset.label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Date & Location */}
+              <div className="space-y-4 rounded-xl border border-ink-200/70 p-4 dark:border-white/10">
+                <h4 className="text-xs font-bold uppercase tracking-wider text-ink-500 dark:text-ink-400">3. Date, Time &amp; Location</h4>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div>
+                    <label className="block text-xs font-semibold text-ink-700 dark:text-ink-300">Start Date &amp; Time <span className="text-rose-500">*</span></label>
+                    <input type="datetime-local" required value={editForm.start}
+                      onChange={(e) => setEditForm({ ...editForm, start: e.target.value })}
+                      className="mt-1 w-full rounded-xl border border-ink-200 bg-white px-3 py-2 text-xs text-ink-900 outline-none transition focus:border-brand-500 dark:border-white/10 dark:bg-ink-800 dark:text-white" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-ink-700 dark:text-ink-300">End Date &amp; Time</label>
+                    <input type="datetime-local" value={editForm.end}
+                      onChange={(e) => setEditForm({ ...editForm, end: e.target.value })}
+                      className="mt-1 w-full rounded-xl border border-ink-200 bg-white px-3 py-2 text-xs text-ink-900 outline-none transition focus:border-brand-500 dark:border-white/10 dark:bg-ink-800 dark:text-white" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-ink-700 dark:text-ink-300">Location Format</label>
+                    <div className="mt-1 flex gap-2">
+                      <button type="button" onClick={() => setEditForm({ ...editForm, type: 'venue' })}
+                        className={cn('flex-1 rounded-xl border py-2 text-xs font-medium transition',
+                          editForm.type === 'venue'
+                            ? 'border-brand-500 bg-brand-50 text-brand-700 dark:bg-brand-950/40 dark:text-brand-300'
+                            : 'border-ink-200 text-ink-600 dark:border-white/10 dark:text-ink-400')}>
+                        Physical Venue
+                      </button>
+                      <button type="button" onClick={() => setEditForm({ ...editForm, type: 'online' })}
+                        className={cn('flex-1 rounded-xl border py-2 text-xs font-medium transition',
+                          editForm.type === 'online'
+                            ? 'border-brand-500 bg-brand-50 text-brand-700 dark:bg-brand-950/40 dark:text-brand-300'
+                            : 'border-ink-200 text-ink-600 dark:border-white/10 dark:text-ink-400')}>
+                        Online Event
+                      </button>
+                    </div>
+                  </div>
+                  {editForm.type === 'venue' ? (
+                    <div>
+                      <label className="block text-xs font-semibold text-ink-700 dark:text-ink-300">City</label>
+                      <input type="text" placeholder="City" value={editForm.city}
+                        onChange={(e) => setEditForm({ ...editForm, city: e.target.value })}
+                        className="mt-1 w-full rounded-xl border border-ink-200 bg-white px-3 py-2 text-xs text-ink-900 outline-none transition focus:border-brand-500 dark:border-white/10 dark:bg-ink-800 dark:text-white" />
+                    </div>
+                  ) : (
+                    <div>
+                      <label className="block text-xs font-semibold text-ink-700 dark:text-ink-300">Streaming Platform</label>
+                      <input type="text" placeholder="Google Meet, Zoom, YouTube Live" value={editForm.onlinePlatform}
+                        onChange={(e) => setEditForm({ ...editForm, onlinePlatform: e.target.value })}
+                        className="mt-1 w-full rounded-xl border border-ink-200 bg-white px-3 py-2 text-xs text-ink-900 outline-none transition focus:border-brand-500 dark:border-white/10 dark:bg-ink-800 dark:text-white" />
+                    </div>
+                  )}
+                  {editForm.type === 'venue' && (
+                    <>
+                      <div>
+                        <label className="block text-xs font-semibold text-ink-700 dark:text-ink-300">Venue Name</label>
+                        <input type="text" placeholder="Venue name" value={editForm.venueName}
+                          onChange={(e) => setEditForm({ ...editForm, venueName: e.target.value })}
+                          className="mt-1 w-full rounded-xl border border-ink-200 bg-white px-3 py-2 text-xs text-ink-900 outline-none transition focus:border-brand-500 dark:border-white/10 dark:bg-ink-800 dark:text-white" />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-semibold text-ink-700 dark:text-ink-300">Address / Area</label>
+                        <input type="text" placeholder="Street or area" value={editForm.address}
+                          onChange={(e) => setEditForm({ ...editForm, address: e.target.value })}
+                          className="mt-1 w-full rounded-xl border border-ink-200 bg-white px-3 py-2 text-xs text-ink-900 outline-none transition focus:border-brand-500 dark:border-white/10 dark:bg-ink-800 dark:text-white" />
+                      </div>
+                    </>
+                  )}
+                </div>
+              </div>
+
+              {/* Ticket Tiers */}
+              <div className="space-y-4 rounded-xl border border-ink-200/70 p-4 dark:border-white/10">
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                  <div>
+                    <h4 className="text-xs font-bold uppercase tracking-wider text-ink-500 dark:text-ink-400">4. Ticket Tiers</h4>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <label className="inline-flex items-center gap-1.5 text-xs font-medium text-ink-700 dark:text-ink-300 cursor-pointer">
+                      <input type="checkbox" checked={editForm.isFree}
+                        onChange={(e) => setEditForm({ ...editForm, isFree: e.target.checked })}
+                        className="rounded border-ink-300 text-brand-600 focus:ring-brand-500" />
+                      <span>Free Event</span>
+                    </label>
+                    <div className="flex flex-wrap items-center gap-1.5">
+                      <button type="button" onClick={() => addEditTicketTier('paid')}
+                        className="inline-flex items-center gap-1 rounded-lg border border-ink-200 bg-white px-2.5 py-1 text-xs font-semibold text-ink-700 hover:bg-ink-50 dark:border-white/10 dark:bg-ink-800 dark:text-ink-200">
+                        <Plus className="size-3" /> Ticket
+                      </button>
+                      <button type="button" onClick={() => addEditTicketTier('table')}
+                        className="inline-flex items-center gap-1 rounded-lg border border-purple-200 bg-purple-50 px-2.5 py-1 text-xs font-semibold text-purple-700 hover:bg-purple-100 dark:border-purple-800/40 dark:bg-purple-950/40 dark:text-purple-300">
+                        <Wine className="size-3" /> Table
+                      </button>
+                      <button type="button" onClick={() => addEditTicketTier('vendor')}
+                        className="inline-flex items-center gap-1 rounded-lg border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700 hover:bg-emerald-100 dark:border-emerald-800/40 dark:bg-emerald-950/40 dark:text-emerald-300">
+                        <Store className="size-3" /> Vendor
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  {editTickets.map((t, idx) => {
+                    const isTable = t.type === 'table'
+                    const isVendor = t.type === 'vendor'
+                    return (
+                      <div key={t.id} className={cn('rounded-xl border p-3.5 space-y-3',
+                        isTable ? 'border-purple-200/80 bg-purple-50/20 dark:border-purple-800/40 dark:bg-purple-950/10'
+                          : isVendor ? 'border-emerald-200/80 bg-emerald-50/20 dark:border-emerald-800/40 dark:bg-emerald-950/10'
+                          : 'border-ink-200/70 bg-white dark:border-white/10 dark:bg-ink-900/40')}>
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs font-bold text-ink-900 dark:text-white">Tier {idx + 1}{isTable ? ' · Table' : isVendor ? ' · Vendor' : ''}</span>
+                          {editTickets.length > 1 && (
+                            <button type="button" onClick={() => removeEditTicketTier(t.id)}
+                              className="grid size-6 place-items-center rounded-lg text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/40">
+                              <Trash2 className="size-3.5" />
+                            </button>
+                          )}
+                        </div>
+                        <div className="grid gap-3 sm:grid-cols-4">
+                          <div className="sm:col-span-2">
+                            <label className="block text-[10px] font-bold uppercase text-ink-400">Tier Name</label>
+                            <input type="text" value={t.name}
+                              onChange={(e) => updateEditTicketTier(t.id, { name: e.target.value })}
+                              className="mt-1 w-full rounded-lg border border-ink-200 bg-white px-2.5 py-1.5 text-xs text-ink-900 outline-none dark:border-white/10 dark:bg-ink-800 dark:text-white" />
+                          </div>
+                          <div>
+                            <label className="block text-[10px] font-bold uppercase text-ink-400">Price (GH₵)</label>
+                            <input type="number" disabled={editForm.isFree}
+                              value={editForm.isFree ? 0 : t.price}
+                              onChange={(e) => updateEditTicketTier(t.id, { price: e.target.value })}
+                              className="mt-1 w-full rounded-lg border border-ink-200 bg-white px-2.5 py-1.5 text-xs text-ink-900 outline-none disabled:bg-ink-100 dark:border-white/10 dark:bg-ink-800 dark:text-white dark:disabled:bg-ink-950" />
+                          </div>
+                          <div>
+                            <label className="block text-[10px] font-bold uppercase text-ink-400">Quantity</label>
+                            <input type="number" value={t.quantity}
+                              onChange={(e) => updateEditTicketTier(t.id, { quantity: e.target.value })}
+                              className="mt-1 w-full rounded-lg border border-ink-200 bg-white px-2.5 py-1.5 text-xs text-ink-900 outline-none dark:border-white/10 dark:bg-ink-800 dark:text-white" />
+                          </div>
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+
+              {/* Description & Spotlight */}
+              <div className="space-y-4 rounded-xl border border-ink-200/70 p-4 dark:border-white/10">
+                <h4 className="text-xs font-bold uppercase tracking-wider text-ink-500 dark:text-ink-400">5. Description &amp; Spotlight</h4>
+                <div>
+                  <label className="block text-xs font-semibold text-ink-700 dark:text-ink-300">Event Description</label>
+                  <textarea rows={3} placeholder="Describe the event…" value={editForm.description}
+                    onChange={(e) => setEditForm({ ...editForm, description: e.target.value })}
+                    className="mt-1 w-full rounded-xl border border-ink-200 bg-white p-3 text-xs text-ink-900 outline-none transition focus:border-brand-500 dark:border-white/10 dark:bg-ink-800 dark:text-white" />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-ink-700 dark:text-ink-300">Highlights (one per line)</label>
+                  <textarea rows={2} placeholder="Highlight 1&#10;Highlight 2" value={editForm.highlights}
+                    onChange={(e) => setEditForm({ ...editForm, highlights: e.target.value })}
+                    className="mt-1 w-full rounded-xl border border-ink-200 bg-white p-3 text-xs text-ink-900 outline-none transition focus:border-brand-500 dark:border-white/10 dark:bg-ink-800 dark:text-white" />
+                </div>
+                <div className="flex items-center justify-between rounded-xl border border-amber-200/60 bg-amber-50/40 p-3.5 dark:border-amber-800/40 dark:bg-amber-950/20">
+                  <div className="flex items-center gap-2">
+                    <Star className="size-4 text-amber-500 fill-amber-500" />
+                    <div>
+                      <p className="text-xs font-bold text-ink-900 dark:text-white">Feature on Homepage Spotlight</p>
+                      <p className="text-[11px] text-ink-500 dark:text-ink-400">Places this event in the premier curated strip on the homepage.</p>
+                    </div>
+                  </div>
+                  <input type="checkbox" checked={editForm.featured}
+                    onChange={(e) => setEditForm({ ...editForm, featured: e.target.checked })}
+                    className="size-4 rounded border-ink-300 text-brand-600 focus:ring-brand-500" />
+                </div>
+              </div>
+
+              {/* Actions */}
+              <div className="flex items-center justify-end gap-3 border-t border-ink-100 pt-4 dark:border-white/10">
+                <button type="button" onClick={() => setIsEditOpen(false)}
+                  className="rounded-xl border border-ink-200 px-4 py-2 text-xs font-medium text-ink-700 hover:bg-ink-50 dark:border-white/10 dark:text-ink-300 dark:hover:bg-white/5">
+                  Cancel
+                </button>
+                <button type="submit" disabled={editSubmitting}
+                  className="inline-flex items-center gap-2 rounded-xl bg-brand-600 px-5 py-2 text-xs font-bold text-white shadow-sm hover:bg-brand-700 disabled:opacity-60">
+                  <Check className="size-3.5" />
+                  {editSubmitting ? 'Saving Changes...' : 'Save Changes'}
+                </button>
               </div>
             </form>
           </div>

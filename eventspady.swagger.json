@@ -1,0 +1,2932 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Eventspady API",
+        "description": "All API endpoints for Eventspady.",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8000",
+            "description": "Local server"
+        }
+    ],
+    "paths": {
+        "/api/auth/register": {
+            "post": {
+                "tags": [
+                    "Authentication & Authorization"
+                ],
+                "summary": "POST /api/auth/register",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "name": "Abena Sowah",
+                                    "email": "abena@example.com",
+                                    "password": "StrongPassword123!",
+                                    "phone": "+233241234567",
+                                    "city": "Wa",
+                                    "role": "organizer",
+                                    "organizationName": "Upper West Cultural Guild",
+                                    "businessRegistrationNumber": "BN-99238120",
+                                    "idCardUrl": "https://cdn.eventspady.com/ids/abena-gh-card.jpg"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/login": {
+            "post": {
+                "tags": [
+                    "Authentication & Authorization"
+                ],
+                "summary": "POST /api/auth/login",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "email": "abena@example.com",
+                                    "password": "StrongPassword123!"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/google": {
+            "post": {
+                "tags": [
+                    "Authentication & Authorization"
+                ],
+                "summary": "POST /api/auth/google",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/forgot-password": {
+            "post": {
+                "tags": [
+                    "Authentication & Authorization"
+                ],
+                "summary": "POST /api/auth/forgot-password",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/reset-password": {
+            "post": {
+                "tags": [
+                    "Authentication & Authorization"
+                ],
+                "summary": "POST /api/auth/reset-password",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/refresh-token": {
+            "post": {
+                "tags": [
+                    "Authentication & Authorization"
+                ],
+                "summary": "POST /api/auth/refresh-token",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/logout": {
+            "post": {
+                "tags": [
+                    "Authentication & Authorization"
+                ],
+                "summary": "POST /api/auth/logout",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/me": {
+            "get": {
+                "tags": [
+                    "Authentication & Authorization"
+                ],
+                "summary": "GET /api/auth/me",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/events": {
+            "get": {
+                "tags": [
+                    "Public Content & Engagement"
+                ],
+                "summary": "GET /api/events",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                }
+            }
+        },
+        "/api/events/search": {
+            "get": {
+                "tags": [
+                    "Public Content & Engagement"
+                ],
+                "summary": "GET /api/events/search",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                }
+            }
+        },
+        "/api/events/{slugOrId}": {
+            "get": {
+                "tags": [
+                    "Public Content & Engagement"
+                ],
+                "summary": "GET /api/events/{slugOrId}",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "slugOrId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ]
+            }
+        },
+        "/api/events/{id}/reviews": {
+            "get": {
+                "tags": [
+                    "Public Content & Engagement"
+                ],
+                "summary": "GET /api/events/{id}/reviews",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Public Content & Engagement"
+                ],
+                "summary": "POST /api/events/{id}/reviews",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/categories": {
+            "get": {
+                "tags": [
+                    "Public Content & Engagement"
+                ],
+                "summary": "GET /api/categories",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                }
+            }
+        },
+        "/api/organizers": {
+            "get": {
+                "tags": [
+                    "Public Content & Engagement"
+                ],
+                "summary": "GET /api/organizers",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                }
+            }
+        },
+        "/api/organizers/{id}": {
+            "get": {
+                "tags": [
+                    "Public Content & Engagement"
+                ],
+                "summary": "GET /api/organizers/{id}",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ]
+            }
+        },
+        "/api/locations": {
+            "get": {
+                "tags": [
+                    "Public Content & Engagement"
+                ],
+                "summary": "GET /api/locations",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                }
+            }
+        },
+        "/api/blog": {
+            "get": {
+                "tags": [
+                    "Public Content & Engagement"
+                ],
+                "summary": "GET /api/blog",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                }
+            }
+        },
+        "/api/blog/{slug}": {
+            "get": {
+                "tags": [
+                    "Public Content & Engagement"
+                ],
+                "summary": "GET /api/blog/{slug}",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "slug",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ]
+            }
+        },
+        "/api/newsletter/subscribe": {
+            "post": {
+                "tags": [
+                    "Public Content & Engagement"
+                ],
+                "summary": "POST /api/newsletter/subscribe",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/contact": {
+            "post": {
+                "tags": [
+                    "Public Content & Engagement"
+                ],
+                "summary": "POST /api/contact",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/feedback": {
+            "post": {
+                "tags": [
+                    "Public Content & Engagement"
+                ],
+                "summary": "POST /api/feedback",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/cms/landing": {
+            "get": {
+                "tags": [
+                    "Public Content & Engagement"
+                ],
+                "summary": "GET /api/cms/landing",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                }
+            }
+        },
+        "/api/faq": {
+            "get": {
+                "tags": [
+                    "Public Content & Engagement"
+                ],
+                "summary": "GET /api/faq",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                }
+            }
+        },
+        "/api/plans": {
+            "get": {
+                "tags": [
+                    "Public Content & Engagement"
+                ],
+                "summary": "GET /api/plans",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                }
+            }
+        },
+        "/api/users/overview": {
+            "get": {
+                "tags": [
+                    "Attendee Dashboard & Account"
+                ],
+                "summary": "GET /api/users/overview",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/users/settings": {
+            "get": {
+                "tags": [
+                    "Attendee Dashboard & Account"
+                ],
+                "summary": "GET /api/users/settings",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "patch": {
+                "tags": [
+                    "Attendee Dashboard & Account"
+                ],
+                "summary": "PATCH /api/users/settings",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/users/profile": {
+            "patch": {
+                "tags": [
+                    "Attendee Dashboard & Account"
+                ],
+                "summary": "PATCH /api/users/profile",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/users/avatar": {
+            "post": {
+                "tags": [
+                    "Attendee Dashboard & Account"
+                ],
+                "summary": "POST /api/users/avatar",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/users/password": {
+            "patch": {
+                "tags": [
+                    "Attendee Dashboard & Account"
+                ],
+                "summary": "PATCH /api/users/password",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/users/notifications": {
+            "get": {
+                "tags": [
+                    "Attendee Dashboard & Account"
+                ],
+                "summary": "GET /api/users/notifications",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/users/notifications/{id}/read": {
+            "patch": {
+                "tags": [
+                    "Attendee Dashboard & Account"
+                ],
+                "summary": "PATCH /api/users/notifications/{id}/read",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/users/notifications/read-all": {
+            "post": {
+                "tags": [
+                    "Attendee Dashboard & Account"
+                ],
+                "summary": "POST /api/users/notifications/read-all",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/users/wallet": {
+            "get": {
+                "tags": [
+                    "Attendee Dashboard & Account"
+                ],
+                "summary": "GET /api/users/wallet",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/users/wallet/transactions": {
+            "get": {
+                "tags": [
+                    "Attendee Dashboard & Account"
+                ],
+                "summary": "GET /api/users/wallet/transactions",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/users/wallet/topup": {
+            "post": {
+                "tags": [
+                    "Attendee Dashboard & Account"
+                ],
+                "summary": "POST /api/users/wallet/topup",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/users/gate-status": {
+            "get": {
+                "tags": [
+                    "Attendee Dashboard & Account"
+                ],
+                "summary": "GET /api/users/gate-status",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/users/tickets": {
+            "get": {
+                "tags": [
+                    "Attendee Dashboard & Account"
+                ],
+                "summary": "GET /api/users/tickets",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/wishlist": {
+            "get": {
+                "tags": [
+                    "Attendee Dashboard & Account"
+                ],
+                "summary": "GET /api/wishlist",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Attendee Dashboard & Account"
+                ],
+                "summary": "DELETE /api/wishlist",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/wishlist/{eventId}": {
+            "post": {
+                "tags": [
+                    "Attendee Dashboard & Account"
+                ],
+                "summary": "POST /api/wishlist/{eventId}",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "eventId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Attendee Dashboard & Account"
+                ],
+                "summary": "DELETE /api/wishlist/{eventId}",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "eventId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/events/{id}/report": {
+            "post": {
+                "tags": [
+                    "Public Content & Engagement"
+                ],
+                "summary": "POST /api/events/{id}/report",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/events/{id}/inquiries": {
+            "post": {
+                "tags": [
+                    "Public Content & Engagement"
+                ],
+                "summary": "POST /api/events/{id}/inquiries",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/orders/checkout": {
+            "post": {
+                "tags": [
+                    "Booking & Ticketing"
+                ],
+                "summary": "POST /api/orders/checkout",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "eventId": "evt_dumba_2026",
+                                    "tickets": [
+                                        {
+                                            "ticketId": "tkt_regular",
+                                            "quantity": 2,
+                                            "price": 50
+                                        }
+                                    ],
+                                    "attendees": [
+                                        {
+                                            "name": "Kofi Owusu",
+                                            "email": "kofi@example.com",
+                                            "ticketName": "Regular Pass"
+                                        },
+                                        {
+                                            "name": "Ama Mensah",
+                                            "email": "ama@example.com",
+                                            "ticketName": "Regular Pass"
+                                        }
+                                    ],
+                                    "couponCode": "WAALA25",
+                                    "paymentMethod": "momo",
+                                    "momoDetails": {
+                                        "network": "MTN",
+                                        "phone": "+233249990000"
+                                    },
+                                    "subtotal": 100,
+                                    "discount": 25,
+                                    "total": 75
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/payments/paystack/initialize": {
+            "post": {
+                "tags": [
+                    "Payment Gateways (Cards & Alternative Channels)"
+                ],
+                "summary": "POST /api/payments/paystack/initialize",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/payments/paystack/verify/{reference}": {
+            "get": {
+                "tags": [
+                    "Payment Gateways (Cards & Alternative Channels)"
+                ],
+                "summary": "GET /api/payments/paystack/verify/{reference}",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "reference",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/payments/flutterwave/initialize": {
+            "post": {
+                "tags": [
+                    "Payment Gateways (Cards & Alternative Channels)"
+                ],
+                "summary": "POST /api/payments/flutterwave/initialize",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/payments/flutterwave/verify/{tx_ref}": {
+            "get": {
+                "tags": [
+                    "Payment Gateways (Cards & Alternative Channels)"
+                ],
+                "summary": "GET /api/payments/flutterwave/verify/{tx_ref}",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "tx_ref",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/payments/momo/ussd-prompt": {
+            "post": {
+                "tags": [
+                    "Payment Gateways (Cards & Alternative Channels)"
+                ],
+                "summary": "POST /api/payments/momo/ussd-prompt",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "orderId": "ORD-2026-8819",
+                                    "network": "MTN",
+                                    "phone": "+233249990000",
+                                    "amount": 75
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/orders/{orderId}": {
+            "get": {
+                "tags": [
+                    "Booking & Ticketing"
+                ],
+                "summary": "GET /api/orders/{orderId}",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "orderId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/orders/{orderId}/tickets.pdf": {
+            "get": {
+                "tags": [
+                    "Booking & Ticketing"
+                ],
+                "summary": "GET /api/orders/{orderId}/tickets.pdf",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "orderId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/orders/{orderId}/calendar.ics": {
+            "get": {
+                "tags": [
+                    "Booking & Ticketing"
+                ],
+                "summary": "GET /api/orders/{orderId}/calendar.ics",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "orderId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/tickets/{ticketCode}/transfer": {
+            "post": {
+                "tags": [
+                    "Booking & Ticketing"
+                ],
+                "summary": "POST /api/tickets/{ticketCode}/transfer",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "ticketCode",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/coupons/validate": {
+            "post": {
+                "tags": [
+                    "Booking & Ticketing"
+                ],
+                "summary": "POST /api/coupons/validate",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "code": "WAALA25",
+                                    "eventId": "evt_dumba_2026",
+                                    "subtotal": 150
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/payments/webhook": {
+            "post": {
+                "tags": [
+                    "Payment Gateways (Cards & Alternative Channels)"
+                ],
+                "summary": "POST /api/payments/webhook",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/organizer/overview": {
+            "get": {
+                "tags": [
+                    "Organizer Portal"
+                ],
+                "summary": "GET /api/organizer/overview",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/organizer/events": {
+            "get": {
+                "tags": [
+                    "Organizer Portal"
+                ],
+                "summary": "GET /api/organizer/events",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Organizer Portal"
+                ],
+                "summary": "POST /api/organizer/events",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/organizer/events/drafts": {
+            "get": {
+                "tags": [
+                    "Organizer Portal"
+                ],
+                "summary": "GET /api/organizer/events/drafts",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/organizer/events/drafts/{id}": {
+            "delete": {
+                "tags": [
+                    "Organizer Portal"
+                ],
+                "summary": "DELETE /api/organizer/events/drafts/{id}",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/organizer/events/{id}/analytics": {
+            "get": {
+                "tags": [
+                    "Organizer Portal"
+                ],
+                "summary": "GET /api/organizer/events/{id}/analytics",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/organizer/events/draft": {
+            "post": {
+                "tags": [
+                    "Organizer Portal"
+                ],
+                "summary": "POST /api/organizer/events/draft",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/organizer/events/{id}": {
+            "put": {
+                "tags": [
+                    "Organizer Portal"
+                ],
+                "summary": "PUT /api/organizer/events/{id}",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Organizer Portal"
+                ],
+                "summary": "DELETE /api/organizer/events/{id}",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/organizer/events/{id}/unpublish": {
+            "patch": {
+                "tags": [
+                    "Organizer Portal"
+                ],
+                "summary": "PATCH /api/organizer/events/{id}/unpublish",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/organizer/media/upload": {
+            "post": {
+                "tags": [
+                    "Organizer Portal"
+                ],
+                "summary": "POST /api/organizer/media/upload",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/organizer/orders": {
+            "get": {
+                "tags": [
+                    "Organizer Portal"
+                ],
+                "summary": "GET /api/organizer/orders",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/organizer/orders/export-csv": {
+            "get": {
+                "tags": [
+                    "Organizer Portal"
+                ],
+                "summary": "GET /api/organizer/orders/export-csv",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/organizer/coupons": {
+            "get": {
+                "tags": [
+                    "Organizer Portal"
+                ],
+                "summary": "GET /api/organizer/coupons",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Organizer Portal"
+                ],
+                "summary": "POST /api/organizer/coupons",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/organizer/coupons/{id}": {
+            "delete": {
+                "tags": [
+                    "Organizer Portal"
+                ],
+                "summary": "DELETE /api/organizer/coupons/{id}",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/organizer/guests": {
+            "get": {
+                "tags": [
+                    "Organizer Portal"
+                ],
+                "summary": "GET /api/organizer/guests",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/organizer/guests/export-csv": {
+            "get": {
+                "tags": [
+                    "Organizer Portal"
+                ],
+                "summary": "GET /api/organizer/guests/export-csv",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/organizer/guests/comps": {
+            "post": {
+                "tags": [
+                    "Organizer Portal"
+                ],
+                "summary": "POST /api/organizer/guests/comps",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/organizer/scanner/check-in": {
+            "post": {
+                "tags": [
+                    "Organizer Portal"
+                ],
+                "summary": "POST /api/organizer/scanner/check-in",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "code": "EP-2026-DUMBA-8819",
+                                    "eventId": "evt_dumba_2026"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/organizer/scanner/check-in/{ticketCode}": {
+            "delete": {
+                "tags": [
+                    "Organizer Portal"
+                ],
+                "summary": "DELETE /api/organizer/scanner/check-in/{ticketCode}",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "ticketCode",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/organizer/gate-violations": {
+            "post": {
+                "tags": [
+                    "Organizer Portal"
+                ],
+                "summary": "POST /api/organizer/gate-violations",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/organizer/payouts": {
+            "get": {
+                "tags": [
+                    "Organizer Portal"
+                ],
+                "summary": "GET /api/organizer/payouts",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/organizer/payouts/request": {
+            "post": {
+                "tags": [
+                    "Organizer Portal"
+                ],
+                "summary": "POST /api/organizer/payouts/request",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/admin/overview": {
+            "get": {
+                "tags": [
+                    "Administration & Moderation"
+                ],
+                "summary": "GET /api/admin/overview",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/admin/organizers": {
+            "get": {
+                "tags": [
+                    "Administration & Moderation"
+                ],
+                "summary": "GET /api/admin/organizers",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/admin/organizers/{id}/commission": {
+            "patch": {
+                "tags": [
+                    "Administration & Moderation"
+                ],
+                "summary": "PATCH /api/admin/organizers/{id}/commission",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/admin/organizers/{id}/verify": {
+            "patch": {
+                "tags": [
+                    "Administration & Moderation"
+                ],
+                "summary": "PATCH /api/admin/organizers/{id}/verify",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/admin/organizers/{id}/reject": {
+            "patch": {
+                "tags": [
+                    "Administration & Moderation"
+                ],
+                "summary": "PATCH /api/admin/organizers/{id}/reject",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/admin/organizers/{id}/suspend": {
+            "patch": {
+                "tags": [
+                    "Administration & Moderation"
+                ],
+                "summary": "PATCH /api/admin/organizers/{id}/suspend",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/admin/events": {
+            "get": {
+                "tags": [
+                    "Administration & Moderation"
+                ],
+                "summary": "GET /api/admin/events",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/admin/events/{id}": {
+            "delete": {
+                "tags": [
+                    "Administration & Moderation"
+                ],
+                "summary": "DELETE /api/admin/events/{id}",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/admin/events/{id}/featured": {
+            "patch": {
+                "tags": [
+                    "Administration & Moderation"
+                ],
+                "summary": "PATCH /api/admin/events/{id}/featured",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/admin/events/{id}/status": {
+            "patch": {
+                "tags": [
+                    "Administration & Moderation"
+                ],
+                "summary": "PATCH /api/admin/events/{id}/status",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/admin/users": {
+            "get": {
+                "tags": [
+                    "Administration & Moderation"
+                ],
+                "summary": "GET /api/admin/users",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/admin/users/{id}": {
+            "get": {
+                "tags": [
+                    "Administration & Moderation"
+                ],
+                "summary": "GET /api/admin/users/{id}",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Administration & Moderation"
+                ],
+                "summary": "DELETE /api/admin/users/{id}",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/admin/users/{id}/role": {
+            "patch": {
+                "tags": [
+                    "Administration & Moderation"
+                ],
+                "summary": "PATCH /api/admin/users/{id}/role",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/admin/users/{id}/status": {
+            "patch": {
+                "tags": [
+                    "Administration & Moderation"
+                ],
+                "summary": "PATCH /api/admin/users/{id}/status",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/admin/gate-violations": {
+            "post": {
+                "tags": [
+                    "Administration & Moderation"
+                ],
+                "summary": "POST /api/admin/gate-violations",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            },
+            "get": {
+                "tags": [
+                    "Administration & Moderation"
+                ],
+                "summary": "GET /api/admin/gate-violations",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/admin/gate-violations/{userId}": {
+            "delete": {
+                "tags": [
+                    "Administration & Moderation"
+                ],
+                "summary": "DELETE /api/admin/gate-violations/{userId}",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/admin/orders": {
+            "get": {
+                "tags": [
+                    "Administration & Moderation"
+                ],
+                "summary": "GET /api/admin/orders",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/admin/orders/export-csv": {
+            "get": {
+                "tags": [
+                    "Administration & Moderation"
+                ],
+                "summary": "GET /api/admin/orders/export-csv",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/admin/orders/{id}": {
+            "get": {
+                "tags": [
+                    "Administration & Moderation"
+                ],
+                "summary": "GET /api/admin/orders/{id}",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/admin/orders/{id}/refund": {
+            "post": {
+                "tags": [
+                    "Administration & Moderation"
+                ],
+                "summary": "POST /api/admin/orders/{id}/refund",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/admin/cms": {
+            "get": {
+                "tags": [
+                    "Administration & Moderation"
+                ],
+                "summary": "GET /api/admin/cms",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/admin/cms/hero": {
+            "put": {
+                "tags": [
+                    "Administration & Moderation"
+                ],
+                "summary": "PUT /api/admin/cms/hero",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/admin/cms/spotlight": {
+            "put": {
+                "tags": [
+                    "Administration & Moderation"
+                ],
+                "summary": "PUT /api/admin/cms/spotlight",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/admin/cms/testimonials": {
+            "post": {
+                "tags": [
+                    "Administration & Moderation"
+                ],
+                "summary": "POST /api/admin/cms/testimonials",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/admin/cms/testimonials/{id}": {
+            "put": {
+                "tags": [
+                    "Administration & Moderation"
+                ],
+                "summary": "PUT /api/admin/cms/testimonials/{id}",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Administration & Moderation"
+                ],
+                "summary": "DELETE /api/admin/cms/testimonials/{id}",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/admin/cms/blog": {
+            "post": {
+                "tags": [
+                    "Administration & Moderation"
+                ],
+                "summary": "POST /api/admin/cms/blog",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/admin/cms/blog/{id}": {
+            "put": {
+                "tags": [
+                    "Administration & Moderation"
+                ],
+                "summary": "PUT /api/admin/cms/blog/{id}",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Administration & Moderation"
+                ],
+                "summary": "DELETE /api/admin/cms/blog/{id}",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/admin/cms/reset": {
+            "post": {
+                "tags": [
+                    "Administration & Moderation"
+                ],
+                "summary": "POST /api/admin/cms/reset",
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {}
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        }
+    }
+}

@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600" width="900" height="600" role="img">
+<defs>
+<linearGradient id="g54659" gradientTransform="rotate(108)">
+<stop offset="0%" stop-color="#059669"/>
+<stop offset="60%" stop-color="#34d399"/>
+<stop offset="100%" stop-color="#a7f3d0"/>
+</linearGradient>
+<radialGradient id="r54659" cx="30%" cy="20%">
+<stop offset="0%" stop-color="#ffffff" stop-opacity=".45"/>
+<stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+</radialGradient>
+<filter id="b54659" x="-30%" y="-30%" width="160%" height="160%">
+<feGaussianBlur stdDeviation="42"/>
+</filter>
+</defs>
+<rect width="900" height="600" fill="url(#g54659)"/>
+<ellipse cx="452" cy="54" rx="224" ry="161" fill="#fff" opacity="0.130" filter="url(#b54659)"/><ellipse cx="113" cy="38" rx="301" ry="217" fill="#fff" opacity="0.063" filter="url(#b54659)"/><ellipse cx="260" cy="470" rx="159" ry="114" fill="#fff" opacity="0.055" filter="url(#b54659)"/><ellipse cx="293" cy="59" rx="108" ry="78" fill="#fff" opacity="0.149" filter="url(#b54659)"/><ellipse cx="487" cy="284" rx="191" ry="138" fill="#fff" opacity="0.122" filter="url(#b54659)"/>
+<path d="M -40 150 Q 225 93 450 150 T 940 150" fill="none" stroke="#fff" stroke-opacity="0.300" stroke-width="3.0" stroke-linecap="round"/><path d="M -40 222 Q 225 175 450 222 T 940 222" fill="none" stroke="#fff" stroke-opacity="0.265" stroke-width="2.7" stroke-linecap="round"/><path d="M -40 294 Q 225 244 450 294 T 940 294" fill="none" stroke="#fff" stroke-opacity="0.230" stroke-width="2.4" stroke-linecap="round"/><path d="M -40 366 Q 225 305 450 366 T 940 366" fill="none" stroke="#fff" stroke-opacity="0.195" stroke-width="2.1" stroke-linecap="round"/><path d="M -40 438 Q 225 410 450 438 T 940 438" fill="none" stroke="#fff" stroke-opacity="0.160" stroke-width="1.8" stroke-linecap="round"/><path d="M -40 510 Q 225 483 450 510 T 940 510" fill="none" stroke="#fff" stroke-opacity="0.125" stroke-width="1.5" stroke-linecap="round"/>
+<rect width="900" height="600" fill="url(#r54659)"/>
+</svg>

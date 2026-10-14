@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" width="1920" height="1080" preserveAspectRatio="xMidYMid slice" role="img">
+<defs>
+<linearGradient id="base61830" gradientTransform="rotate(119)">
+<stop offset="0%" stop-color="#0b0b2e"/>
+<stop offset="55%" stop-color="#384a9a"/>
+<stop offset="100%" stop-color="#0b0b2e"/>
+</linearGradient>
+<filter id="soft61830" x="-40%" y="-40%" width="180%" height="180%">
+<feGaussianBlur stdDeviation="120"/>
+</filter>
+<linearGradient id="sweep61830" x1="0" y1="0" x2="1" y2="0">
+<stop offset="0%" stop-color="#ffffff" stop-opacity="0"/>
+<stop offset="50%" stop-color="#ffffff" stop-opacity=".10"/>
+<stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+</linearGradient>
+</defs>
+<rect width="1920" height="1080" fill="url(#base61830)"/>
+<circle class="orb o0" cx="1336" cy="164" r="536" fill="#384a9a" opacity="0.30" filter="url(#soft61830)">
+<animateTransform attributeName="transform" type="translate" values="0 0; 133 128; 0 0" dur="40.7s" repeatCount="indefinite" calcMode="spline" keySplines="0.45 0 0.55 1; 0.45 0 0.55 1" keyTimes="0; 0.5; 1"/>
+</circle>
+<circle class="orb o1" cx="299" cy="981" r="277" fill="#0ea5e9" opacity="0.32" filter="url(#soft61830)">
+<animateTransform attributeName="transform" type="translate" values="0 0; 134 -108; 0 0" dur="51.8s" repeatCount="indefinite" calcMode="spline" keySplines="0.45 0 0.55 1; 0.45 0 0.55 1" keyTimes="0; 0.5; 1"/>
+</circle>
+<circle class="orb o2" cx="1044" cy="616" r="296" fill="#ff7d11" opacity="0.33" filter="url(#soft61830)">
+<animateTransform attributeName="transform" type="translate" values="0 0; 76 -28; 0 0" dur="31.1s" repeatCount="indefinite" calcMode="spline" keySplines="0.45 0 0.55 1; 0.45 0 0.55 1" keyTimes="0; 0.5; 1"/>
+</circle>
+<circle class="orb o3" cx="127" cy="156" r="463" fill="#ffffff" opacity="0.29" filter="url(#soft61830)">
+<animateTransform attributeName="transform" type="translate" values="0 0; -148 73; 0 0" dur="43.0s" repeatCount="indefinite" calcMode="spline" keySplines="0.45 0 0.55 1; 0.45 0 0.55 1" keyTimes="0; 0.5; 1"/>
+</circle>
+<circle class="orb o4" cx="270" cy="852" r="274" fill="#384a9a" opacity="0.21" filter="url(#soft61830)">
+<animateTransform attributeName="transform" type="translate" values="0 0; -34 -58; 0 0" dur="41.8s" repeatCount="indefinite" calcMode="spline" keySplines="0.45 0 0.55 1; 0.45 0 0.55 1" keyTimes="0; 0.5; 1"/>
+</circle>
+<circle class="orb o5" cx="104" cy="522" r="420" fill="#0ea5e9" opacity="0.44" filter="url(#soft61830)">
+<animateTransform attributeName="transform" type="translate" values="0 0; -125 78; 0 0" dur="35.9s" repeatCount="indefinite" calcMode="spline" keySplines="0.45 0 0.55 1; 0.45 0 0.55 1" keyTimes="0; 0.5; 1"/>
+</circle>
+<rect width="1056" height="1080" fill="url(#sweep61830)">
+<animate attributeName="x" values="-1152;1920;-1152" dur="42.1s" repeatCount="indefinite"/>
+</rect>
+<rect width="1920" height="1080" fill="#0b0b2e" opacity=".28"/>
+</svg>

@@ -1,0 +1,2144 @@
+WINDOW ERROR: Uncaught RangeError: Invalid time value RangeError: Invalid time value
+    at calendarChip (http://localhost:5173/src/lib/utils.js:54:65)
+    at http://localhost:5173/src/components/layout/SearchDialog.jsx:183:24
+    at Array.map (<anonymous>)
+    at SearchDialog (http://localhost:5173/src/components/layout/SearchDialog.jsx:182:24)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:11548:26)
+    at updateFunctionComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:14582:28)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:15924:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:3699:24)
+    at invokeGuardedCallback (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:3733:39)
+WINDOW ERROR: Uncaught RangeError: Invalid time value RangeError: Invalid time value
+    at calendarChip (http://localhost:5173/src/lib/utils.js:54:65)
+    at http://localhost:5173/src/components/layout/SearchDialog.jsx:183:24
+    at Array.map (<anonymous>)
+    at SearchDialog (http://localhost:5173/src/components/layout/SearchDialog.jsx:182:24)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:11548:26)
+    at updateFunctionComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:14582:28)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:15924:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:3699:24)
+    at invokeGuardedCallback (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:3733:39)
+CONSOLE ERROR: The above error occurred in the <SearchDialog> component:
+
+    at SearchDialog (http://localhost:5173/src/components/layout/SearchDialog.jsx:30:32)
+    at Navbar (http://localhost:5173/src/components/layout/Navbar.jsx:75:35)
+    at div
+    at Layout
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=34749df5:4122:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=34749df5:4592:5)
+    at Suspense
+    at CartProvider (http://localhost:5173/src/context/CartContext.jsx:24:32)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.jsx:25:32)
+    at StoreProvider (http://localhost:5173/src/context/StoreContext.jsx:195:33)
+    at WishlistProvider (http://localhost:5173/src/context/WishlistContext.jsx:43:36)
+    at LocationProvider (http://localhost:5173/src/context/LocationContext.jsx:51:36)
+    at ToastProvider (http://localhost:5173/src/context/ToastContext.jsx:28:33)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.jsx:27:33)
+    at App
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=34749df5:4535:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=34749df5:5273:5)
+    at _a (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=4d942d02:624:5)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=940579c3:26:30)
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+WINDOW ERROR: Uncaught RangeError: Invalid time value RangeError: Invalid time value
+    at calendarChip (http://localhost:5173/src/lib/utils.js:54:65)
+    at http://localhost:5173/src/components/layout/SearchDialog.jsx:183:24
+    at Array.map (<anonymous>)
+    at SearchDialog (http://localhost:5173/src/components/layout/SearchDialog.jsx:182:24)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:11548:26)
+    at updateFunctionComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:14582:28)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:15924:22)
+    at beginWork$1 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:19753:22)
+    at performUnitOfWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:19198:20)
+    at workLoopSync (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:19137:13)
+WINDOW ERROR: Uncaught RangeError: Invalid time value RangeError: Invalid time value
+    at calendarChip (http://localhost:5173/src/lib/utils.js:54:65)
+    at http://localhost:5173/src/components/layout/SearchDialog.jsx:183:24
+    at Array.map (<anonymous>)
+    at SearchDialog (http://localhost:5173/src/components/layout/SearchDialog.jsx:182:24)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:11548:26)
+    at updateFunctionComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:14582:28)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:15924:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:3699:24)
+    at invokeGuardedCallback (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:3733:39)
+WINDOW ERROR: Uncaught RangeError: Invalid time value RangeError: Invalid time value
+    at calendarChip (http://localhost:5173/src/lib/utils.js:54:65)
+    at http://localhost:5173/src/components/layout/SearchDialog.jsx:183:24
+    at Array.map (<anonymous>)
+    at SearchDialog (http://localhost:5173/src/components/layout/SearchDialog.jsx:182:24)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:11548:26)
+    at updateFunctionComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:14582:28)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:15924:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:3699:24)
+    at invokeGuardedCallback (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:3733:39)
+CONSOLE ERROR: The above error occurred in the <SearchDialog> component:
+
+    at SearchDialog (http://localhost:5173/src/components/layout/SearchDialog.jsx:30:32)
+    at Navbar (http://localhost:5173/src/components/layout/Navbar.jsx:75:35)
+    at div
+    at Layout
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=34749df5:4122:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=34749df5:4592:5)
+    at Suspense
+    at CartProvider (http://localhost:5173/src/context/CartContext.jsx:24:32)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.jsx:25:32)
+    at StoreProvider (http://localhost:5173/src/context/StoreContext.jsx:195:33)
+    at WishlistProvider (http://localhost:5173/src/context/WishlistContext.jsx:43:36)
+    at LocationProvider (http://localhost:5173/src/context/LocationContext.jsx:51:36)
+    at ToastProvider (http://localhost:5173/src/context/ToastContext.jsx:28:33)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.jsx:27:33)
+    at App
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=34749df5:4535:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=34749df5:5273:5)
+    at _a (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=4d942d02:624:5)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=940579c3:26:30)
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+WINDOW ERROR: Uncaught RangeError: Invalid time value RangeError: Invalid time value
+    at calendarChip (http://localhost:5173/src/lib/utils.js:54:65)
+    at http://localhost:5173/src/components/layout/SearchDialog.jsx:183:24
+    at Array.map (<anonymous>)
+    at SearchDialog (http://localhost:5173/src/components/layout/SearchDialog.jsx:182:24)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:11548:26)
+    at updateFunctionComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:14582:28)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:15924:22)
+    at beginWork$1 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:19753:22)
+    at performUnitOfWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:19198:20)
+    at workLoopSync (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:19137:13)
+WINDOW ERROR: Uncaught RangeError: Invalid time value RangeError: Invalid time value
+    at calendarChip (http://localhost:5173/src/lib/utils.js:54:65)
+    at http://localhost:5173/src/components/layout/SearchDialog.jsx:183:24
+    at Array.map (<anonymous>)
+    at SearchDialog (http://localhost:5173/src/components/layout/SearchDialog.jsx:182:24)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:11548:26)
+    at updateFunctionComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:14582:28)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:15924:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:3699:24)
+    at invokeGuardedCallback (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:3733:39)
+WINDOW ERROR: Uncaught RangeError: Invalid time value RangeError: Invalid time value
+    at calendarChip (http://localhost:5173/src/lib/utils.js:54:65)
+    at http://localhost:5173/src/components/layout/SearchDialog.jsx:183:24
+    at Array.map (<anonymous>)
+    at SearchDialog (http://localhost:5173/src/components/layout/SearchDialog.jsx:182:24)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:11548:26)
+    at updateFunctionComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:14582:28)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:15924:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:3699:24)
+    at invokeGuardedCallback (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:3733:39)
+CONSOLE ERROR: The above error occurred in the <SearchDialog> component:
+
+    at SearchDialog (http://localhost:5173/src/components/layout/SearchDialog.jsx:30:32)
+    at Navbar (http://localhost:5173/src/components/layout/Navbar.jsx:75:35)
+    at div
+    at Layout
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=34749df5:4122:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=34749df5:4592:5)
+    at Suspense
+    at CartProvider (http://localhost:5173/src/context/CartContext.jsx:24:32)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.jsx:25:32)
+    at StoreProvider (http://localhost:5173/src/context/StoreContext.jsx:195:33)
+    at WishlistProvider (http://localhost:5173/src/context/WishlistContext.jsx:43:36)
+    at LocationProvider (http://localhost:5173/src/context/LocationContext.jsx:51:36)
+    at ToastProvider (http://localhost:5173/src/context/ToastContext.jsx:28:33)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.jsx:27:33)
+    at App
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=34749df5:4535:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=34749df5:5273:5)
+    at _a (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=4d942d02:624:5)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=940579c3:26:30)
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+WINDOW ERROR: Uncaught RangeError: Invalid time value RangeError: Invalid time value
+    at calendarChip (http://localhost:5173/src/lib/utils.js:54:65)
+    at http://localhost:5173/src/components/layout/SearchDialog.jsx:183:24
+    at Array.map (<anonymous>)
+    at SearchDialog (http://localhost:5173/src/components/layout/SearchDialog.jsx:182:24)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:11548:26)
+    at updateFunctionComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:14582:28)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:15924:22)
+    at beginWork$1 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:19753:22)
+    at performUnitOfWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:19198:20)
+    at workLoopSync (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:19137:13)
+WINDOW ERROR: Uncaught RangeError: Invalid time value RangeError: Invalid time value
+    at calendarChip (http://localhost:5173/src/lib/utils.js:54:65)
+    at http://localhost:5173/src/components/layout/SearchDialog.jsx:183:24
+    at Array.map (<anonymous>)
+    at SearchDialog (http://localhost:5173/src/components/layout/SearchDialog.jsx:182:24)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:11548:26)
+    at updateFunctionComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:14582:28)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:15924:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:3699:24)
+    at invokeGuardedCallback (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:3733:39)
+WINDOW ERROR: Uncaught RangeError: Invalid time value RangeError: Invalid time value
+    at calendarChip (http://localhost:5173/src/lib/utils.js:54:65)
+    at http://localhost:5173/src/components/layout/SearchDialog.jsx:183:24
+    at Array.map (<anonymous>)
+    at SearchDialog (http://localhost:5173/src/components/layout/SearchDialog.jsx:182:24)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:11548:26)
+    at updateFunctionComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:14582:28)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:15924:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:3699:24)
+    at invokeGuardedCallback (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:3733:39)
+CONSOLE ERROR: The above error occurred in the <SearchDialog> component:
+
+    at SearchDialog (http://localhost:5173/src/components/layout/SearchDialog.jsx:30:32)
+    at Navbar (http://localhost:5173/src/components/layout/Navbar.jsx:75:35)
+    at div
+    at Layout
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=34749df5:4122:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=34749df5:4592:5)
+    at Suspense
+    at CartProvider (http://localhost:5173/src/context/CartContext.jsx:24:32)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.jsx:25:32)
+    at StoreProvider (http://localhost:5173/src/context/StoreContext.jsx:195:33)
+    at WishlistProvider (http://localhost:5173/src/context/WishlistContext.jsx:43:36)
+    at LocationProvider (http://localhost:5173/src/context/LocationContext.jsx:51:36)
+    at ToastProvider (http://localhost:5173/src/context/ToastContext.jsx:28:33)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.jsx:27:33)
+    at App
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=34749df5:4535:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=34749df5:5273:5)
+    at _a (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=4d942d02:624:5)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=940579c3:26:30)
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+WINDOW ERROR: Uncaught RangeError: Invalid time value RangeError: Invalid time value
+    at calendarChip (http://localhost:5173/src/lib/utils.js:54:65)
+    at http://localhost:5173/src/components/layout/SearchDialog.jsx:183:24
+    at Array.map (<anonymous>)
+    at SearchDialog (http://localhost:5173/src/components/layout/SearchDialog.jsx:182:24)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:11548:26)
+    at updateFunctionComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:14582:28)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:15924:22)
+    at beginWork$1 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:19753:22)
+    at performUnitOfWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:19198:20)
+    at workLoopSync (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=90e8b3e3:19137:13)
+WINDOW ERROR: Uncaught RangeError: Invalid time value RangeError: Invalid time value
+    at calendarChip (http://localhost:5173/src/lib/utils.js:54:65)
+    at http://localhost:5173/src/components/layout/SearchDialog.jsx:183:24
+    at Array.map (<anonymous>)
+    at SearchDialog (http://localhost:5173/src/components/layout/SearchDialog.jsx:182:24)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:11548:26)
+    at updateFunctionComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14582:28)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:15924:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3699:24)
+    at invokeGuardedCallback (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3733:39)
+WINDOW ERROR: Uncaught RangeError: Invalid time value RangeError: Invalid time value
+    at formatDate (http://localhost:5173/src/lib/utils.js:32:6)
+    at formatDateRange (http://localhost:5173/src/lib/utils.js:46:26)
+    at SpotlightBanner (http://localhost:5173/src/components/home/SpotlightBanner.jsx:111:13)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:11548:26)
+    at updateFunctionComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14582:28)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:15924:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3699:24)
+    at invokeGuardedCallback (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3733:39)
+    at beginWork$1 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19765:15)
+WINDOW ERROR: Uncaught RangeError: Invalid time value RangeError: Invalid time value
+    at calendarChip (http://localhost:5173/src/lib/utils.js:54:65)
+    at http://localhost:5173/src/components/layout/SearchDialog.jsx:183:24
+    at Array.map (<anonymous>)
+    at SearchDialog (http://localhost:5173/src/components/layout/SearchDialog.jsx:182:24)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:11548:26)
+    at updateFunctionComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14582:28)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:15924:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3699:24)
+    at invokeGuardedCallback (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3733:39)
+WINDOW ERROR: Uncaught RangeError: Invalid time value RangeError: Invalid time value
+    at formatDate (http://localhost:5173/src/lib/utils.js:32:6)
+    at formatDateRange (http://localhost:5173/src/lib/utils.js:46:26)
+    at SpotlightBanner (http://localhost:5173/src/components/home/SpotlightBanner.jsx:111:13)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:11548:26)
+    at updateFunctionComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14582:28)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:15924:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3699:24)
+    at invokeGuardedCallback (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3733:39)
+    at beginWork$1 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19765:15)
+CONSOLE ERROR: The above error occurred in the <SearchDialog> component:
+
+    at SearchDialog (http://localhost:5173/src/components/layout/SearchDialog.jsx:30:32)
+    at Navbar (http://localhost:5173/src/components/layout/Navbar.jsx:75:35)
+    at div
+    at Layout
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4122:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4592:5)
+    at Suspense
+    at CartProvider (http://localhost:5173/src/context/CartContext.jsx:24:32)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.jsx:25:32)
+    at StoreProvider (http://localhost:5173/src/context/StoreContext.jsx:195:33)
+    at WishlistProvider (http://localhost:5173/src/context/WishlistContext.jsx:43:36)
+    at LocationProvider (http://localhost:5173/src/context/LocationContext.jsx:51:36)
+    at ToastProvider (http://localhost:5173/src/context/ToastContext.jsx:28:33)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.jsx:27:33)
+    at App
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4535:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:5273:5)
+    at _a (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=e19e7beb:624:5)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=e19e7beb:26:30)
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+WINDOW ERROR: Uncaught RangeError: Invalid time value RangeError: Invalid time value
+    at calendarChip (http://localhost:5173/src/lib/utils.js:54:65)
+    at http://localhost:5173/src/components/layout/SearchDialog.jsx:183:24
+    at Array.map (<anonymous>)
+    at SearchDialog (http://localhost:5173/src/components/layout/SearchDialog.jsx:182:24)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:11548:26)
+    at updateFunctionComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14582:28)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:15924:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3699:24)
+    at invokeGuardedCallback (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3733:39)
+WINDOW ERROR: Uncaught RangeError: Invalid time value RangeError: Invalid time value
+    at calendarChip (http://localhost:5173/src/lib/utils.js:54:65)
+    at http://localhost:5173/src/components/layout/SearchDialog.jsx:183:24
+    at Array.map (<anonymous>)
+    at SearchDialog (http://localhost:5173/src/components/layout/SearchDialog.jsx:182:24)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:11548:26)
+    at updateFunctionComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14582:28)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:15924:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3699:24)
+    at invokeGuardedCallback (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3733:39)
+CONSOLE ERROR: The above error occurred in the <SearchDialog> component:
+
+    at SearchDialog (http://localhost:5173/src/components/layout/SearchDialog.jsx:30:32)
+    at Navbar (http://localhost:5173/src/components/layout/Navbar.jsx:75:35)
+    at div
+    at Layout
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4122:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4592:5)
+    at Suspense
+    at CartProvider (http://localhost:5173/src/context/CartContext.jsx:24:32)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.jsx:25:32)
+    at StoreProvider (http://localhost:5173/src/context/StoreContext.jsx:195:33)
+    at WishlistProvider (http://localhost:5173/src/context/WishlistContext.jsx:43:36)
+    at LocationProvider (http://localhost:5173/src/context/LocationContext.jsx:51:36)
+    at ToastProvider (http://localhost:5173/src/context/ToastContext.jsx:28:33)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.jsx:27:33)
+    at App
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4535:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:5273:5)
+    at _a (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=e19e7beb:624:5)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=e19e7beb:26:30)
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+WINDOW ERROR: Uncaught RangeError: Invalid time value RangeError: Invalid time value
+    at calendarChip (http://localhost:5173/src/lib/utils.js:54:65)
+    at http://localhost:5173/src/components/layout/SearchDialog.jsx:183:24
+    at Array.map (<anonymous>)
+    at SearchDialog (http://localhost:5173/src/components/layout/SearchDialog.jsx:182:24)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:11548:26)
+    at updateFunctionComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14582:28)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:15924:22)
+    at beginWork$1 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19753:22)
+    at performUnitOfWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19198:20)
+    at workLoopSync (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19137:13)
+WINDOW ERROR: Uncaught RangeError: Invalid time value RangeError: Invalid time value
+    at calendarChip (http://localhost:5173/src/lib/utils.js:54:65)
+    at http://localhost:5173/src/components/layout/SearchDialog.jsx:183:24
+    at Array.map (<anonymous>)
+    at SearchDialog (http://localhost:5173/src/components/layout/SearchDialog.jsx:182:24)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:11548:26)
+    at updateFunctionComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14582:28)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:15924:22)
+    at beginWork$1 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19753:22)
+    at performUnitOfWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19198:20)
+    at workLoopSync (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19137:13)
+WINDOW ERROR: Uncaught RangeError: Invalid time value RangeError: Invalid time value
+    at calendarChip (http://localhost:5173/src/lib/utils.js:54:65)
+    at http://localhost:5173/src/components/layout/SearchDialog.jsx:183:24
+    at Array.map (<anonymous>)
+    at SearchDialog (http://localhost:5173/src/components/layout/SearchDialog.jsx:182:24)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:11548:26)
+    at updateFunctionComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14582:28)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:15924:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3699:24)
+    at invokeGuardedCallback (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3733:39)
+WINDOW ERROR: Uncaught RangeError: Invalid time value RangeError: Invalid time value
+    at calendarChip (http://localhost:5173/src/lib/utils.js:54:65)
+    at http://localhost:5173/src/components/layout/SearchDialog.jsx:183:24
+    at Array.map (<anonymous>)
+    at SearchDialog (http://localhost:5173/src/components/layout/SearchDialog.jsx:182:24)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:11548:26)
+    at updateFunctionComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14582:28)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:15924:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3699:24)
+    at invokeGuardedCallback (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3733:39)
+CONSOLE ERROR: The above error occurred in the <SearchDialog> component:
+
+    at SearchDialog (http://localhost:5173/src/components/layout/SearchDialog.jsx:30:32)
+    at Navbar (http://localhost:5173/src/components/layout/Navbar.jsx:75:35)
+    at div
+    at Layout
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4122:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4592:5)
+    at Suspense
+    at CartProvider (http://localhost:5173/src/context/CartContext.jsx:24:32)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.jsx:25:32)
+    at StoreProvider (http://localhost:5173/src/context/StoreContext.jsx:195:33)
+    at WishlistProvider (http://localhost:5173/src/context/WishlistContext.jsx:43:36)
+    at LocationProvider (http://localhost:5173/src/context/LocationContext.jsx:51:36)
+    at ToastProvider (http://localhost:5173/src/context/ToastContext.jsx:28:33)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.jsx:27:33)
+    at App
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4535:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:5273:5)
+    at _a (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=e19e7beb:624:5)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=e19e7beb:26:30)
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+WINDOW ERROR: Uncaught RangeError: Invalid time value RangeError: Invalid time value
+    at calendarChip (http://localhost:5173/src/lib/utils.js:54:65)
+    at http://localhost:5173/src/components/layout/SearchDialog.jsx:183:24
+    at Array.map (<anonymous>)
+    at SearchDialog (http://localhost:5173/src/components/layout/SearchDialog.jsx:182:24)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:11548:26)
+    at updateFunctionComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14582:28)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:15924:22)
+    at beginWork$1 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19753:22)
+    at performUnitOfWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19198:20)
+    at workLoopSync (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19137:13)
+WINDOW ERROR: Uncaught RangeError: Invalid time value RangeError: Invalid time value
+    at calendarChip (http://localhost:5173/src/lib/utils.js:54:65)
+    at http://localhost:5173/src/components/layout/SearchDialog.jsx:183:24
+    at Array.map (<anonymous>)
+    at SearchDialog (http://localhost:5173/src/components/layout/SearchDialog.jsx:182:24)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:11548:26)
+    at updateFunctionComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14582:28)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:15924:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3699:24)
+    at invokeGuardedCallback (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3733:39)
+WINDOW ERROR: Uncaught RangeError: Invalid time value RangeError: Invalid time value
+    at calendarChip (http://localhost:5173/src/lib/utils.js:54:65)
+    at http://localhost:5173/src/components/layout/SearchDialog.jsx:183:24
+    at Array.map (<anonymous>)
+    at SearchDialog (http://localhost:5173/src/components/layout/SearchDialog.jsx:182:24)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:11548:26)
+    at updateFunctionComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14582:28)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:15924:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3699:24)
+    at invokeGuardedCallback (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3733:39)
+CONSOLE ERROR: The above error occurred in the <SearchDialog> component:
+
+    at SearchDialog (http://localhost:5173/src/components/layout/SearchDialog.jsx:30:32)
+    at Navbar (http://localhost:5173/src/components/layout/Navbar.jsx:75:35)
+    at div
+    at Layout
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4122:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4592:5)
+    at Suspense
+    at CartProvider (http://localhost:5173/src/context/CartContext.jsx:24:32)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.jsx:25:32)
+    at StoreProvider (http://localhost:5173/src/context/StoreContext.jsx:195:33)
+    at WishlistProvider (http://localhost:5173/src/context/WishlistContext.jsx:43:36)
+    at LocationProvider (http://localhost:5173/src/context/LocationContext.jsx:51:36)
+    at ToastProvider (http://localhost:5173/src/context/ToastContext.jsx:28:33)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.jsx:27:33)
+    at App
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4535:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:5273:5)
+    at _a (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=e19e7beb:624:5)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=e19e7beb:26:30)
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+WINDOW ERROR: Uncaught RangeError: Invalid time value RangeError: Invalid time value
+    at calendarChip (http://localhost:5173/src/lib/utils.js:54:65)
+    at http://localhost:5173/src/components/layout/SearchDialog.jsx:183:24
+    at Array.map (<anonymous>)
+    at SearchDialog (http://localhost:5173/src/components/layout/SearchDialog.jsx:182:24)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:11548:26)
+    at updateFunctionComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14582:28)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:15924:22)
+    at beginWork$1 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19753:22)
+    at performUnitOfWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19198:20)
+    at workLoopSync (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19137:13)
+WINDOW ERROR: Uncaught TypeError: Cannot read properties of undefined (reading 'toLocaleString') TypeError: Cannot read properties of undefined (reading 'toLocaleString')
+    at SpotlightBanner (http://localhost:5173/src/components/home/SpotlightBanner.jsx:135:28)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:11548:26)
+    at mountIndeterminateComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14926:21)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:15914:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3699:24)
+    at invokeGuardedCallback (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3733:39)
+    at beginWork$1 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19765:15)
+    at performUnitOfWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19198:20)
+    at workLoopSync (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19137:13)
+CONSOLE ERROR: Warning: React.jsx: type is invalid -- expected a string (for built-in components) or a class/function (for composite components) but got: %s.%s%s undefined  You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.
+
+Check your code at Footer.jsx:220. 
+    at Footer (http://localhost:5173/src/components/layout/Footer.jsx:78:29)
+    at div
+    at Layout
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4122:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4592:5)
+    at Suspense
+    at CartProvider (http://localhost:5173/src/context/CartContext.jsx:24:32)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.jsx:25:32)
+    at StoreProvider (http://localhost:5173/src/context/StoreContext.jsx:195:33)
+    at WishlistProvider (http://localhost:5173/src/context/WishlistContext.jsx:43:36)
+    at LocationProvider (http://localhost:5173/src/context/LocationContext.jsx:51:36)
+    at ToastProvider (http://localhost:5173/src/context/ToastContext.jsx:28:33)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.jsx:27:33)
+    at App
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4535:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:5273:5)
+    at _a (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=e19e7beb:624:5)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=e19e7beb:26:30)
+CONSOLE ERROR: Warning: React.jsx: type is invalid -- expected a string (for built-in components) or a class/function (for composite components) but got: %s.%s%s undefined  You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.
+
+Check your code at Footer.jsx:220. 
+    at Footer (http://localhost:5173/src/components/layout/Footer.jsx:78:29)
+    at div
+    at Layout
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4122:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4592:5)
+    at Suspense
+    at CartProvider (http://localhost:5173/src/context/CartContext.jsx:24:32)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.jsx:25:32)
+    at StoreProvider (http://localhost:5173/src/context/StoreContext.jsx:195:33)
+    at WishlistProvider (http://localhost:5173/src/context/WishlistContext.jsx:43:36)
+    at LocationProvider (http://localhost:5173/src/context/LocationContext.jsx:51:36)
+    at ToastProvider (http://localhost:5173/src/context/ToastContext.jsx:28:33)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.jsx:27:33)
+    at App
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4535:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:5273:5)
+    at _a (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=e19e7beb:624:5)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=e19e7beb:26:30)
+CONSOLE ERROR: Warning: React.jsx: type is invalid -- expected a string (for built-in components) or a class/function (for composite components) but got: %s.%s%s undefined  You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.
+
+Check your code at Footer.jsx:220. 
+    at Footer (http://localhost:5173/src/components/layout/Footer.jsx:78:29)
+    at div
+    at Layout
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4122:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4592:5)
+    at Suspense
+    at CartProvider (http://localhost:5173/src/context/CartContext.jsx:24:32)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.jsx:25:32)
+    at StoreProvider (http://localhost:5173/src/context/StoreContext.jsx:195:33)
+    at WishlistProvider (http://localhost:5173/src/context/WishlistContext.jsx:43:36)
+    at LocationProvider (http://localhost:5173/src/context/LocationContext.jsx:51:36)
+    at ToastProvider (http://localhost:5173/src/context/ToastContext.jsx:28:33)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.jsx:27:33)
+    at App
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4535:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:5273:5)
+    at _a (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=e19e7beb:624:5)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=e19e7beb:26:30)
+CONSOLE ERROR: Warning: React.jsx: type is invalid -- expected a string (for built-in components) or a class/function (for composite components) but got: %s.%s%s undefined  You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.
+
+Check your code at Footer.jsx:220. 
+    at Footer (http://localhost:5173/src/components/layout/Footer.jsx:78:29)
+    at div
+    at Layout
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4122:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4592:5)
+    at Suspense
+    at CartProvider (http://localhost:5173/src/context/CartContext.jsx:24:32)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.jsx:25:32)
+    at StoreProvider (http://localhost:5173/src/context/StoreContext.jsx:195:33)
+    at WishlistProvider (http://localhost:5173/src/context/WishlistContext.jsx:43:36)
+    at LocationProvider (http://localhost:5173/src/context/LocationContext.jsx:51:36)
+    at ToastProvider (http://localhost:5173/src/context/ToastContext.jsx:28:33)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.jsx:27:33)
+    at App
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4535:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:5273:5)
+    at _a (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=e19e7beb:624:5)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=e19e7beb:26:30)
+CONSOLE ERROR: Warning: React.jsx: type is invalid -- expected a string (for built-in components) or a class/function (for composite components) but got: %s.%s%s undefined  You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.
+
+Check your code at Footer.jsx:220. 
+    at Footer (http://localhost:5173/src/components/layout/Footer.jsx:78:29)
+    at div
+    at Layout
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4122:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4592:5)
+    at Suspense
+    at CartProvider (http://localhost:5173/src/context/CartContext.jsx:24:32)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.jsx:25:32)
+    at StoreProvider (http://localhost:5173/src/context/StoreContext.jsx:195:33)
+    at WishlistProvider (http://localhost:5173/src/context/WishlistContext.jsx:43:36)
+    at LocationProvider (http://localhost:5173/src/context/LocationContext.jsx:51:36)
+    at ToastProvider (http://localhost:5173/src/context/ToastContext.jsx:28:33)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.jsx:27:33)
+    at App
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4535:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:5273:5)
+    at _a (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=e19e7beb:624:5)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=e19e7beb:26:30)
+CONSOLE ERROR: Warning: React.jsx: type is invalid -- expected a string (for built-in components) or a class/function (for composite components) but got: %s.%s%s undefined  You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.
+
+Check your code at Footer.jsx:220. 
+    at Footer (http://localhost:5173/src/components/layout/Footer.jsx:78:29)
+    at div
+    at Layout
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4122:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4592:5)
+    at Suspense
+    at CartProvider (http://localhost:5173/src/context/CartContext.jsx:24:32)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.jsx:25:32)
+    at StoreProvider (http://localhost:5173/src/context/StoreContext.jsx:195:33)
+    at WishlistProvider (http://localhost:5173/src/context/WishlistContext.jsx:43:36)
+    at LocationProvider (http://localhost:5173/src/context/LocationContext.jsx:51:36)
+    at ToastProvider (http://localhost:5173/src/context/ToastContext.jsx:28:33)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.jsx:27:33)
+    at App
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4535:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:5273:5)
+    at _a (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=e19e7beb:624:5)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=e19e7beb:26:30)
+CONSOLE ERROR: Warning: React.jsx: type is invalid -- expected a string (for built-in components) or a class/function (for composite components) but got: %s.%s%s undefined  You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.
+
+Check your code at Footer.jsx:220. 
+    at Footer (http://localhost:5173/src/components/layout/Footer.jsx:78:29)
+    at div
+    at Layout
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4122:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4592:5)
+    at Suspense
+    at CartProvider (http://localhost:5173/src/context/CartContext.jsx:24:32)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.jsx:25:32)
+    at StoreProvider (http://localhost:5173/src/context/StoreContext.jsx:195:33)
+    at WishlistProvider (http://localhost:5173/src/context/WishlistContext.jsx:43:36)
+    at LocationProvider (http://localhost:5173/src/context/LocationContext.jsx:51:36)
+    at ToastProvider (http://localhost:5173/src/context/ToastContext.jsx:28:33)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.jsx:27:33)
+    at App
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4535:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:5273:5)
+    at _a (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=e19e7beb:624:5)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=e19e7beb:26:30)
+CONSOLE ERROR: Warning: React.jsx: type is invalid -- expected a string (for built-in components) or a class/function (for composite components) but got: %s.%s%s undefined  You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.
+
+Check your code at Footer.jsx:220. 
+    at Footer (http://localhost:5173/src/components/layout/Footer.jsx:78:29)
+    at div
+    at Layout
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4122:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4592:5)
+    at Suspense
+    at CartProvider (http://localhost:5173/src/context/CartContext.jsx:24:32)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.jsx:25:32)
+    at StoreProvider (http://localhost:5173/src/context/StoreContext.jsx:195:33)
+    at WishlistProvider (http://localhost:5173/src/context/WishlistContext.jsx:43:36)
+    at LocationProvider (http://localhost:5173/src/context/LocationContext.jsx:51:36)
+    at ToastProvider (http://localhost:5173/src/context/ToastContext.jsx:28:33)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.jsx:27:33)
+    at App
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4535:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:5273:5)
+    at _a (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=e19e7beb:624:5)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=e19e7beb:26:30)
+CONSOLE ERROR: Warning: React.jsx: type is invalid -- expected a string (for built-in components) or a class/function (for composite components) but got: %s.%s%s undefined  You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.
+
+Check your code at Footer.jsx:220. 
+    at Footer (http://localhost:5173/src/components/layout/Footer.jsx:78:29)
+    at div
+    at Layout
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4122:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4592:5)
+    at Suspense
+    at CartProvider (http://localhost:5173/src/context/CartContext.jsx:24:32)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.jsx:25:32)
+    at StoreProvider (http://localhost:5173/src/context/StoreContext.jsx:195:33)
+    at WishlistProvider (http://localhost:5173/src/context/WishlistContext.jsx:43:36)
+    at LocationProvider (http://localhost:5173/src/context/LocationContext.jsx:51:36)
+    at ToastProvider (http://localhost:5173/src/context/ToastContext.jsx:28:33)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.jsx:27:33)
+    at App
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4535:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:5273:5)
+    at _a (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=e19e7beb:624:5)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=e19e7beb:26:30)
+CONSOLE ERROR: Warning: React.jsx: type is invalid -- expected a string (for built-in components) or a class/function (for composite components) but got: %s.%s%s undefined  You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.
+
+Check your code at Footer.jsx:220. 
+    at Footer (http://localhost:5173/src/components/layout/Footer.jsx:78:29)
+    at div
+    at Layout
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4122:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4592:5)
+    at Suspense
+    at CartProvider (http://localhost:5173/src/context/CartContext.jsx:24:32)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.jsx:25:32)
+    at StoreProvider (http://localhost:5173/src/context/StoreContext.jsx:195:33)
+    at WishlistProvider (http://localhost:5173/src/context/WishlistContext.jsx:43:36)
+    at LocationProvider (http://localhost:5173/src/context/LocationContext.jsx:51:36)
+    at ToastProvider (http://localhost:5173/src/context/ToastContext.jsx:28:33)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.jsx:27:33)
+    at App
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4535:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:5273:5)
+    at _a (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=e19e7beb:624:5)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=e19e7beb:26:30)
+CONSOLE ERROR: Warning: React.jsx: type is invalid -- expected a string (for built-in components) or a class/function (for composite components) but got: %s.%s%s undefined  You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.
+
+Check your code at Footer.jsx:220. 
+    at Footer (http://localhost:5173/src/components/layout/Footer.jsx:78:29)
+    at div
+    at Layout
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4122:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4592:5)
+    at Suspense
+    at CartProvider (http://localhost:5173/src/context/CartContext.jsx:24:32)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.jsx:25:32)
+    at StoreProvider (http://localhost:5173/src/context/StoreContext.jsx:195:33)
+    at WishlistProvider (http://localhost:5173/src/context/WishlistContext.jsx:43:36)
+    at LocationProvider (http://localhost:5173/src/context/LocationContext.jsx:51:36)
+    at ToastProvider (http://localhost:5173/src/context/ToastContext.jsx:28:33)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.jsx:27:33)
+    at App
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4535:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:5273:5)
+    at _a (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=e19e7beb:624:5)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=e19e7beb:26:30)
+CONSOLE ERROR: Warning: React.jsx: type is invalid -- expected a string (for built-in components) or a class/function (for composite components) but got: %s.%s%s undefined  You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.
+
+Check your code at Footer.jsx:220. 
+    at Footer (http://localhost:5173/src/components/layout/Footer.jsx:78:29)
+    at div
+    at Layout
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4122:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4592:5)
+    at Suspense
+    at CartProvider (http://localhost:5173/src/context/CartContext.jsx:24:32)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.jsx:25:32)
+    at StoreProvider (http://localhost:5173/src/context/StoreContext.jsx:195:33)
+    at WishlistProvider (http://localhost:5173/src/context/WishlistContext.jsx:43:36)
+    at LocationProvider (http://localhost:5173/src/context/LocationContext.jsx:51:36)
+    at ToastProvider (http://localhost:5173/src/context/ToastContext.jsx:28:33)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.jsx:27:33)
+    at App
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4535:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:5273:5)
+    at _a (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=e19e7beb:624:5)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=e19e7beb:26:30)
+WINDOW ERROR: Uncaught Error: Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: undefined. You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.
+
+Check the render method of `Footer`. Error: Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: undefined. You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.
+
+Check the render method of `Footer`.
+    at createFiberFromTypeAndProps (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:20442:23)
+    at createFiberFromElement (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:20463:23)
+    at createChild (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:10089:34)
+    at reconcileChildrenArray (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:10282:33)
+    at reconcileChildFibers2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:10559:24)
+    at reconcileChildren (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14290:37)
+    at updateHostComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14807:11)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:15935:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3699:24)
+WINDOW ERROR: Uncaught Error: Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: undefined. You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.
+
+Check the render method of `Footer`. Error: Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: undefined. You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.
+
+Check the render method of `Footer`.
+    at createFiberFromTypeAndProps (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:20442:23)
+    at createFiberFromElement (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:20463:23)
+    at createChild (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:10089:34)
+    at reconcileChildrenArray (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:10282:33)
+    at reconcileChildFibers2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:10559:24)
+    at reconcileChildren (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14290:37)
+    at updateHostComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14807:11)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:15935:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3699:24)
+WINDOW ERROR: Uncaught Error: Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: undefined. You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.
+
+Check the render method of `Footer`. Error: Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: undefined. You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.
+
+Check the render method of `Footer`.
+    at createFiberFromTypeAndProps (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:20442:23)
+    at createFiberFromElement (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:20463:23)
+    at createChild (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:10089:34)
+    at reconcileChildrenArray (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:10282:33)
+    at reconcileChildFibers2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:10559:24)
+    at reconcileChildren (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14290:37)
+    at updateHostComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14807:11)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:15935:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3699:24)
+WINDOW ERROR: Uncaught Error: Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: undefined. You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.
+
+Check the render method of `Footer`. Error: Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: undefined. You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.
+
+Check the render method of `Footer`.
+    at createFiberFromTypeAndProps (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:20442:23)
+    at createFiberFromElement (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:20463:23)
+    at createChild (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:10089:34)
+    at reconcileChildrenArray (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:10282:33)
+    at reconcileChildFibers2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:10559:24)
+    at reconcileChildren (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14290:37)
+    at updateHostComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14807:11)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:15935:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3699:24)
+WINDOW ERROR: Uncaught Error: Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: undefined. You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.
+
+Check the render method of `Footer`. Error: Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: undefined. You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.
+
+Check the render method of `Footer`.
+    at createFiberFromTypeAndProps (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:20442:23)
+    at createFiberFromElement (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:20463:23)
+    at createChild (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:10089:34)
+    at reconcileChildrenArray (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:10282:33)
+    at reconcileChildFibers2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:10559:24)
+    at reconcileChildren (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14290:37)
+    at updateHostComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14807:11)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:15935:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3699:24)
+WINDOW ERROR: Uncaught Error: Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: undefined. You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.
+
+Check the render method of `Footer`. Error: Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: undefined. You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.
+
+Check the render method of `Footer`.
+    at createFiberFromTypeAndProps (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:20442:23)
+    at createFiberFromElement (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:20463:23)
+    at createChild (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:10089:34)
+    at reconcileChildrenArray (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:10282:33)
+    at reconcileChildFibers2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:10559:24)
+    at reconcileChildren (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14290:37)
+    at updateHostComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14807:11)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:15935:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3699:24)
+WINDOW ERROR: Uncaught TypeError: Cannot read properties of undefined (reading 'toLocaleString') TypeError: Cannot read properties of undefined (reading 'toLocaleString')
+    at SpotlightBanner (http://localhost:5173/src/components/home/SpotlightBanner.jsx:135:28)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:11548:26)
+    at mountIndeterminateComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14926:21)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:15914:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3699:24)
+    at invokeGuardedCallback (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3733:39)
+    at beginWork$1 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19765:15)
+    at performUnitOfWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19198:20)
+    at workLoopSync (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19137:13)
+CONSOLE ERROR: Warning: React.jsx: type is invalid -- expected a string (for built-in components) or a class/function (for composite components) but got: %s.%s%s undefined  You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.
+
+Check your code at Footer.jsx:220. 
+    at Footer (http://localhost:5173/src/components/layout/Footer.jsx:78:29)
+    at div
+    at Layout
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4122:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4592:5)
+    at Suspense
+    at CartProvider (http://localhost:5173/src/context/CartContext.jsx:24:32)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.jsx:25:32)
+    at StoreProvider (http://localhost:5173/src/context/StoreContext.jsx:195:33)
+    at WishlistProvider (http://localhost:5173/src/context/WishlistContext.jsx:43:36)
+    at LocationProvider (http://localhost:5173/src/context/LocationContext.jsx:51:36)
+    at ToastProvider (http://localhost:5173/src/context/ToastContext.jsx:28:33)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.jsx:27:33)
+    at App
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4535:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:5273:5)
+    at _a (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=e19e7beb:624:5)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=e19e7beb:26:30)
+CONSOLE ERROR: Warning: React.jsx: type is invalid -- expected a string (for built-in components) or a class/function (for composite components) but got: %s.%s%s undefined  You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.
+
+Check your code at Footer.jsx:220. 
+    at Footer (http://localhost:5173/src/components/layout/Footer.jsx:78:29)
+    at div
+    at Layout
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4122:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4592:5)
+    at Suspense
+    at CartProvider (http://localhost:5173/src/context/CartContext.jsx:24:32)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.jsx:25:32)
+    at StoreProvider (http://localhost:5173/src/context/StoreContext.jsx:195:33)
+    at WishlistProvider (http://localhost:5173/src/context/WishlistContext.jsx:43:36)
+    at LocationProvider (http://localhost:5173/src/context/LocationContext.jsx:51:36)
+    at ToastProvider (http://localhost:5173/src/context/ToastContext.jsx:28:33)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.jsx:27:33)
+    at App
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4535:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:5273:5)
+    at _a (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=e19e7beb:624:5)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=e19e7beb:26:30)
+CONSOLE ERROR: Warning: React.jsx: type is invalid -- expected a string (for built-in components) or a class/function (for composite components) but got: %s.%s%s undefined  You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.
+
+Check your code at Footer.jsx:220. 
+    at Footer (http://localhost:5173/src/components/layout/Footer.jsx:78:29)
+    at div
+    at Layout
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4122:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4592:5)
+    at Suspense
+    at CartProvider (http://localhost:5173/src/context/CartContext.jsx:24:32)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.jsx:25:32)
+    at StoreProvider (http://localhost:5173/src/context/StoreContext.jsx:195:33)
+    at WishlistProvider (http://localhost:5173/src/context/WishlistContext.jsx:43:36)
+    at LocationProvider (http://localhost:5173/src/context/LocationContext.jsx:51:36)
+    at ToastProvider (http://localhost:5173/src/context/ToastContext.jsx:28:33)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.jsx:27:33)
+    at App
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4535:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:5273:5)
+    at _a (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=e19e7beb:624:5)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=e19e7beb:26:30)
+CONSOLE ERROR: Warning: React.jsx: type is invalid -- expected a string (for built-in components) or a class/function (for composite components) but got: %s.%s%s undefined  You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.
+
+Check your code at Footer.jsx:220. 
+    at Footer (http://localhost:5173/src/components/layout/Footer.jsx:78:29)
+    at div
+    at Layout
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4122:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4592:5)
+    at Suspense
+    at CartProvider (http://localhost:5173/src/context/CartContext.jsx:24:32)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.jsx:25:32)
+    at StoreProvider (http://localhost:5173/src/context/StoreContext.jsx:195:33)
+    at WishlistProvider (http://localhost:5173/src/context/WishlistContext.jsx:43:36)
+    at LocationProvider (http://localhost:5173/src/context/LocationContext.jsx:51:36)
+    at ToastProvider (http://localhost:5173/src/context/ToastContext.jsx:28:33)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.jsx:27:33)
+    at App
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4535:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:5273:5)
+    at _a (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=e19e7beb:624:5)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=e19e7beb:26:30)
+CONSOLE ERROR: Warning: React.jsx: type is invalid -- expected a string (for built-in components) or a class/function (for composite components) but got: %s.%s%s undefined  You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.
+
+Check your code at Footer.jsx:220. 
+    at Footer (http://localhost:5173/src/components/layout/Footer.jsx:78:29)
+    at div
+    at Layout
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4122:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4592:5)
+    at Suspense
+    at CartProvider (http://localhost:5173/src/context/CartContext.jsx:24:32)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.jsx:25:32)
+    at StoreProvider (http://localhost:5173/src/context/StoreContext.jsx:195:33)
+    at WishlistProvider (http://localhost:5173/src/context/WishlistContext.jsx:43:36)
+    at LocationProvider (http://localhost:5173/src/context/LocationContext.jsx:51:36)
+    at ToastProvider (http://localhost:5173/src/context/ToastContext.jsx:28:33)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.jsx:27:33)
+    at App
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4535:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:5273:5)
+    at _a (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=e19e7beb:624:5)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=e19e7beb:26:30)
+CONSOLE ERROR: Warning: React.jsx: type is invalid -- expected a string (for built-in components) or a class/function (for composite components) but got: %s.%s%s undefined  You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.
+
+Check your code at Footer.jsx:220. 
+    at Footer (http://localhost:5173/src/components/layout/Footer.jsx:78:29)
+    at div
+    at Layout
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4122:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4592:5)
+    at Suspense
+    at CartProvider (http://localhost:5173/src/context/CartContext.jsx:24:32)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.jsx:25:32)
+    at StoreProvider (http://localhost:5173/src/context/StoreContext.jsx:195:33)
+    at WishlistProvider (http://localhost:5173/src/context/WishlistContext.jsx:43:36)
+    at LocationProvider (http://localhost:5173/src/context/LocationContext.jsx:51:36)
+    at ToastProvider (http://localhost:5173/src/context/ToastContext.jsx:28:33)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.jsx:27:33)
+    at App
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4535:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:5273:5)
+    at _a (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=e19e7beb:624:5)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=e19e7beb:26:30)
+CONSOLE ERROR: Warning: React.jsx: type is invalid -- expected a string (for built-in components) or a class/function (for composite components) but got: %s.%s%s undefined  You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.
+
+Check your code at Footer.jsx:220. 
+    at Footer (http://localhost:5173/src/components/layout/Footer.jsx:78:29)
+    at div
+    at Layout
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4122:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4592:5)
+    at Suspense
+    at CartProvider (http://localhost:5173/src/context/CartContext.jsx:24:32)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.jsx:25:32)
+    at StoreProvider (http://localhost:5173/src/context/StoreContext.jsx:195:33)
+    at WishlistProvider (http://localhost:5173/src/context/WishlistContext.jsx:43:36)
+    at LocationProvider (http://localhost:5173/src/context/LocationContext.jsx:51:36)
+    at ToastProvider (http://localhost:5173/src/context/ToastContext.jsx:28:33)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.jsx:27:33)
+    at App
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4535:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:5273:5)
+    at _a (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=e19e7beb:624:5)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=e19e7beb:26:30)
+CONSOLE ERROR: Warning: React.jsx: type is invalid -- expected a string (for built-in components) or a class/function (for composite components) but got: %s.%s%s undefined  You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.
+
+Check your code at Footer.jsx:220. 
+    at Footer (http://localhost:5173/src/components/layout/Footer.jsx:78:29)
+    at div
+    at Layout
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4122:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4592:5)
+    at Suspense
+    at CartProvider (http://localhost:5173/src/context/CartContext.jsx:24:32)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.jsx:25:32)
+    at StoreProvider (http://localhost:5173/src/context/StoreContext.jsx:195:33)
+    at WishlistProvider (http://localhost:5173/src/context/WishlistContext.jsx:43:36)
+    at LocationProvider (http://localhost:5173/src/context/LocationContext.jsx:51:36)
+    at ToastProvider (http://localhost:5173/src/context/ToastContext.jsx:28:33)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.jsx:27:33)
+    at App
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4535:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:5273:5)
+    at _a (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=e19e7beb:624:5)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=e19e7beb:26:30)
+CONSOLE ERROR: Warning: React.jsx: type is invalid -- expected a string (for built-in components) or a class/function (for composite components) but got: %s.%s%s undefined  You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.
+
+Check your code at Footer.jsx:220. 
+    at Footer (http://localhost:5173/src/components/layout/Footer.jsx:78:29)
+    at div
+    at Layout
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4122:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4592:5)
+    at Suspense
+    at CartProvider (http://localhost:5173/src/context/CartContext.jsx:24:32)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.jsx:25:32)
+    at StoreProvider (http://localhost:5173/src/context/StoreContext.jsx:195:33)
+    at WishlistProvider (http://localhost:5173/src/context/WishlistContext.jsx:43:36)
+    at LocationProvider (http://localhost:5173/src/context/LocationContext.jsx:51:36)
+    at ToastProvider (http://localhost:5173/src/context/ToastContext.jsx:28:33)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.jsx:27:33)
+    at App
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4535:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:5273:5)
+    at _a (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=e19e7beb:624:5)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=e19e7beb:26:30)
+CONSOLE ERROR: Warning: React.jsx: type is invalid -- expected a string (for built-in components) or a class/function (for composite components) but got: %s.%s%s undefined  You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.
+
+Check your code at Footer.jsx:220. 
+    at Footer (http://localhost:5173/src/components/layout/Footer.jsx:78:29)
+    at div
+    at Layout
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4122:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4592:5)
+    at Suspense
+    at CartProvider (http://localhost:5173/src/context/CartContext.jsx:24:32)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.jsx:25:32)
+    at StoreProvider (http://localhost:5173/src/context/StoreContext.jsx:195:33)
+    at WishlistProvider (http://localhost:5173/src/context/WishlistContext.jsx:43:36)
+    at LocationProvider (http://localhost:5173/src/context/LocationContext.jsx:51:36)
+    at ToastProvider (http://localhost:5173/src/context/ToastContext.jsx:28:33)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.jsx:27:33)
+    at App
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4535:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:5273:5)
+    at _a (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=e19e7beb:624:5)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=e19e7beb:26:30)
+CONSOLE ERROR: Warning: React.jsx: type is invalid -- expected a string (for built-in components) or a class/function (for composite components) but got: %s.%s%s undefined  You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.
+
+Check your code at Footer.jsx:220. 
+    at Footer (http://localhost:5173/src/components/layout/Footer.jsx:78:29)
+    at div
+    at Layout
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4122:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4592:5)
+    at Suspense
+    at CartProvider (http://localhost:5173/src/context/CartContext.jsx:24:32)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.jsx:25:32)
+    at StoreProvider (http://localhost:5173/src/context/StoreContext.jsx:195:33)
+    at WishlistProvider (http://localhost:5173/src/context/WishlistContext.jsx:43:36)
+    at LocationProvider (http://localhost:5173/src/context/LocationContext.jsx:51:36)
+    at ToastProvider (http://localhost:5173/src/context/ToastContext.jsx:28:33)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.jsx:27:33)
+    at App
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4535:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:5273:5)
+    at _a (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=e19e7beb:624:5)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=e19e7beb:26:30)
+CONSOLE ERROR: Warning: React.jsx: type is invalid -- expected a string (for built-in components) or a class/function (for composite components) but got: %s.%s%s undefined  You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.
+
+Check your code at Footer.jsx:220. 
+    at Footer (http://localhost:5173/src/components/layout/Footer.jsx:78:29)
+    at div
+    at Layout
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4122:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4592:5)
+    at Suspense
+    at CartProvider (http://localhost:5173/src/context/CartContext.jsx:24:32)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.jsx:25:32)
+    at StoreProvider (http://localhost:5173/src/context/StoreContext.jsx:195:33)
+    at WishlistProvider (http://localhost:5173/src/context/WishlistContext.jsx:43:36)
+    at LocationProvider (http://localhost:5173/src/context/LocationContext.jsx:51:36)
+    at ToastProvider (http://localhost:5173/src/context/ToastContext.jsx:28:33)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.jsx:27:33)
+    at App
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4535:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:5273:5)
+    at _a (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=e19e7beb:624:5)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=e19e7beb:26:30)
+WINDOW ERROR: Uncaught Error: Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: undefined. You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.
+
+Check the render method of `Footer`. Error: Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: undefined. You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.
+
+Check the render method of `Footer`.
+    at createFiberFromTypeAndProps (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:20442:23)
+    at createFiberFromElement (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:20463:23)
+    at createChild (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:10089:34)
+    at reconcileChildrenArray (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:10282:33)
+    at reconcileChildFibers2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:10559:24)
+    at reconcileChildren (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14290:37)
+    at updateHostComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14807:11)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:15935:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3699:24)
+WINDOW ERROR: Uncaught Error: Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: undefined. You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.
+
+Check the render method of `Footer`. Error: Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: undefined. You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.
+
+Check the render method of `Footer`.
+    at createFiberFromTypeAndProps (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:20442:23)
+    at createFiberFromElement (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:20463:23)
+    at createChild (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:10089:34)
+    at reconcileChildrenArray (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:10282:33)
+    at reconcileChildFibers2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:10559:24)
+    at reconcileChildren (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14290:37)
+    at updateHostComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14807:11)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:15935:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3699:24)
+WINDOW ERROR: Uncaught Error: Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: undefined. You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.
+
+Check the render method of `Footer`. Error: Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: undefined. You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.
+
+Check the render method of `Footer`.
+    at createFiberFromTypeAndProps (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:20442:23)
+    at createFiberFromElement (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:20463:23)
+    at createChild (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:10089:34)
+    at reconcileChildrenArray (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:10282:33)
+    at reconcileChildFibers2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:10559:24)
+    at reconcileChildren (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14290:37)
+    at updateHostComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14807:11)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:15935:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3699:24)
+WINDOW ERROR: Uncaught Error: Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: undefined. You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.
+
+Check the render method of `Footer`. Error: Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: undefined. You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.
+
+Check the render method of `Footer`.
+    at createFiberFromTypeAndProps (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:20442:23)
+    at createFiberFromElement (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:20463:23)
+    at createChild (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:10089:34)
+    at reconcileChildrenArray (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:10282:33)
+    at reconcileChildFibers2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:10559:24)
+    at reconcileChildren (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14290:37)
+    at updateHostComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14807:11)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:15935:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3699:24)
+WINDOW ERROR: Uncaught Error: Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: undefined. You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.
+
+Check the render method of `Footer`. Error: Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: undefined. You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.
+
+Check the render method of `Footer`.
+    at createFiberFromTypeAndProps (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:20442:23)
+    at createFiberFromElement (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:20463:23)
+    at createChild (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:10089:34)
+    at reconcileChildrenArray (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:10282:33)
+    at reconcileChildFibers2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:10559:24)
+    at reconcileChildren (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14290:37)
+    at updateHostComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14807:11)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:15935:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3699:24)
+WINDOW ERROR: Uncaught Error: Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: undefined. You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.
+
+Check the render method of `Footer`. Error: Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: undefined. You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.
+
+Check the render method of `Footer`.
+    at createFiberFromTypeAndProps (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:20442:23)
+    at createFiberFromElement (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:20463:23)
+    at createChild (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:10089:34)
+    at reconcileChildrenArray (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:10282:33)
+    at reconcileChildFibers2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:10559:24)
+    at reconcileChildren (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14290:37)
+    at updateHostComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14807:11)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:15935:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3699:24)
+CONSOLE ERROR: The above error occurred in the <a> component:
+
+    at a
+    at LinkWithRef (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:5378:5)
+    at div
+    at div
+    at div
+    at footer
+    at Footer (http://localhost:5173/src/components/layout/Footer.jsx:78:29)
+    at div
+    at Layout
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4122:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4592:5)
+    at Suspense
+    at CartProvider (http://localhost:5173/src/context/CartContext.jsx:24:32)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.jsx:25:32)
+    at StoreProvider (http://localhost:5173/src/context/StoreContext.jsx:195:33)
+    at WishlistProvider (http://localhost:5173/src/context/WishlistContext.jsx:43:36)
+    at LocationProvider (http://localhost:5173/src/context/LocationContext.jsx:51:36)
+    at ToastProvider (http://localhost:5173/src/context/ToastContext.jsx:28:33)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.jsx:27:33)
+    at App
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4535:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:5273:5)
+    at _a (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=e19e7beb:624:5)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=e19e7beb:26:30)
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+CONSOLE ERROR: The above error occurred in the <a> component:
+
+    at a
+    at LinkWithRef (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:5378:5)
+    at div
+    at div
+    at div
+    at footer
+    at Footer (http://localhost:5173/src/components/layout/Footer.jsx:78:29)
+    at div
+    at Layout
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4122:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4592:5)
+    at Suspense
+    at CartProvider (http://localhost:5173/src/context/CartContext.jsx:24:32)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.jsx:25:32)
+    at StoreProvider (http://localhost:5173/src/context/StoreContext.jsx:195:33)
+    at WishlistProvider (http://localhost:5173/src/context/WishlistContext.jsx:43:36)
+    at LocationProvider (http://localhost:5173/src/context/LocationContext.jsx:51:36)
+    at ToastProvider (http://localhost:5173/src/context/ToastContext.jsx:28:33)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.jsx:27:33)
+    at App
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4535:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:5273:5)
+    at _a (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=e19e7beb:624:5)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=e19e7beb:26:30)
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+CONSOLE ERROR: The above error occurred in the <a> component:
+
+    at a
+    at LinkWithRef (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:5378:5)
+    at div
+    at div
+    at div
+    at footer
+    at Footer (http://localhost:5173/src/components/layout/Footer.jsx:78:29)
+    at div
+    at Layout
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4122:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4592:5)
+    at Suspense
+    at CartProvider (http://localhost:5173/src/context/CartContext.jsx:24:32)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.jsx:25:32)
+    at StoreProvider (http://localhost:5173/src/context/StoreContext.jsx:195:33)
+    at WishlistProvider (http://localhost:5173/src/context/WishlistContext.jsx:43:36)
+    at LocationProvider (http://localhost:5173/src/context/LocationContext.jsx:51:36)
+    at ToastProvider (http://localhost:5173/src/context/ToastContext.jsx:28:33)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.jsx:27:33)
+    at App
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4535:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:5273:5)
+    at _a (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=e19e7beb:624:5)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=e19e7beb:26:30)
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+CONSOLE ERROR: The above error occurred in the <a> component:
+
+    at a
+    at LinkWithRef (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:5378:5)
+    at div
+    at div
+    at div
+    at footer
+    at Footer (http://localhost:5173/src/components/layout/Footer.jsx:78:29)
+    at div
+    at Layout
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4122:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4592:5)
+    at Suspense
+    at CartProvider (http://localhost:5173/src/context/CartContext.jsx:24:32)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.jsx:25:32)
+    at StoreProvider (http://localhost:5173/src/context/StoreContext.jsx:195:33)
+    at WishlistProvider (http://localhost:5173/src/context/WishlistContext.jsx:43:36)
+    at LocationProvider (http://localhost:5173/src/context/LocationContext.jsx:51:36)
+    at ToastProvider (http://localhost:5173/src/context/ToastContext.jsx:28:33)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.jsx:27:33)
+    at App
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4535:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:5273:5)
+    at _a (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=e19e7beb:624:5)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=e19e7beb:26:30)
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+CONSOLE ERROR: The above error occurred in the <a> component:
+
+    at a
+    at LinkWithRef (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:5378:5)
+    at div
+    at div
+    at div
+    at footer
+    at Footer (http://localhost:5173/src/components/layout/Footer.jsx:78:29)
+    at div
+    at Layout
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4122:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4592:5)
+    at Suspense
+    at CartProvider (http://localhost:5173/src/context/CartContext.jsx:24:32)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.jsx:25:32)
+    at StoreProvider (http://localhost:5173/src/context/StoreContext.jsx:195:33)
+    at WishlistProvider (http://localhost:5173/src/context/WishlistContext.jsx:43:36)
+    at LocationProvider (http://localhost:5173/src/context/LocationContext.jsx:51:36)
+    at ToastProvider (http://localhost:5173/src/context/ToastContext.jsx:28:33)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.jsx:27:33)
+    at App
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4535:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:5273:5)
+    at _a (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=e19e7beb:624:5)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=e19e7beb:26:30)
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+CONSOLE ERROR: The above error occurred in the <a> component:
+
+    at a
+    at LinkWithRef (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:5378:5)
+    at div
+    at div
+    at div
+    at footer
+    at Footer (http://localhost:5173/src/components/layout/Footer.jsx:78:29)
+    at div
+    at Layout
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4122:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4592:5)
+    at Suspense
+    at CartProvider (http://localhost:5173/src/context/CartContext.jsx:24:32)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.jsx:25:32)
+    at StoreProvider (http://localhost:5173/src/context/StoreContext.jsx:195:33)
+    at WishlistProvider (http://localhost:5173/src/context/WishlistContext.jsx:43:36)
+    at LocationProvider (http://localhost:5173/src/context/LocationContext.jsx:51:36)
+    at ToastProvider (http://localhost:5173/src/context/ToastContext.jsx:28:33)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.jsx:27:33)
+    at App
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4535:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:5273:5)
+    at _a (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=e19e7beb:624:5)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=e19e7beb:26:30)
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+WINDOW ERROR: Uncaught Error: Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: undefined. You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.
+
+Check the render method of `Footer`. Error: Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: undefined. You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.
+
+Check the render method of `Footer`.
+    at createFiberFromTypeAndProps (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:20442:23)
+    at createFiberFromElement (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:20463:23)
+    at createChild (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:10089:34)
+    at reconcileChildrenArray (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:10282:33)
+    at reconcileChildFibers2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:10559:24)
+    at reconcileChildren (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14290:37)
+    at updateHostComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14807:11)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:15935:22)
+    at beginWork$1 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19753:22)
+    at performUnitOfWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19198:20)
+WINDOW ERROR: Uncaught RangeError: Invalid time value RangeError: Invalid time value
+    at calendarChip (http://localhost:5173/src/lib/utils.js:54:65)
+    at http://localhost:5173/src/components/layout/SearchDialog.jsx:183:24
+    at Array.map (<anonymous>)
+    at SearchDialog (http://localhost:5173/src/components/layout/SearchDialog.jsx:182:24)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:11548:26)
+    at mountIndeterminateComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14926:21)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:15914:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3699:24)
+    at invokeGuardedCallback (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3733:39)
+WINDOW ERROR: Uncaught RangeError: Invalid time value RangeError: Invalid time value
+    at formatDate (http://localhost:5173/src/lib/utils.js:32:6)
+    at formatDateRange (http://localhost:5173/src/lib/utils.js:46:26)
+    at SpotlightBanner (http://localhost:5173/src/components/home/SpotlightBanner.jsx:111:13)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:11548:26)
+    at mountIndeterminateComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14926:21)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:15914:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3699:24)
+    at invokeGuardedCallback (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3733:39)
+    at beginWork$1 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19765:15)
+WINDOW ERROR: Uncaught RangeError: Invalid time value RangeError: Invalid time value
+    at calendarChip (http://localhost:5173/src/lib/utils.js:54:65)
+    at http://localhost:5173/src/components/layout/SearchDialog.jsx:183:24
+    at Array.map (<anonymous>)
+    at SearchDialog (http://localhost:5173/src/components/layout/SearchDialog.jsx:182:24)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:11548:26)
+    at mountIndeterminateComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14926:21)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:15914:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3699:24)
+    at invokeGuardedCallback (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3733:39)
+WINDOW ERROR: Uncaught RangeError: Invalid time value RangeError: Invalid time value
+    at formatDate (http://localhost:5173/src/lib/utils.js:32:6)
+    at formatDateRange (http://localhost:5173/src/lib/utils.js:46:26)
+    at SpotlightBanner (http://localhost:5173/src/components/home/SpotlightBanner.jsx:111:13)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:11548:26)
+    at mountIndeterminateComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14926:21)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:15914:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3699:24)
+    at invokeGuardedCallback (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3733:39)
+    at beginWork$1 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19765:15)
+CONSOLE ERROR: The above error occurred in the <SearchDialog> component:
+
+    at SearchDialog (http://localhost:5173/src/components/layout/SearchDialog.jsx:30:32)
+    at Navbar (http://localhost:5173/src/components/layout/Navbar.jsx:75:35)
+    at div
+    at Layout
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4122:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4592:5)
+    at Suspense
+    at CartProvider (http://localhost:5173/src/context/CartContext.jsx:24:32)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.jsx:25:32)
+    at StoreProvider (http://localhost:5173/src/context/StoreContext.jsx:195:33)
+    at WishlistProvider (http://localhost:5173/src/context/WishlistContext.jsx:43:36)
+    at LocationProvider (http://localhost:5173/src/context/LocationContext.jsx:51:36)
+    at ToastProvider (http://localhost:5173/src/context/ToastContext.jsx:28:33)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.jsx:27:33)
+    at App
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4535:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:5273:5)
+    at _a (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=e19e7beb:624:5)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=e19e7beb:26:30)
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+PROMISE ERROR: RangeError: Invalid time value
+    at calendarChip (http://localhost:5173/src/lib/utils.js:54:65)
+    at http://localhost:5173/src/components/layout/SearchDialog.jsx:183:24
+    at Array.map (<anonymous>)
+    at SearchDialog (http://localhost:5173/src/components/layout/SearchDialog.jsx:182:24)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:11548:26)
+    at mountIndeterminateComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14926:21)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:15914:22)
+    at beginWork$1 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19753:22)
+    at performUnitOfWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19198:20)
+    at workLoopSync (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19137:13)
+WINDOW ERROR: Uncaught RangeError: Invalid time value RangeError: Invalid time value
+    at calendarChip (http://localhost:5173/src/lib/utils.js:54:65)
+    at http://localhost:5173/src/components/layout/SearchDialog.jsx:183:24
+    at Array.map (<anonymous>)
+    at SearchDialog (http://localhost:5173/src/components/layout/SearchDialog.jsx:182:24)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:11548:26)
+    at mountIndeterminateComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14926:21)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:15914:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3699:24)
+    at invokeGuardedCallback (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3733:39)
+WINDOW ERROR: Uncaught RangeError: Invalid time value RangeError: Invalid time value
+    at formatDate (http://localhost:5173/src/lib/utils.js:32:6)
+    at formatDateRange (http://localhost:5173/src/lib/utils.js:46:26)
+    at SpotlightBanner (http://localhost:5173/src/components/home/SpotlightBanner.jsx:111:13)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:11548:26)
+    at mountIndeterminateComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14926:21)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:15914:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3699:24)
+    at invokeGuardedCallback (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3733:39)
+    at beginWork$1 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19765:15)
+WINDOW ERROR: Uncaught RangeError: Invalid time value RangeError: Invalid time value
+    at calendarChip (http://localhost:5173/src/lib/utils.js:54:65)
+    at http://localhost:5173/src/components/layout/SearchDialog.jsx:183:24
+    at Array.map (<anonymous>)
+    at SearchDialog (http://localhost:5173/src/components/layout/SearchDialog.jsx:182:24)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:11548:26)
+    at mountIndeterminateComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14926:21)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:15914:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3699:24)
+    at invokeGuardedCallback (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3733:39)
+WINDOW ERROR: Uncaught RangeError: Invalid time value RangeError: Invalid time value
+    at formatDate (http://localhost:5173/src/lib/utils.js:32:6)
+    at formatDateRange (http://localhost:5173/src/lib/utils.js:46:26)
+    at SpotlightBanner (http://localhost:5173/src/components/home/SpotlightBanner.jsx:111:13)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:11548:26)
+    at mountIndeterminateComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14926:21)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:15914:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3699:24)
+    at invokeGuardedCallback (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3733:39)
+    at beginWork$1 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19765:15)
+CONSOLE ERROR: The above error occurred in the <SearchDialog> component:
+
+    at SearchDialog (http://localhost:5173/src/components/layout/SearchDialog.jsx:30:32)
+    at Navbar (http://localhost:5173/src/components/layout/Navbar.jsx:75:35)
+    at div
+    at Layout
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4122:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4592:5)
+    at Suspense
+    at CartProvider (http://localhost:5173/src/context/CartContext.jsx:24:32)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.jsx:25:32)
+    at StoreProvider (http://localhost:5173/src/context/StoreContext.jsx:195:33)
+    at WishlistProvider (http://localhost:5173/src/context/WishlistContext.jsx:43:36)
+    at LocationProvider (http://localhost:5173/src/context/LocationContext.jsx:51:36)
+    at ToastProvider (http://localhost:5173/src/context/ToastContext.jsx:28:33)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.jsx:27:33)
+    at App
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4535:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:5273:5)
+    at _a (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=e19e7beb:624:5)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=e19e7beb:26:30)
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+PROMISE ERROR: RangeError: Invalid time value
+    at calendarChip (http://localhost:5173/src/lib/utils.js:54:65)
+    at http://localhost:5173/src/components/layout/SearchDialog.jsx:183:24
+    at Array.map (<anonymous>)
+    at SearchDialog (http://localhost:5173/src/components/layout/SearchDialog.jsx:182:24)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:11548:26)
+    at mountIndeterminateComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14926:21)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:15914:22)
+    at beginWork$1 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19753:22)
+    at performUnitOfWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19198:20)
+    at workLoopSync (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19137:13)
+WINDOW ERROR: Uncaught TypeError: Cannot read properties of undefined (reading 'toLocaleString') TypeError: Cannot read properties of undefined (reading 'toLocaleString')
+    at SpotlightBanner (http://localhost:5173/src/components/home/SpotlightBanner.jsx:135:28)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:11548:26)
+    at mountIndeterminateComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14926:21)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:15914:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3699:24)
+    at invokeGuardedCallback (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3733:39)
+    at beginWork$1 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19765:15)
+    at performUnitOfWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19198:20)
+    at workLoopSync (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19137:13)
+WINDOW ERROR: Uncaught TypeError: Cannot read properties of undefined (reading 'toLocaleString') TypeError: Cannot read properties of undefined (reading 'toLocaleString')
+    at SpotlightBanner (http://localhost:5173/src/components/home/SpotlightBanner.jsx:135:28)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:11548:26)
+    at mountIndeterminateComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14926:21)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:15914:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3699:24)
+    at invokeGuardedCallback (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3733:39)
+    at beginWork$1 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19765:15)
+    at performUnitOfWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19198:20)
+    at workLoopSync (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19137:13)
+CONSOLE ERROR: The above error occurred in the <SpotlightBanner> component:
+
+    at SpotlightBanner (http://localhost:5173/src/components/home/SpotlightBanner.jsx:47:32)
+    at div
+    at Home
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4122:5)
+    at Outlet (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4528:26)
+    at ErrorBoundary (http://localhost:5173/src/components/ui/ErrorBoundary.jsx:9:5)
+    at main
+    at div
+    at Layout
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4122:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4592:5)
+    at Suspense
+    at CartProvider (http://localhost:5173/src/context/CartContext.jsx:24:32)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.jsx:25:32)
+    at StoreProvider (http://localhost:5173/src/context/StoreContext.jsx:195:33)
+    at WishlistProvider (http://localhost:5173/src/context/WishlistContext.jsx:43:36)
+    at LocationProvider (http://localhost:5173/src/context/LocationContext.jsx:51:36)
+    at ToastProvider (http://localhost:5173/src/context/ToastContext.jsx:28:33)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.jsx:27:33)
+    at App
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4535:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:5273:5)
+    at _a (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=e19e7beb:624:5)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=e19e7beb:26:30)
+
+React will try to recreate this component tree from scratch using the error boundary you provided, ErrorBoundary.
+CONSOLE ERROR: ErrorBoundary caught an error: TypeError: Cannot read properties of undefined (reading 'toLocaleString') [object Object]
+WINDOW ERROR: Uncaught RangeError: Invalid time value RangeError: Invalid time value
+    at calendarChip (http://localhost:5173/src/lib/utils.js:54:65)
+    at http://localhost:5173/src/components/layout/SearchDialog.jsx?t=1790778206263:183:24
+    at Array.map (<anonymous>)
+    at SearchDialog (http://localhost:5173/src/components/layout/SearchDialog.jsx?t=1790778206263:182:24)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:11548:26)
+    at mountIndeterminateComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14926:21)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:15914:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3699:24)
+    at invokeGuardedCallback (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3733:39)
+WINDOW ERROR: Uncaught RangeError: Invalid time value RangeError: Invalid time value
+    at formatDate (http://localhost:5173/src/lib/utils.js:32:6)
+    at formatDateRange (http://localhost:5173/src/lib/utils.js:46:26)
+    at SpotlightBanner (http://localhost:5173/src/components/home/SpotlightBanner.jsx:111:13)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:11548:26)
+    at mountIndeterminateComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14926:21)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:15914:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3699:24)
+    at invokeGuardedCallback (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3733:39)
+    at beginWork$1 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19765:15)
+WINDOW ERROR: Uncaught RangeError: Invalid time value RangeError: Invalid time value
+    at calendarChip (http://localhost:5173/src/lib/utils.js:54:65)
+    at http://localhost:5173/src/components/layout/SearchDialog.jsx?t=1790778206263:183:24
+    at Array.map (<anonymous>)
+    at SearchDialog (http://localhost:5173/src/components/layout/SearchDialog.jsx?t=1790778206263:182:24)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:11548:26)
+    at mountIndeterminateComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14926:21)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:15914:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3699:24)
+    at invokeGuardedCallback (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3733:39)
+WINDOW ERROR: Uncaught RangeError: Invalid time value RangeError: Invalid time value
+    at formatDate (http://localhost:5173/src/lib/utils.js:32:6)
+    at formatDateRange (http://localhost:5173/src/lib/utils.js:46:26)
+    at SpotlightBanner (http://localhost:5173/src/components/home/SpotlightBanner.jsx:111:13)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:11548:26)
+    at mountIndeterminateComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14926:21)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:15914:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3699:24)
+    at invokeGuardedCallback (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3733:39)
+    at beginWork$1 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19765:15)
+CONSOLE ERROR: The above error occurred in the <SearchDialog> component:
+
+    at SearchDialog (http://localhost:5173/src/components/layout/SearchDialog.jsx?t=1790778206263:30:32)
+    at Navbar (http://localhost:5173/src/components/layout/Navbar.jsx:75:35)
+    at div
+    at Layout
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4122:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4592:5)
+    at Suspense
+    at CartProvider (http://localhost:5173/src/context/CartContext.jsx:24:32)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.jsx:25:32)
+    at StoreProvider (http://localhost:5173/src/context/StoreContext.jsx:195:33)
+    at WishlistProvider (http://localhost:5173/src/context/WishlistContext.jsx:43:36)
+    at LocationProvider (http://localhost:5173/src/context/LocationContext.jsx:51:36)
+    at ToastProvider (http://localhost:5173/src/context/ToastContext.jsx:28:33)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.jsx:27:33)
+    at App
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4535:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:5273:5)
+    at _a (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=e19e7beb:624:5)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=e19e7beb:26:30)
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+PROMISE ERROR: RangeError: Invalid time value
+    at calendarChip (http://localhost:5173/src/lib/utils.js:54:65)
+    at http://localhost:5173/src/components/layout/SearchDialog.jsx?t=1790778206263:183:24
+    at Array.map (<anonymous>)
+    at SearchDialog (http://localhost:5173/src/components/layout/SearchDialog.jsx?t=1790778206263:182:24)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:11548:26)
+    at mountIndeterminateComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14926:21)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:15914:22)
+    at beginWork$1 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19753:22)
+    at performUnitOfWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19198:20)
+    at workLoopSync (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19137:13)
+WINDOW ERROR: Uncaught RangeError: Invalid time value RangeError: Invalid time value
+    at calendarChip (http://localhost:5173/src/lib/utils.js:54:65)
+    at http://localhost:5173/src/components/layout/SearchDialog.jsx?t=1790778206326:183:24
+    at Array.map (<anonymous>)
+    at SearchDialog (http://localhost:5173/src/components/layout/SearchDialog.jsx?t=1790778206326:182:24)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:11548:26)
+    at mountIndeterminateComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14926:21)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:15914:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3699:24)
+    at invokeGuardedCallback (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3733:39)
+WINDOW ERROR: Uncaught RangeError: Invalid time value RangeError: Invalid time value
+    at formatDate (http://localhost:5173/src/lib/utils.js:32:6)
+    at formatDateRange (http://localhost:5173/src/lib/utils.js:46:26)
+    at SpotlightBanner (http://localhost:5173/src/components/home/SpotlightBanner.jsx:111:13)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:11548:26)
+    at mountIndeterminateComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14926:21)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:15914:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3699:24)
+    at invokeGuardedCallback (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3733:39)
+    at beginWork$1 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19765:15)
+WINDOW ERROR: Uncaught RangeError: Invalid time value RangeError: Invalid time value
+    at calendarChip (http://localhost:5173/src/lib/utils.js:54:65)
+    at http://localhost:5173/src/components/layout/SearchDialog.jsx?t=1790778206326:183:24
+    at Array.map (<anonymous>)
+    at SearchDialog (http://localhost:5173/src/components/layout/SearchDialog.jsx?t=1790778206326:182:24)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:11548:26)
+    at mountIndeterminateComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14926:21)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:15914:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3699:24)
+    at invokeGuardedCallback (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3733:39)
+WINDOW ERROR: Uncaught RangeError: Invalid time value RangeError: Invalid time value
+    at formatDate (http://localhost:5173/src/lib/utils.js:32:6)
+    at formatDateRange (http://localhost:5173/src/lib/utils.js:46:26)
+    at SpotlightBanner (http://localhost:5173/src/components/home/SpotlightBanner.jsx:111:13)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:11548:26)
+    at mountIndeterminateComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14926:21)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:15914:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3699:24)
+    at invokeGuardedCallback (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3733:39)
+    at beginWork$1 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19765:15)
+CONSOLE ERROR: The above error occurred in the <SearchDialog> component:
+
+    at SearchDialog (http://localhost:5173/src/components/layout/SearchDialog.jsx?t=1790778206326:30:32)
+    at Navbar (http://localhost:5173/src/components/layout/Navbar.jsx:75:35)
+    at div
+    at Layout
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4122:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4592:5)
+    at Suspense
+    at CartProvider (http://localhost:5173/src/context/CartContext.jsx:24:32)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.jsx:25:32)
+    at StoreProvider (http://localhost:5173/src/context/StoreContext.jsx:195:33)
+    at WishlistProvider (http://localhost:5173/src/context/WishlistContext.jsx:43:36)
+    at LocationProvider (http://localhost:5173/src/context/LocationContext.jsx:51:36)
+    at ToastProvider (http://localhost:5173/src/context/ToastContext.jsx:28:33)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.jsx:27:33)
+    at App
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4535:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:5273:5)
+    at _a (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=e19e7beb:624:5)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=e19e7beb:26:30)
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+PROMISE ERROR: RangeError: Invalid time value
+    at calendarChip (http://localhost:5173/src/lib/utils.js:54:65)
+    at http://localhost:5173/src/components/layout/SearchDialog.jsx?t=1790778206326:183:24
+    at Array.map (<anonymous>)
+    at SearchDialog (http://localhost:5173/src/components/layout/SearchDialog.jsx?t=1790778206326:182:24)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:11548:26)
+    at mountIndeterminateComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14926:21)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:15914:22)
+    at beginWork$1 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19753:22)
+    at performUnitOfWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19198:20)
+    at workLoopSync (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19137:13)
+WINDOW ERROR: Uncaught ReferenceError: useMemo is not defined ReferenceError: useMemo is not defined
+    at EventDetail (http://localhost:5173/src/pages/EventDetail.jsx:68:21)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:11548:26)
+    at mountIndeterminateComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14926:21)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:15914:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3699:24)
+    at invokeGuardedCallback (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3733:39)
+    at beginWork$1 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19765:15)
+    at performUnitOfWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19198:20)
+    at workLoopSync (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19137:13)
+WINDOW ERROR: Uncaught ReferenceError: useMemo is not defined ReferenceError: useMemo is not defined
+    at EventDetail (http://localhost:5173/src/pages/EventDetail.jsx:68:21)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:11548:26)
+    at mountIndeterminateComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14926:21)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:15914:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3699:24)
+    at invokeGuardedCallback (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3733:39)
+    at beginWork$1 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19765:15)
+    at performUnitOfWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19198:20)
+    at workLoopSync (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19137:13)
+CONSOLE ERROR: The above error occurred in the <EventDetail> component:
+
+    at EventDetail (http://localhost:5173/src/pages/EventDetail.jsx:64:20)
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4122:5)
+    at Outlet (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4528:26)
+    at ErrorBoundary (http://localhost:5173/src/components/ui/ErrorBoundary.jsx:9:5)
+    at main
+    at div
+    at Layout
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4122:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4592:5)
+    at Suspense
+    at CartProvider (http://localhost:5173/src/context/CartContext.jsx:24:32)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.jsx:25:32)
+    at StoreProvider (http://localhost:5173/src/context/StoreContext.jsx:195:33)
+    at WishlistProvider (http://localhost:5173/src/context/WishlistContext.jsx:43:36)
+    at LocationProvider (http://localhost:5173/src/context/LocationContext.jsx:51:36)
+    at ToastProvider (http://localhost:5173/src/context/ToastContext.jsx:28:33)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.jsx:27:33)
+    at App
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4535:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:5273:5)
+    at _a (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=e19e7beb:624:5)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=e19e7beb:26:30)
+
+React will try to recreate this component tree from scratch using the error boundary you provided, ErrorBoundary.
+CONSOLE ERROR: ErrorBoundary caught an error: ReferenceError: useMemo is not defined [object Object]
+WINDOW ERROR: Uncaught ReferenceError: useMemo is not defined ReferenceError: useMemo is not defined
+    at EventDetail (http://localhost:5173/src/pages/EventDetail.jsx:68:21)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:11548:26)
+    at mountIndeterminateComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14926:21)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:15914:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3699:24)
+    at invokeGuardedCallback (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3733:39)
+    at beginWork$1 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19765:15)
+    at performUnitOfWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19198:20)
+    at workLoopSync (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19137:13)
+WINDOW ERROR: Uncaught ReferenceError: useMemo is not defined ReferenceError: useMemo is not defined
+    at EventDetail (http://localhost:5173/src/pages/EventDetail.jsx:68:21)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:11548:26)
+    at mountIndeterminateComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14926:21)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:15914:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3699:24)
+    at invokeGuardedCallback (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3733:39)
+    at beginWork$1 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19765:15)
+    at performUnitOfWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19198:20)
+    at workLoopSync (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19137:13)
+CONSOLE ERROR: The above error occurred in the <EventDetail> component:
+
+    at EventDetail (http://localhost:5173/src/pages/EventDetail.jsx:64:20)
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4122:5)
+    at Outlet (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4528:26)
+    at ErrorBoundary (http://localhost:5173/src/components/ui/ErrorBoundary.jsx:9:5)
+    at main
+    at div
+    at Layout
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4122:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4592:5)
+    at Suspense
+    at CartProvider (http://localhost:5173/src/context/CartContext.jsx:24:32)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.jsx:25:32)
+    at StoreProvider (http://localhost:5173/src/context/StoreContext.jsx:195:33)
+    at WishlistProvider (http://localhost:5173/src/context/WishlistContext.jsx:43:36)
+    at LocationProvider (http://localhost:5173/src/context/LocationContext.jsx:51:36)
+    at ToastProvider (http://localhost:5173/src/context/ToastContext.jsx:28:33)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.jsx:27:33)
+    at App
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4535:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:5273:5)
+    at _a (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=e19e7beb:624:5)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=e19e7beb:26:30)
+
+React will try to recreate this component tree from scratch using the error boundary you provided, ErrorBoundary.
+CONSOLE ERROR: ErrorBoundary caught an error: ReferenceError: useMemo is not defined [object Object]
+WINDOW ERROR: Uncaught ReferenceError: useMemo is not defined ReferenceError: useMemo is not defined
+    at EventDetail (http://localhost:5173/src/pages/EventDetail.jsx:68:21)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:11548:26)
+    at mountIndeterminateComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14926:21)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:15914:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3699:24)
+    at invokeGuardedCallback (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3733:39)
+    at beginWork$1 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19765:15)
+    at performUnitOfWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19198:20)
+    at workLoopSync (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19137:13)
+WINDOW ERROR: Uncaught ReferenceError: useMemo is not defined ReferenceError: useMemo is not defined
+    at EventDetail (http://localhost:5173/src/pages/EventDetail.jsx:68:21)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:11548:26)
+    at mountIndeterminateComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14926:21)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:15914:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3699:24)
+    at invokeGuardedCallback (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3733:39)
+    at beginWork$1 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19765:15)
+    at performUnitOfWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19198:20)
+    at workLoopSync (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19137:13)
+CONSOLE ERROR: The above error occurred in the <EventDetail> component:
+
+    at EventDetail (http://localhost:5173/src/pages/EventDetail.jsx:64:20)
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4122:5)
+    at Outlet (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4528:26)
+    at ErrorBoundary (http://localhost:5173/src/components/ui/ErrorBoundary.jsx:9:5)
+    at main
+    at div
+    at Layout
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4122:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4592:5)
+    at Suspense
+    at CartProvider (http://localhost:5173/src/context/CartContext.jsx:24:32)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.jsx:25:32)
+    at StoreProvider (http://localhost:5173/src/context/StoreContext.jsx:195:33)
+    at WishlistProvider (http://localhost:5173/src/context/WishlistContext.jsx:43:36)
+    at LocationProvider (http://localhost:5173/src/context/LocationContext.jsx:51:36)
+    at ToastProvider (http://localhost:5173/src/context/ToastContext.jsx:28:33)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.jsx:27:33)
+    at App
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4535:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:5273:5)
+    at _a (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=e19e7beb:624:5)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=e19e7beb:26:30)
+
+React will try to recreate this component tree from scratch using the error boundary you provided, ErrorBoundary.
+CONSOLE ERROR: ErrorBoundary caught an error: ReferenceError: useMemo is not defined [object Object]
+WINDOW ERROR: Uncaught ReferenceError: useMemo is not defined ReferenceError: useMemo is not defined
+    at EventDetail (http://localhost:5173/src/pages/EventDetail.jsx:68:21)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:11548:26)
+    at mountIndeterminateComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14926:21)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:15914:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3699:24)
+    at invokeGuardedCallback (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3733:39)
+    at beginWork$1 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19765:15)
+    at performUnitOfWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19198:20)
+    at workLoopSync (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19137:13)
+WINDOW ERROR: Uncaught ReferenceError: useMemo is not defined ReferenceError: useMemo is not defined
+    at EventDetail (http://localhost:5173/src/pages/EventDetail.jsx:68:21)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:11548:26)
+    at mountIndeterminateComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14926:21)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:15914:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3699:24)
+    at invokeGuardedCallback (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3733:39)
+    at beginWork$1 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19765:15)
+    at performUnitOfWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19198:20)
+    at workLoopSync (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19137:13)
+CONSOLE ERROR: The above error occurred in the <EventDetail> component:
+
+    at EventDetail (http://localhost:5173/src/pages/EventDetail.jsx:64:20)
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4122:5)
+    at Outlet (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4528:26)
+    at ErrorBoundary (http://localhost:5173/src/components/ui/ErrorBoundary.jsx:9:5)
+    at main
+    at div
+    at Layout
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4122:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4592:5)
+    at Suspense
+    at CartProvider (http://localhost:5173/src/context/CartContext.jsx:24:32)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.jsx:25:32)
+    at StoreProvider (http://localhost:5173/src/context/StoreContext.jsx:195:33)
+    at WishlistProvider (http://localhost:5173/src/context/WishlistContext.jsx:43:36)
+    at LocationProvider (http://localhost:5173/src/context/LocationContext.jsx:51:36)
+    at ToastProvider (http://localhost:5173/src/context/ToastContext.jsx:28:33)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.jsx:27:33)
+    at App
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4535:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:5273:5)
+    at _a (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=e19e7beb:624:5)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=e19e7beb:26:30)
+
+React will try to recreate this component tree from scratch using the error boundary you provided, ErrorBoundary.
+CONSOLE ERROR: ErrorBoundary caught an error: ReferenceError: useMemo is not defined [object Object]
+WINDOW ERROR: Uncaught ReferenceError: useMemo is not defined ReferenceError: useMemo is not defined
+    at EventDetail (http://localhost:5173/src/pages/EventDetail.jsx:68:21)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:11548:26)
+    at mountIndeterminateComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14926:21)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:15914:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3699:24)
+    at invokeGuardedCallback (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3733:39)
+    at beginWork$1 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19765:15)
+    at performUnitOfWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19198:20)
+    at workLoopSync (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19137:13)
+WINDOW ERROR: Uncaught ReferenceError: useMemo is not defined ReferenceError: useMemo is not defined
+    at EventDetail (http://localhost:5173/src/pages/EventDetail.jsx:68:21)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:11548:26)
+    at mountIndeterminateComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14926:21)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:15914:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3699:24)
+    at invokeGuardedCallback (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3733:39)
+    at beginWork$1 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19765:15)
+    at performUnitOfWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19198:20)
+    at workLoopSync (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19137:13)
+CONSOLE ERROR: The above error occurred in the <EventDetail> component:
+
+    at EventDetail (http://localhost:5173/src/pages/EventDetail.jsx:64:20)
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4122:5)
+    at Outlet (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4528:26)
+    at ErrorBoundary (http://localhost:5173/src/components/ui/ErrorBoundary.jsx:9:5)
+    at main
+    at div
+    at Layout
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4122:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4592:5)
+    at Suspense
+    at CartProvider (http://localhost:5173/src/context/CartContext.jsx:24:32)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.jsx:25:32)
+    at StoreProvider (http://localhost:5173/src/context/StoreContext.jsx:195:33)
+    at WishlistProvider (http://localhost:5173/src/context/WishlistContext.jsx:43:36)
+    at LocationProvider (http://localhost:5173/src/context/LocationContext.jsx:51:36)
+    at ToastProvider (http://localhost:5173/src/context/ToastContext.jsx:28:33)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.jsx:27:33)
+    at App
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4535:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:5273:5)
+    at _a (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=e19e7beb:624:5)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=e19e7beb:26:30)
+
+React will try to recreate this component tree from scratch using the error boundary you provided, ErrorBoundary.
+CONSOLE ERROR: ErrorBoundary caught an error: ReferenceError: useMemo is not defined [object Object]
+WINDOW ERROR: Uncaught ReferenceError: useMemo is not defined ReferenceError: useMemo is not defined
+    at EventDetail (http://localhost:5173/src/pages/EventDetail.jsx:68:21)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:11548:26)
+    at mountIndeterminateComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14926:21)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:15914:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3699:24)
+    at invokeGuardedCallback (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3733:39)
+    at beginWork$1 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19765:15)
+    at performUnitOfWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19198:20)
+    at workLoopSync (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19137:13)
+WINDOW ERROR: Uncaught ReferenceError: useMemo is not defined ReferenceError: useMemo is not defined
+    at EventDetail (http://localhost:5173/src/pages/EventDetail.jsx:68:21)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:11548:26)
+    at mountIndeterminateComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14926:21)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:15914:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3699:24)
+    at invokeGuardedCallback (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3733:39)
+    at beginWork$1 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19765:15)
+    at performUnitOfWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19198:20)
+    at workLoopSync (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19137:13)
+CONSOLE ERROR: The above error occurred in the <EventDetail> component:
+
+    at EventDetail (http://localhost:5173/src/pages/EventDetail.jsx:64:20)
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4122:5)
+    at Outlet (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4528:26)
+    at ErrorBoundary (http://localhost:5173/src/components/ui/ErrorBoundary.jsx:9:5)
+    at main
+    at div
+    at Layout
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4122:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4592:5)
+    at Suspense
+    at CartProvider (http://localhost:5173/src/context/CartContext.jsx:24:32)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.jsx:25:32)
+    at StoreProvider (http://localhost:5173/src/context/StoreContext.jsx:195:33)
+    at WishlistProvider (http://localhost:5173/src/context/WishlistContext.jsx:43:36)
+    at LocationProvider (http://localhost:5173/src/context/LocationContext.jsx:51:36)
+    at ToastProvider (http://localhost:5173/src/context/ToastContext.jsx:28:33)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.jsx:27:33)
+    at App
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4535:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:5273:5)
+    at _a (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=e19e7beb:624:5)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=e19e7beb:26:30)
+
+React will try to recreate this component tree from scratch using the error boundary you provided, ErrorBoundary.
+CONSOLE ERROR: ErrorBoundary caught an error: ReferenceError: useMemo is not defined [object Object]
+WINDOW ERROR: Uncaught ReferenceError: useMemo is not defined ReferenceError: useMemo is not defined
+    at EventDetail (http://localhost:5173/src/pages/EventDetail.jsx:68:21)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:11548:26)
+    at mountIndeterminateComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14926:21)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:15914:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3699:24)
+    at invokeGuardedCallback (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3733:39)
+    at beginWork$1 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19765:15)
+    at performUnitOfWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19198:20)
+    at workLoopSync (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19137:13)
+WINDOW ERROR: Uncaught ReferenceError: useMemo is not defined ReferenceError: useMemo is not defined
+    at EventDetail (http://localhost:5173/src/pages/EventDetail.jsx:68:21)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:11548:26)
+    at mountIndeterminateComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14926:21)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:15914:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3699:24)
+    at invokeGuardedCallback (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3733:39)
+    at beginWork$1 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19765:15)
+    at performUnitOfWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19198:20)
+    at workLoopSync (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19137:13)
+CONSOLE ERROR: The above error occurred in the <EventDetail> component:
+
+    at EventDetail (http://localhost:5173/src/pages/EventDetail.jsx:64:20)
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4122:5)
+    at Outlet (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4528:26)
+    at ErrorBoundary (http://localhost:5173/src/components/ui/ErrorBoundary.jsx:9:5)
+    at main
+    at div
+    at Layout
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4122:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4592:5)
+    at Suspense
+    at CartProvider (http://localhost:5173/src/context/CartContext.jsx:24:32)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.jsx:25:32)
+    at StoreProvider (http://localhost:5173/src/context/StoreContext.jsx:195:33)
+    at WishlistProvider (http://localhost:5173/src/context/WishlistContext.jsx:43:36)
+    at LocationProvider (http://localhost:5173/src/context/LocationContext.jsx:51:36)
+    at ToastProvider (http://localhost:5173/src/context/ToastContext.jsx:28:33)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.jsx:27:33)
+    at App
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4535:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:5273:5)
+    at _a (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=e19e7beb:624:5)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=e19e7beb:26:30)
+
+React will try to recreate this component tree from scratch using the error boundary you provided, ErrorBoundary.
+CONSOLE ERROR: ErrorBoundary caught an error: ReferenceError: useMemo is not defined [object Object]
+WINDOW ERROR: Uncaught Error: useAuth must be used inside <AuthProvider> Error: useAuth must be used inside <AuthProvider>
+    at useAuth (http://localhost:5173/src/context/AuthContext.jsx:220:19)
+    at RequireAuth (http://localhost:5173/src/components/auth/RequireAuth.jsx:22:46)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:11548:26)
+    at mountIndeterminateComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14926:21)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:15914:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3699:24)
+    at invokeGuardedCallback (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3733:39)
+    at beginWork$1 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19765:15)
+    at performUnitOfWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19198:20)
+WINDOW ERROR: Uncaught Error: useAuth must be used inside <AuthProvider> Error: useAuth must be used inside <AuthProvider>
+    at useAuth (http://localhost:5173/src/context/AuthContext.jsx:220:19)
+    at RequireAuth (http://localhost:5173/src/components/auth/RequireAuth.jsx:22:46)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:11548:26)
+    at mountIndeterminateComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14926:21)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:15914:22)
+    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3674:22)
+    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3699:24)
+    at invokeGuardedCallback (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:3733:39)
+    at beginWork$1 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19765:15)
+    at performUnitOfWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19198:20)
+CONSOLE ERROR: The above error occurred in the <RequireAuth> component:
+
+    at RequireAuth (http://localhost:5173/src/components/auth/RequireAuth.jsx:20:31)
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4122:5)
+    at Outlet (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4528:26)
+    at ScrollToTopWrapper
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4122:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4592:5)
+    at Suspense
+    at CartProvider (http://localhost:5173/src/context/CartContext.jsx:24:32)
+    at AuthProvider (http://localhost:5173/src/context/AuthContext.jsx?t=1790788217563:25:32)
+    at StoreProvider (http://localhost:5173/src/context/StoreContext.jsx:195:33)
+    at WishlistProvider (http://localhost:5173/src/context/WishlistContext.jsx?t=1790788217563:43:36)
+    at LocationProvider (http://localhost:5173/src/context/LocationContext.jsx?t=1790788217563:51:36)
+    at ToastProvider (http://localhost:5173/src/context/ToastContext.jsx:28:33)
+    at ThemeProvider (http://localhost:5173/src/context/ThemeContext.jsx:27:33)
+    at App
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:4535:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=e19e7beb:5273:5)
+    at _a (http://localhost:5173/node_modules/.vite/deps/react-helmet-async.js?v=e19e7beb:624:5)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=e19e7beb:26:30)
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+PROMISE ERROR: Error: useAuth must be used inside <AuthProvider>
+    at useAuth (http://localhost:5173/src/context/AuthContext.jsx:220:19)
+    at RequireAuth (http://localhost:5173/src/components/auth/RequireAuth.jsx:22:46)
+    at renderWithHooks (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:11548:26)
+    at mountIndeterminateComponent (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:14926:21)
+    at beginWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:15914:22)
+    at beginWork$1 (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19753:22)
+    at performUnitOfWork (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19198:20)
+    at workLoopSync (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19137:13)
+    at renderRootSync (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:19116:15)
+    at recoverFromConcurrentError (http://localhost:5173/node_modules/.vite/deps/chunk-RPCDYKBN.js?v=e19e7beb:18736:28)
+CONSOLE ERROR: ReferenceError: Can't find variable: useMemo
+CONSOLE ERROR: ErrorBoundary caught an error: ReferenceError: Can't find variable: useMemo [object Object]
+CONSOLE ERROR: ReferenceError: Can't find variable: useMemo
+CONSOLE ERROR: ErrorBoundary caught an error: ReferenceError: Can't find variable: useMemo [object Object]

@@ -499,6 +499,13 @@ export default function CreateEvent() {
 
     const eventPayload = {
       ...form,
+      name: form.title,
+      cover: form.cover || '/images/events/event-1.svg',
+      image: form.cover || '/images/events/event-1.svg',
+      venueName: form.venueName || 'Wa Central',
+      address: form.address || form.venueName || 'Wa Central',
+      start_time: form.start,
+      end_time: form.end || form.start,
       status: 'published',
       highlights: highlightLines,
       organizerId,

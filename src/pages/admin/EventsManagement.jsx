@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef } from 'react'
+import { useState, useMemo, useRef, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import {
   Calendar,
@@ -72,11 +72,71 @@ export default function EventsManagement() {
   const toast = useToast()
 
   const events = useMemo(() => {
-    if (Array.isArray(eventsData)) return eventsData
-    if (Array.isArray(eventsData?.events)) return eventsData.events
-    if (eventsData?.data) return eventsData.data
-    if (eventsData !== undefined) return []
-    return storeEvents
+    const apiList = Array.isArray(eventsData)
+      ? eventsData
+      : Array.isArray(eventsData?.events)
+        ? eventsData.events
+        : Array.isArray(eventsData?.data)
+          ? eventsData.data
+          : []
+
+    const map = new Map()
+    apiList.forEach((e) => {
+      if (e?.id || e?.slug) map.set(String(e.id || e.slug), e)
+    })
+    storeEvents.forEach((e) => {
+      if (e?.id || e?.slug) {
+        const key = String(e.id || e.slug)
+        map.set(key, { ...(map.get(key) || {}), ...e })
+      }
+    })
+
+    return Array.from(map.values())
+  }, [eventsData, storeEvents])
+
+  // Automatically sync any local-only custom events to the backend database
+  useEffect(() => {
+    if (!eventsData) return
+    const apiList = Array.isArray(eventsData)
+      ? eventsData
+      : Array.isArray(eventsData?.events)
+        ? eventsData.events
+        : Array.isArray(eventsData?.data)
+          ? eventsData.data
+          : []
+
+    const apiIds = new Set(apiList.map((e) => String(e.id || e.slug)))
+    const unsynced = storeEvents.filter(
+      (se) =>
+        se &&
+        (se.isCustom || !se.id || isNaN(Number(se.id))) &&
+        !apiIds.has(String(se.id)) &&
+        !apiIds.has(String(se.slug)),
+    )
+
+    if (unsynced.length > 0) {
+      unsynced.forEach(async (ev) => {
+        try {
+          await createMutation.mutateAsync({
+            title: ev.title || ev.name,
+            name: ev.title || ev.name,
+            description: ev.description || ev.tagline,
+            category: typeof ev.category === 'object' ? ev.category?.id : ev.category,
+            start: ev.start || ev.start_time,
+            end: ev.end || ev.end_time,
+            type: ev.type,
+            venueName: ev.venue?.name || ev.address,
+            address: ev.venue?.address || ev.address,
+            cover: ev.cover || ev.image,
+            capacity: ev.capacity || 100,
+            tickets: ev.tickets || [],
+            featured: Boolean(ev.featured),
+          })
+        } catch {
+          // Sync attempt silently catches if server unavailable
+        }
+      })
+    }
   }, [eventsData, storeEvents])
 
   const [search, setSearch] = useState('')
@@ -132,12 +192,17 @@ export default function EventsManagement() {
   const filteredEvents = useMemo(() => {
     return events.filter((ev) => {
       const evCat = typeof ev.category === 'object' ? ev.category?.id : ev.category
-      const matchesCategory = categoryFilter === 'all' || evCat === categoryFilter
+      const catStr = String(evCat || ev.category?.name || ev.category || '').toLowerCase()
+      const matchesCategory =
+        categoryFilter === 'all' ||
+        catStr === categoryFilter.toLowerCase() ||
+        catStr.includes(categoryFilter.toLowerCase())
       const matchesSearch =
         !search ||
         ev.title?.toLowerCase().includes(search.toLowerCase()) ||
         ev.venue?.city?.toLowerCase().includes(search.toLowerCase()) ||
-        ev.organizer?.name?.toLowerCase().includes(search.toLowerCase())
+        ev.organizer?.name?.toLowerCase().includes(search.toLowerCase()) ||
+        ev.organizerName?.toLowerCase().includes(search.toLowerCase())
       return matchesCategory && matchesSearch
     })
   }, [events, categoryFilter, search])
@@ -491,13 +556,19 @@ export default function EventsManagement() {
 
     const eventPayload = {
       title: form.title.trim(),
+      name: form.title.trim(),
       tagline: form.tagline.trim() || form.title.trim(),
       category: form.category,
       cover: form.cover || '/images/events/event-1.svg',
+      image: form.cover || '/images/events/event-1.svg',
       slug,
       start: form.start,
+      start_time: form.start,
       end: form.end || form.start,
+      end_time: form.end || form.start,
       type: form.type,
+      venueName: form.venueName || 'Wa Regional Center',
+      address: form.address || form.venueName || 'Wa Central',
       venue:
         form.type === 'venue'
           ? {

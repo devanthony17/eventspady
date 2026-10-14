@@ -48,27 +48,70 @@ export default function Overview() {
   const toast = useToast()
 
   const organizers = useMemo(() => {
-    if (Array.isArray(organizersData)) return organizersData
-    if (Array.isArray(organizersData?.organizers)) return organizersData.organizers
-    if (organizersData?.data) return organizersData.data
-    if (organizersData !== undefined) return []
-    return storeOrganizers
+    const apiList = Array.isArray(organizersData)
+      ? organizersData
+      : Array.isArray(organizersData?.organizers)
+        ? organizersData.organizers
+        : Array.isArray(organizersData?.data)
+          ? organizersData.data
+          : []
+
+    const map = new Map()
+    apiList.forEach((o) => {
+      if (o?.id) map.set(String(o.id), o)
+    })
+    storeOrganizers.forEach((o) => {
+      if (o?.id) {
+        map.set(String(o.id), { ...(map.get(String(o.id)) || {}), ...o })
+      }
+    })
+
+    return Array.from(map.values())
   }, [organizersData, storeOrganizers])
 
   const events = useMemo(() => {
-    if (Array.isArray(eventsData)) return eventsData
-    if (Array.isArray(eventsData?.events)) return eventsData.events
-    if (eventsData?.data) return eventsData.data
-    if (eventsData !== undefined) return []
-    return storeEvents
+    const apiList = Array.isArray(eventsData)
+      ? eventsData
+      : Array.isArray(eventsData?.events)
+        ? eventsData.events
+        : Array.isArray(eventsData?.data)
+          ? eventsData.data
+          : []
+
+    const map = new Map()
+    apiList.forEach((e) => {
+      if (e?.id || e?.slug) map.set(String(e.id || e.slug), e)
+    })
+    storeEvents.forEach((e) => {
+      if (e?.id || e?.slug) {
+        const key = String(e.id || e.slug)
+        map.set(key, { ...(map.get(key) || {}), ...e })
+      }
+    })
+
+    return Array.from(map.values())
   }, [eventsData, storeEvents])
 
   const orders = useMemo(() => {
-    if (Array.isArray(ordersData)) return ordersData
-    if (Array.isArray(ordersData?.orders)) return ordersData.orders
-    if (ordersData?.data) return ordersData.data
-    if (ordersData !== undefined) return []
-    return storeOrders
+    const apiList = Array.isArray(ordersData)
+      ? ordersData
+      : Array.isArray(ordersData?.orders)
+        ? ordersData.orders
+        : Array.isArray(ordersData?.data)
+          ? ordersData.data
+          : []
+
+    const map = new Map()
+    apiList.forEach((ord) => {
+      if (ord?.id) map.set(String(ord.id), ord)
+    })
+    storeOrders.forEach((ord) => {
+      if (ord?.id) {
+        map.set(String(ord.id), { ...(map.get(String(ord.id)) || {}), ...ord })
+      }
+    })
+
+    return Array.from(map.values())
   }, [ordersData, storeOrders])
 
   const pendingOrganizers = useMemo(

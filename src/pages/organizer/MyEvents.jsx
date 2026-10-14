@@ -11,6 +11,7 @@ import { Input } from '@components/ui/Field'
 import { EmptyState } from '@components/ui/EmptyState'
 import { useAuth } from '@context/AuthContext'
 import { useToast } from '@context/ToastContext'
+import { useStore } from '@context/StoreContext'
 import {
   useOrganizerEvents,
   useUpdateEventMutation,
@@ -25,6 +26,7 @@ import { cn, formatCurrency, formatDate } from '@lib/utils'
 export default function MyEvents() {
   const { nav } = useOutletContext()
   const { user } = useAuth()
+  const { events: storeEvents = [], deleteEvent } = useStore()
   const { data: eventsData, isLoading } = useOrganizerEvents()
   const updateEventMutation = useUpdateEventMutation()
   const deleteEventMutation = useDeleteEventMutation()
@@ -45,9 +47,27 @@ export default function MyEvents() {
   })
 
   const events = useMemo(() => {
-    if (Array.isArray(eventsData)) return eventsData
-    return eventsData?.events || eventsData?.data || []
-  }, [eventsData])
+    const apiList = Array.isArray(eventsData)
+      ? eventsData
+      : Array.isArray(eventsData?.events)
+        ? eventsData.events
+        : Array.isArray(eventsData?.data)
+          ? eventsData.data
+          : []
+
+    const map = new Map()
+    apiList.forEach((e) => {
+      if (e?.id || e?.slug) map.set(String(e.id || e.slug), e)
+    })
+    storeEvents.forEach((e) => {
+      if (e?.id || e?.slug) {
+        const key = String(e.id || e.slug)
+        map.set(key, { ...(map.get(key) || {}), ...e })
+      }
+    })
+
+    return Array.from(map.values())
+  }, [eventsData, storeEvents])
 
   const published = events.filter((e) => new Date(e.start || e.startDate) > new Date())
   const past = events.filter((e) => new Date(e.start || e.startDate) <= new Date())

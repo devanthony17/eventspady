@@ -69,13 +69,13 @@ export function TicketSelector({ event, className }) {
           {event.soldOut ? (
             <Badge tone="danger">Sold out</Badge>
           ) : (
-            <Badge tone="success">{(event.remaining ?? 100).toLocaleString()} left</Badge>
+            <Badge tone="success">{(Number(event.remaining != null ? event.remaining : 100) || 0).toLocaleString()} left</Badge>
           )}
         </div>
       </div>
 
       <div className="divide-y divide-ink-200/70 dark:divide-white/10">
-        {event.tickets.map((ticket) => {
+        {(event.tickets || []).map((ticket) => {
           const quantity = lines[ticket.id] ?? 0
           const soldOut = (ticket.remaining ?? 100) <= 0
           const salesClosed = ticket.salesEnd ? new Date(ticket.salesEnd).getTime() < Date.now() : false

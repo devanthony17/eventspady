@@ -547,8 +547,12 @@ export default function CreateEvent() {
         securityIncluded: t.type === 'vendor' ? Boolean(t.securityIncluded) : undefined,
         setupHours: t.type === 'vendor' ? t.setupHours : undefined,
         teardownHours: t.type === 'vendor' ? t.teardownHours : undefined,
+        sold: 0,
         salesEnd: form.start,
       })),
+      capacity: ticketStats.totalCapacity || tickets.reduce((s, t) => s + (Number(t.quantity) || 0), 0),
+      sold: 0,
+      remaining: ticketStats.totalCapacity || tickets.reduce((s, t) => s + (Number(t.quantity) || 0), 0),
     }
 
     const createdEvent = store.createEvent(eventPayload)

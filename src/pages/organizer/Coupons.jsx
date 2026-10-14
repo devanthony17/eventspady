@@ -138,7 +138,7 @@ export default function Coupons() {
                 <div className="mt-auto">
                   <div className="mb-1.5 flex items-center justify-between text-xs">
                     <span className="text-ink-500 dark:text-ink-400">
-                      {coupon.used.toLocaleString()} / {coupon.usageLimit.toLocaleString()} redeemed
+                      {(Number(coupon.used) || 0).toLocaleString()} / {(Number(coupon.usageLimit) || 0).toLocaleString()} redeemed
                     </span>
                     <span className="font-bold">{usedPercent}%</span>
                   </div>

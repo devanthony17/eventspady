@@ -37,6 +37,18 @@ export function SpotlightBanner() {
 
   if (!spotlight) return null
 
+  const soldCount = Number(spotlight.sold) || 0
+  const capacity =
+    Number(spotlight.capacity) ||
+    (Array.isArray(spotlight.tickets) ? spotlight.tickets.reduce((acc, t) => acc + (Number(t.quantity) || 0), 0) : 0) ||
+    100
+  const remainingCount =
+    spotlight.remaining != null && !isNaN(Number(spotlight.remaining))
+      ? Number(spotlight.remaining)
+      : Math.max(0, capacity - soldCount)
+  const percentSold = capacity > 0 ? Math.min(100, Math.max(0, Math.round((soldCount / capacity) * 100))) : 0
+  const priceFrom = Number(spotlight.priceFrom) || 0
+
   return (
     <Section size="tight">
       <Container>
@@ -76,13 +88,13 @@ export function SpotlightBanner() {
                 </li>
                 <li className="flex items-center gap-2">
                   <Users className="size-4 shrink-0 text-accent-400" aria-hidden="true" />
-                  {spotlight.sold.toLocaleString()} going
+                  {soldCount.toLocaleString()} going
                 </li>
               </ul>
 
               <div className="mt-8 flex flex-wrap items-center gap-3">
                 <Button to={`/events/${spotlight.slug}`} size="lg" iconRight={ArrowRight}>
-                  Get tickets from {formatCurrency(spotlight.priceFrom)}
+                  Get tickets from {formatCurrency(priceFrom)}
                 </Button>
                 <Link
                   to="/events"
@@ -109,14 +121,14 @@ export function SpotlightBanner() {
               )}
 
               <p className="mt-4 text-sm text-white/60">
-                <span className="font-bold text-white">{spotlight.remaining.toLocaleString()}</span> tickets
+                <span className="font-bold text-white">{remainingCount.toLocaleString()}</span> tickets
                 still available
               </p>
 
               <div className="mt-2 h-1.5 w-full max-w-xs overflow-hidden rounded-full bg-white/15">
                 <div
                   className="h-full rounded-full bg-gradient-to-r from-accent-400 to-accent-500"
-                  style={{ width: `${Math.round((spotlight.sold / spotlight.capacity) * 100)}%` }}
+                  style={{ width: `${percentSold}%` }}
                 />
               </div>
             </div>

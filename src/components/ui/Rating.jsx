@@ -26,8 +26,8 @@ export function Rating({ value = 0, count, size = 'md', showValue = true, classN
         })}
       </div>
       {showValue && <span className="text-sm font-bold leading-none">{Number(value).toFixed(1)}</span>}
-      {count != null && (
-        <span className="text-xs text-ink-500 dark:text-ink-400">({count.toLocaleString()})</span>
+      {count != null && !isNaN(Number(count)) && (
+        <span className="text-xs text-ink-500 dark:text-ink-400">({(Number(count) || 0).toLocaleString()})</span>
       )}
     </div>
   )

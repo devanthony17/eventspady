@@ -46,7 +46,10 @@ function SaveButton({ event, className }) {
 export function EventCard({ event, variant = 'default', className, showSave = true }) {
   const chip = calendarChip(event.start)
   const isOnline = event.type === 'online'
-  const almostGone = !event.soldOut && event.remaining <= event.capacity * 0.12
+  const capacity = Number(event.capacity) || 0
+  const sold = Number(event.sold) || 0
+  const remaining = Number(event.remaining != null ? event.remaining : Math.max(0, capacity - sold))
+  const almostGone = !event.soldOut && capacity > 0 && remaining <= capacity * 0.12
 
   const priceLabel = event.isFree
     ? 'Free'
@@ -145,7 +148,7 @@ export function EventCard({ event, variant = 'default', className, showSave = tr
           <div className="mt-3 flex flex-wrap items-center gap-4 text-xs text-ink-500 dark:text-ink-400">
             <span className="inline-flex items-center gap-1.5 font-medium">
               <Users className="size-3.5 text-brand-600 dark:text-brand-400" aria-hidden="true" />
-              {event.sold?.toLocaleString() ?? 0} going
+              {sold.toLocaleString()} going
             </span>
             {event.organizer?.name && (
               <span className="inline-flex items-center gap-1.5 truncate">
@@ -238,7 +241,7 @@ export function EventCard({ event, variant = 'default', className, showSave = tr
           </Badge>
           <span className="inline-flex items-center gap-1 text-xs font-medium text-ink-500 dark:text-ink-400">
             <Users className="size-3.5 text-brand-600 dark:text-brand-400" aria-hidden="true" />
-            <span>{event.sold?.toLocaleString() ?? 0} going</span>
+            <span>{sold.toLocaleString()} going</span>
           </span>
         </div>
 

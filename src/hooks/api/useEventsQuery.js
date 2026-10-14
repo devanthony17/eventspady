@@ -4,6 +4,26 @@ import queryClient from '@api/queryClient'
 import { useStore } from '@context/StoreContext'
 import { useMemo } from 'react'
 
+function normalizeEvent(e) {
+  if (!e || typeof e !== 'object') return e
+  const tickets = Array.isArray(e.tickets) ? e.tickets : []
+  const calcCapacity = tickets.reduce((acc, t) => acc + (Number(t.quantity) || 0), 0)
+  const capacity = Number(e.capacity) || calcCapacity || 100
+  const sold = Number(e.sold) || 0
+  const remaining = Number(e.remaining != null ? e.remaining : Math.max(0, capacity - sold))
+  const priceFrom =
+    Number(e.priceFrom) ||
+    (tickets.length ? Math.min(...tickets.map((t) => Number(t.price) || 0)) : 0)
+
+  return {
+    ...e,
+    capacity,
+    sold,
+    remaining,
+    priceFrom,
+  }
+}
+
 export function useEvents(params = {}, options = {}) {
   let storeEvents = []
   try {
@@ -48,7 +68,7 @@ export function useEvents(params = {}, options = {}) {
       }
     })
 
-    const merged = Array.from(map.values())
+    const merged = Array.from(map.values()).map(normalizeEvent)
     return {
       events: merged,
       total: merged.length,
@@ -128,7 +148,18 @@ export function useEvent(slugOrId, options = {}) {
     ...options,
   })
 
-  const eventData = query.data || (localEvent ? { event: localEvent, data: localEvent } : null)
+  const rawEvent = query.data || (localEvent ? { event: localEvent, data: localEvent } : null)
+  const eventData = useMemo(() => {
+    if (!rawEvent) return null
+    const e = rawEvent.event || rawEvent.data || (rawEvent.title ? rawEvent : null)
+    if (!e) return rawEvent
+    const normalized = normalizeEvent(e)
+    return {
+      ...rawEvent,
+      event: normalized,
+      data: normalized,
+    }
+  }, [rawEvent])
 
   return {
     ...query,

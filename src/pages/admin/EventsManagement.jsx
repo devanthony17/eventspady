@@ -274,6 +274,8 @@ export default function EventsManagement() {
     const organizerName = form.organizerName.trim() || 'Eventspady Official'
     const organizerId = `admin-org-${Date.now()}`
 
+    const capacity = tickets.reduce((sum, t) => sum + (Number(t.quantity) || 0), 0)
+
     const eventPayload = {
       title: form.title.trim(),
       tagline: form.tagline.trim() || form.title.trim(),
@@ -338,7 +340,9 @@ export default function EventsManagement() {
       featured: Boolean(form.featured),
       status: 'published',
       isCustom: true,
+      capacity,
       sold: 0,
+      remaining: capacity,
     }
 
     try {
@@ -533,7 +537,7 @@ export default function EventsManagement() {
 
                         <td className="px-4 py-4">
                           <div className="flex items-center justify-between text-[11px] font-medium">
-                            <span>{ev.sold?.toLocaleString() || 0} sold</span>
+                            <span>{(Number(ev.sold) || 0).toLocaleString()} sold</span>
                             <span className="text-ink-400">{soldRatio}%</span>
                           </div>
                           <div className="mt-1 h-1.5 w-24 overflow-hidden rounded-full bg-ink-100 dark:bg-white/10">

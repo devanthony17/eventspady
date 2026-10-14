@@ -123,7 +123,7 @@ export default function OrganizerOverview() {
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
           <StatCard label="Gross revenue" value={formatCurrency(grossRevenue)} icon={DollarSign} tone="success" delta={18} />
           <StatCard label="Net payout" value={formatCurrency(netPayout)} icon={TrendingUp} tone="brand" delta={16} />
-          <StatCard label="Tickets sold" value={ticketsSold.toLocaleString()} icon={Ticket} tone="info" delta={9} />
+          <StatCard label="Tickets sold" value={(Number(ticketsSold) || 0).toLocaleString()} icon={Ticket} tone="info" delta={9} />
           <StatCard label="Live events" value={myEvents.length} icon={Users} tone="accent" />
         </div>
 

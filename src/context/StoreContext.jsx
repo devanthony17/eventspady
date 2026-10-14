@@ -57,8 +57,9 @@ function enrichEvent(event) {
   const purchasable = tickets.filter((t) => t.remaining > 0 && (!t.salesEnd || new Date(t.salesEnd).getTime() > now))
   const prices = (purchasable.length > 0 ? purchasable : tickets).map((t) => Number(t.price) || 0)
 
-  const capacity = tickets.reduce((sum, t) => sum + (Number(t.quantity) || 0), 0)
-  const sold = tickets.reduce((sum, t) => sum + (Number(t.sold) || 0), 0)
+  const capacity = Number(event.capacity) || tickets.reduce((sum, t) => sum + (Number(t.quantity) || 0), 0)
+  const sold = Number(event.sold) || tickets.reduce((sum, t) => sum + (Number(t.sold) || 0), 0)
+  const remaining = Number(event.remaining != null ? event.remaining : Math.max(0, capacity - sold))
 
   return {
     currency: 'GHS',
@@ -72,6 +73,7 @@ function enrichEvent(event) {
     tickets,
     capacity,
     sold,
+    remaining,
     priceFrom: prices.length ? Math.min(...prices) : 0,
     priceTo: prices.length ? Math.max(...prices) : 0,
     isFree: prices.length > 0 && prices.every((p) => p === 0),

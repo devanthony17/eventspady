@@ -16,11 +16,12 @@ export function slugify(value) {
 
 /** Ghana cedis by default — `en-GH` renders the ₵ symbol rather than the code. */
 export function formatCurrency(amount, currency = 'GHS') {
+  const val = Number(amount) || 0
   return new Intl.NumberFormat('en-GH', {
     style: 'currency',
     currency,
-    maximumFractionDigits: Number.isInteger(amount) ? 0 : 2,
-  }).format(amount)
+    maximumFractionDigits: Number.isInteger(val) ? 0 : 2,
+  }).format(val)
 }
 
 export function formatDate(value, options = {}) {
@@ -58,7 +59,8 @@ export function calendarChip(value) {
 }
 
 export function formatCompact(n) {
-  return new Intl.NumberFormat('en-GB', { notation: 'compact', maximumFractionDigits: 1 }).format(n)
+  const val = Number(n) || 0
+  return new Intl.NumberFormat('en-GB', { notation: 'compact', maximumFractionDigits: 1 }).format(val)
 }
 
 /** Human countdown between now and a target date. Returns null once elapsed. */

@@ -270,7 +270,7 @@ export default function Pricing() {
                 <label htmlFor="volume" className="label flex items-center justify-between">
                   <span>Tickets sold:</span>
                   <span className="rounded-md bg-brand-50 px-2 py-0.5 font-bold text-brand-600 dark:bg-brand-500/10 dark:text-brand-400">
-                    {volume.toLocaleString()}
+                    {(Number(volume) || 0).toLocaleString()}
                   </span>
                 </label>
                 <input

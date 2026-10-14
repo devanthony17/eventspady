@@ -221,7 +221,7 @@ export default function Overview() {
             </div>
             <div className="mt-3">
               <p className="text-2xl font-black text-ink-900 dark:text-white">
-                {totalTicketsSold.toLocaleString()}
+                {(Number(totalTicketsSold) || 0).toLocaleString()}
               </p>
               <p className="mt-1.5 text-xs text-ink-500 dark:text-ink-400 font-medium">
                 Across {events.length} live event{events.length === 1 ? '' : 's'}

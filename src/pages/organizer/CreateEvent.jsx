@@ -8,16 +8,18 @@ import {
   Clock,
   Crown,
   Droplets,
+  ExternalLink,
   HelpCircle,
   ImagePlus,
   Layers,
   MapPin,
+  Navigation,
   Plus,
   Save,
   ShieldCheck,
-  Sparkles,
   Store,
   Trash2,
+  TrendingUp,
   UploadCloud,
   Users,
   Video,
@@ -309,6 +311,9 @@ export default function CreateEvent() {
     address: '',
     city: 'Wa',
     country: 'Ghana',
+    venueLat: '',
+    venueLng: '',
+    googleMapsUrl: '',
     onlinePlatform: '',
     joinNote: '',
     ageLimit: 'All ages',
@@ -336,6 +341,31 @@ export default function CreateEvent() {
       },
     ])
     toast.success(`Added ${preset.label} to your ticket tiers.`)
+  }
+
+  const handleDetectCoordinates = () => {
+    if (!navigator.geolocation) {
+      toast.warning('Geolocation is not supported by your browser.')
+      return
+    }
+    toast.info('Detecting device location coordinates...')
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const lat = pos.coords.latitude.toFixed(6)
+        const lng = pos.coords.longitude.toFixed(6)
+        setForm((prev) => ({
+          ...prev,
+          venueLat: lat,
+          venueLng: lng,
+          googleMapsUrl: prev.googleMapsUrl || `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`,
+        }))
+        toast.success(`Coordinates captured: ${lat}, ${lng}`)
+      },
+      (err) => {
+        toast.warning(err.message || 'Unable to access device location.')
+      },
+      { timeout: 10000, enableHighAccuracy: true },
+    )
   }
 
   const ticketStats = useMemo(() => {
@@ -517,6 +547,9 @@ export default function CreateEvent() {
               address: form.address,
               city: form.city || 'Wa',
               country: form.country || 'Ghana',
+              lat: form.venueLat ? Number(form.venueLat) : undefined,
+              lng: form.venueLng ? Number(form.venueLng) : undefined,
+              googleMapsUrl: form.googleMapsUrl?.trim() || undefined,
               mapQuery: `${form.venueName}, ${form.city || 'Wa'}, Ghana`,
             }
           : null,
@@ -925,6 +958,74 @@ export default function CreateEvent() {
                     onChange={(e) => set({ country: e.target.value })}
                     placeholder="Ghana"
                   />
+
+                  {/* Dedicated Venue Coordinates & Google Maps Directions Integration */}
+                  <div className="sm:col-span-2 rounded-2xl border border-brand-500/20 bg-brand-50/40 p-4 dark:border-brand-500/20 dark:bg-brand-950/20 space-y-3">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <div className="flex items-center gap-2">
+                        <Navigation className="size-4 text-brand-600 dark:text-brand-400" />
+                        <h3 className="text-sm font-bold text-ink-900 dark:text-white">
+                          Venue GPS Coordinates &amp; Google Maps Directions
+                        </h3>
+                      </div>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="xs"
+                        iconLeft={MapPin}
+                        onClick={handleDetectCoordinates}
+                      >
+                        Detect My Coordinates
+                      </Button>
+                    </div>
+                    <p className="text-xs text-ink-500 dark:text-ink-400">
+                      Provide exact location coordinates or paste a direct Google Maps venue link. Attendees will click &quot;Get Directions&quot; on the website to open turn-by-turn Google Maps navigation.
+                    </p>
+
+                    <div className="grid gap-4 sm:grid-cols-3">
+                      <Input
+                        label="Latitude (e.g. 10.0601)"
+                        type="number"
+                        step="any"
+                        value={form.venueLat}
+                        onChange={(e) => set({ venueLat: e.target.value })}
+                        placeholder="10.0601"
+                      />
+                      <Input
+                        label="Longitude (e.g. -2.5099)"
+                        type="number"
+                        step="any"
+                        value={form.venueLng}
+                        onChange={(e) => set({ venueLng: e.target.value })}
+                        placeholder="-2.5099"
+                      />
+                      <div>
+                        <Input
+                          label="Google Maps Link (Optional)"
+                          type="url"
+                          value={form.googleMapsUrl}
+                          onChange={(e) => set({ googleMapsUrl: e.target.value })}
+                          placeholder="https://maps.app.goo.gl/..."
+                        />
+                        {(form.googleMapsUrl || (form.venueLat && form.venueLng) || form.venueName) && (
+                          <a
+                            href={
+                              form.googleMapsUrl ||
+                              (form.venueLat && form.venueLng
+                                ? `https://www.google.com/maps/dir/?api=1&destination=${form.venueLat},${form.venueLng}`
+                                : `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(`${form.venueName || ''}, ${form.city || 'Wa'}, Ghana`)}`)
+                            }
+                            target="_blank"
+                            rel="noreferrer noopener"
+                            className="mt-1.5 inline-flex items-center gap-1 text-[11px] font-semibold text-brand-600 hover:text-brand-700 dark:text-brand-400"
+                          >
+                            <ExternalLink className="size-3" />
+                            <span>Preview directions in Google Maps</span>
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  </div>
                 </div>
               ) : (
                 <div className="space-y-4">
@@ -1073,7 +1174,7 @@ export default function CreateEvent() {
                 <div className="mb-3 flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <span className="flex size-7 items-center justify-center rounded-lg bg-brand-500/10 text-brand-600 dark:text-brand-400">
-                      <Sparkles className="size-4" />
+                      <TrendingUp className="size-4" />
                     </span>
                     <h3 className="text-xs font-bold uppercase tracking-wider text-ink-500 dark:text-ink-400">
                       Inventory & Revenue Projection

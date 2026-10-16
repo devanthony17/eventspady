@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import {
   Briefcase,
   CalendarDays,
+  Camera,
   ChevronDown,
   ExternalLink,
   Globe,
@@ -11,6 +12,7 @@ import {
   Plus,
   Settings,
   ShieldCheck,
+  UploadCloud,
   User,
 } from 'lucide-react'
 import { Ticket } from '@components/icons/AppIcons'
@@ -20,18 +22,57 @@ import { Avatar } from '@components/ui/Avatar'
 import { Badge } from '@components/ui/Badge'
 import { Button } from '@components/ui/Button'
 import { useAuth } from '@context/AuthContext'
+import { useToast } from '@context/ToastContext'
+import { useUploadAvatarMutation } from '@hooks/api'
 import { useClickOutside } from '@hooks/useClickOutside'
 import { cn } from '@lib/utils'
 
 export function PortalTopNav({ portal: propPortal, onToggleMobileNav }) {
   const { pathname } = useLocation()
   const navigate = useNavigate()
-  const { user, logout } = useAuth()
+  const { user, logout, updateProfile } = useAuth()
+  const toast = useToast()
+  const uploadAvatarMutation = useUploadAvatarMutation()
 
   const [userMenuOpen, setUserMenuOpen] = useState(false)
   const userMenuRef = useRef(null)
+  const deviceFileInputRef = useRef(null)
 
   useClickOutside(userMenuRef, () => setUserMenuOpen(false), userMenuOpen)
+
+  const handleDeviceAvatarUpload = async (e) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    if (!file.type.startsWith('image/')) {
+      toast.warning('Please select an image file (PNG, JPG, WebP, etc.).')
+      return
+    }
+
+    const reader = new FileReader()
+    reader.onload = async (event) => {
+      const dataUrl = event.target?.result
+      if (dataUrl) {
+        // Immediately persist to local session & UI
+        await updateProfile({ avatar: dataUrl })
+        toast.success('Profile photo updated successfully from your device!')
+      }
+
+      // Proactively sync with server if API is available
+      try {
+        const formData = new FormData()
+        formData.append('avatar', file)
+        const res = await uploadAvatarMutation.mutateAsync(formData)
+        const serverUrl = res?.avatarUrl || res?.url || res?.data?.avatarUrl
+        if (serverUrl) {
+          updateProfile({ avatar: serverUrl })
+        }
+      } catch {
+        // Local persistence already applied
+      }
+    }
+    reader.readAsDataURL(file)
+  }
 
   // Auto-detect portal type if not passed
   const activePortal =
@@ -170,11 +211,21 @@ export function PortalTopNav({ portal: propPortal, onToggleMobileNav }) {
             <span>Public Site</span>
           </Link>
 
-          {/* Theme Toggle */}
-          <ThemeToggle className="size-9" />
+          {/* Hidden file input for uploading profile picture from device */}
+          <input
+            type="file"
+            ref={deviceFileInputRef}
+            onChange={handleDeviceAvatarUpload}
+            accept="image/*"
+            className="hidden"
+            aria-label="Upload profile image from device"
+          />
+
+          {/* Theme Toggle — strictly icon mode with shrink-0 to prevent layout overlap */}
+          <ThemeToggle variant="icon" className="size-9 shrink-0" />
 
           {/* User Profile Avatar & Dropdown */}
-          <div ref={userMenuRef} className="relative">
+          <div ref={userMenuRef} className="relative shrink-0">
             <button
               type="button"
               onClick={() => setUserMenuOpen((v) => !v)}
@@ -183,8 +234,8 @@ export function PortalTopNav({ portal: propPortal, onToggleMobileNav }) {
               className="flex items-center gap-2 rounded-xl p-1 transition hover:bg-ink-100 dark:hover:bg-white/10"
             >
               <Avatar
-                src={user?.avatar || '/images/avatars/avatar-1.svg'}
-                name={user?.name || 'User'}
+                src={user?.avatar || '/images/avatars/avatar-eric-naah.jpg'}
+                name={user?.name || 'Super Admin'}
                 size="sm"
               />
               <span className="hidden xl:inline text-xs font-bold text-ink-800 dark:text-ink-200 max-w-[100px] truncate">
@@ -194,14 +245,25 @@ export function PortalTopNav({ portal: propPortal, onToggleMobileNav }) {
             </button>
 
             {userMenuOpen && (
-              <div className="absolute right-0 top-full mt-2 w-64 animate-scale-in overflow-hidden rounded-2xl border border-ink-200/80 bg-white shadow-xl dark:border-white/10 dark:bg-ink-900 z-50">
+              <div className="absolute right-0 top-full mt-2 w-72 animate-scale-in overflow-hidden rounded-2xl border border-ink-200/80 bg-white shadow-xl dark:border-white/10 dark:bg-ink-900 z-50">
                 <div className="flex items-center gap-3 border-b border-ink-200/70 p-4 dark:border-white/10">
-                  <Avatar
-                    src={user?.avatar || '/images/avatars/avatar-1.svg'}
-                    name={user?.name || 'User'}
-                    size="md"
-                  />
-                  <div className="min-w-0">
+                  <div className="relative group">
+                    <Avatar
+                      src={user?.avatar || '/images/avatars/avatar-eric-naah.jpg'}
+                      name={user?.name || 'Super Admin'}
+                      size="md"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => deviceFileInputRef.current?.click()}
+                      title="Change photo from device"
+                      className="absolute -bottom-1 -right-1 grid size-5 place-items-center rounded-full bg-brand-600 text-white shadow-lift transition hover:bg-brand-700 hover:scale-105"
+                      aria-label="Change photo from device"
+                    >
+                      <Camera className="size-2.5" />
+                    </button>
+                  </div>
+                  <div className="min-w-0 flex-1">
                     <p className="truncate text-sm font-bold text-ink-900 dark:text-white">
                       {user?.name || 'Account User'}
                     </p>
@@ -214,7 +276,7 @@ export function PortalTopNav({ portal: propPortal, onToggleMobileNav }) {
                       className="mt-1"
                     >
                       {user?.role === 'admin'
-                        ? 'Platform Admin'
+                        ? 'Super Admin'
                         : user?.role === 'organizer'
                           ? 'Verified Organizer'
                           : 'Attendee'}
@@ -223,6 +285,18 @@ export function PortalTopNav({ portal: propPortal, onToggleMobileNav }) {
                 </div>
 
                 <div className="p-1.5 space-y-0.5">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      deviceFileInputRef.current?.click()
+                      setUserMenuOpen(false)
+                    }}
+                    className="flex w-full items-center gap-3 rounded-xl px-3 py-2 text-xs font-semibold text-brand-600 transition hover:bg-brand-50 dark:text-brand-400 dark:hover:bg-brand-950/40"
+                  >
+                    <Camera className="size-4" />
+                    <span>Change Photo from Device</span>
+                  </button>
+
                   <Link
                     to="/dashboard/profile"
                     onClick={() => setUserMenuOpen(false)}

@@ -2,7 +2,9 @@ import { Link } from 'react-router-dom'
 import { cn } from '@lib/utils'
 
 /**
- * Brand logo, served from `public/images/logo.webp`.
+ * Brand logo:
+ * - `logo-light.webp` for light theme backgrounds.
+ * - `logo-dark.webp` for dark theme backgrounds.
  */
 export function Logo({ className, showWordmark = true, to = '/', tone = 'auto', size = 'md' }) {
   const heights = {
@@ -12,8 +14,8 @@ export function Logo({ className, showWordmark = true, to = '/', tone = 'auto', 
   }
   const height = heights[size] ?? heights.md
 
-  const src = '/images/logo.webp'
-  const darkSrc = '/images/logo.webp'
+  const src = '/images/logo-light.webp'
+  const darkSrc = '/images/logo-dark.webp'
 
   return (
     <Link

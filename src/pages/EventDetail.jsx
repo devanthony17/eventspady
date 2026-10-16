@@ -6,17 +6,20 @@ import {
   Check,
   Clock,
   Copy,
+  ExternalLink,
   Facebook,
   Flag,
   Globe,
   Heart,
   Link2,
   MapPin,
+  Navigation,
   Share2,
   Twitter,
   Users,
   Video,
 } from 'lucide-react'
+import { getDirectionsUrl } from '@lib/utils'
 import { Seo, eventJsonLd } from '@components/ui/Seo'
 import { Container, Section } from '@components/ui/Section'
 import { Breadcrumbs } from '@components/ui/Breadcrumbs'
@@ -222,9 +225,23 @@ export default function EventDetail() {
               )}
               <div>
                 <p className="text-sm font-semibold">{isOnline ? event.online?.platform || 'Online' : event.venue?.name || 'Wa Naa Palace Grounds'}</p>
-                <p className="text-xs text-white/55">
-                  {isOnline ? 'Join link on your ticket' : event.venue?.address || 'Wa, Ghana'}
-                </p>
+                <div className="flex items-center gap-2">
+                  <p className="text-xs text-white/55">
+                    {isOnline ? 'Join link on your ticket' : event.venue?.address || 'Wa, Ghana'}
+                  </p>
+                  {!isOnline && event.venue && (
+                    <a
+                      href={getDirectionsUrl(event.venue)}
+                      target="_blank"
+                      rel="noreferrer noopener"
+                      className="inline-flex items-center gap-1 text-[11px] font-bold text-accent-400 hover:text-white underline decoration-accent-400/60 underline-offset-2 transition"
+                      title="Open directions in Google Maps"
+                    >
+                      <Navigation className="size-3" />
+                      <span>Directions</span>
+                    </a>
+                  )}
+                </div>
               </div>
             </div>
 
@@ -446,25 +463,30 @@ export default function EventDetail() {
 
                     <div className="flex flex-wrap items-center justify-between gap-4 p-5">
                       <div>
-                        <p className="font-bold">{event.venue?.name || 'Wa Naa Palace Grounds'}</p>
+                        <div className="flex flex-wrap items-center gap-2">
+                          <p className="font-bold text-base text-ink-900 dark:text-white">{event.venue?.name || 'Wa Naa Palace Grounds'}</p>
+                          {event.venue?.lat && event.venue?.lng && (
+                            <span className="inline-flex items-center gap-1 rounded-md border border-brand-200 bg-brand-50/70 px-2 py-0.5 text-[10px] font-semibold text-brand-700 dark:border-brand-800/40 dark:bg-brand-950/40 dark:text-brand-300">
+                              <Navigation className="size-2.5" />
+                              GPS: {event.venue.lat}, {event.venue.lng}
+                            </span>
+                          )}
+                        </div>
                         <p className="mt-1 text-sm text-ink-500 dark:text-ink-400">
                           {event.venue?.address ? `${event.venue.address}, ` : ''}
                           {event.venue?.city || 'Wa'}, {event.venue?.country || 'Ghana'}
                         </p>
                       </div>
                       <Button
-                        href={
-                          event.venue?.lat && event.venue?.lng
-                            ? `https://www.google.com/maps/search/?api=1&query=${event.venue.lat},${event.venue.lng}`
-                            : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${event.venue?.name || ''}, ${event.venue?.city || 'Wa'}, Ghana`)}`
-                        }
+                        href={getDirectionsUrl(event.venue)}
                         target="_blank"
                         rel="noreferrer noopener"
-                        variant="outline"
+                        variant="accent"
                         size="sm"
-                        iconLeft={MapPin}
+                        iconLeft={Navigation}
+                        className="shadow-lift font-bold"
                       >
-                        Get directions
+                        Get directions in Google Maps
                       </Button>
                     </div>
                   </div>

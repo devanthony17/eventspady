@@ -18,7 +18,31 @@ const initialsOf = (name = '') =>
     .join('')
     .toUpperCase()
 
+export const REAL_PORTRAIT_AVATARS = [
+  '/images/avatars/avatar-eric-naah.jpg',
+  '/images/avatars/avatar-abena-sowah.jpg',
+  '/images/avatars/avatar-alhaj-mumuni.jpg',
+  '/images/avatars/avatar-gifty-bawa.jpg',
+  '/images/avatars/avatar-paulina-kuu-ire.jpg',
+  '/images/avatars/avatar-sulemana-iddrisu.jpg',
+]
+
+export function getDeterministicAvatar(name = '') {
+  if (!name) return REAL_PORTRAIT_AVATARS[0]
+  let hash = 0
+  for (let i = 0; i < name.length; i++) {
+    hash = (hash << 5) - hash + name.charCodeAt(i)
+    hash |= 0
+  }
+  const idx = Math.abs(hash) % REAL_PORTRAIT_AVATARS.length
+  return REAL_PORTRAIT_AVATARS[idx]
+}
+
 export function Avatar({ src, name = '', size = 'md', ring = false, className }) {
+  // If src is missing or points to a legacy SVG silhouette, resolve to an actual photographic portrait
+  const isSvgPlaceholder = typeof src === 'string' && (src.endsWith('.svg') || src.includes('avatar-') && src.endsWith('.svg'))
+  const resolvedSrc = (!src || isSvgPlaceholder) ? getDeterministicAvatar(name) : src
+
   return (
     <span
       className={cn(
@@ -28,11 +52,18 @@ export function Avatar({ src, name = '', size = 'md', ring = false, className })
         className,
       )}
     >
-      {src ? (
-        <img src={src} alt={name ? `${name} avatar` : ''} loading="lazy" className="size-full object-cover" />
-      ) : (
-        initialsOf(name)
-      )}
+      <img
+        src={resolvedSrc}
+        alt={name ? `${name} avatar` : 'Profile avatar'}
+        loading="lazy"
+        onError={(e) => {
+          // If custom URL fails to load, fallback to first real portrait photo
+          if (e.currentTarget.src !== REAL_PORTRAIT_AVATARS[0]) {
+            e.currentTarget.src = REAL_PORTRAIT_AVATARS[0]
+          }
+        }}
+        className="size-full object-cover"
+      />
     </span>
   )
 }

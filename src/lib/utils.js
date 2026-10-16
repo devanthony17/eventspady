@@ -149,3 +149,20 @@ export function generateOrderId() {
 export function clamp(value, min, max) {
   return Math.min(Math.max(value, min), max)
 }
+
+/** Generate a direct turn-by-turn Google Maps directions URL for an event venue. */
+export function getDirectionsUrl(venue) {
+  if (!venue) return 'https://www.google.com/maps'
+  if (venue.googleMapsUrl && /^https?:\/\//i.test(venue.googleMapsUrl)) {
+    return venue.googleMapsUrl
+  }
+  const lat = Number(venue.lat)
+  const lng = Number(venue.lng)
+  if (Number.isFinite(lat) && Number.isFinite(lng)) {
+    return `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`
+  }
+  const query = [venue.name, venue.address, venue.city || 'Wa', venue.country || 'Ghana']
+    .filter(Boolean)
+    .join(', ')
+  return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(query)}`
+}

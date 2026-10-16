@@ -88,7 +88,7 @@ export default function AdminLogin() {
 
         {/* Top Header */}
         <header className="relative z-10 mx-auto flex w-full max-w-7xl items-center justify-between px-6 py-6 sm:px-8">
-          <Logo size="sm" to="/" />
+          <Logo size="sm" to="/" tone="inverse" />
 
           <div className="flex items-center gap-4 sm:gap-5">
             <Link

@@ -322,7 +322,7 @@ export function PortalSideNav({ portal: propPortal, mobileOpen = false, onClose 
           <div className="flex items-center justify-between rounded-xl bg-ink-100/70 p-2.5 dark:bg-white/[.04]">
             <div className="flex items-center gap-2.5 min-w-0">
               <Avatar
-                src={user?.avatar || '/images/avatars/avatar-1.svg'}
+                src={user?.avatar || '/images/avatars/avatar-eric-naah.jpg'}
                 name={user?.name || 'User'}
                 size="sm"
               />
@@ -397,7 +397,7 @@ export function PortalSideNav({ portal: propPortal, mobileOpen = false, onClose 
               <div className="rounded-2xl border border-white/15 bg-white/10 p-4 shadow-xl mb-6">
                 <div className="flex items-center gap-3">
                   <Avatar
-                    src={user?.avatar || '/images/avatars/avatar-1.svg'}
+                    src={user?.avatar || '/images/avatars/avatar-eric-naah.jpg'}
                     name={user?.name || 'User'}
                     size="md"
                     className="ring-2 ring-white/25"

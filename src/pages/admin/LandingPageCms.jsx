@@ -248,7 +248,7 @@ export default function LandingPageCms() {
     role: '',
     quote: '',
     rating: 5,
-    avatar: '/images/avatars/avatar-2.svg',
+    avatar: '/images/avatars/avatar-abena-sowah.jpg',
   })
   const [showReviewModal, setShowReviewModal] = useState(false)
   const [editingReview, setEditingReview] = useState(null)
@@ -257,16 +257,12 @@ export default function LandingPageCms() {
 
   // Avatar presets for quick testimonial picker
   const avatarPresets = [
-    { src: '/images/avatars/avatar-1.svg', label: 'Avatar 1' },
-    { src: '/images/avatars/avatar-2.svg', label: 'Avatar 2' },
-    { src: '/images/avatars/avatar-3.svg', label: 'Avatar 3' },
-    { src: '/images/avatars/avatar-4.svg', label: 'Avatar 4' },
-    { src: '/images/avatars/avatar-5.svg', label: 'Avatar 5' },
-    { src: '/images/avatars/avatar-abena-sowah.jpg', label: 'Abena' },
-    { src: '/images/avatars/avatar-alhaj-mumuni.jpg', label: 'Alhaj' },
-    { src: '/images/avatars/avatar-eric-naah.jpg', label: 'Eric' },
-    { src: '/images/avatars/avatar-gifty-bawa.jpg', label: 'Gifty' },
-    { src: '/images/avatars/avatar-paulina-kuu-ire.jpg', label: 'Paulina' },
+    { src: '/images/avatars/avatar-abena-sowah.jpg', label: 'Abena Sowah' },
+    { src: '/images/avatars/avatar-eric-naah.jpg', label: 'Eric Naah' },
+    { src: '/images/avatars/avatar-alhaj-mumuni.jpg', label: 'Alhaj Mumuni' },
+    { src: '/images/avatars/avatar-gifty-bawa.jpg', label: 'Gifty Bawa' },
+    { src: '/images/avatars/avatar-paulina-kuu-ire.jpg', label: 'Paulina Kuu-Ire' },
+    { src: '/images/avatars/avatar-sulemana-iddrisu.jpg', label: 'Sulemana Iddrisu' },
   ]
 
   // Blog modal / form states
@@ -276,7 +272,7 @@ export default function LandingPageCms() {
     excerpt: '',
     category: 'Guides',
     cover: '/images/events/bugatti-blackfriday.jpg',
-    author: { name: 'Kofi Owusu', avatar: '/images/avatars/avatar-1.svg' },
+    author: { name: 'Kofi Owusu', avatar: '/images/avatars/avatar-eric-naah.jpg' },
     body: 'How organizers in Ghana can leverage mobile money USSD for instant payouts.',
   })
   const [showBlogModal, setShowBlogModal] = useState(false)
@@ -356,7 +352,7 @@ export default function LandingPageCms() {
       role: '',
       quote: '',
       rating: 5,
-      avatar: '/images/avatars/avatar-2.svg',
+      avatar: '/images/avatars/avatar-abena-sowah.jpg',
     })
     setShowReviewModal(false)
   }
@@ -408,7 +404,7 @@ export default function LandingPageCms() {
       excerpt: '',
       category: 'Guides',
       cover: '/images/events/bugatti-blackfriday.jpg',
-      author: { name: 'Kofi Owusu', avatar: '/images/avatars/avatar-1.svg' },
+      author: { name: 'Kofi Owusu', avatar: '/images/avatars/avatar-eric-naah.jpg' },
       body: 'How organizers in Ghana can leverage mobile money USSD for instant payouts.',
     })
     setShowBlogModal(false)

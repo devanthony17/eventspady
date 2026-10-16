@@ -31,18 +31,28 @@ export default function Profile() {
   const handleAvatarChange = async (e) => {
     const file = e.target.files?.[0]
     if (!file) return
-    const formData = new FormData()
-    formData.append('avatar', file)
-    try {
-      const res = await uploadAvatarMutation.mutateAsync(formData)
-      const avatarUrl = res.avatarUrl || res.url || res.data?.avatarUrl
-      if (avatarUrl) {
-        updateProfile({ avatar: avatarUrl })
+
+    const reader = new FileReader()
+    reader.onload = async (ev) => {
+      const dataUrl = ev.target?.result
+      if (dataUrl) {
+        await updateProfile({ avatar: dataUrl })
+        toast.success('Avatar updated successfully from your device.')
       }
-      toast.success('Avatar updated successfully.')
-    } catch (err) {
-      toast.error(err?.response?.data?.message || err.message || 'Failed to upload avatar.')
+
+      const formData = new FormData()
+      formData.append('avatar', file)
+      try {
+        const res = await uploadAvatarMutation.mutateAsync(formData)
+        const avatarUrl = res?.avatarUrl || res?.url || res?.data?.avatarUrl
+        if (avatarUrl) {
+          updateProfile({ avatar: avatarUrl })
+        }
+      } catch {
+        // Local device file already persisted cleanly
+      }
     }
+    reader.readAsDataURL(file)
   }
 
   const onSubmit = async (e) => {

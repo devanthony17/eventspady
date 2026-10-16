@@ -2,16 +2,17 @@ import { useState, useMemo, useRef, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import {
   Calendar,
+  CalendarPlus,
   Check,
   CheckCircle2,
   ExternalLink,
   Eye,
   ImagePlus,
   MapPin,
+  Navigation,
   Pencil,
   Plus,
   Search,
-  Sparkles,
   Star,
   Ticket,
   Trash2,
@@ -167,6 +168,9 @@ export default function EventsManagement() {
     venueName: '',
     address: '',
     city: 'Wa',
+    venueLat: '',
+    venueLng: '',
+    googleMapsUrl: '',
     onlinePlatform: 'Google Meet',
     joinNote: '',
     start: '',
@@ -247,6 +251,9 @@ export default function EventsManagement() {
       venueName: ev.venue?.name || '',
       address: ev.venue?.address || '',
       city: ev.venue?.city || 'Wa',
+      venueLat: ev.venue?.lat != null ? String(ev.venue.lat) : '',
+      venueLng: ev.venue?.lng != null ? String(ev.venue.lng) : '',
+      googleMapsUrl: ev.venue?.googleMapsUrl || '',
       onlinePlatform: ev.online?.platform || 'Google Meet',
       joinNote: ev.online?.joinInstructions || '',
       start: ev.start ? ev.start.slice(0, 16) : '',
@@ -370,10 +377,14 @@ export default function EventsManagement() {
       venue:
         editForm.type === 'venue'
           ? {
+              ...(editingEvent?.venue || {}),
               name: editForm.venueName || 'Wa Regional Center',
               address: editForm.address || 'Wa Central',
               city: editForm.city || 'Wa',
               country: 'Ghana',
+              lat: editForm.venueLat ? Number(editForm.venueLat) : undefined,
+              lng: editForm.venueLng ? Number(editForm.venueLng) : undefined,
+              googleMapsUrl: editForm.googleMapsUrl?.trim() || undefined,
               mapQuery: `${editForm.venueName || 'Wa'}, ${editForm.city || 'Wa'}, Ghana`,
             }
           : null,
@@ -386,29 +397,32 @@ export default function EventsManagement() {
         ...(editingEvent?.organizer || {}),
         name: organizerName,
       },
-      tickets: editTickets.map((t) => ({
-        id: t.id,
-        name: t.name,
-        type: editForm.isFree ? 'free' : (t.type || 'paid'),
-        price: editForm.isFree ? 0 : Number(t.price) || 0,
-        quantity: Number(t.quantity) || 100,
-        perOrderLimit: Number(t.perOrderLimit) || 10,
-        description: t.description || '',
-        seatsPerTable: t.type === 'table' ? Number(t.seatsPerTable) || 4 : undefined,
-        tableLocation: t.type === 'table' ? t.tableLocation : undefined,
-        tablePackage: t.type === 'table' ? t.tablePackage : undefined,
-        dedicatedWaiter: t.type === 'table' ? Boolean(t.dedicatedWaiter) : undefined,
-        vipParking: t.type === 'table' ? Number(t.vipParking) || 0 : undefined,
-        expressEntry: t.type === 'table' ? Boolean(t.expressEntry) : undefined,
-        spaceSize: t.type === 'vendor' ? t.spaceSize : undefined,
-        vendorCategory: t.type === 'vendor' ? t.vendorCategory : undefined,
-        passesIncluded: t.type === 'vendor' ? Number(t.passesIncluded) || 2 : undefined,
-        tablesChairsIncluded: t.type === 'vendor' ? t.tablesChairsIncluded : undefined,
-        powerIncluded: t.type === 'vendor' ? Boolean(t.powerIncluded) : undefined,
-        waterIncluded: t.type === 'vendor' ? Boolean(t.waterIncluded) : undefined,
-        sold: t.sold || 0,
-        salesEnd: editForm.start,
-      })),
+      tickets: editTickets.map((t) => {
+        const isTierFree = t.type === 'free' || Number(t.price) === 0
+        return {
+          id: t.id,
+          name: t.name,
+          type: isTierFree ? 'free' : (t.type || 'paid'),
+          price: isTierFree ? 0 : Math.max(0, Number(t.price) || 0),
+          quantity: Number(t.quantity) || 100,
+          perOrderLimit: Number(t.perOrderLimit) || 10,
+          description: t.description || '',
+          seatsPerTable: t.type === 'table' ? Number(t.seatsPerTable) || 4 : undefined,
+          tableLocation: t.type === 'table' ? t.tableLocation : undefined,
+          tablePackage: t.type === 'table' ? t.tablePackage : undefined,
+          dedicatedWaiter: t.type === 'table' ? Boolean(t.dedicatedWaiter) : undefined,
+          vipParking: t.type === 'table' ? Number(t.vipParking) || 0 : undefined,
+          expressEntry: t.type === 'table' ? Boolean(t.expressEntry) : undefined,
+          spaceSize: t.type === 'vendor' ? t.spaceSize : undefined,
+          vendorCategory: t.type === 'vendor' ? t.vendorCategory : undefined,
+          passesIncluded: t.type === 'vendor' ? Number(t.passesIncluded) || 2 : undefined,
+          tablesChairsIncluded: t.type === 'vendor' ? t.tablesChairsIncluded : undefined,
+          powerIncluded: t.type === 'vendor' ? Boolean(t.powerIncluded) : undefined,
+          waterIncluded: t.type === 'vendor' ? Boolean(t.waterIncluded) : undefined,
+          sold: t.sold || 0,
+          salesEnd: editForm.start,
+        }
+      }),
       description: editForm.description.trim(),
       highlights: highlightList,
       featured: Boolean(editForm.featured),
@@ -531,6 +545,40 @@ export default function EventsManagement() {
     setTickets((prev) => prev.filter((t) => t.id !== id))
   }
 
+  const handleDetectCoordinates = (isEdit = false) => {
+    if (!navigator.geolocation) {
+      toast.warning('Geolocation is not supported by your browser.')
+      return
+    }
+    toast.info('Detecting device location coordinates...')
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const lat = pos.coords.latitude.toFixed(6)
+        const lng = pos.coords.longitude.toFixed(6)
+        if (isEdit) {
+          setEditForm((prev) => ({
+            ...prev,
+            venueLat: lat,
+            venueLng: lng,
+            googleMapsUrl: prev.googleMapsUrl || `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`,
+          }))
+        } else {
+          setForm((prev) => ({
+            ...prev,
+            venueLat: lat,
+            venueLng: lng,
+            googleMapsUrl: prev.googleMapsUrl || `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`,
+          }))
+        }
+        toast.success(`Coordinates captured: ${lat}, ${lng}`)
+      },
+      (err) => {
+        toast.warning(err.message || 'Unable to access device location.')
+      },
+      { timeout: 10000, enableHighAccuracy: true }
+    )
+  }
+
   const handleCreateSubmit = async (e) => {
     e.preventDefault()
     if (!form.title.trim()) {
@@ -573,9 +621,12 @@ export default function EventsManagement() {
         form.type === 'venue'
           ? {
               name: form.venueName || 'Wa Regional Center',
-              address: form.address || 'Wa Central',
+              address: form.address || form.venueName || 'Wa Central',
               city: form.city || 'Wa',
               country: 'Ghana',
+              lat: form.venueLat ? Number(form.venueLat) : undefined,
+              lng: form.venueLng ? Number(form.venueLng) : undefined,
+              googleMapsUrl: form.googleMapsUrl?.trim() || undefined,
               mapQuery: `${form.venueName || 'Wa'}, ${form.city || 'Wa'}, Ghana`,
             }
           : null,
@@ -596,29 +647,32 @@ export default function EventsManagement() {
         rating: 5.0,
         reviews: 0,
       },
-      tickets: tickets.map((t) => ({
-        id: t.id,
-        name: t.name,
-        type: form.isFree ? 'free' : (t.type || 'paid'),
-        price: form.isFree ? 0 : Number(t.price) || 0,
-        quantity: Number(t.quantity) || 100,
-        perOrderLimit: Number(t.perOrderLimit) || (t.type === 'table' || t.type === 'vendor' ? 2 : 10),
-        description: t.description || '',
-        seatsPerTable: t.type === 'table' ? Number(t.seatsPerTable) || 4 : undefined,
-        tableLocation: t.type === 'table' ? t.tableLocation : undefined,
-        tablePackage: t.type === 'table' ? t.tablePackage : undefined,
-        dedicatedWaiter: t.type === 'table' ? Boolean(t.dedicatedWaiter) : undefined,
-        vipParking: t.type === 'table' ? Number(t.vipParking) || 0 : undefined,
-        expressEntry: t.type === 'table' ? Boolean(t.expressEntry) : undefined,
-        spaceSize: t.type === 'vendor' ? t.spaceSize || '10x10 ft' : undefined,
-        vendorCategory: t.type === 'vendor' ? t.vendorCategory : undefined,
-        passesIncluded: t.type === 'vendor' ? Number(t.passesIncluded) || 2 : undefined,
-        tablesChairsIncluded: t.type === 'vendor' ? t.tablesChairsIncluded : undefined,
-        powerIncluded: t.type === 'vendor' ? Boolean(t.powerIncluded) : undefined,
-        waterIncluded: t.type === 'vendor' ? Boolean(t.waterIncluded) : undefined,
-        sold: 0,
-        salesEnd: form.start,
-      })),
+      tickets: tickets.map((t) => {
+        const isTierFree = t.type === 'free' || Number(t.price) === 0
+        return {
+          id: t.id,
+          name: t.name,
+          type: isTierFree ? 'free' : (t.type || 'paid'),
+          price: isTierFree ? 0 : Math.max(0, Number(t.price) || 0),
+          quantity: Number(t.quantity) || 100,
+          perOrderLimit: Number(t.perOrderLimit) || (t.type === 'table' || t.type === 'vendor' ? 2 : 10),
+          description: t.description || '',
+          seatsPerTable: t.type === 'table' ? Number(t.seatsPerTable) || 4 : undefined,
+          tableLocation: t.type === 'table' ? t.tableLocation : undefined,
+          tablePackage: t.type === 'table' ? t.tablePackage : undefined,
+          dedicatedWaiter: t.type === 'table' ? Boolean(t.dedicatedWaiter) : undefined,
+          vipParking: t.type === 'table' ? Number(t.vipParking) || 0 : undefined,
+          expressEntry: t.type === 'table' ? Boolean(t.expressEntry) : undefined,
+          spaceSize: t.type === 'vendor' ? t.spaceSize || '10x10 ft' : undefined,
+          vendorCategory: t.type === 'vendor' ? t.vendorCategory : undefined,
+          passesIncluded: t.type === 'vendor' ? Number(t.passesIncluded) || 2 : undefined,
+          tablesChairsIncluded: t.type === 'vendor' ? t.tablesChairsIncluded : undefined,
+          powerIncluded: t.type === 'vendor' ? Boolean(t.powerIncluded) : undefined,
+          waterIncluded: t.type === 'vendor' ? Boolean(t.waterIncluded) : undefined,
+          sold: 0,
+          salesEnd: form.start,
+        }
+      }),
       description: form.description.trim() || 'Join us for this exciting live event.',
       highlights: highlightList,
       featured: Boolean(form.featured),
@@ -911,7 +965,7 @@ export default function EventsManagement() {
 
             <div className="flex items-center gap-3">
               <div className="grid size-12 place-items-center rounded-2xl bg-brand-500/10 text-brand-600 dark:text-brand-400">
-                <Sparkles className="size-6" />
+                <CalendarPlus className="size-6" />
               </div>
               <div>
                 <h3 className="text-xl font-black text-ink-900 dark:text-white">
@@ -1181,6 +1235,88 @@ export default function EventsManagement() {
                           className="mt-1 w-full rounded-xl border border-ink-200 bg-white px-3 py-2 text-xs text-ink-900 outline-none transition focus:border-brand-500 dark:border-white/10 dark:bg-ink-800 dark:text-white"
                         />
                       </div>
+
+                      {/* Dedicated Get Directions & Coordinates Integration */}
+                      <div className="sm:col-span-2 rounded-xl border border-brand-500/20 bg-brand-50/40 p-3.5 dark:border-brand-500/20 dark:bg-brand-950/20 space-y-3">
+                        <div className="flex flex-wrap items-center justify-between gap-2">
+                          <div className="flex items-center gap-2">
+                            <Navigation className="size-4 text-brand-600 dark:text-brand-400" />
+                            <h5 className="text-xs font-bold text-ink-900 dark:text-white">
+                              Venue GPS Coordinates &amp; Get Directions Link
+                            </h5>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => handleDetectCoordinates(false)}
+                            className="inline-flex items-center gap-1.5 rounded-lg border border-brand-300 bg-white px-2.5 py-1 text-xs font-semibold text-brand-700 shadow-sm hover:bg-brand-50 dark:border-brand-700/50 dark:bg-brand-900/60 dark:text-brand-300"
+                          >
+                            <MapPin className="size-3.5" />
+                            <span>Use Device Coordinates</span>
+                          </button>
+                        </div>
+                        <p className="text-[11px] text-ink-500 dark:text-ink-400">
+                          Organizers provide GPS coordinates or a Google Maps link. Attendees can click &quot;Get Directions&quot; on the website to open live Google Maps navigation.
+                        </p>
+
+                        <div className="grid gap-3 sm:grid-cols-3">
+                          <div>
+                            <label className="block text-[10px] font-bold uppercase text-ink-500 dark:text-ink-400">
+                              Latitude (e.g. 10.0601)
+                            </label>
+                            <input
+                              type="number"
+                              step="any"
+                              placeholder="10.0601"
+                              value={form.venueLat}
+                              onChange={(e) => setForm({ ...form, venueLat: e.target.value })}
+                              className="mt-1 w-full rounded-lg border border-ink-200 bg-white px-2.5 py-1.5 text-xs text-ink-900 outline-none dark:border-white/10 dark:bg-ink-800 dark:text-white"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-[10px] font-bold uppercase text-ink-500 dark:text-ink-400">
+                              Longitude (e.g. -2.5099)
+                            </label>
+                            <input
+                              type="number"
+                              step="any"
+                              placeholder="-2.5099"
+                              value={form.venueLng}
+                              onChange={(e) => setForm({ ...form, venueLng: e.target.value })}
+                              className="mt-1 w-full rounded-lg border border-ink-200 bg-white px-2.5 py-1.5 text-xs text-ink-900 outline-none dark:border-white/10 dark:bg-ink-800 dark:text-white"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-[10px] font-bold uppercase text-ink-500 dark:text-ink-400">
+                              Google Maps Link (Optional)
+                            </label>
+                            <div className="flex gap-1.5 mt-1">
+                              <input
+                                type="url"
+                                placeholder="https://maps.app.goo.gl/..."
+                                value={form.googleMapsUrl}
+                                onChange={(e) => setForm({ ...form, googleMapsUrl: e.target.value })}
+                                className="w-full rounded-lg border border-ink-200 bg-white px-2.5 py-1.5 text-xs text-ink-900 outline-none dark:border-white/10 dark:bg-ink-800 dark:text-white"
+                              />
+                              {(form.googleMapsUrl || (form.venueLat && form.venueLng) || form.venueName) && (
+                                <a
+                                  href={
+                                    form.googleMapsUrl ||
+                                    (form.venueLat && form.venueLng
+                                      ? `https://www.google.com/maps/dir/?api=1&destination=${form.venueLat},${form.venueLng}`
+                                      : `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(`${form.venueName || ''}, ${form.city || 'Wa'}, Ghana`)}`)
+                                  }
+                                  target="_blank"
+                                  rel="noreferrer noopener"
+                                  className="grid size-8 shrink-0 place-items-center rounded-lg border border-brand-200 bg-white text-brand-600 hover:bg-brand-50 dark:border-brand-800 dark:bg-brand-950 dark:text-brand-300"
+                                  title="Preview directions in Google Maps"
+                                >
+                                  <ExternalLink className="size-3.5" />
+                                </a>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </>
                   )}
                 </div>
@@ -1191,14 +1327,14 @@ export default function EventsManagement() {
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                   <div>
                     <h4 className="text-xs font-bold uppercase tracking-wider text-ink-500 dark:text-ink-400">
-                      4. Ticket Tiers, Tables & Vendor Spaces
+                      4. Ticket Tiers, Tables &amp; Vendor Spaces
                     </h4>
                     <p className="mt-0.5 text-[11px] text-ink-400">
-                      Add standard admission tickets, VIP bottle service tables, and commercial exhibition spaces.
+                      Each ticket tier can independently be Free or Paid. Marking a free admission tier does not effect VIP or vendor pricing.
                     </p>
                   </div>
 
-                  <div className="flex items-center gap-3">
+                  <div className="flex flex-wrap items-center gap-3">
                     <label className="inline-flex items-center gap-1.5 text-xs font-medium text-ink-700 dark:text-ink-300 cursor-pointer">
                       <input
                         type="checkbox"
@@ -1206,7 +1342,7 @@ export default function EventsManagement() {
                         onChange={(e) => setForm({ ...form, isFree: e.target.checked })}
                         className="rounded border-ink-300 text-brand-600 focus:ring-brand-500"
                       />
-                      <span>Free Event</span>
+                      <span>Free Event Tag</span>
                     </label>
 
                     <div className="flex flex-wrap items-center gap-1.5">
@@ -1239,6 +1375,7 @@ export default function EventsManagement() {
                   {tickets.map((t, idx) => {
                     const isTable = t.type === 'table'
                     const isVendor = t.type === 'vendor'
+                    const isFreeTier = Number(t.price) === 0
 
                     return (
                       <div
@@ -1268,6 +1405,16 @@ export default function EventsManagement() {
                                 Standard Admission
                               </span>
                             )}
+                            <span
+                              className={cn(
+                                'rounded px-1.5 py-0.5 text-[10px] font-bold uppercase',
+                                isFreeTier
+                                  ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-300'
+                                  : 'bg-brand-50 text-brand-700 dark:bg-brand-950/50 dark:text-brand-300',
+                              )}
+                            >
+                              {isFreeTier ? 'Free' : 'Paid'}
+                            </span>
                           </div>
 
                           {tickets.length > 1 && (
@@ -1275,6 +1422,7 @@ export default function EventsManagement() {
                               type="button"
                               onClick={() => removeTicketTier(t.id)}
                               className="grid size-6 place-items-center rounded-lg text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/40"
+                              title="Delete tier"
                             >
                               <Trash2 className="size-3.5" />
                             </button>
@@ -1302,16 +1450,47 @@ export default function EventsManagement() {
                           </div>
 
                           <div>
-                            <label className="block text-[10px] font-bold uppercase text-ink-400">
-                              {isTable ? 'Table Price (GH₵)' : isVendor ? 'Booth Price (GH₵)' : 'Price (GH₵)'}
-                            </label>
-                            <input
-                              type="number"
-                              disabled={form.isFree || t.type === 'free'}
-                              value={form.isFree || t.type === 'free' ? 0 : t.price}
-                              onChange={(e) => updateTicketTier(t.id, { price: e.target.value })}
-                              className="mt-1 w-full rounded-lg border border-ink-200 bg-white px-2.5 py-1.5 text-xs text-ink-900 outline-none disabled:bg-ink-100 dark:border-white/10 dark:bg-ink-800 dark:text-white dark:disabled:bg-ink-950"
-                            />
+                            <div className="flex items-center justify-between">
+                              <label className="block text-[10px] font-bold uppercase text-ink-400">
+                                {isTable ? 'Table Price' : isVendor ? 'Booth Price' : 'Price'}
+                              </label>
+                              <div className="flex items-center gap-1">
+                                <button
+                                  type="button"
+                                  onClick={() => updateTicketTier(t.id, { price: t.price > 0 ? t.price : 50, type: t.type === 'free' ? 'paid' : t.type })}
+                                  className={cn(
+                                    'px-1.5 py-0.2 text-[9px] font-bold rounded transition',
+                                    Number(t.price) > 0
+                                      ? 'bg-brand-600 text-white'
+                                      : 'text-ink-400 hover:text-ink-600 dark:hover:text-ink-200',
+                                  )}
+                                >
+                                  Paid
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => updateTicketTier(t.id, { price: 0, type: isTable || isVendor ? t.type : 'free' })}
+                                  className={cn(
+                                    'px-1.5 py-0.2 text-[9px] font-bold rounded transition',
+                                    Number(t.price) === 0
+                                      ? 'bg-emerald-600 text-white'
+                                      : 'text-ink-400 hover:text-ink-600 dark:hover:text-ink-200',
+                                  )}
+                                >
+                                  Free
+                                </button>
+                              </div>
+                            </div>
+                            <div className="relative mt-1">
+                              <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-xs font-semibold text-ink-400">GH₵</span>
+                              <input
+                                type="number"
+                                min="0"
+                                value={t.price}
+                                onChange={(e) => updateTicketTier(t.id, { price: Math.max(0, Number(e.target.value) || 0) })}
+                                className="w-full rounded-lg border border-ink-200 bg-white pl-8 pr-2.5 py-1.5 text-xs text-ink-900 outline-none dark:border-white/10 dark:bg-ink-800 dark:text-white"
+                              />
+                            </div>
                           </div>
 
                           <div>
@@ -1727,6 +1906,85 @@ export default function EventsManagement() {
                           onChange={(e) => setEditForm({ ...editForm, address: e.target.value })}
                           className="mt-1 w-full rounded-xl border border-ink-200 bg-white px-3 py-2 text-xs text-ink-900 outline-none transition focus:border-brand-500 dark:border-white/10 dark:bg-ink-800 dark:text-white" />
                       </div>
+
+                      {/* Dedicated Get Directions & Coordinates Integration for Edit Modal */}
+                      <div className="sm:col-span-2 rounded-xl border border-brand-500/20 bg-brand-50/40 p-3.5 dark:border-brand-500/20 dark:bg-brand-950/20 space-y-3">
+                        <div className="flex flex-wrap items-center justify-between gap-2">
+                          <div className="flex items-center gap-2">
+                            <Navigation className="size-4 text-brand-600 dark:text-brand-400" />
+                            <h5 className="text-xs font-bold text-ink-900 dark:text-white">
+                              Venue GPS Coordinates &amp; Get Directions Link
+                            </h5>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => handleDetectCoordinates(true)}
+                            className="inline-flex items-center gap-1.5 rounded-lg border border-brand-300 bg-white px-2.5 py-1 text-xs font-semibold text-brand-700 shadow-sm hover:bg-brand-50 dark:border-brand-700/50 dark:bg-brand-900/60 dark:text-brand-300"
+                          >
+                            <MapPin className="size-3.5" />
+                            <span>Use Device Coordinates</span>
+                          </button>
+                        </div>
+
+                        <div className="grid gap-3 sm:grid-cols-3">
+                          <div>
+                            <label className="block text-[10px] font-bold uppercase text-ink-500 dark:text-ink-400">
+                              Latitude (e.g. 10.0601)
+                            </label>
+                            <input
+                              type="number"
+                              step="any"
+                              placeholder="10.0601"
+                              value={editForm.venueLat}
+                              onChange={(e) => setEditForm({ ...editForm, venueLat: e.target.value })}
+                              className="mt-1 w-full rounded-lg border border-ink-200 bg-white px-2.5 py-1.5 text-xs text-ink-900 outline-none dark:border-white/10 dark:bg-ink-800 dark:text-white"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-[10px] font-bold uppercase text-ink-500 dark:text-ink-400">
+                              Longitude (e.g. -2.5099)
+                            </label>
+                            <input
+                              type="number"
+                              step="any"
+                              placeholder="-2.5099"
+                              value={editForm.venueLng}
+                              onChange={(e) => setEditForm({ ...editForm, venueLng: e.target.value })}
+                              className="mt-1 w-full rounded-lg border border-ink-200 bg-white px-2.5 py-1.5 text-xs text-ink-900 outline-none dark:border-white/10 dark:bg-ink-800 dark:text-white"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-[10px] font-bold uppercase text-ink-500 dark:text-ink-400">
+                              Google Maps Link (Optional)
+                            </label>
+                            <div className="flex gap-1.5 mt-1">
+                              <input
+                                type="url"
+                                placeholder="https://maps.app.goo.gl/..."
+                                value={editForm.googleMapsUrl}
+                                onChange={(e) => setEditForm({ ...editForm, googleMapsUrl: e.target.value })}
+                                className="w-full rounded-lg border border-ink-200 bg-white px-2.5 py-1.5 text-xs text-ink-900 outline-none dark:border-white/10 dark:bg-ink-800 dark:text-white"
+                              />
+                              {(editForm.googleMapsUrl || (editForm.venueLat && editForm.venueLng) || editForm.venueName) && (
+                                <a
+                                  href={
+                                    editForm.googleMapsUrl ||
+                                    (editForm.venueLat && editForm.venueLng
+                                      ? `https://www.google.com/maps/dir/?api=1&destination=${editForm.venueLat},${editForm.venueLng}`
+                                      : `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(`${editForm.venueName || ''}, ${editForm.city || 'Wa'}, Ghana`)}`)
+                                  }
+                                  target="_blank"
+                                  rel="noreferrer noopener"
+                                  className="grid size-8 shrink-0 place-items-center rounded-lg border border-brand-200 bg-white text-brand-600 hover:bg-brand-50 dark:border-brand-800 dark:bg-brand-950 dark:text-brand-300"
+                                  title="Preview directions in Google Maps"
+                                >
+                                  <ExternalLink className="size-3.5" />
+                                </a>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </>
                   )}
                 </div>
@@ -1737,13 +1995,16 @@ export default function EventsManagement() {
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                   <div>
                     <h4 className="text-xs font-bold uppercase tracking-wider text-ink-500 dark:text-ink-400">4. Ticket Tiers</h4>
+                    <p className="mt-0.5 text-[11px] text-ink-400">
+                      Each ticket tier can independently be Free or Paid. Free admission does not affect table or vendor prices.
+                    </p>
                   </div>
-                  <div className="flex items-center gap-3">
+                  <div className="flex flex-wrap items-center gap-3">
                     <label className="inline-flex items-center gap-1.5 text-xs font-medium text-ink-700 dark:text-ink-300 cursor-pointer">
                       <input type="checkbox" checked={editForm.isFree}
                         onChange={(e) => setEditForm({ ...editForm, isFree: e.target.checked })}
                         className="rounded border-ink-300 text-brand-600 focus:ring-brand-500" />
-                      <span>Free Event</span>
+                      <span>Free Event Tag</span>
                     </label>
                     <div className="flex flex-wrap items-center gap-1.5">
                       <button type="button" onClick={() => addEditTicketTier('paid')}
@@ -1766,16 +2027,26 @@ export default function EventsManagement() {
                   {editTickets.map((t, idx) => {
                     const isTable = t.type === 'table'
                     const isVendor = t.type === 'vendor'
+                    const isFreeTier = Number(t.price) === 0
+
                     return (
                       <div key={t.id} className={cn('rounded-xl border p-3.5 space-y-3',
                         isTable ? 'border-purple-200/80 bg-purple-50/20 dark:border-purple-800/40 dark:bg-purple-950/10'
                           : isVendor ? 'border-emerald-200/80 bg-emerald-50/20 dark:border-emerald-800/40 dark:bg-emerald-950/10'
                           : 'border-ink-200/70 bg-white dark:border-white/10 dark:bg-ink-900/40')}>
                         <div className="flex items-center justify-between">
-                          <span className="text-xs font-bold text-ink-900 dark:text-white">Tier {idx + 1}{isTable ? ' · Table' : isVendor ? ' · Vendor' : ''}</span>
+                          <div className="flex items-center gap-2">
+                            <span className="text-xs font-bold text-ink-900 dark:text-white">Tier {idx + 1}{isTable ? ' · Table' : isVendor ? ' · Vendor' : ''}</span>
+                            <span className={cn('rounded px-1.5 py-0.5 text-[10px] font-bold uppercase',
+                              isFreeTier ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-300'
+                                : 'bg-brand-50 text-brand-700 dark:bg-brand-950/50 dark:text-brand-300')}>
+                              {isFreeTier ? 'Free' : 'Paid'}
+                            </span>
+                          </div>
                           {editTickets.length > 1 && (
                             <button type="button" onClick={() => removeEditTicketTier(t.id)}
-                              className="grid size-6 place-items-center rounded-lg text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/40">
+                              className="grid size-6 place-items-center rounded-lg text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/40"
+                              title="Delete tier">
                               <Trash2 className="size-3.5" />
                             </button>
                           )}
@@ -1788,11 +2059,37 @@ export default function EventsManagement() {
                               className="mt-1 w-full rounded-lg border border-ink-200 bg-white px-2.5 py-1.5 text-xs text-ink-900 outline-none dark:border-white/10 dark:bg-ink-800 dark:text-white" />
                           </div>
                           <div>
-                            <label className="block text-[10px] font-bold uppercase text-ink-400">Price (GH₵)</label>
-                            <input type="number" disabled={editForm.isFree}
-                              value={editForm.isFree ? 0 : t.price}
-                              onChange={(e) => updateEditTicketTier(t.id, { price: e.target.value })}
-                              className="mt-1 w-full rounded-lg border border-ink-200 bg-white px-2.5 py-1.5 text-xs text-ink-900 outline-none disabled:bg-ink-100 dark:border-white/10 dark:bg-ink-800 dark:text-white dark:disabled:bg-ink-950" />
+                            <div className="flex items-center justify-between">
+                              <label className="block text-[10px] font-bold uppercase text-ink-400">Price (GH₵)</label>
+                              <div className="flex items-center gap-1">
+                                <button
+                                  type="button"
+                                  onClick={() => updateEditTicketTier(t.id, { price: t.price > 0 ? t.price : 50, type: t.type === 'free' ? 'paid' : t.type })}
+                                  className={cn('px-1.5 py-0.2 text-[9px] font-bold rounded transition',
+                                    Number(t.price) > 0 ? 'bg-brand-600 text-white' : 'text-ink-400 hover:text-ink-600 dark:hover:text-ink-200')}
+                                >
+                                  Paid
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => updateEditTicketTier(t.id, { price: 0, type: isTable || isVendor ? t.type : 'free' })}
+                                  className={cn('px-1.5 py-0.2 text-[9px] font-bold rounded transition',
+                                    Number(t.price) === 0 ? 'bg-emerald-600 text-white' : 'text-ink-400 hover:text-ink-600 dark:hover:text-ink-200')}
+                                >
+                                  Free
+                                </button>
+                              </div>
+                            </div>
+                            <div className="relative mt-1">
+                              <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-xs font-semibold text-ink-400">GH₵</span>
+                              <input
+                                type="number"
+                                min="0"
+                                value={t.price}
+                                onChange={(e) => updateEditTicketTier(t.id, { price: Math.max(0, Number(e.target.value) || 0) })}
+                                className="w-full rounded-lg border border-ink-200 bg-white pl-8 pr-2.5 py-1.5 text-xs text-ink-900 outline-none dark:border-white/10 dark:bg-ink-800 dark:text-white"
+                              />
+                            </div>
                           </div>
                           <div>
                             <label className="block text-[10px] font-bold uppercase text-ink-400">Quantity</label>

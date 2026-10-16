@@ -17,7 +17,7 @@ export function ThemeToggle({ className, variant = 'switch' }) {
   // Auto-detect icon mode if specified or if fixed square size / grid class is passed
   const isIcon =
     variant === 'icon' ||
-    (variant !== 'switch' && className && /\b(size-\w+|grid)\b/.test(className))
+    Boolean(className && /\b(size-\w+|grid)\b/.test(className))
 
   if (isIcon) {
     return (
@@ -27,7 +27,7 @@ export function ThemeToggle({ className, variant = 'switch' }) {
         aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
         title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
         className={cn(
-          'group relative grid size-10 place-items-center rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500',
+          'group relative grid size-9 shrink-0 place-items-center overflow-hidden rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500',
           isDark
             ? 'text-indigo-300 bg-indigo-500/10 hover:bg-indigo-500/20 border border-indigo-500/25 hover:border-indigo-400/40 hover:shadow-[0_0_12px_rgba(99,102,241,0.25)]'
             : 'text-amber-500 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/25 hover:border-amber-400/50 hover:shadow-[0_0_12px_rgba(245,158,11,0.25)]',

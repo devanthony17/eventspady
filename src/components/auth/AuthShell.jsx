@@ -15,7 +15,7 @@ const DEFAULT_QUOTE = {
   name: 'Hajia Mariama',
   role: 'Founder, Savannah Women in Tech',
   quote: 'Eventspady transformed our conference ticketing in Wa. MoMo checkouts were instant and door check-in was seamless.',
-  avatar: '/images/avatars/avatar-4.svg',
+  avatar: '/images/avatars/avatar-abena-sowah.jpg',
 }
 
 /** Split layout shared by sign in, sign up and password recovery with right-side photographic visuals. */
